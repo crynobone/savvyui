@@ -27,7 +27,7 @@ var Js = window.Js = function(selector, context) {
 };
 
 // this Savvy.UI version number
-Js.version = "0.1.4-nb1";
+Js.version = "1.0.0-nb1";
 
 // Savvy.UI namespace manager
 Js.namespace = {
@@ -172,13 +172,6 @@ Js.fn = {
 			}
 		}
 		return node;
-	},
-	verifyNode: function(node) {
-		if(!node || !node.nodeType || node.nodeType !== 1) {
-			return false;
-		} else { 
-			return true;
-		}	
 	},
 	// loop callback function to each of the node
 	each: function(node, fn, args) {

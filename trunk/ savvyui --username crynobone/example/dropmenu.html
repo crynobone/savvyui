@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>DropMenu Example</title>
+	<script src="../all.js" type="text/javascript"></script>
+    <style type="text/css">
+		@import url("example.css");
+    </style>
+	<style type="text/css">
+    <!--
+    @import url("../css/style-black.css");
+    -->
+    </style>
+    <style type="text/css">
+    <!--
+    #nav{height:25px;width:980px;font-weight:700;margin:0 auto;padding:5px 0 0;}
+	ul.nav{height:25px;line-height:25px;float:left;list-style:none;font-size:11px;text-transform:inherit;margin:0;padding:0;}
+    ul.nav li{float:left !important;list-style-type:none;margin:0;padding:0;}
+    ul.nav li a,ul.nav li a:link,ul.nav li a:visited{color:#333;float:left;display:block;text-decoration:none;padding:0 15px;}
+    ul.nav li a:hover,ul.nav li a:active{color:#333;text-decoration:none;}
+    ul.nav li.current_page_item a{text-decoration:none;color:#aaa;}
+    ul.nav li ul{float:left;margin:0;padding:0;visibility:hidden;display:none;}
+	-->
+	</style>
+</head>
+<body>
+<h1>DropMenu Example</h1>
+<div>
+	<div id="nav">
+		<ul class="nav">
+			<li><a href="#">Menu World</a>
+				<ul>
+					<li><a href="#">Item 1</a></li>
+					<li><a href="#">Item 2</a></li>
+					<li><a href="#">Item 3</a></li>
+					<li><a href="#">Item 4</a></li>
+				</ul>
+			</li>
+			<li><a href="#">Menu</a>
+				<ul>
+					<li><a href="#"><img src="images/icon/app-list.gif" />Item 1</a></li>
+					<li><a href="#" id="do">Item 2</a></li>
+					<li><a href="#">Item 3</a></li>
+					<li><a href="#">Item 4</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</div>
+<p>Note: Try clicking on the link above to test the dropdown menu in action. You can also view the code from <a href="dropmenu.js">dropmenu.js</a>.</p>
+
+<script type="text/javascript" src="dropmenu.js"></script>
+</body>
+</html>

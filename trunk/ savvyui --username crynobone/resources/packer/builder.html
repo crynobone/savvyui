@@ -1,0 +1,99 @@
+<p>Not everyone can include the everything on their site. This tool will allow you to build your own Savvy.UI with just the things you need.</p>
+<form action="http://savvyui.com/packer/build.php" method="post">
+	<h3>Core</h3>
+    <table>
+    	<tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" disabled="disabled" checked="checked" name="build[]" value="savvy-base.js" /> <strong>Core</strong></td>
+            <td style="font-size:0.87em;">The core of Savvy.UI. Is required by all the others, but has no dependancies and can be used stand-alone. Contains Basic functions and Initializers.</td>
+		</tr>
+    </table>
+	<h3>Extension</h3>
+    <table>
+    	<tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/ajax.js" /> <strong>Ajax</strong></td>
+            <td style="font-size:0.87em;">XMLHttpRequest Object Class Wrapper for all AJAX request.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/animator.js" /> <strong>Animator</strong></td>
+            <td style="font-size:0.87em;">Contains the basic animation logic.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/cookie.js" /> <strong>Cookie</strong></td>
+            <td style="font-size:0.87em;">Contain element method to manipulate Cookie.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/drag.js" /> <strong>Drag</strong></td>
+            <td style="font-size:0.87em;">Contains the basic dragging capability to an element.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/jsclass.js" /> <strong>JsClass</strong></td>
+            <td style="font-size:0.87em;">Enable Object Oriented Programming in Savvy.UI.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/resize.js" /> <strong>Resize</strong></td>
+            <td style="font-size:0.87em;">Contains the basic resizing capability to an element.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/form.js" /> <strong>Form</strong></td>
+            <td style="font-size:0.87em;">Contains element method to manipulate forms.<br /><em>Partial requirement: Ajax</em></td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/panel.js" /> <strong>Panel</strong></td>
+            <td style="font-size:0.87em;">Contain element method to create Panels.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/winpanel.js" /> <strong>WinPanel</strong></td>
+            <td style="font-size:0.87em;">Contain element method to create floating Window Panels.<br /><em>Requirement: Panel</em></td>
+		</tr>
+    </table>
+    <h3>Utilities</h3>
+    <table>
+    	<tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="util/anchor.js" /> <strong>Anchor</strong></td>
+            <td style="font-size:0.87em;">Contain element/interval method to create active in-page navigation.</td>
+		</tr>
+    	<tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="util/calendar.js" /> <strong>Calendar</strong></td>
+            <td style="font-size:0.87em;">Contain element method to create inline Calendar.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="util/dropmenu.js" /> <strong>Drop Down Menu</strong></td>
+            <td style="font-size:0.87em;">Contain element method to create Dropdown Menu.<br /><em>Requirement: Animator</em></td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="util/simpletab.js" /> <strong>Simple Tab</strong></td>
+            <td style="font-size:0.87em;">Contain element method to create Tabbing Content.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="util/ticker.js" /> <strong>Ticker</strong></td>
+            <td style="font-size:0.87em;">Contain element method to manipulate multiple checkbox at once.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="util/toggler.js" /> <strong>Toggler</strong></td>
+            <td style="font-size:0.87em;">Contain element method to create Toggler Interface.<br /><em>Requirement: Animator</em></td>
+		</tr>
+    </table>
+    <h3>Helper Engine</h3>
+    <table>
+    	<tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="checkbox" name="build[]" value="ext/helper.js" /> <strong>Helper</strong></td>
+            <td style="font-size:0.87em;">Add compatibility option for previous version.</td>
+		</tr>
+    </table>
+    <h3>Compression Option</h3>
+    <table>
+    	<tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="radio" name="compress" checked="checked" value="Uncompress" /> <strong>Uncompress</strong></td>
+            <td style="font-size:0.87em;">No compression, recommended for development and testing.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="radio" name="compress" value="None" /> <strong>Minimal</strong></td>
+            <td style="font-size:0.87em;">Minimal compression, remove comment and whitespace.</td>
+		</tr>
+        <tr>
+        	<td style="vertical-align:top;width:130px;font-size:0.92em;"><input type="radio" name="compress" value="Normal" /> <strong>Normal</strong></td>
+            <td style="font-size:0.87em;">Normal Compression, based on algorithm by <a href="http://dean.edwards.name/download/#packer">Dean Edwards</a>.</td>
+		</tr>
+    </table>
+	<div><input type="submit" value="Build Your Savvy.UI" /></div>
+</form>

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>SavvyUI Ajax Example</title>
+	<script src="../all.js" type="text/javascript"></script>
+    <script src="../widget/message.js" type="text/javascript"></script>
+    <style type="text/css">
+		@import url(example.css);
+    </style>
+    <style type="text/css">
+#sui-message {
+	position: absolute;
+	color: #fff;
+	font-size: 11px;
+	width: 200px;
+	top: 0px;
+	right: 0px;
+	padding: 2px;
+	x-index: 50;
+}
+div.sui-messagebox {
+	color: #fff;
+	width: 190px;
+	-moz-border-radius: 2px;
+}
+div.note {
+	background: #333;
+	color: #fff;
+}
+div.error {
+	background: #a00;
+	color: #fff;
+}
+div.success {
+	background: #393;
+	color: #fff;
+}
+.sui-messagebox span.sui-messagebox-close {
+	float: right;
+	color: #fff;
+	width: 10px;
+	height: 10px;
+	margin: 2px 5px;
+	font: bold 11px verdana;
+	cursor: pointer;
+}
+.sui-messagebox p {
+	margin: 0px;
+	padding: 3px 5px;
+	color: #fff;
+}
+</style>
+</head>
+<body>
+    <h1>Ajax XHR</h1>
+    <p>Note: This example shows how to use Ajax XHR request with Savvy.UI. See <a href="ajax.js">ajax.js</a> for the full source code.</p>
+    <div>
+    	<input type="button" id="ajax-load" value="Ajax Request (Bind to Element)" /> 
+        <input type="button" id="ajax-ext" value="Ajax Request (Standard)" />
+	</div>
+    
+    <p id="hello-load"></div>
+    <p id="hello-ext"></div>
+    <script src="ajax.js" type="text/javascript"></script>
+</body>
+</html>

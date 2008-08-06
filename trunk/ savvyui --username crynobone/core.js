@@ -15,7 +15,7 @@ Js.namespace.include("attr", {
 	set: function(node, attr, value) {
 		var attr = Js.fn.trim(attr.toLowerCase());
 		
-		if(Js.dom.verifyNode(node)) {
+		if(Js.dom.isElement(node)) {
 			if(attr == "class") { 
 				// set className
 				node.className = value;
@@ -40,7 +40,7 @@ Js.namespace.include("attr", {
 		var attr = Js.fn.trim(attr.toLowerCase());
 		var value = false;
 		
-		if(Js.dom.verifyNode(node)) {
+		if(Js.dom.isElement(node)) {
 			if(attr == "class" && node.className) {
 				// get className
 				value = node.className; 
@@ -62,7 +62,7 @@ Js.namespace.include("attr", {
 	remove: function(node, attr) {
 		var attr = Js.fn.trim(attr.toLowerCase());
 		
-		if(Js.dom.verifyNode(node)) {
+		if(Js.dom.isElement(node)) {
 			if(attr == "class" && node.className) {
 				// remove className
 				node.className = "";
@@ -109,7 +109,7 @@ Js.namespace.include("attr", {
 						Js.attr.set(node, value, object[value]);
 					}
 				} else {
-					if(Js.dom.verifyNode(node)) {
+					if(Js.dom.isElement(node)) {
 						node.className = object[value];
 					}
 				}
@@ -120,7 +120,7 @@ Js.namespace.include("attr", {
 					
 Js.namespace.include("className", {
 	set: function(node, value) {
-		if(Js.dom.verifyNode(node)) {
+		if(Js.dom.isElement(node)) {
 			node.className = value;
 			return node;
 		} else {
@@ -128,7 +128,7 @@ Js.namespace.include("className", {
 		}
 	},
 	append: function(node, value) {
-		if(Js.dom.verifyNode(node)) {
+		if(Js.dom.isElement(node)) {
 			var klasName = node.className;
 			
 			if(Js.fn.isset(klasName) && Js.fn.trim(klasName) != "") {
@@ -143,7 +143,7 @@ Js.namespace.include("className", {
 		}
 	},
 	get: function(node) {
-		if(Js.dom.verifyNode(node)) {
+		if(Js.dom.isElement(node)) {
 			// get the className value
 			return node.className;
 		} else { 
@@ -152,11 +152,11 @@ Js.namespace.include("className", {
 	},
 	has: function(node, value) {
 		var klasName = node.className;
-		var value = SUI.fn.trim(value);
+		var value = Js.fn.trim(value);
 		
-		if(Js.dom.verifyNode(node)) {
-			if(SUI.fn.isset(klasName) && SUI.fn.trim(klasName) != "") {
-				return SUI.fn.inArray(klasName.split(/\s/), value);
+		if(Js.dom.isElement(node)) {
+			if(Js.fn.isset(klasName) && Js.fn.trim(klasName) != "") {
+				return Js.fn.inArray(klasName.split(/\s/), value);
 			} else { 
 				return false;
 			}
@@ -167,7 +167,7 @@ Js.namespace.include("className", {
 	remove: function(node, value) {
 		var klasName = node.className;
 		
-		if(Js.dom.verifyNode(node)) {
+		if(Js.dom.isElement(node)) {
 			if(Js.fn.isset(klasName) && Js.fn.trim(klasName) != ""){
 				var data = [];
 				var klass = klasName.split(/\s/);
@@ -185,7 +185,7 @@ Js.namespace.include("className", {
 		}
 	},
 	empty: function(node) {
-		if(Js.dom.verifyNode(node)) { 
+		if(Js.dom.isElement(node)) { 
 			node.className = "";
 		} else {
 			return false;
@@ -193,17 +193,17 @@ Js.namespace.include("className", {
 	}
 });
 
-Js.namespace.include("css", {
+Js.namespace.include("style", {
 	set: function(node, data, value) {
 		var data = Js.fn.trim(data);
 		var val = Js.fn.trim(value);
 		
-		if(Js.dom.verifyNode(node)) {
+		if(Js.dom.isElement(node)) {
 			try {
 				node.style[data] = value; 
 				return node;
 			} catch(e) { 
-				SUI.fn.logger("SUI.CSS.Set failed: " + e);
+				Js.logs("Js.style.get failed: " + e);
 				return false;
 			}
 		} else {
@@ -218,118 +218,118 @@ Js.namespace.include("css", {
 			data = [data];
 		}
 		
-		for (var i = 0; i < data.length; i++) {
+		for(var i = 0; i < data.length; i++) {
 			var obj = data[i];
 			
-			for (var value in obj) {
-				value = SUI.fn.trim(value);
+			for(var value in obj) {
+				value = Js.fn.trim(value);
 				
-				if (obj.hasOwnProperty(value)) {
-					SUI.CSS.Set(node, value, obj[value]);
+				if(obj.hasOwnProperty(value)) {
+					Js.style.set(node, value, obj[value]);
 				}
 			}
 		};
 		return node;
 	},
-	Get: function(node, data) {
-		var data = SUI.fn.trim(data);
+	get: function(node, data) {
+		var data = Js.fn.trim(data);
 		
-		if (this.__FN__(node, "Get")) {
+		if(Js.dom.isElement(node)) {
 			try {
 				return node.style[data];
 			} catch(e) {
-				SUI.fn.logger("SUI.CSS.Get failed: " + node + " " + data + " " + e);
+				Js.logs("Js.style.get failed: " + node + " " + data + " " + e);
 				return false;
 			}
 		} else {
 			return false;
 		}
 	},
-	Alpha: function(node, value) {
+	alpha: function(node, value) {
 		var value = (value > 100 ? 100 : (value < 0 ? 0 : value));
 		
-		if (SUI.fn.isset(node)) {
+		if(Js.fn.isset(node)) {
 			try {
-				if (value == 0 && this.Get(node, "visibility") != "hidden") {
-					this.Hide(node);
-				} else if (value > 0 && this.Get(node, "visibility") == "hidden") {
-					this.Show(node);
+				if (value == 0 && this.get(node, "visibility") != "hidden") {
+					this.hide(node);
+				} else if (value > 0 && this.get(node, "visibility") == "hidden") {
+					this.show(node);
 				}
 				
-				if (SUI.fn.behaviour.ie == true) {
-					if (!node.currentStyle || !node.currentStyle.hasLayout) {
-						this.Set(node, "zoom", 1);
+				if(Js.fn.behaviour.ie == true) {
+					if(!node.currentStyle || !node.currentStyle.hasLayout) {
+						this.set(node, "zoom", 1);
 					}
 					
-					this.Set(node, "filter", "alpha(opacity=" + value + ")");
+					this.set(node, "filter", "alpha(opacity=" + value + ")");
 				} else {
-					this.Set(node, "opacity", (value / 100));
-					this.Set(node, "MozOpacity", (value / 100));
+					this.set(node, "opacity", (value / 100));
+					this.set(node, "MozOpacity", (value / 100));
 				}
 			} catch(e) { 
-				SUI.logger("SUI.CSS.Alpha() failed: " + e); 
+				Js.logs("Js.style.alpha failed: " + e); 
 			}
 		} else return false
 	},
-	Png: function(node, uri, js) {
+	png: function(node, uri, js) {
 		var node = node;
 		var uri = uri;
-		var gecko = SUI.fn.pick(js.gecko, "");
-		var ie = SUI.fn.pick(js.ie, "scale");
+		var gecko = Js.fn.pick(js.gecko, "");
+		var ie = Js.fn.pick(js.ie, "scale");
 		
 		ie = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + uri + "',sizingMethod='" + ie + "')";
 		gecko = "url('" + uri + "') " + gecko;
 		
-		if (window.ActiveXObject && (SUI.fn.behaviour.ie && !SUI.fn.behaviour.ie7)) {
-			this.Set(node, "filter", ie);
+		if(window.ActiveXObject && (Js.fn.behaviour.ie && !Js.fn.behaviour.ie7)) {
+			this.set(node, "filter", ie);
 		} else {
-			this.Set(node, "background", gecko);
+			this.set(node, "background", gecko);
 		}
 		
 		return node;
 	},
-	Show: function(node, fx) {
+	show: function(node, fx) {
 		var ani = true;
 		
-		if (this.__FN__(node, "Show")) {
+		if(Js.dom.isElement(node)) {
 			try {
 				ani = this.__FX__(node, fx, "show");
 				
 				if(!ani) {
-					this.Set(node, "visibility", "visible");
+					this.set(node, "visibility", "visible");
 				}
 				return node;
 			} catch(e) {
-				SUI.fn.logger("SUI.CSS.Show failed: " + e);
+				Js.logs("Js.style.show failed: " + e);
 				return false;
 			}
 		} else return false;
 	},
-	Hide: function(node, fx) {
+	hide: function(node, fx) {
 		var ani = true;
 		
-		if (this.__FN__(node, "Hide")) {
+		if(Js.dom.isElement(node)) {
 			try {
 				ani = this.__FX__(node, fx, "hide");
 				
-				if (!ani) {
-					this.Set(node, "visibility", "hidden");
+				if(!ani) {
+					this.set(node, "visibility", "hidden");
 				}
 				return node;
 			} catch(e) {
-				SUI.fn.logger("SUI.CSS.Hide failed: " + e);
+				Js.logs("Js.style.hide failed: " + e);
 				return false;
 			}
 		} else return false;
 	},
 	__FX__: function(node, fx, value) {
-		var fx = (SUI.fn.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
-		var id = SUI.Attr.Get(node, "id");
+		var fx = (Js.fn.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
+		var id = Js.attr.get(node, "id");
 		var data = [20, 0.8, 80];
 		var value = (value.match(/^(show|hide)$/) ? value : 'show');
 		var fade = (value == "show" ? [0, 100] : [100, 0]);
 		
-		if (SUI.Ext.require("Animator") && !!fx) {
+		if(Js.ext.require("Animator") && !!fx) {
 			if (fx == "slow") {
 				data[0] = 60;
 				data[1] = 1.5;
@@ -337,8 +337,8 @@ Js.namespace.include("css", {
 			} else if (!fx) {
 				return false;
 			}
-			var anim = new SUI.Ext.Animator;
-			anim.Initialize(node).Fx({
+			var effect = new Js.ext.animator;
+			effect.Initialize(node).Fx({
 				method: "fade",
 				transaction: fade,
 				shutter: data[0],
@@ -351,20 +351,12 @@ Js.namespace.include("css", {
 		} else { 
 			return false;
 		}
-	},
-	__FN__: function(node, from) {
-		if (!node || !node.nodeType || node.nodeType !== 1) {
-			SUI.fn.logger("SUI.CSS." + from + " failed: Object " + node + " is null");
-			return false;
-		} else { 
-			return true;
-		}
 	}
 });
 
 Js.namespace.include("dom", {
 	add: function(parent, child) {
-		if (!SUI.fn.isset(child)) {
+		if(!Js.fn.isset(child)) {
 			var child = parent;
 			var parent = document.body;
 		}
@@ -373,34 +365,34 @@ Js.namespace.include("dom", {
 			parent.appendChild(child);
 			return parent;
 		} catch(e) {
-			SUI.fn.logger("SUI.DOM.Add failed: " + e);
+			Js.logs("Js.dom.add failed: " + e);
 			return false;
 		}
 	},
 	addText: function(parent, text) {
-		if (SUI.fn.isset(parent)) {
+		if(Js.fn.isset(parent)) {
 			return this.Add(parent, document.createTextNode(text));
 		} else {
-			SUI.fn.logger("SUI.DOM.AddText failed: " + e);
+			Js.logs("Js.dom.addText failed: " + e);
 			return false;
 		}
 	},
 	addBefore: function(args) {
-		var args = SUI.fn.toArray(arguments);
+		var args = Js.fn.toArray(arguments);
 		var parent = null;
 		var child = null;
 		var reference = null;
 		
-		if (args.length == 3 && SUI.fn.isset(args[0]) && SUI.fn.isset(args[1]) && SUI.fn.isset(args[2])) {
+		if(args.length == 3 && Js.fn.isset(args[0]) && Js.fn.isset(args[1]) && Js.fn.isset(args[2])) {
 			parent = args[0];
 			child = args[1];
 			reference = args[2];
-		} else if (args.length == 2 && SUI.fn.isset(args[0]) && SUI.fn.isset(args[1])) {
+		} else if(args.length == 2 && Js.fn.isset(args[0]) && Js.fn.isset(args[1])) {
 			parent = args[1].parentNode;
 			child = args[0];
 			reference = args[1];
 		} else {
-			SUI.fn.logger("SUI.DOM.AddBefore failed: Reference Object is null");
+			Js.logs("Js.dom.addBefore failed: Reference Object is null");
 			return false;
 		}
 		
@@ -408,7 +400,7 @@ Js.namespace.include("dom", {
 			parent.insertBefore(child, reference);
 			return true;
 		} catch(e) {
-			SUI.fn.logger("SUI.DOM.AddBefore failed: " + parent + " " + child + " " + reference + e);
+			Js.logs("Js.dom.addBefore failed: " + parent + " " + child + " " + reference + e);
 			return false;
 		}
 	},
@@ -418,7 +410,7 @@ Js.namespace.include("dom", {
 		var child = null;
 		var reference = null;
 		
-		if(args.length == 3 && SUI.fn.isset(args[0]) && SUI.fn.isset(args[1]) && SUI.fn.isset(args[2])) {
+		if(args.length == 3 && Js.fn.isset(args[0]) && Js.fn.isset(args[1]) && Js.fn.isset(args[2])) {
 			parent = args[0];
 			child = args[1];
 			reference = this.next(args[2]);
@@ -429,13 +421,13 @@ Js.namespace.include("dom", {
 		}
 		
 		try {
-			if (SUI.fn.isset(reference)) {
-				return this.AddBefore(parent, child, reference);
+			if(Js.fn.isset(reference)) {
+				return this.addBefore(parent, child, reference);
 			} else {
-				return this.Add(parent, child);
+				return this.add(parent, child);
 			}
 		} catch(e) {
-			SUI.fn.logger("SUI.DOM.AddAfter failed: " + e);
+			Js.logs("Js.dom.addAfter failed: " + e);
 			return false;
 		}
 	},
@@ -444,10 +436,10 @@ Js.namespace.include("dom", {
 		var parNode = null;
 		var chiNode = null;
 		
-		if (args.length === 2 && SUI.fn.isset(args[0]) && SUI.fn.isset(args[1])){
+		if(args.length === 2 && Js.fn.isset(args[0]) && Js.fn.isset(args[1])){
 			parNode = args[0];
 			chiNode = args[1];
-		} else if (args.length == 1 && SUI.fn.isset(args[0])){
+		} else if(args.length == 1 && Js.fn.isset(args[0])){
 			parNode = args[0].parentNode;
 			chiNode = args[0];
 		}
@@ -456,51 +448,44 @@ Js.namespace.include("dom", {
 			parNode.removeChild(chiNode);
 			return parNode;
 		} catch(e) {
-			SUI.fn.logger("SUI.DOM.Remove failed: " + e);
+			Js.logs("Js.dom.remove failed: " + e);
 			return false;
 		}
 	},
 	empty: function(node) {
 		while(node.firstChild) {
-			this.Remove(node);
+			this.remove(node);
 		}
 		
 		return node;
 	},
 	change: function(args) {
 		var args = arguments;
-		var parNode = null;
-		var chiNode = null;
-		var refNode = null;
+		var parent = null;
+		var child = null;
+		var reference = null;
 		
-		if (args.length == 3 && !!args[0] && !!args[1] && !!args[2]) {
-			parNode = args[0];
-			chiNode = args[1];
-			refNode = args[2];
-		} else if (args.length == 2 && !!args[0] && !!args[1]) {
-			parNode = args[1].parentNode;
-			chiNode = args[0];
-			refNode = args[1];
+		if(args.length == 3 && !!args[0] && !!args[1] && !!args[2]) {
+			parent = args[0];
+			child = args[1];
+			reference = args[2];
+		} else if(args.length == 2 && !!args[0] && !!args[1]) {
+			parent = args[1].parentNode;
+			child = args[0];
+			reference = args[1];
 		}
 		
 		try {
-			parNode.replaceChild(chiNode, refNode);
+			parent.replaceChild(child, reference);
 			return true;
 		} catch(e) {
-			SUI.fn.logger("SUI.DOM.Change failed: " + e);
+			Js.logs("Js.dom.change failed: " + e);
 			return false;
 		}
 	},
 	clone: function(node, bool) {
 		return node.cloneNode(bool);
 	},
-	verifyElement: function(node) {
-		if(!node || !node.nodeType || node.nodeType !== 1) {
-			return false;
-		} else { 
-			return true;
-		}
-	}
 	prev: function(node) {
 		do {
 		   node = node.previousSibling;
@@ -545,5 +530,111 @@ Js.namespace.include("dom", {
 	},
 	parent: function(node) {
 		return node.parentNode;
+	}
+});
+
+Js.namespace.include("domReady", {
+	fn: [],
+	node: [],
+	script: null,
+	timer: null,
+	done: null,
+	init: function(node, fn) {
+		var that = Js.domReady;
+		
+		return (function(fn, node) {
+			if (!!that.done) {
+				if(!!node && node !== document) {
+					Js.fn.callback(node, fn);
+				} else { 
+					fn();
+				}
+				
+				return;
+			}
+			
+			if (/Konqueror/i.test(navigator.userAgent)) {
+				new Js.events("on", {
+					on: "load",
+					callback: function() {
+						that.callback();
+					}
+				});
+			} else if (document.addEventListener) {
+				try { 
+					document.addEventListener("DOMContentLoaded", that.callback, false); 
+				} catch(e) { 
+					new Js.events("on", {
+						on: "load",
+						callback: function() {
+							that.callback();	
+						}
+					});
+				}
+			}
+			
+			if (/WebKit/i.test(navigator.userAgent)) { 
+				var timer = setInterval(function() {
+					if (/loaded|complete/.test(document.readyState)) {
+						that.callback();
+						clearInterval(that.timer);
+						that.timer = null;
+					}
+				}, 10);
+			}
+			
+			if (!!Js.fn.behaviour.ie) {
+				try {
+					document.write("<script id=__ie_onload defer src=//0><\/scr"+"ipt>");
+					that.script = document.getElementById("__ie_onload");
+					that.script.onreadystatechange = function() {
+						if (this.readyState == "complete") 
+							that.callback(); // call the onload handler
+					};
+				} catch(e) { 
+					Js.logs(e);
+				}
+			} else {
+				new Js.events("on", {
+					on: "load",
+					callback: (function() {
+						that.__CALLBACK__();
+					})
+				});
+			}
+			
+			that.fn[that.fn.length] = fn;
+			that.node[that.node.length] = node;
+		})(fn, node);
+	},
+	callback: function() {
+		if(!Js.domReady.done) {
+			Js.domReady.done = true;
+			
+			if (!!Js.domReady.timer) {
+				clearInterval(that.timer);
+				Js.domReady.timer = null;
+			}
+			
+			for (var i = 0; i < SUI.onDOMReady._FN_.length; i++) {
+				var fn = Js.domReady.fn[i];
+				var node = Js.domReady.node[i];
+				
+				if (SUI.fn.isfunction(fn)) {
+					if(!!node && node !== document) {
+						SUI.fn.callback(node, fn);
+					} else { 
+						fn();
+					}
+				}
+			}
+			
+			Js.domReady.fn = new Array;
+			Js.domReady.node = new Array;
+			
+			if(!!Js.domReady.script) {
+				Js.domReady.script.onreadystatechange = '';
+			}
+		}
 	}
 });

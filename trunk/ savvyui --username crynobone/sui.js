@@ -83,6 +83,9 @@ Js.extend = function(name, fn) {
 	if(Js.fn.isfunction(fn) && !!Js.elements) {
 		// push the function in Js.elements
 		Js.elements.prototype[name] = fn;
+		return true;
+	} else {
+		return false;	
 	}
 };
 
@@ -360,7 +363,7 @@ Js.fn = {
 				--valueLength;
 				rdata[offsetLength] = values[valueLength];
 			}
-			return rdata; 
+			return rdata;
 		}
 	},
 	// Trim both left and right of a string.
@@ -489,7 +492,7 @@ Js.util = {
 	loaded: function(name) {
 		return Js.fn.inArray(this.lists, name);	
 	}
-});
+};
 
 
 // copy SUI as shadow for Js

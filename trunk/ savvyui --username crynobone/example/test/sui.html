@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Test SUI</title>
+<script type="text/javascript" src="../../sui.js"></script>
+<script type="text/javascript">
+var JsTestUnit = function(test, result, answer) {
+	var p = document.createElement("div");
+	if(result == answer) {
+		p.className = 'good';
+	} else {
+		p.className = 'bad';
+	}
+	var text = "<strong>Running " + test + "</strong><br />Result: " + result + " | Answer: " + answer;
+	p.innerHTML = text;
+	document.body.appendChild(p);
+}
+</script>
+<link rel="stylesheet" type="text/css" href="../example.css" />
+</head>
+
+<body>
+
+<h2>Js.toString</h2>
+<script type="text/javascript">
+	JsTestUnit('Js.toString', Js.toString(), "Savvy.UI version 1.0.0-nb1");
+</script>
+
+<h2>Js.namespace</h2>
+<script type="text/javascript">
+// Js.namespace
+Js.namespace.include("hello_world", function() {
+	JsTestUnit('Js.namespace.include', true, true);
+});
+Js.hello_world();
+var test = Js.namespace.require("hello_world");
+JsTestUnit('Js.namespace.require', test, true);
+
+var test = Js.namespace.loaded("hello");
+JsTestUnit('Js.namespace.loaded', test, false);
+</script>
+
+<h2>Js.extend</h2>
+<script type="text/javascript">
+// Js.namespace
+var test = Js.extend('name', function() { });
+JsTestUnit('Js.extend', test, false);
+</script>
+
+</body>
+</html>

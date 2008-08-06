@@ -117,8 +117,8 @@ Js.namespace.include("attr", {
 		};
 	}
 });
-					
-Js.namespace.include("className", {
+
+Js.namespace.include("class", {
 	set: function(node, value) {
 		if(Js.dom.isElement(node)) {
 			node.className = value;
@@ -193,7 +193,7 @@ Js.namespace.include("className", {
 	}
 });
 
-Js.namespace.include("style", {
+Js.namespace.include("css", {
 	set: function(node, data, value) {
 		var data = Js.fn.trim(data);
 		var val = Js.fn.trim(value);
@@ -203,7 +203,7 @@ Js.namespace.include("style", {
 				node.style[data] = value; 
 				return node;
 			} catch(e) { 
-				Js.logs("Js.style.get failed: " + e);
+				Js.logs("Js.css.get failed: " + e);
 				return false;
 			}
 		} else {
@@ -225,7 +225,7 @@ Js.namespace.include("style", {
 				value = Js.fn.trim(value);
 				
 				if(obj.hasOwnProperty(value)) {
-					Js.style.set(node, value, obj[value]);
+					Js.css.set(node, value, obj[value]);
 				}
 			}
 		};
@@ -238,7 +238,7 @@ Js.namespace.include("style", {
 			try {
 				return node.style[data];
 			} catch(e) {
-				Js.logs("Js.style.get failed: " + node + " " + data + " " + e);
+				Js.logs("Js.css.get failed: " + node + " " + data + " " + e);
 				return false;
 			}
 		} else {
@@ -267,7 +267,7 @@ Js.namespace.include("style", {
 					this.set(node, "MozOpacity", (value / 100));
 				}
 			} catch(e) { 
-				Js.logs("Js.style.alpha failed: " + e); 
+				Js.logs("Js.css.alpha failed: " + e); 
 			}
 		} else return false
 	},
@@ -300,7 +300,7 @@ Js.namespace.include("style", {
 				}
 				return node;
 			} catch(e) {
-				Js.logs("Js.style.show failed: " + e);
+				Js.logs("Js.css.show failed: " + e);
 				return false;
 			}
 		} else return false;
@@ -317,7 +317,7 @@ Js.namespace.include("style", {
 				}
 				return node;
 			} catch(e) {
-				Js.logs("Js.style.hide failed: " + e);
+				Js.logs("Js.css.hide failed: " + e);
 				return false;
 			}
 		} else return false;
@@ -554,7 +554,7 @@ Js.namespace.include("domReady", {
 			}
 			
 			if (/Konqueror/i.test(navigator.userAgent)) {
-				new Js.events("on", {
+				new Js.domEvent("on", {
 					on: "load",
 					callback: function() {
 						that.callback();
@@ -564,7 +564,7 @@ Js.namespace.include("domReady", {
 				try { 
 					document.addEventListener("DOMContentLoaded", that.callback, false); 
 				} catch(e) { 
-					new Js.events("on", {
+					new Js.domEvent("on", {
 						on: "load",
 						callback: function() {
 							that.callback();	
@@ -595,7 +595,7 @@ Js.namespace.include("domReady", {
 					Js.logs(e);
 				}
 			} else {
-				new Js.events("on", {
+				new Js.domEvent("on", {
 					on: "load",
 					callback: (function() {
 						that.__CALLBACK__();
@@ -620,9 +620,9 @@ Js.namespace.include("domReady", {
 				var fn = Js.domReady.fn[i];
 				var node = Js.domReady.node[i];
 				
-				if (SUI.fn.isfunction(fn)) {
+				if (Js.fn.isfunction(fn)) {
 					if(!!node && node !== document) {
-						SUI.fn.callback(node, fn);
+						Js.fn.callback(node, fn);
 					} else { 
 						fn();
 					}
@@ -636,5 +636,134 @@ Js.namespace.include("domReady", {
 				Js.domReady.script.onreadystatechange = '';
 			}
 		}
+	}
+});
+
+Js.namespace.include("domEvent", function(handler, js) {
+	this.node = window;
+	this.type = null;
+	this.fn = null;
+	
+	if(handler == "on") {
+		return this.on(js);
+	} else if(handler == "off") {
+		return this.off(js);
+	}
+	
+	return this;
+}).prototype = {
+	on: function(js) {
+		var that = this;
+		var p = true;
+		var r;
+		
+		this.node = Js.fn.pick(js.object, this.node);
+		this.type = Js.fn.pick(js.on, this.type, "load");
+		this.fn = Js.fn.pick(js.callback, this.fn);
+		
+		if (this.node.addEventListener) {
+			try { 
+				r = this.node.addEventListener(this.type, this.fn, false);
+				return r;
+			} catch(e) {
+				try {
+					this.node.attachEvent("on" + this.type, this.fn);
+				} catch(e) {
+					p = false;
+				}
+			}
+		} else if (this.node.attachEvent) {
+			try { 
+				this.node.attachEvent("on" + this.type, this.fn);
+			} catch(e) { 
+				p = false; 
+			}
+			
+			return true;
+		} else {
+			p = false;
+		}
+		
+		if (!pass) {
+			var fn = Js.fn.pick(this.object["on" + this.type], null);
+			Js.fn.on(this.node, this.type, function() {
+				if(Js.fn.isset(fn) && Js.fn.isfunction(fn)) {
+					fn();
+				}
+				that.fn();
+			});
+		}
+	},
+	off: function (js) {
+		var that = this;
+		var r = false;
+		this.node = Js.fn.pick(js.object, this.node);
+		this.type = Js.fn.pick(js.on, this.type, "load");
+		this.fn = Js.fn.pick(js.callback, this.fn);
+		
+		if (this.node.detachEvent) {
+			try { 
+				r = this.node.detachEvent("on" + this.type, this.fn);
+			} catch(e) {
+				try { 
+					r = this.node.removeEventListener(this.type, this.fn, false);
+				} catch(e) { 
+					r = "Unable to load window.attachEvent: " + e;
+				}
+			}
+		} else { 
+			try { 
+				r = this.node.removeEventListener(this.type, this.fn, false);
+			} catch(e) {
+				r = "Unable to load window.addEventListener: " + e;
+			}
+		}
+		return r;
+	}
+};
+
+Js.namespace.include("hash", {
+	object: {},
+	set: function(node, data, value) {
+		var name = this.verify(node);
+		
+		if (Js.fn.isset(name)) {
+			if (!Js.fn.isset(this.object[name])) {
+				this.object[name] = {};
+			}
+			
+			this.object[name][data] = value;
+		}
+	},
+	get: function(node, data) {
+		var name = this.verify(node);
+		
+		if (Js.fn.isset(name)) {
+			if (Js.fn.isset(this.object[name]) && Js.fn.isset(this.object[name][data])) {
+				return this.object[name][data];
+			} else {
+				return false;
+			}
+		} else { 
+			return false;
+		}
+	},
+	remove: function(node, data) {
+		var name = this.verify(node);
+		
+		if (Js.fn.isset(name)) {
+			this.object[name][data] = null;
+			
+			if (Js.fn.isset(this.object[name]) && Js.fn.isset(this.object[name][data])) {
+				this.object[name][data] = null;
+			} else {
+				return false;
+			}
+		} else { 
+			return false;
+		}
+	},
+	verify: function(node) {
+		return (typeof(node) == "object" ? Js.attr.get(node, "id") : node);
 	}
 });

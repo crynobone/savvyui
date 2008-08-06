@@ -494,6 +494,5 @@ Js.util = {
 	}
 };
 
-
 // copy SUI as shadow for Js
 var SUI = window.SUI = Js;

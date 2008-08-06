@@ -173,9 +173,8 @@ Js.fn = {
 		}
 		return node;
 	},
-	verifyElement: function(node, from) {
+	verifyNode: function(node) {
 		if(!node || !node.nodeType || node.nodeType !== 1) {
-			Js.logs(from + " failed: Object " + node + " is null");
 			return false;
 		} else { 
 			return true;

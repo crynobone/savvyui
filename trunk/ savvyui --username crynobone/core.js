@@ -7,17 +7,17 @@
  * Copyright (c) 2007-2008 Mior Muhammad Zaki Mior Khairuddin (Cryno Bone) http://savvyui.com
  * Licensed under the MIT License
  ***************************************************
- * Require: Base
+ * Require: SUI, Base
  */
 
 Js.namespace.include("attr", {
 	// Set Attribute value for an Element
 	set: function(node, attr, value) {
-		var attr = SUI.fn.trim(attr.toLowerCase());
+		var attr = Js.fn.trim(attr.toLowerCase());
 		
-		if(Js.fn.verifyElement(node, "attr.set")) {
+		if(Js.fn.verifyNode(node, "attr.set")) {
 			if(attr == "class") { 
-				// set class (using SUI.Classes Namespace)
+				// set className
 				node.className = value;
 			} else if(attr == "colspan") {
 				// set colspan without creating a conflict in IE
@@ -40,7 +40,7 @@ Js.namespace.include("attr", {
 		var attr = Js.fn.trim(attr.toLowerCase());
 		var value = false;
 		
-		if(Js.fn.verifyElement(node, "attr.set")) {
+		if(Js.fn.verifyNode(node, "attr.set")) {
 			if(attr == "class" && node.className) {
 				// get className
 				value = node.className; 
@@ -60,9 +60,9 @@ Js.namespace.include("attr", {
 	},
 	// Remove Attribute value from an Element
 	remove: function(node, attr) {
-		var attr = SUI.fn.trim(attr.toLowerCase());
+		var attr = Js.fn.trim(attr.toLowerCase());
 		
-		if(Js.fn.verifyElement(node, "attr.remove")) {
+		if(Js.fn.verifyNode(node, "attr.remove")) {
 			if(attr == "class" && node.className) {
 				// remove className
 				node.className = "";
@@ -91,7 +91,7 @@ Js.namespace.include("attr", {
 		// Get JSON attributes
 		var data = Js.fn.pick(data, []);
 		
-		if(SUI.fn.typeOf(data) !== "array") {
+		if(Js.fn.typeOf(data) !== "array") {
 			data = [data];
 		}
 		
@@ -109,11 +109,87 @@ Js.namespace.include("attr", {
 						Js.attr.set(node, value, object[value]);
 					}
 				} else {
-					if(Js.fn.verifyElement(node, "attr.setup") {
+					if(Js.fn.verifyNode(node, "attr.setup") {
 						node.className = object[value];
 					}
 				}
 			}
 		};
+	}
+});
+					
+Js.namespace.include("className", {
+	set: function(node, value) {
+		if(Js.fn.verifyNode(node, "className.set")) {
+			node.className = value;
+			return node;
+		} else {
+			return false;
+		}
+	},
+	append: function(node, value) {
+		if(Js.fn.verifyNode(node, "className.append")) {
+			var klasName = node.className;
+			
+			if(SUI.fn.isset(klasName) && SUI.fn.trim(klasName) != "") {
+				var klass = SUI.fn.trim(klasName).split(/\s/g);
+				klass[klass.length] = SUI.fn.trim(value);
+				klass = SUI.fn.unique(klass);
+				value = klass.join(" ");
+			} else {
+				value = value;	
+			}
+			node.className = value;
+		}
+	},
+	get: function(node) {
+		if(this.__FN__(node, "Get")) {
+			// get the className value
+			return node.className;
+		} else { 
+			// HTML Element isn't defined
+			return false;
+		}
+	},
+	has: function(node, value) {
+		var klasName = node.className;
+		var value = SUI.fn.trim(value);
+		
+		if(this.__FN__(node, "Has")) {
+			if(SUI.fn.isset(klasName) && SUI.fn.trim(klasName) != "") {
+				return SUI.fn.inArray(klasName.split(/\s/), value);
+			} else { 
+				return false;
+			}
+		} else {
+			return false;
+		}
+	},
+	remove: function(node, value) {
+		var klasName = node.className;
+		
+		if(Js.fn.verifyNode(node, "className.remove")) {
+			if(Js.fn.isset(klasName) && Js.fn.trim(klasName) != ""){
+				var data = [];
+				var klass = klasName.split(/\s/);
+				
+				for(var i = 0; i < klass.length && klass[i]; i++) {
+					if(klass[i] !== "" && klass[i] != value) { 
+						data[data.length] = klass[i];
+					}
+				}
+				node.className = data.join(" ");
+			}
+			return node;
+		} else { 
+			return false;
+		}
+	},
+	empty: function(node) {
+		if(Js.fn.verifyNode(node, "className.empty")) { 
+			node.className = "";
+		} else {
+			return false;
+		}
 	}
 });

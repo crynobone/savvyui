@@ -86,7 +86,7 @@ Js.extend = function(name, fn) {
 	}
 };
 
-// Add a numbers of function to Js.Base
+// Add a numbers of function to Js.fn
 Js.fn = {
 	_$: null,
 	// Check browser behaviour to determine whether it's based on IE, IE6, IE7, GECKO, OPERA or KHTML.

@@ -193,7 +193,7 @@ Js.namespace.include("class", {
 	}
 });
 
-Js.namespace.include("css", {
+Js.namespace.include("style", {
 	set: function(node, data, value) {
 		var data = Js.fn.trim(data);
 		var val = Js.fn.trim(value);
@@ -203,7 +203,7 @@ Js.namespace.include("css", {
 				node.style[data] = value; 
 				return node;
 			} catch(e) { 
-				Js.logs("Js.css.get failed: " + e);
+				Js.logs("Js.style.get failed: " + e);
 				return false;
 			}
 		} else {
@@ -225,7 +225,7 @@ Js.namespace.include("css", {
 				value = Js.fn.trim(value);
 				
 				if(obj.hasOwnProperty(value)) {
-					Js.css.set(node, value, obj[value]);
+					Js.style.set(node, value, obj[value]);
 				}
 			}
 		};
@@ -238,7 +238,7 @@ Js.namespace.include("css", {
 			try {
 				return node.style[data];
 			} catch(e) {
-				Js.logs("Js.css.get failed: " + node + " " + data + " " + e);
+				Js.logs("Js.style.get failed: " + node + " " + data + " " + e);
 				return false;
 			}
 		} else {
@@ -267,7 +267,7 @@ Js.namespace.include("css", {
 					this.set(node, "MozOpacity", (value / 100));
 				}
 			} catch(e) { 
-				Js.logs("Js.css.alpha failed: " + e); 
+				Js.logs("Js.style.alpha failed: " + e); 
 			}
 		} else return false
 	},
@@ -300,7 +300,7 @@ Js.namespace.include("css", {
 				}
 				return node;
 			} catch(e) {
-				Js.logs("Js.css.show failed: " + e);
+				Js.logs("Js.style.show failed: " + e);
 				return false;
 			}
 		} else return false;
@@ -317,7 +317,7 @@ Js.namespace.include("css", {
 				}
 				return node;
 			} catch(e) {
-				Js.logs("Js.css.hide failed: " + e);
+				Js.logs("Js.style.hide failed: " + e);
 				return false;
 			}
 		} else return false;
@@ -616,7 +616,7 @@ Js.namespace.include("domReady", {
 				Js.domReady.timer = null;
 			}
 			
-			for (var i = 0; i < SUI.onDOMReady._FN_.length; i++) {
+			for (var i = 0; i < Js.domReady.fn.length; i++) {
 				var fn = Js.domReady.fn[i];
 				var node = Js.domReady.node[i];
 				
@@ -765,5 +765,409 @@ Js.namespace.include("hash", {
 	},
 	verify: function(node) {
 		return (typeof(node) == "object" ? Js.attr.get(node, "id") : node);
+	}
+});
+
+Js.namespace.include("parse", {
+	// Parse string value with Parsed HTML value
+	html: {
+		to: function(value) {
+			var value = new String(value);
+			value = Js.fn.htmlEntities(value);
+			value = encodeURIComponent(value);
+			
+			return value;
+		},
+		from: function(value) {
+			var value = new String(value);
+			value = decodeURIComponent(value);
+			value = Js.fn.htmlEntityDecode(value);
+			
+			return value;
+		}
+	},
+	// Convert back bbml string to normal string
+	bbml: function(value) {
+		return new String(value).replace(/\[lt\]/g, "<").replace(/\[gt\]/g, ">").replace(/\[n\]/g, "&").replace(/\&quot\;/g, "\"").replace(/\&rsquo\;/g, "\'").replace(/\[br\]/g, "\n").replace(/\[break\]/g, "<br />");
+	}
+});
+
+Js.namespace.include("query", {
+	is: function(node, is) {
+		var is = Js.fn.trim(is);
+		var r = null;
+		var status = null;
+		var value = false;
+		var prev = node.previousSibling;
+		var next = node.nextSibling;
+		
+		if (is.match(/^(enabled|disabled|checked|selected)$/)) {
+			status = is;
+			is = "input";
+			
+			if (status === "enabled") {
+				value = true;
+				status = "disabled";
+			}
+		}
+		
+		switch (is) {
+			case 'visible':
+				return ((Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden") || (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === "hidden") ? false : true);
+				break;
+			case 'hidden':
+				return (Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden" ? true : false);
+				break;
+			case 'first-child':
+				return (function(prev) {
+					if (!!prev) {
+						return (!prev || !!Js.dom.isFirst(prev) ? true : false);
+					} else {
+						return true;
+					}
+				})(prev);
+				break;
+			case 'last-child':
+				return (function(next) {
+					if (!!next) { 
+						return (!next || !!Js.dom.isLast(next) ? true : false);
+					} else {
+						return true;
+					}
+				})(next);
+				break;
+			case 'only-child':
+				return (function(node) {
+					if (!!node) { 
+						return Js.dom.isOnlyChild(node);
+					} else {
+						return true;
+					}
+				})(node);
+				break;
+			case 'input':
+				return (function(node, r, status, value) {
+					r = node.tagName.toLowerCase().match(/^(input|select|textarea)$/);
+					if (!!status) {
+						r = (Js.attr.get(node, status) !== false ? true : false);
+						
+						if(!!value) { 
+							r = (r ? false : true);
+						}
+					}
+					return r;			 
+				})(node, r, status, value);
+				break;
+			default:
+				return (function(node, is) {
+					if (is.match(/^(text|password|radio|checkbox|submit|image|reset|button|file|hidden)$/)) {
+						return (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === is ? true : false);
+					} else { 
+						return false;
+					}
+				})(node, is);
+		};
+	},
+	hasClass: function(node, klasName) {
+		return (Js.class.has(node, klasName) ? true : false);
+	},
+	hasAttr: function(node, attrs) {
+		var at = Js.attr.get(node, attrs[0]);
+		
+		if(at) {
+			switch (attrs[1]) {
+				case '=': // Equality
+					return (at === attrs[2]);
+					break;
+				case '~': // Match one of space seperated
+					return (at.match(new RegExp('\\b' + attrs[2] + '\\b')));
+					break;
+				case '|': // Match start with value followed by optional hyphen
+					return (at.match(new RegExp('^' + attrs[2] + '-?')));
+					break;
+				case '^': // Match starts with value
+					return (at.indexOf(attrs[2]) === 0);
+					break;
+				case '$': // Match ends with value - fails with "Warning" in Opera 7
+					return (at.lastIndexOf(attrs[2]) === at.length - attrs[2].length);
+					break;
+				case '*': // Match ends with value
+					return (at.indexOf(attrs[2]) > -1);
+					break;
+				default : // Just test for existence of attribute
+					return at;
+			}
+		} else 
+			return false;
+	},
+	tagParentOf: function(tags, parent, klasName, is, attr) {
+		var context = [];
+		
+		if(parent.length > 0) {
+			var t = (tags === "*" && document.all ? document.all : document.getElementsByTagName(tags));
+			
+			for(var i = 0; i < parent.length && parent[i]; i++) {
+				for(var ii = 0; ii < t.length && t[ii]; ii++) {
+					var node = t[ii];
+					
+					if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node === parent[i].parentNode) {
+						context[context.length] = node;
+					}
+				}
+			}
+		}
+		return context;
+	},
+	tagNextOf: function(tags, parent, klasName, is, attr) {
+		var context = [];
+		
+		if(parent.length > 0) {
+			for(var i = 0; i < parent.length && parent[i]; i++) {
+				var parParent = parent[i].parentNode;
+				
+				if(!!Js.dom.isElement(parParent)) {
+					var tag = (tags === "*" && parParent.all ? parParent.all : parParent.getElementsByTagName(tags));
+				
+					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
+						var node = tag[ii];
+						var tnode = Js.dom.prev(node);
+						
+						if(tnode === parNode[i] && node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr)) {
+							context[context.length] = node;
+						}
+					}
+				}
+			}
+		}
+		return context;
+	},
+	tagSiblingOf: function(tags, parent, klasName, is, attr) {
+		var context = [];
+		
+		if(parNode.length > 0) {
+			for(var i = 0; i < parent.length && parent[i]; i++) {
+				var parParent = parent[i].parentNode;
+				
+				if(!!Js.dom.isElement(parParent)) {
+					var tag = (tags === "*" && parParent.all ? parParent.all : parParent.getElementsByTagName(tags));
+				
+					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
+						var node = t[ii];
+						
+						if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === pn) {
+							context[context.length] = node;
+						}
+					}
+				}
+			}
+		}
+		return context;
+	},
+	tagChildOf: function(tags, parNode, klasName, is, attr) {
+		var context = [];
+		
+		if(parNode.length > 0) {
+			for(var i = 0; i < parNode.length && parNode[i]; i++) {
+				var pn = parNode[i];
+				
+				if(!!pn && pn.nodeType == 1) {
+					var t = (tags === "*" && pn.all ? pn.all : pn.getElementsByTagName(tags));
+				
+					for(var ii = 0; ii < t.length && t[ii]; ii++) {
+						var node = t[ii];
+						
+						if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === pn) {
+							context[context.length] = node;
+						}
+					}
+				}
+			}
+		}
+		return context;
+	},
+	validate: function(node, klasName, is, attr) {
+		var valid = false;
+		var klasName = Js.fn.pick(klasName, "");
+		var is = Js.fn.pick(is, null);
+		var attr = Js.fn.pick(attr, []);
+		
+		valid = (klasName === "" || !!Js.query.hasClass(node, klasName) ? true : false);
+		valid = ((attr.length === 0 || (attr.length === 3 && !!Js.query.hasAttr(node, attr))) && !!valid ? true : false); 
+		valid = ((!is || (!!is && !!Js.query.is(node, is))) && !!valid ? true : false);
+		
+		return valid;
+	},
+	create: function(tags, attr) {
+		var node = null;
+		var tags = Js.fn.trim(tags);
+		
+		if(/\#/.test(tags)) {
+			var tag = tags.split(/\#/);
+			var el = Js.fn.trim(tag[0]);
+			var id = Js.fn.trim(tag[1]);
+			node = document.createElementNS ? document.createElementNS('http://www.w3.org/1999/xhtml', el) : document.createElement(el);
+			Js.attr.set(node, "id", id);
+		} else {
+			node = document.createElementNS ? document.createElementNS('http://www.w3.org/1999/xhtml', tags) : document.createElement(tags);
+		}
+		
+		if (Js.fn.isset(attr)) { 
+			Js.attr.setup(node, attr);
+		}
+		
+		return node;
+	},
+	tags: function(tags, parNode, klasName, is, attr, type) {
+		var context = [];
+		var klasName = Js.fn.trim(Js.fn.pick(klasName, ""));
+		var is = Js.fn.pick(is, null);
+		var attr = Js.fn.pick(attr, []);
+		var tags = Js.fn.pick(tags, "*");
+		
+		if(Js.fn.isset(type) && type > 0) {
+			if(type === 4) {
+				context = Js.query.tagParentOf(tags, parNode, klasName, is, attr);
+			} else if (type === 2) {
+				context = Js.query.tagNextOf(tags, parNode, klasName, is, attr);
+			} else if (type === 3) {
+				context = Js.query.tagSiblingOf(tags, parNode, klasName, is, attr);
+			} else if (type === 1) {
+				context = Js.query.tagChildOf(tags, parNode, klasName, is, attr);
+			}
+		} else {
+			if(!parNode || parNode.length === 0 || !parNode.length) {
+				parNode = [document];
+			}
+			
+			for(var i = 0; i < parNode.length && parNode[i]; i++) {
+				var t = (tags === "*" && parNode[i].all ? parNode[i].all : parNode[i].getElementsByTagName(tags));
+				
+				for(var ii = 0; ii < t.length && t[ii]; ii++) {
+					var node = t[ii];
+					
+					if(node.nodeType === 1 && Js.query.validate(node, klasName, is, attr)) {
+						context[context.length] = node;
+					}
+				}
+			}
+		}
+		return (context.length > 0 ? context : false);
+	},
+	id: function(id, parent, tags, is) {
+		var tags = Js.fn.trim(Js.fn.pick(tags, "*")).toUpperCase();
+		var el = document.getElementById(id);
+		var is = (!!is ? this.is(el, is) : true);
+			
+		if (el && (tags == "*" || tags == el.tagName.toUpperCase()) && !!is) {
+			return el;
+		} else { 
+			return false;
+		}
+	},
+	selector: function(elem, parNode) {
+		var context = [];
+		
+		var init = function(elem, parNode) {
+			var context = [];
+			
+			if (!!parNode && !parNode.length) {
+				context = [parNode];
+			} else if (!!parNode && parNode.length > 0) { 
+				context = parNode;
+			}
+			
+			var type = 0;
+			var elm = elem.split(/\s/);
+			
+			for (var i = 0; i < elm.length; i++){
+				if(context.length === 0 && i > 0) {
+					context = false;
+					break;
+				}
+				
+				var el = Js.fn.trim(elm[i]);
+				
+				if (el !== "") {
+					var tags = "";
+					var id = "";
+					var klasName = "";
+					var attr = [];
+					var is = null;
+					
+					if (el === ">") {
+						type = 1;
+					} else if (el === "+") { 
+						type = 2;
+					} else if (el === "~") {
+						type = 3;
+					} else if (el === "<") {
+						type = 4;
+					} else {
+						if (el.match(/^(\w*)\[(\w+)([=~\|\^\$\*]?)=?"?([^\]"]*)"?\]$/)){
+							tags = RegExp.$1;
+							attr[0] = RegExp.$2;
+							attr[1] = RegExp.$3;
+							attr[2] = RegExp.$4;
+						} else {
+							if (el.indexOf(":") > -1) {
+								var pr = el.split(":");
+								el = pr[0];
+								is = pr[1];
+							}
+							
+							if (el.indexOf(".") > -1) {
+								var pr = el.split(".");
+								tags = pr[0];
+								klasName = pr[1];
+							} else if (el.indexOf("#") > -1) {
+								var pr = el.split("#");
+								tags = pr[0];
+								id = pr[1];
+							} else {
+								tags = el;
+							}
+							
+							tags = (tags == "" ? "*" : tags);
+						}
+						
+						if (!!id && id !== "") {
+							context = [Js.query.id(id, context, tags, is)];
+						} else {
+							context = Js.query.tags(tags, context, klasName, is, attr, type);
+						}
+						
+						if (!context) {
+							context = [];
+							break;
+						} else {
+							context = Js.fn.unique(context);
+						}
+						
+						type = 0;
+					}
+				}
+			}
+			return context;
+		};
+		
+		var el = Js.fn.trim(elem).split(/,/);
+		el = Js.fn.unique(el);
+		
+		for (var m = 0; m < el.length && !!el[m]; m++) {
+			var elm = Js.fn.trim(el[m]);
+			
+			if (elm !== "") {
+				var node = init(elm, parNode);
+				
+				if (!!node && node.length > 0) {
+					for (var i = 0; i < node.length; i++) {
+						if (node[i].nodeType === 1) {
+							context[context.length] = node[i];
+						}
+					}
+				}
+			}
+		}
+		return (context.length > 0 ? context : false);
 	}
 });

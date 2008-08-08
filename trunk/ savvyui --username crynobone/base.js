@@ -18,12 +18,12 @@ Js.base.create = function(js) {
 	
 	function Class() {
 		if(!initialize && !!this.construct) {
-			this.construct.apply(this, Js.fn.toArray(arguments));
+			this.construct.apply(this, Js.code.toArray(arguments));
 		}
 	};
 	
 	Class.prototype = prototype;
-	Class.prototype.construct = Js.fn.pick(js.__construct, null);
+	Class.prototype.construct = Js.code.pick(js.__construct, null);
 	Class.constructor = Class;
 	Class.extend = function(js) {
 		js.ext = this;
@@ -32,21 +32,21 @@ Js.base.create = function(js) {
 		return eClass;
 	};
 	
-	var ext = Js.fn.pick(js.ext, null);
+	var ext = Js.code.pick(js.ext, null);
 	
-	if(Js.fn.isset(ext)) {
+	if(Js.code.isset(ext)) {
 		try {
 			// try to copy parent object.
 			(function(js) {
 				var mtd = ["ext", "__construct", "__destruct", "_super", "prototype"];
 				// start adding parent method and properties to this object
 				for (var method in js.prototype) {
-					if (js.prototype.hasOwnProperty(method) && (!Js.fn.inArray(mtd, method) && !this[method])) {
+					if (js.prototype.hasOwnProperty(method) && (!Js.code.inArray(mtd, method) && !this[method])) {
 						this[method] = js.prototype[method];
 					}
 				}
 				for (var method in js) {
-					if (js.hasOwnProperty(method) && (!Js.fn.inArray(mtd, method) && !this[method])) {
+					if (js.hasOwnProperty(method) && (!Js.code.inArray(mtd, method) && !this[method])) {
 						this[method] = js[method];
 					}
 				}
@@ -54,7 +54,7 @@ Js.base.create = function(js) {
 				this._super = js.prototype;
 			}).call(prototype, ext);
 		} catch(e) {
-			Js.logs(e);
+			Js.debug.log(e);
 		}
 	}
 	
@@ -65,7 +65,7 @@ Js.base.create = function(js) {
 		
 		// start adding method and properties to this object
 		for (var method in js) {
-			if (js.hasOwnProperty(method) && (!Js.fn.inArray(mtd, method) && !this[method])) {
+			if (js.hasOwnProperty(method) && (!Js.code.inArray(mtd, method) && !this[method])) {
 				this[method] = js[method];
 			}
 		};

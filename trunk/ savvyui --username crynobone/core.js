@@ -13,7 +13,7 @@
 Js.namespace.include("attr", {
 	// Set Attribute value for an Element
 	set: function(node, attr, value) {
-		var attr = Js.fn.trim(attr.toLowerCase());
+		var attr = Js.code.trim(attr.toLowerCase());
 		
 		if(Js.dom.isElement(node)) {
 			if(attr == "class") { 
@@ -37,7 +37,7 @@ Js.namespace.include("attr", {
 	},
 	// Get Attribute value from an Element
 	get: function(node, attr) {
-		var attr = Js.fn.trim(attr.toLowerCase());
+		var attr = Js.code.trim(attr.toLowerCase());
 		var value = false;
 		
 		if(Js.dom.isElement(node)) {
@@ -60,7 +60,7 @@ Js.namespace.include("attr", {
 	},
 	// Remove Attribute value from an Element
 	remove: function(node, attr) {
-		var attr = Js.fn.trim(attr.toLowerCase());
+		var attr = Js.code.trim(attr.toLowerCase());
 		
 		if(Js.dom.isElement(node)) {
 			if(attr == "class" && node.className) {
@@ -89,9 +89,9 @@ Js.namespace.include("attr", {
 		var node = node;
 		
 		// Get JSON attributes
-		var data = Js.fn.pick(data, []);
+		var data = Js.code.pick(data, []);
 		
-		if(Js.fn.typeOf(data) !== "array") {
+		if(Js.code.typeOf(data) !== "array") {
 			data = [data];
 		}
 		
@@ -102,7 +102,7 @@ Js.namespace.include("attr", {
 			
 			for(var value in object) {
 				// trim and ensure val's value is lowercased
-				value = Js.fn.trim(value.toLowerCase());
+				value = Js.code.trim(value.toLowerCase());
 				
 				if(value != "class") {
 					if(object.hasOwnProperty(value)) {
@@ -131,10 +131,10 @@ Js.namespace.include("class", {
 		if(Js.dom.isElement(node)) {
 			var klasName = node.className;
 			
-			if(Js.fn.isset(klasName) && Js.fn.trim(klasName) != "") {
-				var klass = Js.fn.trim(klasName).split(/\s/g);
-				klass[klass.length] = Js.fn.trim(value);
-				klass = Js.fn.unique(klass);
+			if(Js.code.isset(klasName) && Js.code.trim(klasName) != "") {
+				var klass = Js.code.trim(klasName).split(/\s/g);
+				klass[klass.length] = Js.code.trim(value);
+				klass = Js.code.unique(klass);
 				value = klass.join(" ");
 			} else {
 				value = value;	
@@ -152,11 +152,11 @@ Js.namespace.include("class", {
 	},
 	has: function(node, value) {
 		var klasName = node.className;
-		var value = Js.fn.trim(value);
+		var value = Js.code.trim(value);
 		
 		if(Js.dom.isElement(node)) {
-			if(Js.fn.isset(klasName) && Js.fn.trim(klasName) != "") {
-				return Js.fn.inArray(klasName.split(/\s/), value);
+			if(Js.code.isset(klasName) && Js.code.trim(klasName) != "") {
+				return Js.code.inArray(klasName.split(/\s/), value);
 			} else { 
 				return false;
 			}
@@ -168,7 +168,7 @@ Js.namespace.include("class", {
 		var klasName = node.className;
 		
 		if(Js.dom.isElement(node)) {
-			if(Js.fn.isset(klasName) && Js.fn.trim(klasName) != ""){
+			if(Js.code.isset(klasName) && Js.code.trim(klasName) != ""){
 				var data = [];
 				var klass = klasName.split(/\s/);
 				
@@ -195,15 +195,15 @@ Js.namespace.include("class", {
 
 Js.namespace.include("style", {
 	set: function(node, data, value) {
-		var data = Js.fn.trim(data);
-		var val = Js.fn.trim(value);
+		var data = Js.code.trim(data);
+		var val = Js.code.trim(value);
 		
 		if(Js.dom.isElement(node)) {
 			try {
 				node.style[data] = value; 
 				return node;
 			} catch(e) { 
-				Js.logs("Js.style.get failed: " + e);
+				Js.debug.log("Js.style.get failed: " + e);
 				return false;
 			}
 		} else {
@@ -212,9 +212,9 @@ Js.namespace.include("style", {
 	},
 	setup: function(node, js) {
 		var node = node;
-		var data = Js.fn.pick(js, []);
+		var data = Js.code.pick(js, []);
 		
-		if(Js.fn.typeOf(data) !== "array") {
+		if(Js.code.typeOf(data) !== "array") {
 			data = [data];
 		}
 		
@@ -222,7 +222,7 @@ Js.namespace.include("style", {
 			var obj = data[i];
 			
 			for(var value in obj) {
-				value = Js.fn.trim(value);
+				value = Js.code.trim(value);
 				
 				if(obj.hasOwnProperty(value)) {
 					Js.style.set(node, value, obj[value]);
@@ -232,13 +232,13 @@ Js.namespace.include("style", {
 		return node;
 	},
 	get: function(node, data) {
-		var data = Js.fn.trim(data);
+		var data = Js.code.trim(data);
 		
 		if(Js.dom.isElement(node)) {
 			try {
 				return node.style[data];
 			} catch(e) {
-				Js.logs("Js.style.get failed: " + node + " " + data + " " + e);
+				Js.debug.log("Js.style.get failed: " + node + " " + data + " " + e);
 				return false;
 			}
 		} else {
@@ -248,7 +248,7 @@ Js.namespace.include("style", {
 	alpha: function(node, value) {
 		var value = (value > 100 ? 100 : (value < 0 ? 0 : value));
 		
-		if(Js.fn.isset(node)) {
+		if(Js.code.isset(node)) {
 			try {
 				if (value == 0 && this.get(node, "visibility") != "hidden") {
 					this.hide(node);
@@ -256,7 +256,7 @@ Js.namespace.include("style", {
 					this.show(node);
 				}
 				
-				if(Js.fn.behaviour.ie == true) {
+				if(Js.code.behaviour.ie == true) {
 					if(!node.currentStyle || !node.currentStyle.hasLayout) {
 						this.set(node, "zoom", 1);
 					}
@@ -267,20 +267,20 @@ Js.namespace.include("style", {
 					this.set(node, "MozOpacity", (value / 100));
 				}
 			} catch(e) { 
-				Js.logs("Js.style.alpha failed: " + e); 
+				Js.debug.log("Js.style.alpha failed: " + e); 
 			}
 		} else return false
 	},
 	png: function(node, uri, js) {
 		var node = node;
 		var uri = uri;
-		var gecko = Js.fn.pick(js.gecko, "");
-		var ie = Js.fn.pick(js.ie, "scale");
+		var gecko = Js.code.pick(js.gecko, "");
+		var ie = Js.code.pick(js.ie, "scale");
 		
 		ie = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + uri + "',sizingMethod='" + ie + "')";
 		gecko = "url('" + uri + "') " + gecko;
 		
-		if(window.ActiveXObject && (Js.fn.behaviour.ie && !Js.fn.behaviour.ie7)) {
+		if(window.ActiveXObject && (Js.code.behaviour.ie && !Js.code.behaviour.ie7)) {
 			this.set(node, "filter", ie);
 		} else {
 			this.set(node, "background", gecko);
@@ -300,7 +300,7 @@ Js.namespace.include("style", {
 				}
 				return node;
 			} catch(e) {
-				Js.logs("Js.style.show failed: " + e);
+				Js.debug.log("Js.style.show failed: " + e);
 				return false;
 			}
 		} else return false;
@@ -317,13 +317,13 @@ Js.namespace.include("style", {
 				}
 				return node;
 			} catch(e) {
-				Js.logs("Js.style.hide failed: " + e);
+				Js.debug.log("Js.style.hide failed: " + e);
 				return false;
 			}
 		} else return false;
 	},
 	__FX__: function(node, fx, value) {
-		var fx = (Js.fn.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
+		var fx = (Js.code.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
 		var id = Js.attr.get(node, "id");
 		var data = [20, 0.8, 80];
 		var value = (value.match(/^(show|hide)$/) ? value : 'show');
@@ -356,7 +356,7 @@ Js.namespace.include("style", {
 
 Js.namespace.include("dom", {
 	add: function(parent, child) {
-		if(!Js.fn.isset(child)) {
+		if(!Js.code.isset(child)) {
 			var child = parent;
 			var parent = document.body;
 		}
@@ -365,34 +365,34 @@ Js.namespace.include("dom", {
 			parent.appendChild(child);
 			return parent;
 		} catch(e) {
-			Js.logs("Js.dom.add failed: " + e);
+			Js.debug.log("Js.dom.add failed: " + e);
 			return false;
 		}
 	},
 	addText: function(parent, text) {
-		if(Js.fn.isset(parent)) {
+		if(Js.code.isset(parent)) {
 			return this.Add(parent, document.createTextNode(text));
 		} else {
-			Js.logs("Js.dom.addText failed: " + e);
+			Js.debug.log("Js.dom.addText failed: " + e);
 			return false;
 		}
 	},
 	addBefore: function(args) {
-		var args = Js.fn.toArray(arguments);
+		var args = Js.code.toArray(arguments);
 		var parent = null;
 		var child = null;
 		var reference = null;
 		
-		if(args.length == 3 && Js.fn.isset(args[0]) && Js.fn.isset(args[1]) && Js.fn.isset(args[2])) {
+		if(args.length == 3 && Js.code.isset(args[0]) && Js.code.isset(args[1]) && Js.code.isset(args[2])) {
 			parent = args[0];
 			child = args[1];
 			reference = args[2];
-		} else if(args.length == 2 && Js.fn.isset(args[0]) && Js.fn.isset(args[1])) {
+		} else if(args.length == 2 && Js.code.isset(args[0]) && Js.code.isset(args[1])) {
 			parent = args[1].parentNode;
 			child = args[0];
 			reference = args[1];
 		} else {
-			Js.logs("Js.dom.addBefore failed: Reference Object is null");
+			Js.debug.log("Js.dom.addBefore failed: Reference Object is null");
 			return false;
 		}
 		
@@ -400,7 +400,7 @@ Js.namespace.include("dom", {
 			parent.insertBefore(child, reference);
 			return true;
 		} catch(e) {
-			Js.logs("Js.dom.addBefore failed: " + parent + " " + child + " " + reference + e);
+			Js.debug.log("Js.dom.addBefore failed: " + parent + " " + child + " " + reference + e);
 			return false;
 		}
 	},
@@ -410,7 +410,7 @@ Js.namespace.include("dom", {
 		var child = null;
 		var reference = null;
 		
-		if(args.length == 3 && Js.fn.isset(args[0]) && Js.fn.isset(args[1]) && Js.fn.isset(args[2])) {
+		if(args.length == 3 && Js.code.isset(args[0]) && Js.code.isset(args[1]) && Js.code.isset(args[2])) {
 			parent = args[0];
 			child = args[1];
 			reference = this.next(args[2]);
@@ -421,34 +421,34 @@ Js.namespace.include("dom", {
 		}
 		
 		try {
-			if(Js.fn.isset(reference)) {
+			if(Js.code.isset(reference)) {
 				return this.addBefore(parent, child, reference);
 			} else {
 				return this.add(parent, child);
 			}
 		} catch(e) {
-			Js.logs("Js.dom.addAfter failed: " + e);
+			Js.debug.log("Js.dom.addAfter failed: " + e);
 			return false;
 		}
 	},
 	remove : function(params) {
 		var args = arguments;
-		var parNode = null;
-		var chiNode = null;
+		var parent = null;
+		var child = null;
 		
-		if(args.length === 2 && Js.fn.isset(args[0]) && Js.fn.isset(args[1])){
-			parNode = args[0];
-			chiNode = args[1];
-		} else if(args.length == 1 && Js.fn.isset(args[0])){
-			parNode = args[0].parentNode;
-			chiNode = args[0];
+		if(args.length === 2 && Js.code.isset(args[0]) && Js.code.isset(args[1])){
+			parent = args[0];
+			child = args[1];
+		} else if(args.length == 1 && Js.code.isset(args[0])){
+			parent = args[0].parentNode;
+			child = args[0];
 		}
 		
 		try {
-			parNode.removeChild(chiNode);
-			return parNode;
+			parent.removeChild(child);
+			return parent;
 		} catch(e) {
-			Js.logs("Js.dom.remove failed: " + e);
+			Js.debug.log("Js.dom.remove failed: " + e);
 			return false;
 		}
 	},
@@ -479,7 +479,7 @@ Js.namespace.include("dom", {
 			parent.replaceChild(child, reference);
 			return true;
 		} catch(e) {
-			Js.logs("Js.dom.change failed: " + e);
+			Js.debug.log("Js.dom.change failed: " + e);
 			return false;
 		}
 	},
@@ -539,13 +539,13 @@ Js.namespace.include("domReady", {
 	script: null,
 	timer: null,
 	done: null,
-	init: function(node, fn) {
+	add: function(node, fn) {
 		var that = Js.domReady;
 		
 		return (function(fn, node) {
 			if (!!that.done) {
 				if(!!node && node !== document) {
-					Js.fn.callback(node, fn);
+					Js.code.callback(node, fn);
 				} else { 
 					fn();
 				}
@@ -583,22 +583,23 @@ Js.namespace.include("domReady", {
 				}, 10);
 			}
 			
-			if (!!Js.fn.behaviour.ie) {
+			if (!!Js.code.behaviour.ie) {
 				try {
 					document.write("<script id=__ie_onload defer src=//0><\/scr"+"ipt>");
 					that.script = document.getElementById("__ie_onload");
 					that.script.onreadystatechange = function() {
-						if (this.readyState == "complete") 
+						if(this.readyState == "complete") {
 							that.callback(); // call the onload handler
+						}
 					};
 				} catch(e) { 
-					Js.logs(e);
+					Js.debug.log(e);
 				}
 			} else {
 				new Js.domEvent("on", {
 					on: "load",
 					callback: (function() {
-						that.__CALLBACK__();
+						that.callback();
 					})
 				});
 			}
@@ -620,9 +621,9 @@ Js.namespace.include("domReady", {
 				var fn = Js.domReady.fn[i];
 				var node = Js.domReady.node[i];
 				
-				if (Js.fn.isfunction(fn)) {
+				if (Js.code.isfunction(fn)) {
 					if(!!node && node !== document) {
-						Js.fn.callback(node, fn);
+						Js.code.callback(node, fn);
 					} else { 
 						fn();
 					}
@@ -657,9 +658,9 @@ Js.namespace.include("domEvent", function(handler, js) {
 		var p = true;
 		var r;
 		
-		this.node = Js.fn.pick(js.object, this.node);
-		this.type = Js.fn.pick(js.on, this.type, "load");
-		this.fn = Js.fn.pick(js.callback, this.fn);
+		this.node = Js.code.pick(js.object, this.node);
+		this.type = Js.code.pick(js.on, this.type, "load");
+		this.fn = Js.code.pick(js.callback, this.fn);
 		
 		if (this.node.addEventListener) {
 			try { 
@@ -685,9 +686,9 @@ Js.namespace.include("domEvent", function(handler, js) {
 		}
 		
 		if (!pass) {
-			var fn = Js.fn.pick(this.object["on" + this.type], null);
-			Js.fn.on(this.node, this.type, function() {
-				if(Js.fn.isset(fn) && Js.fn.isfunction(fn)) {
+			var fn = Js.code.pick(this.object["on" + this.type], null);
+			Js.code.on(this.node, this.type, function() {
+				if(Js.code.isset(fn) && Js.code.isfunction(fn)) {
 					fn();
 				}
 				that.fn();
@@ -697,9 +698,9 @@ Js.namespace.include("domEvent", function(handler, js) {
 	off: function (js) {
 		var that = this;
 		var r = false;
-		this.node = Js.fn.pick(js.object, this.node);
-		this.type = Js.fn.pick(js.on, this.type, "load");
-		this.fn = Js.fn.pick(js.callback, this.fn);
+		this.node = Js.code.pick(js.object, this.node);
+		this.type = Js.code.pick(js.on, this.type, "load");
+		this.fn = Js.code.pick(js.callback, this.fn);
 		
 		if (this.node.detachEvent) {
 			try { 
@@ -727,8 +728,8 @@ Js.namespace.include("hash", {
 	set: function(node, data, value) {
 		var name = this.verify(node);
 		
-		if (Js.fn.isset(name)) {
-			if (!Js.fn.isset(this.object[name])) {
+		if (Js.code.isset(name)) {
+			if (!Js.code.isset(this.object[name])) {
 				this.object[name] = {};
 			}
 			
@@ -738,8 +739,8 @@ Js.namespace.include("hash", {
 	get: function(node, data) {
 		var name = this.verify(node);
 		
-		if (Js.fn.isset(name)) {
-			if (Js.fn.isset(this.object[name]) && Js.fn.isset(this.object[name][data])) {
+		if (Js.code.isset(name)) {
+			if (Js.code.isset(this.object[name]) && Js.code.isset(this.object[name][data])) {
 				return this.object[name][data];
 			} else {
 				return false;
@@ -751,10 +752,10 @@ Js.namespace.include("hash", {
 	remove: function(node, data) {
 		var name = this.verify(node);
 		
-		if (Js.fn.isset(name)) {
+		if (Js.code.isset(name)) {
 			this.object[name][data] = null;
 			
-			if (Js.fn.isset(this.object[name]) && Js.fn.isset(this.object[name][data])) {
+			if (Js.code.isset(this.object[name]) && Js.code.isset(this.object[name][data])) {
 				this.object[name][data] = null;
 			} else {
 				return false;
@@ -773,7 +774,7 @@ Js.namespace.include("parse", {
 	html: {
 		to: function(value) {
 			var value = new String(value);
-			value = Js.fn.htmlEntities(value);
+			value = Js.code.htmlEntities(value);
 			value = encodeURIComponent(value);
 			
 			return value;
@@ -781,7 +782,7 @@ Js.namespace.include("parse", {
 		from: function(value) {
 			var value = new String(value);
 			value = decodeURIComponent(value);
-			value = Js.fn.htmlEntityDecode(value);
+			value = Js.code.htmlEntityDecode(value);
 			
 			return value;
 		}
@@ -794,7 +795,7 @@ Js.namespace.include("parse", {
 
 Js.namespace.include("query", {
 	is: function(node, is) {
-		var is = Js.fn.trim(is);
+		var is = Js.code.trim(is);
 		var r = null;
 		var status = null;
 		var value = false;
@@ -900,17 +901,17 @@ Js.namespace.include("query", {
 		} else 
 			return false;
 	},
-	tagParentOf: function(tags, parent, klasName, is, attr) {
+	tagParentOf: function(tags, parents, klasName, is, attr) {
 		var context = [];
 		
-		if(parent.length > 0) {
-			var t = (tags === "*" && document.all ? document.all : document.getElementsByTagName(tags));
+		if(parents.length > 0) {
+			var tag = (tags === "*" && document.all ? document.all : document.getElementsByTagName(tags));
 			
-			for(var i = 0; i < parent.length && parent[i]; i++) {
-				for(var ii = 0; ii < t.length && t[ii]; ii++) {
-					var node = t[ii];
+			for(var i = 0; i < parents.length && parents[i]; i++) {
+				for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
+					var node = tag[ii];
 					
-					if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node === parent[i].parentNode) {
+					if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node === parents[i].parentNode) {
 						context[context.length] = node;
 					}
 				}
@@ -918,21 +919,21 @@ Js.namespace.include("query", {
 		}
 		return context;
 	},
-	tagNextOf: function(tags, parent, klasName, is, attr) {
+	tagNextOf: function(tags, parents, klasName, is, attr) {
 		var context = [];
 		
-		if(parent.length > 0) {
-			for(var i = 0; i < parent.length && parent[i]; i++) {
-				var parParent = parent[i].parentNode;
+		if(parents.length > 0) {
+			for(var i = 0; i < parents.length && parents[i]; i++) {
+				var parent = parents[i].parentNode;
 				
-				if(!!Js.dom.isElement(parParent)) {
-					var tag = (tags === "*" && parParent.all ? parParent.all : parParent.getElementsByTagName(tags));
+				if(!!Js.dom.isElement(parent)) {
+					var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
 				
 					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 						var node = tag[ii];
 						var tnode = Js.dom.prev(node);
 						
-						if(tnode === parNode[i] && node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr)) {
+						if(tnode === parents[i] && node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr)) {
 							context[context.length] = node;
 						}
 					}
@@ -941,20 +942,20 @@ Js.namespace.include("query", {
 		}
 		return context;
 	},
-	tagSiblingOf: function(tags, parent, klasName, is, attr) {
+	tagSiblingOf: function(tags, parents, klasName, is, attr) {
 		var context = [];
 		
-		if(parNode.length > 0) {
-			for(var i = 0; i < parent.length && parent[i]; i++) {
-				var parParent = parent[i].parentNode;
+		if(parents.length > 0) {
+			for(var i = 0; i < parents.length && parents[i]; i++) {
+				var parent = parents[i].parentNode;
 				
-				if(!!Js.dom.isElement(parParent)) {
-					var tag = (tags === "*" && parParent.all ? parParent.all : parParent.getElementsByTagName(tags));
+				if(!!Js.dom.isElement(parent)) {
+					var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
 				
 					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 						var node = t[ii];
 						
-						if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === pn) {
+						if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === parent) {
 							context[context.length] = node;
 						}
 					}
@@ -963,20 +964,20 @@ Js.namespace.include("query", {
 		}
 		return context;
 	},
-	tagChildOf: function(tags, parNode, klasName, is, attr) {
+	tagChildOf: function(tags, parents, klasName, is, attr) {
 		var context = [];
 		
-		if(parNode.length > 0) {
-			for(var i = 0; i < parNode.length && parNode[i]; i++) {
-				var pn = parNode[i];
+		if(parents.length > 0) {
+			for(var i = 0; i < parents.length && parents[i]; i++) {
+				var parent = parents[i];
 				
-				if(!!pn && pn.nodeType == 1) {
-					var t = (tags === "*" && pn.all ? pn.all : pn.getElementsByTagName(tags));
+				if(!!parent && parent.nodeType == 1) {
+					var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
 				
-					for(var ii = 0; ii < t.length && t[ii]; ii++) {
-						var node = t[ii];
+					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
+						var node = tag[ii];
 						
-						if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === pn) {
+						if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === parent) {
 							context[context.length] = node;
 						}
 					}
@@ -987,9 +988,9 @@ Js.namespace.include("query", {
 	},
 	validate: function(node, klasName, is, attr) {
 		var valid = false;
-		var klasName = Js.fn.pick(klasName, "");
-		var is = Js.fn.pick(is, null);
-		var attr = Js.fn.pick(attr, []);
+		var klasName = Js.code.pick(klasName, "");
+		var is = Js.code.pick(is, null);
+		var attr = Js.code.pick(attr, []);
 		
 		valid = (klasName === "" || !!Js.query.hasClass(node, klasName) ? true : false);
 		valid = ((attr.length === 0 || (attr.length === 3 && !!Js.query.hasAttr(node, attr))) && !!valid ? true : false); 
@@ -999,50 +1000,51 @@ Js.namespace.include("query", {
 	},
 	create: function(tags, attr) {
 		var node = null;
-		var tags = Js.fn.trim(tags);
+		var tags = Js.code.trim(tags);
 		
 		if(/\#/.test(tags)) {
 			var tag = tags.split(/\#/);
-			var el = Js.fn.trim(tag[0]);
-			var id = Js.fn.trim(tag[1]);
+			var el = Js.code.trim(tag[0]);
+			var id = Js.code.trim(tag[1]);
 			node = document.createElementNS ? document.createElementNS('http://www.w3.org/1999/xhtml', el) : document.createElement(el);
 			Js.attr.set(node, "id", id);
 		} else {
 			node = document.createElementNS ? document.createElementNS('http://www.w3.org/1999/xhtml', tags) : document.createElement(tags);
 		}
 		
-		if (Js.fn.isset(attr)) { 
+		if (Js.code.isset(attr)) { 
 			Js.attr.setup(node, attr);
 		}
 		
 		return node;
 	},
-	tags: function(tags, parNode, klasName, is, attr, type) {
+	tags: function(tags, parents, klasName, is, attr, type) {
 		var context = [];
-		var klasName = Js.fn.trim(Js.fn.pick(klasName, ""));
-		var is = Js.fn.pick(is, null);
-		var attr = Js.fn.pick(attr, []);
-		var tags = Js.fn.pick(tags, "*");
+		var klasName = Js.code.trim(Js.code.pick(klasName, ""));
+		var is = Js.code.pick(is, null);
+		var attr = Js.code.pick(attr, []);
+		var tags = Js.code.pick(tags, "*");
 		
-		if(Js.fn.isset(type) && type > 0) {
+		if(Js.code.isset(type) && type > 0) {
 			if(type === 4) {
-				context = Js.query.tagParentOf(tags, parNode, klasName, is, attr);
+				context = Js.query.tagParentOf(tags, parents, klasName, is, attr);
 			} else if (type === 2) {
-				context = Js.query.tagNextOf(tags, parNode, klasName, is, attr);
+				context = Js.query.tagNextOf(tags, parents, klasName, is, attr);
 			} else if (type === 3) {
-				context = Js.query.tagSiblingOf(tags, parNode, klasName, is, attr);
+				context = Js.query.tagSiblingOf(tags, parents, klasName, is, attr);
 			} else if (type === 1) {
-				context = Js.query.tagChildOf(tags, parNode, klasName, is, attr);
+				context = Js.query.tagChildOf(tags, parents, klasName, is, attr);
 			}
 		} else {
-			if(!parNode || parNode.length === 0 || !parNode.length) {
-				parNode = [document];
+			if(!parents || parents.length === 0 || !parents.length) {
+				parents = [document];
 			}
 			
-			for(var i = 0; i < parNode.length && parNode[i]; i++) {
-				var t = (tags === "*" && parNode[i].all ? parNode[i].all : parNode[i].getElementsByTagName(tags));
+			for(var i = 0; i < parents.length && parents[i]; i++) {
+				var parent = parents[i];
+				var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
 				
-				for(var ii = 0; ii < t.length && t[ii]; ii++) {
+				for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 					var node = t[ii];
 					
 					if(node.nodeType === 1 && Js.query.validate(node, klasName, is, attr)) {
@@ -1053,8 +1055,8 @@ Js.namespace.include("query", {
 		}
 		return (context.length > 0 ? context : false);
 	},
-	id: function(id, parent, tags, is) {
-		var tags = Js.fn.trim(Js.fn.pick(tags, "*")).toUpperCase();
+	id: function(id, parents, tags, is) {
+		var tags = Js.code.trim(Js.code.pick(tags, "*")).toUpperCase();
 		var el = document.getElementById(id);
 		var is = (!!is ? this.is(el, is) : true);
 			
@@ -1064,28 +1066,28 @@ Js.namespace.include("query", {
 			return false;
 		}
 	},
-	selector: function(elem, parNode) {
+	selector: function(selector, parents) {
 		var context = [];
 		
-		var init = function(elem, parNode) {
+		var init = function(selector, parents) {
 			var context = [];
 			
-			if (!!parNode && !parNode.length) {
-				context = [parNode];
-			} else if (!!parNode && parNode.length > 0) { 
-				context = parNode;
+			if (!!parents && !parents.length) {
+				context = [parents];
+			} else if (!!parents && parents.length > 0) { 
+				context = parents;
 			}
 			
 			var type = 0;
-			var elm = elem.split(/\s/);
+			var elem = selector.split(/\s/);
 			
-			for (var i = 0; i < elm.length; i++){
+			for (var i = 0; i < elem.length; i++){
 				if(context.length === 0 && i > 0) {
 					context = false;
 					break;
 				}
 				
-				var el = Js.fn.trim(elm[i]);
+				var el = Js.code.trim(elem[i]);
 				
 				if (el !== "") {
 					var tags = "";
@@ -1140,7 +1142,7 @@ Js.namespace.include("query", {
 							context = [];
 							break;
 						} else {
-							context = Js.fn.unique(context);
+							context = Js.code.unique(context);
 						}
 						
 						type = 0;
@@ -1150,14 +1152,14 @@ Js.namespace.include("query", {
 			return context;
 		};
 		
-		var el = Js.fn.trim(elem).split(/,/);
-		el = Js.fn.unique(el);
+		var elem = Js.code.trim(selector).split(/,/);
+		elem = Js.code.unique(elem);
 		
-		for (var m = 0; m < el.length && !!el[m]; m++) {
-			var elm = Js.fn.trim(el[m]);
+		for (var m = 0; m < elem.length && !!elem[m]; m++) {
+			var el = Js.code.trim(elem[m]);
 			
-			if (elm !== "") {
-				var node = init(elm, parNode);
+			if (el !== "") {
+				var node = init(el, parents);
 				
 				if (!!node && node.length > 0) {
 					for (var i = 0; i < node.length; i++) {
@@ -1169,5 +1171,43 @@ Js.namespace.include("query", {
 			}
 		}
 		return (context.length > 0 ? context : false);
+	}
+});
+
+Js.namespace.include("test", {
+	isString: function(value) {
+		return (typeof(value) == "string" && isNaN(value));
+	},
+	isInteger: function(value) {
+		return !isNaN(value);
+	},
+	isNumber: function(value) {
+		return this.isInteger(value);
+	},
+	isEmail: function(value) {
+		return (value.match(/^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/));
+	},
+	isLength: function(datas, value) {
+		var data = datas.split(/\-/);
+		var length = SUI.fn.toNumber(data[1]);
+		var rdata = null;
+		
+		if (data[0] === "max") {
+			rdata = (value <= length ? true : false);
+		} else if (data[0] === "min") {
+			rdata = (value >= length ? true : false);
+		} else if (data[0] === "exact") {
+			rdata = (value == length ? true : false);
+		} else { 
+			rdata = true;
+		}
+		
+		return rdata;
+	},
+	isURL: function(value) {
+		return (value.match(/^https?:\/\/([a-z0-9-]+\.)+[a-z0-9]{2,4}.*$/));
+	},
+	isIpAddress: function(value) {
+		return (value.match(/^\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\]$/));
 	}
 });

@@ -48,6 +48,10 @@ JsTestUnit('Js.namespace.loaded', test, false);
 // Js.namespace
 var test = Js.extend('name', function() { });
 JsTestUnit('Js.extend', test, false);
+
+var test = ' hello world ';
+test = Jscript.trim(test);
+JsTestUnit('Js.trim', test, 'hello world');
 </script>
 
 </body>

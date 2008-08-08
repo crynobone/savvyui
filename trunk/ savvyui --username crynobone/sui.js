@@ -45,30 +45,32 @@ Js.namespace = {
 		var isload = this.loaded(name);
 		
 		if(!isload) {
-			Js.logs("Required Namespace ." + name + " is not loaded");
+			Js.debug.log("Required Namespace ." + name + " is not loaded");
 		}
 		
 		return isload;
 	},
 	// identical to this.require but just return boolean
 	loaded: function(name) {
-		return Js.fn.inArray(Js.namespace.lists, name);	
+		return Js.code.inArray(Js.namespace.lists, name);	
 	}
 };
 
-// Savvy.UI debugger option
-Js.debug = false;
-// Savvy.UI debugger message list
-Js.message = [];
-// Savvy.UI debugger logging function
-Js.logs = function(text) {
-	Js.message[Js.message.length] = text;
+Js.debug = {
+	// Savvy.UI debugger option
+	enable: false, 
+	// Savvy.UI debugger message list
+	message: [],
+	// Savvy.UI debugger logging function
+	log: function(text) {
+		this.message[this.message.length] = text;
 	
-	if(!!Js.debug) {
-		if(!!console.log) {
-			console.log(text);
-		} else {
-			window.alert(text);	
+		if(!!this.debug) {
+			if(!!console.log) {
+				console.log(text);
+			} else {
+				window.alert(text);	
+			}
 		}
 	}
 };
@@ -80,7 +82,7 @@ Js.toString = function() {
 // extends Savvy.UI's Js.elements
 Js.extend = function(name, fn) {
 	// check whether it's a function
-	if(Js.fn.isfunction(fn) && !!Js.elements) {
+	if(Js.code.isfunction(fn) && !!Js.elements) {
 		// push the function in Js.elements
 		Js.elements.prototype[name] = fn;
 		return true;
@@ -90,7 +92,7 @@ Js.extend = function(name, fn) {
 };
 
 // Add a numbers of function to Js.fn
-Js.fn = {
+var Js.code = Js.fn = {
 	_$: null,
 	// Check browser behaviour to determine whether it's based on IE, IE6, IE7, GECKO, OPERA or KHTML.
 	behaviour: function() {
@@ -229,7 +231,7 @@ Js.fn = {
 				window.open(url, target);
 			}
 		} catch(e) {
-			Js.logs("Js.fn.href() failed: " + e);
+			Js.debug.log("Js.code.href() failed: " + e);
 		}
 	},
 	// Convert all string characters to HTML entities
@@ -293,7 +295,7 @@ Js.fn = {
 				}
 			}
 		} catch(e) {
-			Js.logs("Js.base.on() failed: " + fn + e);
+			Js.debug.log("Js.code.on() failed: " + fn + e);
 		}
 	},
 	// Loop each option until find an option which does not return null and return it.
@@ -320,15 +322,15 @@ Js.fn = {
 		
 		if(this.typeOf(data) === "array") {
 			for(var i = 0; i < data.length && data[i]; i++) {
-				if(!!Js.Parser) { 
-					data[i].value = Js.Parser.HTML.to(data[i].value);
+				if(!!Js.parse) { 
+					data[i].value = Js.parse.html.to(data[i].value);
 				}
 				value[value.length] = data[i].name + "=" + data[i].value;
 			}
 		} else if(this.typeOf(data) == "object") {
 			for(var values in data) {
-				if(!!Js.Parser) { 
-					data[values] = Js.Parser.HTML.to(data[values]);
+				if(!!Js.parse) { 
+					data[values] = Js.parse.html.to(data[values]);
 				}
 				
 				value[value.length] = values + "=" + data[values];
@@ -425,12 +427,12 @@ Js.ext = {
 	require: function(name) {
 		var isload = this.loaded(name);
 		if(!isload) {
-			Js.logs("Required Namespace Js.ext." + name + " is not loaded.");	
+			Js.debug.log("Required Namespace Js.ext." + name + " is not loaded.");	
 		}
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.fn.inArray(this.lists, name);	
+		return Js.code.inArray(this.lists, name);	
 	}
 };
 
@@ -445,19 +447,19 @@ Js.widget = {
 	require: function(name) {
 		var isload = this.loaded(name);
 		if(!isload) {
-			Js.logs("Required Namespace Js.widget." + name + " is not loaded.");	
+			Js.debug.log("Required Namespace Js.widget." + name + " is not loaded.");	
 		}
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.fn.inArray(this.lists, name);	
+		return Js.code.inArray(this.lists, name);	
 	}
 };
 
 Js.tool = {
 	include: function(name, fn) {
 		this.lists[this.lists.length] = name;
-		Js.namespace.lists[Js.namespace.lists.length] = "Js.tool." + name;
+		Js.namespace.lists[Js.namespace.lists.length] = "tool." + name;
 		
 		return this[name] = fn;
 	},
@@ -465,19 +467,19 @@ Js.tool = {
 	require: function(name) {
 		var n = this.loaded(name);
 		if(!n) {
-			Js.logs("Required Namespace Js.tool." + name + " is not loaded.");	
+			Js.debug.log("Required Namespace Js.tool." + name + " is not loaded.");	
 		}
 		return n;
 	},
 	loaded: function(name) {
-		return Js.fn.inArray(this.lists, name);	
+		return Js.code.inArray(this.lists, name);	
 	}
 };
 
 Js.util = {
 	include: function(name, fn) {
 		this.lists[this.lists.length] = name;
-		Js.namespace.lists[Js.namespace.lists.length] = "Util." + name;
+		Js.namespace.lists[Js.namespace.lists.length] = "util." + name;
 		
 		return this[name] = fn;
 	},
@@ -485,14 +487,11 @@ Js.util = {
 	require: function(name) {
 		var isload = this.loaded(name);
 		if(!isload) {
-			Js.logs("Required Namespace Js.util." + name + " is not loaded.");	
+			Js.debug.log("Required Namespace Js.util." + name + " is not loaded.");	
 		}
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.fn.inArray(this.lists, name);	
+		return Js.code.inArray(this.lists, name);	
 	}
 };
-
-// copy SUI as shadow for Js
-var SUI = window.SUI = Js;

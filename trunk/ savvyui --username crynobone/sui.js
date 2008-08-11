@@ -19,7 +19,7 @@ var Js = window.Js = function(selector, context) {
 	
 	if(this === window && !!Js.elements) {
 		// return this as Js.elements Object
-		return new Js.elements(selector, context);
+		return new Js.Elements(selector, context);
 	} else {
 		// return as global namespace
 		return this;

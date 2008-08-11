@@ -337,7 +337,7 @@ Js.namespace.include("style", {
 			} else if (!fx) {
 				return false;
 			}
-			var effect = new Js.ext.animator;
+			var effect = new Js.ext.Animator;
 			effect.Initialize(node).Fx({
 				method: "fade",
 				transaction: fade,
@@ -345,7 +345,7 @@ Js.namespace.include("style", {
 				ease: data[1],
 				step: data[2]
 			});
-				
+			
 			return true;
 			
 		} else { 

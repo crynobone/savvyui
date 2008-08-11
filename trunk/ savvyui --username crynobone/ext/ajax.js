@@ -12,7 +12,7 @@
  */
 
 // Import as Extension
-SUI.Ext.include("Ajax", function(js) {
+Js.ext.include("Ajax", function(js) {
 	this.object = null;
 	this.debug = false;
 	this.data = null;
@@ -27,13 +27,13 @@ SUI.Ext.include("Ajax", function(js) {
 	
 	// create a XHR Request
 	if(!!js && typeof(js) === "object") {
-		this.Call(js);
+		this.init(js);
 	}
 	
 	// chain this
 	return this;
 }).prototype = {
-	Initialize: function() {
+	declare: function() {
 		var xhr = false;
 		
 		if (window.XMLHttpRequest) {
@@ -53,34 +53,34 @@ SUI.Ext.include("Ajax", function(js) {
 		
 		if (!xhr) {
 			// Failed to attach any XHR object
-			SUI.fn.logger("SUI.Ext.Ajax.Initialize() failed: browser does not support Ajax!");
+			Js.debug.log("Js.ext.Ajax.Initialize() failed: browser does not support Ajax!");
 		}
 		
 		this.object = xhr;
 	},
-	Call: function(js) {
+	init: function(js) {
 		if (this.object == null) {
 			// Initialize XHR object if undefined.
-			this.Initialize();
+			this.declare();
 		}
 		
 		// Check XHR method: GET/POST
-		this.method = (!SUI.fn.isset(js.method) || js.method != "GET" ? "POST" : "GET");
+		this.method = (!Js.code.isset(js.method) || js.method != "GET" ? "POST" : "GET");
 		// Set caching option for the request
-		this.cache = SUI.fn.pick(js.cache, this.cache);
+		this.cache = Js.code.pick(js.cache, this.cache);
 		// Enable debugging for XHR request
-		this.debug = SUI.fn.pick(js.debug, this.debug);
+		this.debug = Js.code.pick(js.debug, this.debug);
 		// XHR uri request
-		this.uri = (js.uri ? SUI.fn.trim(js.uri) : this.uri);
+		this.uri = (js.uri ? Js.code.trim(js.uri) : this.uri);
 		// XHR parameters
-		this.parameter = (js.parameters ? SUI.fn.trim(js.parameters) : this.parameter);
+		this.parameter = (js.parameters ? Js.code.trim(js.parameters) : this.parameter);
 		// XHR data
 		this.data = (!!js.data ? js.data : this.data);
-		this.data = (!!this.data ? SUI.fn.serialize(this.data) : "");
+		this.data = (!!this.data ? Js.code.serialize(this.data) : "");
 		
 		// Set timeout.
-		this.timeout = SUI.fn.pick(js.timeout, this.timeout);
-		this.timeout = (!!SUI.Test.isInteger(this.timeout) ? this.timeout : 0);
+		this.timeout = Js.code.pick(js.timeout, this.timeout);
+		this.timeout = (!!Js.test.isInteger(this.timeout) ? this.timeout : 0);
 		
 		// check whether XHR object is ready
 		if (this.object.readyState == 4 || this.object.readyState == 0) {
@@ -88,18 +88,18 @@ SUI.Ext.include("Ajax", function(js) {
 				// use method POST
 				this.object.open("POST", this.uri, true);
 				
-				this.type = SUI.fn.trim(SUI.fn.pick(js.type, "application/x-www-form-urlencoded"));
+				this.type = Js.code.trim(Js.code.pick(js.type, "application/x-www-form-urlencoded"));
 				this.object.setRequestHeader("Content-Type", this.type);
 				
 				if(this.object.overrideMimeType) {
 					this.object.setRequestHeader("Connection", "close");
 				}
 				
-				this.__POST__();
+				this.methodPost();
 				this.object.send(this.parameter);
 			} else {
 				// use method GET
-				this.__GET__();
+				this.methodGet();
 				this.object.open("GET", [this.uri, this.parameter].join(""), true);
 				this.object.send("");
 			}
@@ -107,19 +107,19 @@ SUI.Ext.include("Ajax", function(js) {
 			// set timeout count
 			if(this.timeout > 0) {
 				this.timeoutid = setTimeout(function() {
-					that.Cancel();
+					that.requestCancel();
 				}, this.timeout);
 			}
 			
 			var that = this;
 			var object = this.object;
 			// Run custom callback to function
-			if (SUI.fn.isfunction(js.onComplete)) {
+			if (Js.code.isfunction(js.onComplete)) {
 				try {
 					this.object.onreadystatechange = function() {
 						// clear timeout (if exist)
-						if(this.readyState === 4 && that.__STATUS__()) {
-							if(SUI.fn.isset(that.timeoutid)) {
+						if(this.readyState === 4 && that.requestStatus()) {
+							if(Js.code.isset(that.timeoutid)) {
 								clearTimeout(that.timeoutid);
 								that.timeoutid = null;
 							}
@@ -128,26 +128,26 @@ SUI.Ext.include("Ajax", function(js) {
 						js.onComplete.apply(that.object);
 					};
 				} catch(e) { 
-					SUI.fn.logger(e); 
+					Js.debug.log(e); 
 				}
 			} else {
 				// Run default callback to function
 				this.object.onreadystatechange = function() {
 					try {
 						// if request is complete and page is available
-						if (that.object.readyState === 4 && that.__STATUS__()) {
+						if (that.object.readyState === 4 && that.requestStatus()) {
 							// clear timeout (if exist)
-							if(SUI.fn.isset(that.timeoutid)) {
+							if(Js.code.isset(that.timeoutid)) {
 								clearTimeout(that.timeoutid);
 								that.timeoutid = null;
 							}
 							
 							// get response text
-							var reply = that.reply = SUI.fn.trim(that.object.responseText);
+							var reply = that.reply = Js.code.trim(that.object.responseText);
 							
 							// add to logs (if enable)
 							if (that.debug === true) {
-								SUI.fn.logger("Response from XHR: " + reply);
+								Js.debug.log("Response from XHR: " + reply);
 							}
 							
 							// reply shouldn't be empty
@@ -157,32 +157,33 @@ SUI.Ext.include("Ajax", function(js) {
 								
 								// check for SUIXHR object
 								if(!!data.SUIXHR) {
-									that.__ALERT__(data);
-									that.__GOTO__(data);
-									that.__UPDATE__(data);
+									that.responseNotice(data);
+									that.responseGoto(data);
+									that.responseUpdate(data);
 								}
-								that.__DONE__();
-							} else 
-								that.Cancel(); // cancel the object
+								that.requestDone();
+							} else {
+								that.requestCancel(); // cancel the object
+							}
 						}
 					} catch(e) {
 						// log if anything goes wrong
-						SUI.fn.logger("onreadychange error: " +e);
+						Js.debug.log("onreadychange error: " +e);
 					}
 				};
 			}
 		}
 	},
 	// Cancel the currently running XHR Object/request
-	Cancel: function() {
+	requestCancel: function() {
 		this.object.abort();
 		this.object = null;
-		SUI.fn.logger("SUI.Ajax: Cancel XHR request"); 
+		Js.debug.log("Js.ext.Ajax: Cancel XHR request"); 
 	},
-	__DONE__: function() {
+	requestDone: function() {
 		this.object = null;
 	},
-	__POST__: function() {
+	methodPost: function() {
 		var p = this.parameter;
 		
 		if (p.match(/^\?/)) {
@@ -197,7 +198,7 @@ SUI.Ext.include("Ajax", function(js) {
 			this.parameter += (this.parameter !== "" ? "&" : "?") + "suicache=" + s.getTime(); 
 		}
 	},
-	__GET__: function() {
+	methodGet: function() {
 		var par = [];
 		var param = "";
 		var p = this.parameter;
@@ -234,44 +235,45 @@ SUI.Ext.include("Ajax", function(js) {
 			this.parameter += (this.parameter !== "" ? "&" : "?") + "suicache=" + s.getTime(); 
 		}
 	},
-	__STATUS__: function() {
+	requestStatus: function() {
 		var r = this.object.status;
 		
 		try {
 			var local = (!r && location.protocol == 'file:');
 			var range = (r >= 200 && r < 300);
 			var unmodified = (r == 304);
-			var safari = (SUI.fn.behaviour.safari && typeof(r) == "undefined");
+			var safari = (Js.code.behaviour.safari && typeof(r) == "undefined");
 			return  (local || range || unmodified || safari);
 		} catch(e) {
-			SUI.fn.logger("Status failed: " + e);	
+			Js.debug.log("Status failed: " + e);	
 		}
 		return false;
 	},
-	__ALERT__: function(data) {
-		var a = SUI.fn.pick(data.alertpop, data.notice);
+	responseNotice: function(data) {
+		var a = Js.code.pick(data.alertpop, data.notice);
 		
-		if (SUI.fn.isset(a) && a !== "") {
+		if (Js.code.isset(a) && a !== "") {
 			window.alert(a);
 		}
 	},
-	__GOTO__: function(data) {
-		var h = SUI.fn.pick(data.jumpto, data.href);
+	responseGoto: function(data) {
+		var h = Js.code.pick(data.jumpto, data.href);
 		
-		if (SUI.fn.isset(h) && h !== "") {
-			SUI.fn.href(h);
+		if (Js.code.isset(h) && h !== "") {
+			Js.code.href(h);
 		}
 	},
-	__UPDATE__: function(data) {
-		var p = SUI.fn.pick(data.result, data.text);
-		var id = SUI.fn.pick(data.add2id, data.id);
-		var fn = SUI.fn.pick(data.exec, data.callback);
-		var args = SUI.fn.pick(data.args, null);
+	responseCustom: function(data) {
+		var p = Js.code.pick(data.result, data.text);
+		var id = Js.code.pick(data.add2id, data.id);
+		var fn = Js.code.pick(data.exec, data.callback);
+		var args = Js.code.pick(data.args, null);
 		
 		if (!!p) {
 			if (!!id && typeof(id) === "string") {
-				SUI("#" + id).html(SUI.Parser.SuiML(p));
-			} else if (SUI.fn.isfunction(fn)) {
+				var node = Js.query.selector("#" + id);
+				node[0].innerHTML = Js.parse.bbml(p);
+			} else if (Js.code.isfunction(fn)) {
 				if(args !== null && args.length > 0) {
 					fn.apply(data, args);
 				} else {
@@ -283,23 +285,23 @@ SUI.Ext.include("Ajax", function(js) {
 };
 
 // Make it easier for people to code
-SUI.namespace.include("Ajax", SUI.Ext.Ajax);
+Js.namespace.include("Ajax", Js.ext.Ajax);
 
-SUI.extend("load", (function(url, method, i) {
-	var i = SUI.fn.pick(this.index, i, 0);
-	var imethod = (!!SUI.fn.inArray(['post','get'], method.toLowerCase()) ? method.toUpperCase() : 'GET');
+Js.extend("load", (function(url, method) {
+	var key = Js.code.pick(this.index, 0);
+	var imethod = (!!Js.code.inArray(['post','get'], method.toLowerCase()) ? method.toUpperCase() : 'GET');
 	
-	if (SUI.fn.isset(i) && !!this.node[i]) {
-		var node = this.node[i];
+	if(Js.code.isset(key) && !!this.node[key]) {
+		var node = this.node[key];
 		
 		var updateNode = function() {
-			if (this.readyState == 4) {
+			if(this.readyState == 4) {
 				var text = this.responseText;
-				node.innerHTML = SUI.Parser.SuiML(text);
+				node.innerHTML = Js.parse.bbml(text);
 			}
 		};
 		
-		new SUI.Ext.Ajax({
+		new Js.ext.Ajax({
 			uri: url,
 			method: imethod,
 			cache: false,

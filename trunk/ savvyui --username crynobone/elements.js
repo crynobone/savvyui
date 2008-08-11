@@ -11,7 +11,7 @@
  * Optional: SUI.Ext.Animator
  */
 
-Js.namespace.include("elements", function(selector, parent) {
+Js.namespace.include("Elements", function(selector, parent) {
 	this.node = [];
 	this.animate = [];
 	this._node = [];
@@ -56,7 +56,7 @@ Js.namespace.include("elements", function(selector, parent) {
 			node[node.length] = Js.query.create(tags, attr);
 			Js.dom.add(parent, node[0]);
 		} catch(e) {
-			Js.debug.log("Js.elements.create failed: " + e);
+			Js.debug.log("Js.Elements.create failed: " + e);
 		}
 		
 		if(node.length > 0) {
@@ -91,7 +91,7 @@ Js.namespace.include("elements", function(selector, parent) {
 							this.animate[length] = new Js.ext.Animator;
 							this.animate[length].initialize(node);
 						} catch(e) {
-							Js.debug.log("Js.elements.__ADD__ error on Initialize Animator: " + node +  e);
+							Js.debug.log("Js.Elements.__ADD__ error on Initialize Animator: " + node +  e);
 						};
 					}
 				}
@@ -147,7 +147,7 @@ Js.namespace.include("elements", function(selector, parent) {
 		var n2 = (!key ? this._node : this._node[key]);
 		var node = Js.code.pick(n1, n2);
 		
-		return new Js.elements(selector, node);
+		return new Js.Elements(selector, node);
 	},
 	childOf: function(selector) {
 		var key = Js.code.pick(this.index, null);
@@ -178,7 +178,7 @@ Js.namespace.include("elements", function(selector, parent) {
 			return this;
 		} else if(this._node.length === 0) {
 			var node = (!key ? this.node : this.node[key]);
-			return new Js.elements(selector, node);
+			return new Js.Elements(selector, node);
 		}
 	},
 	has: function(selector) {
@@ -210,7 +210,7 @@ Js.namespace.include("elements", function(selector, parent) {
 			return this;
 		} else if(this._node.length === 0) {
 			var node = (!key ? this.node : this.node[key]);
-			return new Js.elements(selector, node);
+			return new Js.Elements(selector, node);
 		}
 	},
 	is: function(selector) {
@@ -220,7 +220,7 @@ Js.namespace.include("elements", function(selector, parent) {
 		
 		for(var i = 0; i < node.length && !!node[i]; i++) {
 			if(node[i] === this.node[key]) {
-				object = new Js.elements(node[i]);
+				object = new Js.Elements(node[i]);
 				break;
 			}
 		}
@@ -231,12 +231,12 @@ Js.namespace.include("elements", function(selector, parent) {
 			}
 			return object;
 		} else { 
-			return new Js.elements();
+			return new Js.Elements();
 		}
 	},
 	use: function() {
 		var node = this.fetch();
-		return (!!node ? new Js.elements(node) : false);						
+		return (!!node ? new Js.Elements(node) : false);						
 	},
 	fetch: function() {
 		var key = Js.code.pick(this.index, 0);
@@ -257,7 +257,7 @@ Js.namespace.include("elements", function(selector, parent) {
 		var key = Js.code.pick(this.index, 0);
 		var node = Js.code.pick(this.node[key].parentNode, false);
 		
-		return (!!node ? new Js.elements(node) : false);
+		return (!!node ? new Js.Elements(node) : false);
 	},
 	siblings: function(selector) {
 		var key = Js.code.pick(this.index, 0);
@@ -289,7 +289,7 @@ Js.namespace.include("elements", function(selector, parent) {
 			return this;
 		} else if (this._node.length === 0) {
 			var node = (!key ? this.node : this.node[key]);
-			return new Js.elements(selector, node);
+			return new Js.Elements(selector, node);
 		}
 	},
 	first: function() {
@@ -362,7 +362,7 @@ Js.namespace.include("elements", function(selector, parent) {
 		var key = Js.code.pick(this.index, 0);
 		
 		if (!!this.node[key]) {
-			var node = new Js.elements;
+			var node = new Js.Elements;
 			node.create(selector, this.node[key], data);
 			
 			return node;
@@ -659,7 +659,7 @@ Js.namespace.include("elements", function(selector, parent) {
 		// continue chaining
 		return this;
 	},
-	// extend onDOMReady function to Js.elements
+	// extend onDOMReady function to Js.Elements
 	ready: function(fn) {
 		// include document if node empty
 		if(this.node.length == 0) {
@@ -734,7 +734,7 @@ Js.namespace.include("elements", function(selector, parent) {
 	}
 };
 
-// Extend misc event handler function to Js.elements
+// Extend misc event handler function to Js.Elements
 (function() {
 	// array listing all the supported event handler
 	var handler = ["click", "mouseover", "mouseout", "change", "keyup", "keypress", "submit", "blur", "focus", "hover"];
@@ -746,7 +746,7 @@ Js.namespace.include("elements", function(selector, parent) {
 		var n = (!that.match(/(s|es)$/g) ? [that, (that.match(/es$/g) ? "" : "s")].join("") : that);
 		
 		try {
-			// extend it to Js.elements
+			// extend it to Js.Elements
 			Js.extend(n, function(fn1, fn2) {
 				return this.on(that, fn1, fn2);					  
 			});

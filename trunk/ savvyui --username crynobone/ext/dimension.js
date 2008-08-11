@@ -100,7 +100,7 @@ Js.ext.include("dimension", {
 				}
 				return rdata;
 			} else {
-				Js.debug.logs("Js.ext.dimension.node.offset error : " + node + " does not exist");
+				Js.debug.log("Js.ext.dimension.node.offset error : " + node + " does not exist");
 				return ret;
 			}
 		}

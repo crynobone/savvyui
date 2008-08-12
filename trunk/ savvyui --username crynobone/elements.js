@@ -21,9 +21,9 @@ Js.namespace.include("Elements", function(selector, parent) {
 	this.index = null;
 	this.length = 0;
 	
-	if(Js.dom.isElement(selector)) {
+	if(!!selector && selector.nodeType) {
 		this.__ADD__([selector]);
-	} else if(!!selector && selector.length > 0) {
+	} else if(!!selector && typeof(selector) !== "string" && selector.length > 0) {
 		this.__ADD__(selector);
 	} else if (!!selector && typeof(selector) == "string") {
 		this.query(selector, parent);
@@ -39,7 +39,7 @@ Js.namespace.include("Elements", function(selector, parent) {
 		var attr = null;
 		
 		if(args.length === 3 && (!!args[0] && typeof(args[0]) == "string" && !!args[1] && args[1].nodeType && !!args[2])) {
-			parnet = args[1];
+			parent = args[1];
 			tags = args[0];
 			attr = args[2];
 		} else if(!!args[0] && typeof(args[0]) == "string") {
@@ -81,7 +81,7 @@ Js.namespace.include("Elements", function(selector, parent) {
 			for(var i = 0; i < nodes.length; i++) {
 				var node = nodes[i];
 				
-				if(Js.dom.isElement(node.nodeType)) {
+				if(!!node && node.nodeType) {
 					this.node[this.node.length] = node;
 					
 					if(Js.ext.loaded("Animator") && node != document) {
@@ -94,6 +94,8 @@ Js.namespace.include("Elements", function(selector, parent) {
 							Js.debug.log("Js.Elements.__ADD__ error on Initialize Animator: " + node +  e);
 						};
 					}
+				} else {
+					Js.debug.log("node is not a HTMLelement" + (!!node && node.nodeType));	
 				}
 			}
 		}
@@ -234,12 +236,12 @@ Js.namespace.include("Elements", function(selector, parent) {
 			return new Js.Elements();
 		}
 	},
-	use: function() {
-		var node = this.fetch();
+	use: function(key) {
+		var node = this.fetch(key);
 		return (!!node ? new Js.Elements(node) : false);						
 	},
-	fetch: function() {
-		var key = Js.code.pick(this.index, 0);
+	fetch: function(key) {
+		var key = Js.code.pick(this.index, key);
 		
 		if (Js.code.isnull(key)) { 
 			return this.node;
@@ -356,12 +358,12 @@ Js.namespace.include("Elements", function(selector, parent) {
 		// continue chaining
 		return this;
 	},
-	add: function(elem, data) {
+	add: function(selector, data) {
 		var args = arguments;
 		
 		var key = Js.code.pick(this.index, 0);
 		
-		if (!!this.node[key]) {
+		if (Js.code.isset(this.node[key])) {
 			var node = new Js.Elements;
 			node.create(selector, this.node[key], data);
 			
@@ -457,9 +459,9 @@ Js.namespace.include("Elements", function(selector, parent) {
 		
 		if(args.length === 1 && typeof(args[0]) == "object") { 
 			return this.setStyles(args[0]);
-		} else if(ar.length === 2) {
-			if(typeof(ar[0]) == "string") {
-				if(ar[0] == "alpha") { 
+		} else if(args.length === 2) {
+			if(typeof(args[0]) == "string") {
+				if(args[0] == "alpha") { 
 					return this.alpha(args[1]);
 				} else { 
 					return this.setStyle(args[0], args[1]);

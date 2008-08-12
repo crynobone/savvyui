@@ -144,7 +144,7 @@ Js.ext.include("Resizable", function(js) {
 	}
 };
 
-SUI.namespace.include("Resize", SUI.Ext.Resizable);
+Js.namespace.include("Resizable", Js.ext.Resizable);
 
 Js.extend('resizable', (function(js, i) {
 	var i = Js.code.pick(this.index, i);

@@ -17,7 +17,7 @@
 var Js = window.Js = function(selector, context) {
 	var selector = selector || document;
 	
-	if(this === window && !!Js.elements) {
+	if(this === window && !!Js.Elements) {
 		// return this as Js.elements Object
 		return new Js.Elements(selector, context);
 	} else {
@@ -92,7 +92,7 @@ Js.extend = function(name, fn) {
 };
 
 // Add a numbers of function to Js.fn
-var Js.code = Js.fn = {
+Js.code = Js.fn = {
 	_$: null,
 	// Check browser behaviour to determine whether it's based on IE, IE6, IE7, GECKO, OPERA or KHTML.
 	behaviour: function() {

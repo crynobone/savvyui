@@ -49,10 +49,10 @@ Js.widget.include("SimpleTab", function(sel) {
 			this.activeTab = Js(child.first().fetch());
 		}
 		
-		this.toolbar(this.element);
+		this.addToolbar(this.element);
 		
 		child.each(function() {
-			that.header(this);
+			that.addHeader(this);
 			Js(this).setClass("simpletab-hidden");			
 		});
 			
@@ -99,13 +99,13 @@ Js.widget.include("SimpleTab", function(sel) {
 		}
 		return this;
 	},
-	toolbar: function(el) {
-		var div = Js("body").first().add("div", {
+	addToolbar: function(el) {
+		div = Js("body").first().add("div", {
 			"class": "simpletab-toolbar-container",
 			"id": this.element + "toolbar"
 		});
 		
-		Js.dom.addBefore(div.fetch(0), this.object.fetch());
+		Js.dom.addBefore(div.fetch(), this.object.fetch());
 		this.toolbar = div;
 		
 		this.header = this.toolbar.add("ul", {
@@ -133,7 +133,7 @@ Js.widget.include("SimpleTab", function(sel) {
 			this.activate(activecon.first().fetch());
 		}
 	},
-	header: function(obj) {
+	addHeader: function(obj) {
 		var that = this;
 		var obj = Js(obj);
 		var title = obj.get("title");

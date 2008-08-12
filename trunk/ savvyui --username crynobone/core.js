@@ -526,7 +526,7 @@ Js.namespace.include("dom", {
 		return f === l;
 	},
 	isElement: function(node) {
-		return (!!node && node.nodeType == 1 ? true : false);
+		return (Js.code.isset(node) && node.nodeType ? true : false);
 	},
 	parent: function(node) {
 		return node.parentNode;
@@ -926,7 +926,7 @@ Js.namespace.include("query", {
 			for(var i = 0; i < parents.length && parents[i]; i++) {
 				var parent = parents[i].parentNode;
 				
-				if(!!Js.dom.isElement(parent)) {
+				if(!!parent && parent.nodeType) {
 					var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
 				
 					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
@@ -949,11 +949,11 @@ Js.namespace.include("query", {
 			for(var i = 0; i < parents.length && parents[i]; i++) {
 				var parent = parents[i].parentNode;
 				
-				if(!!Js.dom.isElement(parent)) {
+				if(!!parent && parent.nodeType) {
 					var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
 				
 					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
-						var node = t[ii];
+						var node = tag[ii];
 						
 						if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === parent) {
 							context[context.length] = node;
@@ -1045,7 +1045,7 @@ Js.namespace.include("query", {
 				var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
 				
 				for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
-					var node = t[ii];
+					var node = tag[ii];
 					
 					if(node.nodeType === 1 && Js.query.validate(node, klasName, is, attr)) {
 						context[context.length] = node;

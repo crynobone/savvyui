@@ -17,10 +17,10 @@ Js.util.include("ActiveContent", Js.base.create({
 	interval: null,
 	repeat: false,
 	init: null,
-	sel: null,
+	element: null,
 	option: null,
-	__construct: function(sel) {
-		this.sel = Js.code.pick(sel, null);
+	__construct: function(selector) {
+		this.element = Js.code.pick(selector, null);
 		
 		if(Js.code.isset(this.sel)) {
 			this.selector();
@@ -38,38 +38,38 @@ Js.util.include("ActiveContent", Js.base.create({
 			this.interval == null;
 		}
 		
-		this.sel = null;
+		this.element = null;
 		this.__destruct();
 		return null;
 	},
 	selector: function() {
 		var that = this;
 		
-		Js(this.sel).clicks(function() {
-			var h = Js(this).get("href");
-			var an = (Js.code.isset(h) ? h : this.href);
+		Js(this.element).onclick(function() {
+			var href = Js(this).get("href");
+			var anchors = (Js.code.isset(href) ? href : this.href);
 			
-			if(an.match(/^\#/)) {
-				var a = ["", an.substring(1, an.length)];
+			if(anchors.match(/^\#/)) {
+				var ahref = ["", anchors.substr(1)];
 			} else { 
-				var a = an.split(/\#/);
+				var ahref = anchors.split(/\#/);
 			}
 			
-			if(Js.code.isset(a[1])) {
-				that.repeat = (a[1] === that.last);
+			if(Js.code.isset(ahref[1])) {
+				that.repeat = (ahref[1] === that.last);
 				
-				that.last = a[1];
-				var i = a[1].split(/\//);
-				that.init(i);
+				that.last = ahref[1];
+				var data = ahref[1].split(/\//);
+				that.init(data);
 			}
 		});
 	},
 	check: function() {
-		if(location.hash != this.last && location.hash !== "#/" && location.hash !== "#"){
+		if(location.hash != this.last && location.hash !== "#") {
 			this.last = location.hash;
-			var i;
-			i = location.hash.substring(1, location.hash.length).split(/\//);
-			this.init(i);
+			
+			var data = location.hash.substr(1).split(/\//);
+			this.init(data);
 		}
 	}
 }));

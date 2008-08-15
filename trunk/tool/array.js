@@ -1,20 +1,21 @@
 Js.namespace.include("array", Js.base.create({
 	ext: Array.prototype,
-	__construct: function(s) {
-		this._super = s;
+	value: null,
+	__construct: function(value) {
+		this._super = value;
 		this.value = this._super;
 		return this;
 	},
-	exec: function(m, arg) {
+	exec: function(data, args) {
 		var args = Js.code.toArray(arguments, 1);
-		var s = this._super;
-		s = new Array(s);
-		s = s[m].apply(s, args);
-		this._super = s;
+		var value = this._super;
+		value = new Number(value);
+		value = value[data].apply(value, args);
+		this.value = this._super = value;
+		
 		return this;
 	},
 	append: function(value) {
-		var len = this._super.length;
-		this._super[len] = value;
+		this.value[this.value.length] = this._super[this._super.length] = value;
 	}
 }));

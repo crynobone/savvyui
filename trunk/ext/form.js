@@ -19,74 +19,68 @@ Js.ext.include("Form", function() {
 	return this;
 }).prototype = {
 	liveValidate: function(node, custom) {
-		var node = this.object = Js.code.pick(node, this.object);
-		var el = Js.attr.get(node, "id");
+		this.object = Js.code.pick(node, this.object);
+		
+		var formId = Js.attr.get(this.object, "id");
 		var custom = Js.code.pick(custom, null);
 		var post = "";
 		var that = this;
 		
-		if(!!node) {
-			var inputs = Js("#" + el + " :input");
+		if(!!this.object) {
+			var field = Js("#" + formId + " :input");
 			
-			inputs.blurs(function() {
-				var errnode = Js(this).siblings("span.form_error").first();
-				if(errnode.count() == 1) {
-					Js.dom.remove(errnode.fetch());	
+			field.onblur(function() {
+				var errorNode = Js(this).siblings("span.extform-errormessage").first();
+				if(errorNode.count() == 1) {
+					Js.dom.remove(errorNode.fetch());	
 				}
 				
-				if (this.tagName.toUpperCase().match(/^(INPUT|SELECT|TEXTAREA)$/)) {
-					if (this.name != "") {
+				if(this.tagName.toUpperCase().match(/^(INPUT|SELECT|TEXTAREA)$/)) {
+					if(this.name != "") {
 						this.className = (Js.code.isset(this.className) ? this.className : "");
-						var cl = this.className.split(/\s/);
-						var err = "";
+						var klass = this.className.split(/\s/);
+						var error = "";
 						
-						if (Js.code.inArray(cl, "required") && Js.code.trim(this.value) === "") {
-							err = "This field require an input!";
+						if(Js.code.inArray(klass, "required") && Js.code.trim(this.value) === "") {
+							error = "This field require an input!";
 						}
 						
-						if (Js.code.inArray(cl, "string") && !Js.test.isString(this.value) && Js.code.trim(this.value) !== "") {
-							err = "This field require valid alphanumeric!";
-						} else if (Js.code.inArray(cl, "integer") && !Js.test.isInteger(this.value) && Js.code.trim(this.value) !== "") { 
-							err = "This field require valid numbers!";
-						} else if (Js.code.inArray(cl, "email") && !Js.test.isEmail(this.value) && Js.code.trim(this.value) !== "") {
-							err = "This field require valid e-mail address!";
+						if(Js.code.inArray(klass, "string") && !Js.test.isString(this.value) && Js.code.trim(this.value) !== "") {
+							error = "This field require valid alphanumeric!";
+						} else if((Js.code.inArray(klass, "integer") || Js.code.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Js.code.trim(this.value) !== "") { 
+							error = "This field require valid numbers!";
+						} else if(Js.code.inArray(klass, "email") && !Js.test.isEmail(this.value) && Js.code.trim(this.value) !== "") {
+							error = "This field require valid e-mail address!";
 						}
 						
-						if(Js.code.inArray(cl, "custom") || Js.code.isset(custom)) {
-							var id = Js.attr.get(this, "id");
-							if(Js.code.isset(custom[id])) {
-								if(Js.code.isfunction(custom[id]['callback'])) {
-									var callback = custom[id]['callback'](this.value);
-									
-									if(!callback) { 
-										err = Js.code.pick(custom[id]['err'], err);
-									}
-								} else if(Js.code.isset(custom[id]['test'])) {
-									var test = this.value.match(custom[id]['test']);
-									
-									if(!test) {
-										err = Js.code.pick(custom[id]['err'], err);
-									}
+						if(Js.code.isset(custom)) {
+							var validate = custom[Js.attr.get(this, "id")];
+							
+							if(Js.code.isset(validate)) {
+								if(Js.code.isfunction(validate.callback) && !validate.callback(this.value)) { 
+									error = Js.code.pick(validate.error, error);
+								} else if(Js.code.isset(validate.test) && !this.value.match(validate.test)) {
+									error = Js.code.pick(validate.error, error);
 								}
 							}
 						}
 						
-						if(err !== "") {
-							that.__LIVERROR__(node, this, err);
+						if(error !== "") {
+							that.liveError(this, error);
 						} else {
-							Js.class.remove(this, "sui-form-error");
+							Js.class.remove(this, "extform-error");
 							
-							var errnode = Js(this).siblings("span.form_error").first();
-							if(errnode.count() == 1) {
-								Js.dom.remove(errnode.fetch());	
+							var errorNode = Js(this).siblings("span.extform-errormessage").first();
+							if(errorNode.count() == 1) {
+								Js.dom.remove(errorNode.fetch());	
 							}
 						}
 						
-						for (var i = 0; i < cl.length; i++) {
-							if (cl[i].match(/(max|min|exact)\-(\d*)/)) {
-								if (!Js.test.isLength(cl[i], this.value.length)) {
-									var err = cl[i].split(/\-/);
-									that.liveError(node, this, "This field require " + err[0] + " of " + err[1] + " characters.", true);
+						for(var i = 0; i < klass.length; i++) {
+							if(klass[i].match(/(max|min|exact)\-(\d*)/)) {
+								if(!Js.test.isLength(klass[i], this.value.length)) {
+									var error = klass[i].split(/\-/);
+									that.liveError(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
 								}
 							}
 						}
@@ -95,51 +89,51 @@ Js.ext.include("Form", function() {
 			});
 		}
 		
-		if (Js.code.isset(this.first)) { 
+		if(Js.code.isset(this.first)) { 
 			// stop form processing
 			return false;
 		} else {
 			return true;
 		}
 	},
-	liveError: function(node, form, text, data) {
+	liveError: function(field, text, data) {
 		// Mark first error occured!
-		var form = Js(form);
-		var node = Js(node);
-		var el = form.get("name");
-		var fid = [node.get("id"), el, "error"].join("_");
+		var form = Js(this.object);
+		var field = Js(field);
+		var fieldId = field.get("name");
+		var fieldErrorId = [form.get("id"), fieldId, "error"].join("-");
 		var data = Js.code.pick(data, false);
 		var that = this;
 		
-		if (!Js.code.finds(fid)) {
-			form.appendClass("sui-form-error").parent().add("span", {"id": fid, "class": "form_error"}).html(text);
+		if (!Js.code.finds(fieldErrorId)) {
+			field.appendClass("extform-error").parent().add("span", {"id": fieldErrorId, "class": "extform-errormessage"}).html(text);
 			
-			form.focus(function() {
+			field.onfocus(function() {
 				if(this.value != "") { 
-					var obj = Js(this).removeClass("sui-form-error");
-					var errnode = obj.siblings("span.form_error").first();
+					var node = Js(this).removeClass("extform-error");
+					var errorNode = node.siblings("span.extform-errormessage").first();
 					
-					if(errnode.count() == 1) {
-						Js.dom.remove(errnode.fetch());
+					if(errorNode.count() == 1) {
+						Js.dom.remove(errorNode.fetch());
 					}
 				}
 			});
-		} else if (Js.code.finds(fid) && data) {
-			form.appendClass("sui-form-error");
-			var errnode = form.siblings("span.form_error").first();
-			var ohtml = errnode.html();
+		} else if (Js.code.finds(fieldErrorId) && data) {
+			field.appendClass("extform-error");
+			var errorNode = field.siblings("span.extform-errormessage").first();
+			var html = errorNode.html();
 			
-			if (ohtml.match(text) === false && Js.code.trim(ohtml) != "") {
-				errnode.append(" " + text);
+			if (html.match(text) === false && Js.code.trim(html) != "") {
+				errorNode.append(" " + text);
 			}
 			
-			form.focus(function() {
+			field.onfocus(function() {
 				if (this.value != "") {
-					var obj = Js(this).removeClass("sui-form-error");
-					var errnode = obj.siblings("span.form_error").first();
+					var node = Js(this).removeClass("extform-error");
+					var errorNode = node.siblings("span.extform-errormessage").first();
 					
-					if(errnode.count() == 1) {
-						Js.dom.remove(errnode.fetch());
+					if(errorNode.count() == 1) {
+						Js.dom.remove(errorNode.fetch());
 					}
 					
 				}
@@ -147,92 +141,90 @@ Js.ext.include("Form", function() {
 		}
 	},
 	validate: function(node, custom) {
-		var node = this.object = Js.code.pick(node, this.object);
-		var el = Js.attr.get(node, "id");
+		this.object = Js.code.pick(node, this.object);
+		
+		var formId = Js.attr.get(this.object, "id");
 		var custom = Js.code.pick(custom, null);
 		var post = "";
+		
 		this.first = null;
 		var that = this;
 		
-		if(!!node) {
-			var inputs = Js("#" + el + " :input");
+		if(!!this.object) {
+			var field = Js("#" + formId + " :input");
 			
-			inputs.each(function() {
-				if (this.tagName.toUpperCase().match(/^(INPUT|SELECT|TEXTAREA)$/)) {
-					if (this.name != "") {
+			field.each(function() {
+				if(this.tagName.toUpperCase().match(/^(INPUT|SELECT|TEXTAREA)$/)) {
+					if(this.name != "") {
 						this.className = (Js.code.isset(this.className) ? this.className : "");
-						var cl = this.className.split(/\s/);
-						var err = "";
+						var klass = this.className.split(/\s/);
+						var error = "";
 												
-						if (Js.code.inArray(cl, "required") && Js.code.trim(this.value) === "") {
-							err = "This field require an input!";
+						if(Js.code.inArray(klass, "required") && Js.code.trim(this.value) === "") {
+							error = "This field require an input!";
 						}
 						
-						if (Js.code.inArray(cl, "string") && !Js.test.isString(this.value) && Js.code.trim(this.value) !== "") {
-							err = "This field require valid alphanumeric!";
-						} else if (Js.code.inArray(cl, "integer") && !Js.test.isInteger(this.value) && Js.code.trim(this.value) !== "") { 
-							err = "This field require valid numbers!";
-						} else if (Js.code.inArray(cl, "email") && !Js.test.isEmail(this.value) && Js.code.trim(this.value) !== "") {
-							err = "This field require valid e-mail address!";
+						if(Js.code.inArray(klass, "string") && !Js.test.isString(this.value) && Js.code.trim(this.value) !== "") {
+							error = "This field require valid alphanumeric!";
+						} else if((Js.code.inArray(klass, "integer") || Js.code.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Js.code.trim(this.value) !== "") { 
+							error = "This field require valid numbers!";
+						} else if(Js.code.inArray(klass, "email") && !Js.test.isEmail(this.value) && Js.code.trim(this.value) !== "") {
+							error = "This field require valid e-mail address!";
 						}
 						
-						if(Js.code.inArray(cl, "custom") || Js.code.isset(custom)) {
-							var id = Js.attr.get(this, "id");
-							if(Js.code.isset(custom[id])) {
-								if(Js.code.isfunction(custom[id]['callback'])) {
-									var callback = custom[id]['callback'](this.value);
-									
-									if(!callback) {
-										err = Js.code.pick(custom[id]['err'], err);
-									}
-								} else if(Js.code.isset(custom[id]['test'])) {
-									var test = this.value.match(custom[id]['test']);
-									
-									if(!test) {
-										err = Js.code.pick(custom[id]['err'], err);
-									}
+						if(Js.code.isset(custom)) {
+							var validate = custom[Js.attr.get(this, "id")];
+							
+							if(Js.code.isset(validate)) {
+								if(Js.code.isfunction(validate.callback) && !validate.callback(this.value)) {
+									error = Js.code.pick(validate.error, error);
+								} else if(Js.code.isset(validate.test) && !this.value.match(validate.test)) {
+									error = Js.code.pick(validate.error, error);
 								} else {
-									err	= Js.code.pick(custom[id]['err'], err);
+									error = Js.code.pick(validate.error, error);
 								}
 							}
 						}
 						
-						if(err !== "") {
-							that.__ERROR__(node, this, err);
+						if(error !== "") {
+							that.error(this, error);
 						} else {
-							Js.class.remove(this, "sui-form-error");
-							var errnode = Js(this).siblings("span.form_error").first();
+							Js.class.remove(this, "extform-error");
+							var errorObject = Js(this).siblings("span.extform-errormessage").first();
 							
-							if(errnode.count() == 1) {
-								Js.dom.remove(errnode.fetch());	
+							if(errorObject.count() == 1) {
+								Js.dom.remove(errorObject.fetch());	
 							}
 						}
 						
-						for (var i = 0; i < cl.length; i++) {
-							if (cl[i].match(/(max|min|exact)\-(\d*)/)) {
-								if (!Js.test.isLength(cl[i], this.value.length)) {
-									var err = cl[i].split(/\-/);
-									that.__ERROR__(node, this, "This field require " + err[0] + " of " + err[1] + " characters.", true);
+						for(var i = 0; i < klass.length; i++) {
+							if(klass[i].match(/(max|min|exact)\-(\d*)/)) {
+								if(!Js.test.isLength(klass[i], this.value.length)) {
+									var error = klass[i].split(/\-/);
+									that.error(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
 								}
 							}
 						}
 						
 						// dump name and value to opt in querystring format ( &name=value )
-						if (this.type.toLowerCase().match(/^(checkbox|radio)$/)) {
-							// only add checked checkbox input
-							if (this.type == "checkbox" && this.checked == true) 
-								post += "&" + this.name + "=" + SUI.Parser.HTML.to(this.value);
-							// only add checked radiobox input
-							else if (this.type == "radio" && this.checked == true) 
-								post += "&" + this.name + "=" + SUI.Parser.HTML.to(this.value);
-						} else 
-							post += "&" + this.name + "=" + SUI.Parser.HTML.to(this.value);  // add all input (except radio/checkbox)
+						if(this.type.toLowerCase().match(/^(checkbox|radio)$/)) {
+							if(this.type == "checkbox" && this.checked == true) {
+								// only add checked checkbox input
+								post += "&" + this.name + "=" + Js.parse.html.to(this.value);
+							} else if (this.type == "radio" && this.checked == true) {
+								// only add checked radiobox input
+								post += "&" + this.name + "=" + Js.parse.html.to(this.value);
+							}
+						} else { 
+							// add all input (except radio/checkbox)
+							post += "&" + this.name + "=" + Js.parse.html.to(this.value);
+						}
 					}
 				}
 			});
 		}
 		
-		if (Js.code.isset(this.first)) { 
+		if(Js.code.isset(this.first)) { 
 			// there an error, set focus to first invalid field
 			this.first.focus();
 			// stop form processing
@@ -241,47 +233,48 @@ Js.ext.include("Form", function() {
 			return post; // return all field data in querystring formatting
 		}
 	},
-	error: function(node, form, text, data) {
+	//node, form
+	error: function(field, text, data) {
 		// Mark first error occured!
 		this.first = (Js.code.isnull(this.first) ? node : this.first);
 		
-		var form = Js(form);
-		var node = Js(node);
-		var el = form.get("name");
-		var fid = [node.get("id"), el, "_error"].join("");
+		var field = Js(field);
+		var form = Js(this.object);
+		var fieldName = field.get("name");
+		var fieldErrorId = [form.get("id"), fieldName, "error"].join("-");
 		var data = Js.code.pick(data, false);
 		var that = this;
 		
-		if (!Js.code.finds(fid)) {
-			form.appendClass("sui-form-error").parent().add("span", {"id": fid, "class": "form_error"}).html(text);
+		if (!Js.code.finds(fieldErrorId)) {
+			field.appendClass("jsextform-error").parent().add("span", {"id": fieldErrorId, "class": "extform-errormessage"}).html(text);
 			
-			form.changes(function() {
+			field.onchange(function() {
 				if(this.value != "") { 
-					var obj = Js(this).removeClass("sui-form-error");
+					var node = Js(this).removeClass("extform-error");
 					
-					var errnode = obj.siblings("span.form_error").first();
-					if(errnode.count() == 1) {
-						Js.dom.remove(errnode.fetch());
+					var errorNode = node.siblings("span.extform-errormessage").first();
+					if(errorNode.count() == 1) {
+						Js.dom.remove(errorNode.fetch());
 					}
 					that.first = null;
 				}
 			});
-		} else if (Js.code.finds(fid) && data) {
-			form.appendClass("sui-form-error");
-			var errnode = form.siblings("span.form_error").first();
-			ohtml = form.html();
+		} else if (Js.code.finds(fieldErrorId) && data) {
+			field.appendClass("extform-error");
+			var errorNode = field.siblings("span.extform-errormessage").first();
+			var html = errorNode.html();
 			
-			if (ohtml.match(text) === false && Js.code.trim(ohtml) != "") {
-				errnode.append(text);
+			if (html.match(text) === false && Js.code.trim(html) != "") {
+				errorNode.append(text);
 			}
 			
-			form.changes(function() {
+			field.onchange(function() {
 				if (this.value != "") {
-					var obj = Js(this).removeClass("sui-form-error");
+					var node = Js(this).removeClass("extform-error");
 					
-					var errnode = obj.siblings("span.form_error").first();
-					if(errnode.count() == 1) {
-						Js.dom.remove(errnode.fetch());
+					var errorNode = node.siblings("span.extform-errormessage").first();
+					if(errorNode.count() == 1) {
+						Js.dom.remove(errorNode.fetch());
 					}
 					that.first = null;
 				}
@@ -296,18 +289,18 @@ Js.ext.include("Form", function() {
 		// add custom field validation
 		var custom = Js.code.pick(js.custom, null);
 		// onsuccess function
-		var ifn = Js.code.pick(js.onsuccess, js.onstart, null);
+		var onInit = Js.code.pick(js.onSuccess, js.onStart, null);
 		// onfaild function
-		var ffn = Js.code.pick(js.onfail, null);
+		var onFail = Js.code.pick(js.onFail, null);
 		// validate selected form
-		var post = this.Validate(node, custom);
+		var post = this.validate(node, custom);
 		// parameters
 		var parameter = Js.code.pick(js.parameters, js.params, "");
 		
 		if (post) {
 			// callback to onsuccess function
-			if (Js.code.isfunction(ifn)) {
-				ifn();
+			if (Js.code.isfunction(onInit)) {
+				onInit();
 			}
 			
 			parameter += (Js.code.trim(post) !== "" ? post : "");
@@ -322,8 +315,8 @@ Js.ext.include("Form", function() {
 			return true;
 		} else {
 			// callback to onfail function
-			if (Js.code.isfunction(ffn)) {
-				ffn();
+			if (Js.code.isfunction(onFail)) {
+				onFail();
 			}
 			return false;
 		}
@@ -336,18 +329,18 @@ Js.ext.include("Form", function() {
 		// add custom field validation
 		var custom = Js.code.pick(js.custom, null);
 		// onsuccess function
-		var ifn = Js.code.pick(js.onsuccess, js.onstart, null);
+		var onInit = Js.code.pick(js.onSuccess, js.onStart, null);
 		// onfaild function
-		var ffn = Js.code.pick(js.onfail, null);
+		var onFail = Js.code.pick(js.onFail, null);
 		// validate selected form
-		var get = this.Validate(node, custom);
+		var get = this.validate(node, custom);
 		// parameters
 		var parameter = Js.code.pick(js.parameters, js.params, "");
 		
 		if (get) {
 			// callback to onsuccess function
-			if (Js.code.isfunction(ifn)) {
-				ifn();
+			if (Js.code.isfunction(onInit)) {
+				onInit();
 			}
 			
 			parameter += (Js.code.trim(get) !== "" ? post : "");
@@ -363,8 +356,8 @@ Js.ext.include("Form", function() {
 			return true;
 		} else {
 			// callback to onfail function
-			if (Js.code.isfunction(ffn)) {
-				ffn();
+			if (Js.code.isfunction(onFail)) {
+				onFail();
 			}
 			return false;
 		}
@@ -372,3 +365,10 @@ Js.ext.include("Form", function() {
 };
 
 Js.namespace.include("Form", Js.ext.Form);
+
+Js.ext.include("formErrorMessage", {
+	required: "",
+	email: "",
+	string: "",
+	number: ""
+});

@@ -35,7 +35,7 @@ Js.widget.include("Toggler", function(js) {
 		var content = this.content = js.content;
 		
 		if(Js.code.isset(button) && Js.code.isset(container) && Js.code.isset(content)) {
-			Js(button).clicks(function() {
+			Js(button).onclick(function() {
 				var dwl = Js(container).first();
 				var stack = Js(content).first();
 				var button = Js(this).first();

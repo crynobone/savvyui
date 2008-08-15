@@ -122,24 +122,27 @@ Js.ext.include("Draggable", function(js) {
 		var node = this.object;
 		document.onmousemove = null;
 		document.onmouseup = null;
-		var r = node.root;
-		r.onDragEnd(Js.code.toNumber(r.style.left), Js.code.toNumber(r.style.top), r);
+		var data = node.root;
+		data.onDragEnd(Js.code.toNumber(data.style.left), Js.code.toNumber(data.style.top), data);
 		node = null;
 	},
 	fixE: function(e) {
-		if (Js.code.isnull(e)) 
+		if(Js.code.isnull(e)) {
 			e = window.event;
-		if (Js.code.isnull(e.layerX)) 
+		}
+		if(Js.code.isnull(e.layerX)) {
 			e.layerX = e.offsetX;
-		if (Js.code.isnull(e.layerY)) 
+		}
+		if(Js.code.isnull(e.layerY)) {
 			e.layerY = e.offsetY;
+		}
 		
 		return e;
 	}
 };
 
 // Shortern the Namespace
-Js.namespace.include("draggable", Js.ext.Draggable);
+Js.namespace.include("Draggable", Js.ext.Draggable);
 
 Js.extend('draggable', function(js) {
 	var js = (!js ? {} : js);

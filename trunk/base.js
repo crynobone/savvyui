@@ -27,9 +27,7 @@ Js.base.create = function(js) {
 	Class.constructor = Class;
 	Class.extend = function(js) {
 		js.ext = this;
-		var eClass = Js.base.create(js);
-		
-		return eClass;
+		return Js.base.create(js);
 	};
 	
 	var ext = Js.code.pick(js.ext, null);

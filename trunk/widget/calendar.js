@@ -132,29 +132,29 @@ Js.widget.include("Calendar", function(js) {
 		
 		return this;
 	},
-	minYear: function(y) {
-		var ret = y;
+	minYear: function(year) {
+		var data = year;
 		if (this.mindate) {
-			var md = this.mindate.split("-");
-			var ny = Js.code.toNumber(md[0]);
+			var minDate = this.minDate.split("-");
+			var newYear = Js.code.toNumber(minDate[0]);
 			
-			if(ny > ret) { 
-				ret = ny;
+			if(newYear > data) { 
+				data = newYear;
 			}
 		}
-		return ret;	
+		return data;	
 	},
-	maxYear: function(y) {
-		var ret = y;
+	maxYear: function(year) {
+		var data = year;
 		if (this.maxdate) {
-			var md = this.maxdate.split("-");
-			var ny = Js.code.toNumber(md[0]);
+			var maxDate = this.maxdate.split("-");
+			var newYear = Js.code.toNumber(maxDate[0]);
 			
-			if(ny < ret) {
-				ret = ny;
+			if(newYear < data) {
+				data = newYear;
 			}
 		}
-		return ret;
+		return data;
 	},
 	prevMonth: function() {
 		this.day = null;
@@ -164,7 +164,7 @@ Js.widget.include("Calendar", function(js) {
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
 		if (this.validation()) {
-			this.renderTo.html("Regenerating calendar...");
+			this.renderTo.html("");
 			this.callback();
 		} else {
 			this.Dates = new Date(this.year, (this.month + 1));
@@ -183,7 +183,7 @@ Js.widget.include("Calendar", function(js) {
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
 		if (this.validation()) {
-			this.renderTo.html("Regenerating calendar...");
+			this.renderTo.html("");
 			this.callback();
 		} else {
 			this.Dates = new Date((this.year + 1), this.month);
@@ -202,7 +202,7 @@ Js.widget.include("Calendar", function(js) {
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
 		if (this.validation()) {
-			this.renderTo.html("Regenerating calendar...");
+			this.renderTo.html("");
 			this.callback();
 		} else {
 			this.Dates = new Date(this.year, (this.month - 1));
@@ -220,7 +220,7 @@ Js.widget.include("Calendar", function(js) {
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
 		if (this.validation()){
-			this.renderTo.html("Regenerating calendar...");
+			this.renderTo.html("");
 			this.callback();
 		} else {
 			this.Dates = new Date((this.year - 1), this.month);
@@ -233,19 +233,19 @@ Js.widget.include("Calendar", function(js) {
 	customMonth: function(data) {
 		this.day = null;
 		this.Dates = new Date(this.year, data);
-		var tmpmonth = this.Dates.getMonth();
-		var tmpyear = this.Dates.getFullYear();
-		this.date = [tmpyear, (tmpmonth + 1), this.dayOfMonth(tmpmonth, tmpyear)].join("-");
+		var tempMonth = this.Dates.getMonth();
+		var tempYear = this.Dates.getFullYear();
+		this.date = [tempYear, (tempMonth + 1), this.dayOfMonth(tempMonth, tempYear)].join("-");
 		
 		if (this.validation()) {
-			this.year = tmpyear;
-			this.month = tmpmonth;
-			this.renderTo.html("Regenerating Calendar...");
+			this.year = tempYear;
+			this.month = tempMonth;
+			this.renderTo.html("");
 			this.callback();
 		} else {
 			this.Dates = new Date(this.year, this.month);
 			this.date = [this.year, (this.month + 1), "1"].join("-");
-			this.renderTo.html("Regenerating Calendar...");
+			this.renderTo.html("");
 			this.callback();
 		}
 		return this;
@@ -253,19 +253,19 @@ Js.widget.include("Calendar", function(js) {
 	customYear: function(data) {
 		this.day = null;
 		this.Dates = new Date(data, this.month);
-		var tmpmonth = this.Dates.getMonth();
-		var tmpyear = this.Dates.getFullYear();
-		this.date = [tmpyear, (tmpmonth + 1), this.dayOfMonth(tmpmonth, tmpyear)].join("-");
+		var tempMonth = this.Dates.getMonth();
+		var tempYear = this.Dates.getFullYear();
+		this.date = [tempYear, (tempMonth + 1), this.dayOfMonth(tempMonth, tempYear)].join("-");
 		
 		if (this.validation()) {
-			this.year = tmpyear;
-			this.month = tmpmonth;
-			this.renderTo.html("Regenerating Calendar...");
+			this.year = tempYear;
+			this.month = tempMonth;
+			this.renderTo.html("");
 			this.callback();
 		} else {
 			this.Dates = new Date(this.year, this.month);
 			this.date = [this.year, (this.month + 1), "1"].join("-");
-			this.renderTo.html("Regenerating Calendar...");
+			this.renderTo.html("");
 			this.callback();
 		}
 		return this;
@@ -276,47 +276,47 @@ Js.widget.include("Calendar", function(js) {
 		this.month = this.Dates.getMonth();
 		this.day = this.Dates.getDate();
 		this.date = [this.year, (this.month + 1), this.day].join("-");
-		this.renderTo.html("Regenerating Calendar...");
+		this.renderTo.html("");
 		this.callback();
 	},
 	validation: function() {
-		var ret = false;
-		var mi = Js.code.isset(this.mindate);
-		var ma = Js.code.isset(this.maxdate);
+		var data = false;
+		var minDate = Js.code.isset(this.mindate);
+		var maxDate = Js.code.isset(this.maxdate);
 		
-		if (mi && ma && this.Compare(this.mindate, this.date) && this.Compare(this.date, this.maxdate)) {
-			ret = true;
-		} else if (mi && this.Compare(this.mindate, this.date)) {
-			ret = true;
-		} else if (ma && this.Compare(this.date, this.maxdate)) {
-			ret = true;
-		} else if (!mi && !ma) {
-			ret = true;
+		if (minDate && maxDate && this.compare(this.mindate, this.date) && this.compare(this.date, this.maxdate)) {
+			data = true;
+		} else if (minDate && this.compare(this.mindate, this.date)) {
+			data = true;
+		} else if (maxDate && this.compare(this.date, this.maxdate)) {
+			data = true;
+		} else if (!minDate && !maxDate) {
+			data = true;
 		}
 		
-		return ret;
+		return data;
 	},
-	dayOfMonth: function(m, y) {
-		var m = Js.code.pick(m, this.month);
-		var y = Js.code.pick(y, this.year);
+	dayOfMonth: function(month, year) {
+		var month = Js.code.pick(month, this.month);
+		var year = Js.code.pick(year, this.year);
 		
-		if (m == 1 && (y % 4 == 0 && y % 100 != 0) || y % 400 == 0) {
+		if (month == 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
 			var monthLength = 29;
 		}
 		
-		return Js.code.pick(monthLength, this.daysinmonth[m]);
+		return Js.code.pick(monthLength, this.daysinmonth[month]);
 	},
-	Compare: function(f, s) {
-		var fD = f.split("-");
-		var sD = s.split("-");
+	compare: function(first, second) {
+		var firsts = first.split("-");
+		var seconds = second.split("-");
 		
-		var fDO = new Date(fD[0], (Js.code.toNumber(fD[1]) - 1));
-		fDO.setDate(fD[2]);
+		var firstDate = new Date(firstDate[0], (Js.code.toNumber(firstDate[1]) - 1));
+		firstDate.setDate(firstDate[2]);
 		
-		var sDO = new Date(sD[0], (Js.code.toNumber(sD[1]) - 1));
-		sDO.setDate(sD[2]);
+		var secondDate = new Date(secondDate[0], (Js.code.toNumber(secondDate[1]) - 1));
+		secondDate.setDate(secondDate[2]);
 		
-		return (sDO >= fDO ? true : false);
+		return (secondDate >= firstDate ? true : false);
 	},
 	updateValue: function(Y, m, d) {
 		var f = Js("#" + this.element + "_" + Y + m + d).first();
@@ -432,7 +432,7 @@ Js.widget.include("Calendar", function(js) {
 					var tday;
 					
 					if (this.validation()) {
-						days.clicks(function() {
+						days.onclick(function() {
 							var i = Js(this).get("id").split("_");
 							var ym = that.year + "" + that.month;
 							tday = i[1].substring((ym.length), i[1].length);
@@ -464,18 +464,18 @@ Js.widget.include("Calendar", function(js) {
 		var tf3 = tr3.add("td", {"class": "sui-panel-fr"}).html("&nbsp;");
 		
 		if (this.navigation == true) {
-			prevbtn.setClass("prev-month").html("&nbsp;").clicks(function() {
+			prevbtn.setClass("prev-month").html("&nbsp;").onclick(function() {
 				that.prevMonth();															  
 			});
 			
-			nextbtn.setClass("next-month").html("&nbsp;").clicks(function() {
+			nextbtn.setClass("next-month").html("&nbsp;").onclick(function() {
 				that.nextMonth();
 			});
 			var divmon = this.optnode = tc2.add("div", {"class": "calendar-content-selector"});
 			
 			divmon.add("p").text("Select a specific combination of month and year");
 			
-			var selmonth = divmon.add("select", {"name": "month"}).changes(function() {
+			var selmonth = divmon.add("select", {"name": "month"}).onchange(function() {
 				that.customMonth(this.value);							
 			});
 			
@@ -487,7 +487,7 @@ Js.widget.include("Calendar", function(js) {
 				}
 			}
 			
-			var selyear = divmon.text(" ").add("select", {"name": "year"}).changes(function() {
+			var selyear = divmon.text(" ").add("select", {"name": "year"}).onchange(function() {
 				that.customYear(this.value);									
 			});
 			
@@ -504,14 +504,14 @@ Js.widget.include("Calendar", function(js) {
 				"type": "button", 
 				"value": "Today", 
 				"name": "today"
-			}).clicks(function() {
+			}).onclick(function() {
 				that.today();													
 			});
 			
 			title.setClass("this-month").html(this.months[this.month] + "&nbsp;" + this.year);
 			Js.hash.set(this.element, "toggle", 1);
 			
-			title.css("cursor", "pointer").clicks(function() {
+			title.css("cursor", "pointer").onclick(function() {
 				var i = Js.hash.get(that.element, "toggle");
 				
 				if(i === 1) {

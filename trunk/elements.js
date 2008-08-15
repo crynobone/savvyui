@@ -16,8 +16,6 @@ Js.namespace.include("Elements", function(selector, parent) {
 	this.animate = [];
 	this._node = [];
 	this._animate = [];
-	this.__fn = [];
-	this.__node = [];
 	this.index = null;
 	this.length = 0;
 	
@@ -745,12 +743,15 @@ Js.namespace.include("Elements", function(selector, parent) {
 		// this is the values of array
 		var that = this;
 		// add 's' or 'es' at the end of array value (prevent problem without having s)
-		var n = (!that.match(/(s|es)$/g) ? [that, (that.match(/es$/g) ? "" : "s")].join("") : that);
-		
+		var event1 = (!that.match(/(es)$/g) ? [that, (!that.match(/s$/g) ? "s" : "")].join("") : that);
+		var event2 = ['on', that].join("");
 		try {
 			// extend it to Js.Elements
-			Js.extend(n, function(fn1, fn2) {
-				return this.on(that, fn1, fn2);					  
+			Js.extend(event1, function(fn1, fn2) {
+				return this.on(that, fn1, fn2);
+			});
+			Js.extend(event2, function(fn1, fn2) {
+				return this.on(that, fn1, fn2);						   
 			});
 		} catch(e) { 
 			// Just in case any error occur (but doubt it)

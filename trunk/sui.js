@@ -45,7 +45,7 @@ Js.namespace = {
 		var isload = this.loaded(name);
 		
 		if(!isload) {
-			Js.debug.log("Required Namespace ." + name + " is not loaded");
+			Js.debug.log("Required Namespace Js." + name + " is not loaded");
 		}
 		
 		return isload;
@@ -82,12 +82,26 @@ Js.toString = function() {
 // extends Savvy.UI's Js.elements
 Js.extend = function(name, fn) {
 	// check whether it's a function
-	if(Js.code.isfunction(fn) && !!Js.elements) {
+	if(Js.code.isfunction(fn) && !!Js.Elements) {
 		// push the function in Js.elements
-		Js.elements.prototype[name] = fn;
+		Js.Elements.prototype[name] = fn;
 		return true;
 	} else {
 		return false;	
+	}
+};
+
+Js.nue = function(object) {
+	if(Js.code.typeOf(object) == "object") {
+		var node = {};
+		for(var method in object) {
+			if(object.hasOwnProperty(method)) {
+				node[method] = object[method];
+			}
+		}
+		return node;
+	} else {
+		return object;
 	}
 };
 
@@ -166,7 +180,7 @@ Js.code = Js.fn = {
 	},
 	// create a callback function for node
 	callback: function(node, fn, args) {
-		if (this.isfunction(fn)) {
+		if(this.isfunction(fn)) {
 			try {
 				// try to use apply (support multiple arguments)
 				var args = this.toArray(arguments, 2);
@@ -182,20 +196,24 @@ Js.code = Js.fn = {
 	each: function(node, fn, args) {
 		if(this.isfunction(fn)) {
 			// loop each node (node should be an array)
-			for (var i = 0; i < node.length && !!node[i]; i++) {
+			for(var i = 0; i < node.length && !!node[i]; i++) {
 				try {
 					var args = this.toArray(arguments, 2);
 					fn.apply(node[i], [node[i], i]);
 				} catch(e) {
 					// alternatively use call, but only can support one arguments
-					fn.call(node[i], node[i] + "," + i);
+					try {
+						fn.call(node[i], node[i] + "," + i);
+					} catch(e) {
+						fn(node[i], i);	
+					}
 				}
 			}
 		}
 	},
 	// finds whether HTML Elements existed.
-	finds: function(elem) {
-		return (document.getElementById(this.trim(elem)) ? true : false);
+	finds: function(element) {
+		return (document.getElementById(this.trim(element)) ? true : false);
 	},
 	// prepare whether object or element have been send
 	prepare: function(node, element, value) {
@@ -203,15 +221,15 @@ Js.code = Js.fn = {
 		var data = [this.isset(node), this.isset(element)];
 		
 		return (function(node, element, value, data) {
-			if (data[0] && data[1]) {
+			if(data[0] && data[1]) {
 				// both first and second are equal
-				return (Js.Attr.Get(node, "id") == elem ? (value == "object" ? node : element) : false);
-			} else if (data[1]) {
+				return (Js.attr.get(node, "id") == elem ? (value == "object" ? node : element) : false);
+			} else if(data[1]) {
 				// return second element
 				return (value == "object" ? document.getElementById(element) : element);
-			} else if (data[0]) {
+			} else if(data[0]) {
 				// return first element
-				return (value == "object" ? node : Js.Attr.Get(node, "id"));
+				return (value == "object" ? node : Js.attr.get(node, "id"));
 			} else {
 				// all failed
 				return false;
@@ -223,7 +241,7 @@ Js.code = Js.fn = {
 	href: function(url, target) {
 		try {
 			
-			if (this.isnull(target)) {
+			if(this.isnull(target)) {
 				// load new URL in same window
 				window.location.href = url;
 			} else {
@@ -243,14 +261,14 @@ Js.code = Js.fn = {
 	},
 	// Get the indexOf based array's value
 	"indexOf": function(data, value) {
-		for (var i = data.length; i-- && data[i] !== value;);
+		for(var i = data.length; i-- && data[i] !== value;);
 		return i;
 	},
 	// Check whether the value is in an array
 	inArray: function(data, value) {
 		// loop the array to check each of it's value
-		for (var i = 0; i < data.length && !!data[i]; i++) {
-			if (data[i] === value) {
+		for(var i = 0; i < data.length && !!data[i]; i++) {
+			if(data[i] === value) {
 				return true;
 				break;
 			}
@@ -278,7 +296,7 @@ Js.code = Js.fn = {
 	on: function(node, handler, fn1, fn2) {
 		var handler = this.trim(handler);
 		try {
-			if (!!node && node !== document) {
+			if(!!node && node !== document) {
 				if(handler === "hover") {
 					// Add special event handler for "hover"
 					if(this.isfunction(fn1)) {
@@ -302,9 +320,9 @@ Js.code = Js.fn = {
 	pick: function(value) {
 		var data = arguments;
 		// loop all arguments.
-		for (var i = 0; i < data.length; i++) {
+		for(var i = 0; i < data.length; i++) {
 			// Return the first option/n-option only if the previous option return null.
-			if (this.isset(data[i])) {
+			if(this.isset(data[i])) {
 				return data[i];
 			}
 		}
@@ -346,6 +364,18 @@ Js.code = Js.fn = {
 		// return possible integer value of a string, if not a string then return self
 		return (typeof(value) == "string" ? parseInt(value, 10) : value);
 	},
+	toProperCase: function(value) {
+		var data = value.split(/ /g);
+		var rdata = [];
+		
+		Js.code.each(data, function() {
+			var first = this.substr(0, 1).toUpperCase();
+			var other = this.substr(1);
+			rdata[rdata.length] = first + other;
+		});
+		
+		return rdata.join(" ");
+	},
 	// convert a object (mainly use for arguments) to array
 	// & require on .length to check the length to object to convert 
 	toArray: function(values, offset) {
@@ -360,7 +390,7 @@ Js.code = Js.fn = {
 			var valueLength = values.length;
 			var rdata = [];
 			// loop and prepare r to be return
-			while (offsetLength > 0) {
+			while(offsetLength > 0) {
 				--offsetLength;
 				--valueLength;
 				rdata[offsetLength] = values[valueLength];
@@ -395,17 +425,17 @@ Js.code = Js.fn = {
 		var repeat = this.pick(repeat, false);
 		var rdata = [];
 		
-		for (var i = 0; i < data.length && !!data[i]; i++) {
+		for(var i = 0; i < data.length && !!data[i]; i++) {
 			if(!repeat) {
 				// add only if unique
-				if (!this.inArray(rdata, data[i])) {
+				if(!this.inArray(rdata, data[i])) {
 					rdata[rdata.length] = data[i];
 				}
 			} else {
 				// add only if previous value isn't the same
-				if (i == 0) {
+				if(i == 0) {
 					rdata[rdata.length] = data[i];
-				} else if (data[i] !== this.trim(data[i - 1])) { 
+				} else if(data[i] !== this.trim(data[i - 1])) { 
 					rdata[rdata.length] = data[i];
 				}
 			}

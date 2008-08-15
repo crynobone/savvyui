@@ -42,7 +42,7 @@ Js.widget.include("message", {
 			}, timeout);
 			
 			if(!!closable) {
-				span.clicks(function() {
+				span.onclick(function() {
 					clearTimeout(t);
 					t = null;
 					div.remove(span.fetch());

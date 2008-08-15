@@ -51,10 +51,10 @@ Js.ext.include("Resizable", function(js) {
 		var that = this;
 		var node = this.object;
 		var e = this.fixE(e);
-		var y = Js.code.toNumber(Js.style.get(node.root, "height"));
-		var x = Js.code.toNumber(Js.style.get(node.root, "width"));
+		var height = Js.code.toNumber(Js.style.get(node.root, "height"));
+		var width = Js.code.toNumber(Js.style.get(node.root, "width"));
 		
-		node.root.onResizeStart(x, y);
+		node.root.onResizeStart(width, height);
 		node.lastMouseX = e.clientX;
 		node.lastMouseY = e.clientY;
 		
@@ -75,38 +75,38 @@ Js.ext.include("Resizable", function(js) {
 	startResize: function(e) {
 		var e = this.fixE(e);
 		var node = this.object;
-		var ey = e.clientY;
-		var ex = e.clientX;
-		var y = Js.code.toNumber(Js.style.get(node.root, "height"));
-		var x = Js.code.toNumber(Js.style.get(node.root, "width"));
-		var ow = x;
-		var oh = y;
-		var nx;
-		var ny;
+		var eHeight = e.clientY;
+		var eWidth = e.clientX;
+		var height = Js.code.toNumber(Js.style.get(node.root, "height"));
+		var width = Js.code.toNumber(Js.style.get(node.root, "width"));
+		var nodeWidth = width;
+		var nodeHeight = height;
+		var newWidth;
+		var newHeight;
 		
-		ex = (node.minX != null ? Math.max(ex, node.minMouseX) : ex);
-		ex = (node.maxX != null ? Math.min(ex, node.maxMouseX) : ex);
-		ey = (node.minY != null ? Math.max(ey, node.minMouseY) : ey);
-		ey = (node.maxY != null ? Math.min(ey, node.maxMouseY) : ey);
+		eWidth = (node.minX != null ? Math.max(eWidth, node.minMouseX) : eWidth);
+		eWidth = (node.maxX != null ? Math.min(eWidth, node.maxMouseX) : eWidth);
+		eHeight = (node.minY != null ? Math.max(eHeight, node.minMouseY) : eHeight);
+		eHeight = (node.maxY != null ? Math.min(eHeight, node.maxMouseY) : eHeight);
 		
-		nx = x + ((ex - node.lastMouseX) * (node.hswap ? -1 : 1));
-		ny = y + ((ey - node.lastMouseY) * (node.vswap ? -1 : 1));
+		newWidth = width + ((eWidth - node.lastMouseX) * (node.hswap ? -1 : 1));
+		newHeight = height + ((eHeight - node.lastMouseY) * (node.vswap ? -1 : 1));
 		
 		if (node.hmode) {
-			Js.style.set(node.root, "width", (ow + (nx - x)) + "px");
+			Js.style.set(node.root, "width", (nodeWidth + (newWidth - width)) + "px");
 		} else {
-			nx = x = 0;
+			newWidth = width = 0;
 		}
 		
 		if(node.vmode) {
-			Js.style.set(node.root, "height", (oh + (ny - y)) + "px");
+			Js.style.set(node.root, "height", (nodeHeight + (newHeight - height)) + "px");
 		} else {
-			ny = y = 0;
+			newHeight = height = 0;
 		}
 		
-		node.lastMouseX = ex;
-		node.lastMouseY = ey;
-		node.root.onResize(Math.round(nx - x), Math.round(ny - y));
+		node.lastMouseX = eWidth;
+		node.lastMouseY = eHeight;
+		node.root.onResize(Math.round(newWidth - width), Math.round(newHeight - height));
 		
 		return false;
 	},
@@ -114,8 +114,8 @@ Js.ext.include("Resizable", function(js) {
 		var node = this.object;
 		document.onmousemove = null;
 		document.onmouseup = null;
-		var r = node.root;
-		r.onResizeEnd(Js.code.toNumber(r.style.width), Js.code.toNumber(r.style.height), r);
+		var data = node.root;
+		data.onResizeEnd(Js.code.toNumber(data.style.width), Js.code.toNumber(data.style.height), data);
 		node = null;
 	},
 	fixE: function(e) {
@@ -131,10 +131,10 @@ Js.ext.include("Resizable", function(js) {
 		return e;
 	},
 	childResize: function(js){
-		var parNode = js.object;
-		var chiNode = js.child;
+		var parend = js.object;
+		var child = js.child;
 		
-		Js.code.each(chiNode, function() {
+		Js.code.each(child, function() {
 			try { 
 				Js.style.set(this, "width", (Js.code.toNumber(Js.style.get(this, "width")) + js.width)+"px");
 			} catch(e) { /* on failed continue */ }

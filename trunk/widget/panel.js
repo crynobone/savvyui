@@ -139,7 +139,7 @@ Js.widget.include("Panel", function(js) {
 			tclose.setClass(this.layout + "-close").css({
 				"display": "block",
 				"cursor": "pointer"
-			}).clicks(function() {
+			}).onclick(function() {
 				that.closePanel();
 			});
 		} else { 

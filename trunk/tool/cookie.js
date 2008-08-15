@@ -1,30 +1,30 @@
 Js.tool.include("cookie", {
 	get: function(name) {
-		var a = name + "=";
-		var i = 0;
-		while(i < document.cookie.length) {
-			var j = i + a.length;
+		var cookie = name + "=";
+		var index = 0;
+		while(index < document.cookie.length) {
+			var cookies = index + cookie.length;
 			
-			if(document.cookie.substring(i, j) == a) {
-				return (function(j) {
-					var sl = document.cookie.indexOf(";", j);
+			if(document.cookie.substring(index, cookies) == cookie) {
+				return (function(cookies) {
+					var value = document.cookie.indexOf(";", cookies);
 					
-					if(sl == -1) {
-						sl = document.cookie.length;
+					if(value == -1) {
+						value = document.cookie.length;
 					}
-					return unescape(document.cookie.substring(j, sl));
-				})(j);
+					return unescape(document.cookie.substring(cookies, value));
+				})(cookies);
 			}
-			i = document.cookie.indexOf(" ", i) + 1;
+			index = document.cookie.indexOf(" ", index) + 1;
 			
-			if(i == 0) {
+			if(index == 0) {
 				break;
 			}
 		}
 		return false;
 	},
-	set: function(name, val, expire, path, domain, secure) {
-		document.cookie = name + "=" + escape(val) + (!!expire && SUI.fn.typeOf(expire) === "date" ? "; expires=" + expire.toGMTString() : "") + (!!path ? "; path=" + path : "") + (!!domain ? "; domain=" + domain : "") + (!!secure ? "; secure" : "");
+	set: function(name, value, expire, path, domain, secure) {
+		document.cookie = name + "=" + escape(value) + (!!expire && SUI.fn.typeOf(expire) === "date" ? "; expires=" + expire.toGMTString() : "") + (!!path ? "; path=" + path : "") + (!!domain ? "; domain=" + domain : "") + (!!secure ? "; secure" : "");
 	},
 	remove: function(name, path, domain) {
 		if(this.get(name)) {

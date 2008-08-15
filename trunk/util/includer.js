@@ -15,5 +15,8 @@ Js.util.include("includer", {
 			"media": media
 		});
 		Js.dom.add(head, style);
+	},
+	flash: function(src, js) {
+		
 	}
 });

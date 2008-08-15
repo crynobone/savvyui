@@ -26,7 +26,7 @@ Js.util.include("AutoComplete", function(spec) {
 	this.matched = [];
 	this.separator = ',';
 	this.timeout = null;
-	this.ctimeout = null;
+	this.timeoutId = null;
 	this.status = 0;
 	
 	if(typeof(spec) === "object") {
@@ -46,9 +46,9 @@ Js.util.include("AutoComplete", function(spec) {
 		this.uri = Js.code.pick(spec.uri, this.uri);
 		this.type = Js.code.pick(spec.type, this.type);
 		
-		this.method = (Js.code.inArray(['post','get'], spec.method.toLowerCase()) ? spec.method.toUpperCase() : 'GET'); 
+		this.method = (spec.method.match(/^(get|post)$/gi) ? spec.method.toUpperCase() : 'GET'); 
 		
-		if (!!this.element) {
+		if(!!this.element) {
 			this.object = Js(this.element);
 		} else {
 			this.object = Js(this.object);
@@ -56,33 +56,33 @@ Js.util.include("AutoComplete", function(spec) {
 		
 		this.name = this.object.get("name");
 		
-		this.object.keyups(function() {
-			if(that.timeout) {
-				clearTimeout(that.timeout);
-				that.timeout = null;
+		this.object.onkeyup(function() {
+			if(that.timeoutId) {
+				clearTimeout(that.timeoutId);
+				that.timeoutId = null;
 			}
 			that.matched = [];
 			
 			if(that.type === "multiple") {
 				var values = this.value;
 				var val = values.split(that.separator);
-				var len = val.length;
-				var value = Js.code.trim(val[(len - 1)]);
+				var length = value.length;
+				var value = Js.code.trim(val[(length - 1)]);
 				
-				for(var i = 0; i < (len - 1); i++) {
-					that.matched.push(Js.code.trim(val[i]));
+				for(var i = 0; i < (length - 1); i++) {
+					that.matched[that.matched.length] = Js.code.trim(val[i]);
 				}
 			} else {
 				var value = Js.code.trim(this.value);	
 			}
 			
 			if(value.length > that.minimum && value !== that.value) {
-				that.timeout = window.setTimeout((function() {
+				that.timeoutId = window.setTimeout(function() {
 					that.show(value);
-				}), that.delay);
+				}, that.delay);
 			}
-		}).blurs(function() {
-			that.ctimeout = window.setTimeout((function() {
+		}).onblur(function() {
+			that.timeoutId = window.setTimeout((function() {
 				that.status = 0;
 				that.hide();
 			}), 5000);
@@ -125,8 +125,8 @@ Js.util.include("AutoComplete", function(spec) {
 		if(!!this.div && this.status === 0) {
 			Js.dom.remove(this.div.fetch());
 			this.div = null;
-			clearTimeout(this.ctimeout);
-			this.ctimeout = null;
+			clearTimeout(this.timeoutId);
+			this.timeoutId = null;
 		}
 	},
 	request: function(data) {
@@ -145,7 +145,7 @@ Js.util.include("AutoComplete", function(spec) {
 						var li = ul.add("li");
 						var a = li.add("a", {
 							"href": "#"
-						}).text(this).clicks(function() {
+						}).text(this).onclick(function() {
 							clearTimeout(that.ctimeout);
 							that.ctimeout = null;
 							that.status = 1;
@@ -162,7 +162,7 @@ Js.util.include("AutoComplete", function(spec) {
 				
 			} else {
 				var li = ul.add("li");
-				var a = li.add("a", {"href": "#"}).text("No match").clicks(function() {
+				var a = li.add("a", {"href": "#"}).text("No match").onclick(function() {
 					that.status = 0;
 					that.hide();																	
 				}).mouseovers(function() {

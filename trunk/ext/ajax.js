@@ -41,11 +41,11 @@ Js.ext.include("Ajax", function(js) {
 			xhr = new XMLHttpRequest();
 		} else if (window.ActiveXObject) {
 			// Enable support for IE browser, IE7 and above provide option to use XMLHttpRequest()
-			var ms = ["MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.5.0", "MSXML2.XMLHTTP.6.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
+			var ie = ["MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.5.0", "MSXML2.XMLHTTP.6.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
 			
-			for (var i = 0; i < ms.length && !!ms[i]; i++) {
+			for (var i = 0; i < ie.length && !!ie[i]; i++) {
 				try {
-					xhr = new ActiveXObject(ms[i]);
+					xhr = new ActiveXObject(ie[i]);
 					break;
 				} catch(e){ }
 			}
@@ -53,7 +53,7 @@ Js.ext.include("Ajax", function(js) {
 		
 		if (!xhr) {
 			// Failed to attach any XHR object
-			Js.debug.log("Js.ext.Ajax.Initialize() failed: browser does not support Ajax!");
+			Js.debug.log("Js.ext.Ajax.init() failed: browser does not support Ajax!");
 		}
 		
 		this.object = xhr;

@@ -79,12 +79,12 @@ Js.widget.include("SimpleTab", function(sel) {
 				"title": title
 			});
 			a.add("em");
-			a.text(title).clicks(function() {
+			a.text(title).onclick(function() {
 				that.activate(this);
 			});
 			
 			if (!!closable) {
-				a.add("span").css("paddingLeft", "10px").text("x").clicks(function() { // clicks to mouseovers
+				a.add("span").css("paddingLeft", "10px").text("x").onclick(function() { // clicks to mouseovers
 					var href = Js(this.parentNode).get("href");
 					that.activeHeader.setClass("").done();
 					that.activeTab.setClass("simpletab-hidden").done();
@@ -147,13 +147,13 @@ Js.widget.include("SimpleTab", function(sel) {
 		});
 		
 		a.add("em");
-		a.text(title).clicks(function() {
+		a.text(title).onclick(function() {
 			that.activate(this);
 		});
 		
 		if(!!closable) {
-			a.add("span").css("paddingLeft", "10px").text("x").clicks(function() {
-				var my = Js(this.parentNode).clicks(function() { 
+			a.add("span").css("paddingLeft", "10px").text("x").onclick(function() {
+				var my = Js(this.parentNode).onclick(function() { 
 					return false; 
 				});
 				

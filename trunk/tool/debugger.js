@@ -1,6 +1,6 @@
 Js.tool.include("Debugger", function() {
 	Js.code.debug = true;
-	var div = Js.query.create("div#sui-debugger");
+	var div = Js.query.create("div#tooldebugger");
 	Js.dom.add(div);
 		
 	var object = Js.query.create("ul");

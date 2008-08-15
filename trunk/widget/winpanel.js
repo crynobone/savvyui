@@ -63,7 +63,7 @@ Js.widget.include("WinPanel", function(js) {
 			this.object.hide();
 			
 			if (!!this.autoFocus) {
-				this.object.clicks(function() {
+				this.object.onclick(function() {
 					var m = Js(this).first();
 					m.css("alpha", 100);
 					

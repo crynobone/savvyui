@@ -1,17 +1,16 @@
 Js.namespace.include("string", Js.base.create({
 	ext: String.prototype,
 	value: null,
-	__construct: function(s) {
-		var that = this;
-		this.value = this._super = s;
+	__construct: function(value) {
+		this.value = this._super = value;
 		return this;
 	},
-	exec: function(m, args) {
+	exec: function(data, args) {
 		var args = Js.code.toArray(arguments, 1);
-		var s = this._super;
-		s = new String(s);
-		s = s[m].call(s, args);
-		this.value = this._super = s;
+		var value = this._super;
+		value = new String(value);
+		value = value[data].call(value, args);
+		this.value = this._super = value;
 		return this;
 	},
 	trim: function() {

@@ -293,7 +293,7 @@ Js.namespace.include("style", {
 		
 		if(Js.dom.isElement(node)) {
 			try {
-				ani = this.__FX__(node, fx, "show");
+				ani = this.effect(node, fx, "show");
 				
 				if(!ani) {
 					this.set(node, "visibility", "visible");
@@ -310,7 +310,7 @@ Js.namespace.include("style", {
 		
 		if(Js.dom.isElement(node)) {
 			try {
-				ani = this.__FX__(node, fx, "hide");
+				ani = this.effect(node, fx, "hide");
 				
 				if(!ani) {
 					this.set(node, "visibility", "hidden");
@@ -322,7 +322,7 @@ Js.namespace.include("style", {
 			}
 		} else return false;
 	},
-	__FX__: function(node, fx, value) {
+	effect: function(node, fx, value) {
 		var fx = (Js.code.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
 		var id = Js.attr.get(node, "id");
 		var data = [20, 0.8, 80];
@@ -371,7 +371,7 @@ Js.namespace.include("dom", {
 	},
 	addText: function(parent, text) {
 		if(Js.code.isset(parent)) {
-			return this.Add(parent, document.createTextNode(text));
+			return this.add(parent, document.createTextNode(text));
 		} else {
 			Js.debug.log("Js.dom.addText failed: " + e);
 			return false;

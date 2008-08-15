@@ -338,7 +338,7 @@ Js.namespace.include("style", {
 				return false;
 			}
 			var effect = new Js.ext.Animator;
-			effect.Initialize(node).Fx({
+			effect.init(node).Fx({
 				method: "fade",
 				transaction: fade,
 				shutter: data[0],

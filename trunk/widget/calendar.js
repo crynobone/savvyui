@@ -57,9 +57,9 @@ Js.widget.include("Calendar", function(js) {
 		var regexp = new RegExp(/^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/);
 		this.renderTo = Js.code.pick(js.renderTo, this.renderTo);
 		
-		if (!this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType)) {
+		if(!this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType)) {
 			this.renderTo = Js("body").first().add("div");
-		} else if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) {
+		} else if(typeof(this.renderTo) === "string" || this.renderTo.nodeType) {
 			this.renderTo = Js(this.renderTo).first();
 		}
 		
@@ -67,20 +67,20 @@ Js.widget.include("Calendar", function(js) {
 		this.field = Js.code.pick(js.field, this.field, "value");
 		this.type = Js.code.pick(js.type, this.type, "single");
 		
-		if (!!js.mindate && regexp.test(js.mindate)) {
+		if(!!js.mindate && regexp.test(js.mindate)) {
 			this.mindate = Js.code.pick(js.mindate, null);
 		}
 		
-		if (!!js.maxdate && regexp.test(js.maxdate)) {
+		if(!!js.maxdate && regexp.test(js.maxdate)) {
 			this.maxdate = Js.code.pick(js.maxdate, null);
 		}
 		
-		if (!!js.value && regexp.test(js.value)) {
+		if(!!js.value && regexp.test(js.value)) {
 			var tdate = js.value.split("-");
 			js.month = tdate[1];
 			js.year = tdate[0];
 			js.day = tdate[2];
-		} else if (!!js.value && js.value === "today") {
+		} else if(!!js.value && js.value === "today") {
 			var tmpdate = new Date();
 			js.month = tmpdate.getMonth();
 			js.year = tmpdate.getFullYear();
@@ -95,28 +95,28 @@ Js.widget.include("Calendar", function(js) {
 		this.onupdate = Js.code.pick(js.onUpdate, null);
 		this.navigation = Js.code.pick(js.navigate, true);
 		
-		if (this.navigation == true) {
-			if (!js.range[0] || js.range[0].toLowerCase() == "now") {
+		if(this.navigation == true) {
+			if(!js.range[0] || js.range[0].toLowerCase() == "now") {
 				js.range[0] = this.Dates.getFullYear();
-			} else if (Js.test.isInteger(js.range[0]) && (js.range[0] > 1000 && js.range[0] < 9999)) {
+			} else if(Js.test.isInteger(js.range[0]) && (js.range[0] > 1000 && js.range[0] < 9999)) {
 				js.range[0] = js.range[0];
-			} else if (js.range[0].charAt(0) == "-") {
+			} else if(js.range[0].charAt(0) == "-") {
 				js.range[0] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[0]));
-			} else if (js.range[0].charAt(0) == "+") {
+			} else if(js.range[0].charAt(0) == "+") {
 				js.range[0] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[0]));
 			}
 			
-			if (!js.range[1] || js.range[1].toLowerCase() == "now") {
+			if(!js.range[1] || js.range[1].toLowerCase() == "now") {
 				js.range[1] = this.Dates.getFullYear();
-			} else if (Js.test.isInteger(js.range[1]) && (js.range[1] > 1000 && js.range[1] < 9999)) {
+			} else if(Js.test.isInteger(js.range[1]) && (js.range[1] > 1000 && js.range[1] < 9999)) {
 				js.range[1] = s_.range[1];
-			} else if (js.range[1].charAt(0) == "-") {
+			} else if(js.range[1].charAt(0) == "-") {
 				js.range[1] = (this.Dates.getFullYear() + (Js.code.toNumber(js.range[1]) + 0));
-			} else if (js.range[1].charAt(0) == "+") {
+			} else if(js.range[1].charAt(0) == "+") {
 				js.range[1] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[1]));
 			}
 			
-			if (js.range[0] < js.range[1]) {
+			if(js.range[0] < js.range[1]) {
 				var tmp = js.range[0];
 				js.range[0] = js.range[1];
 				js.range[1] = tmp;
@@ -134,7 +134,7 @@ Js.widget.include("Calendar", function(js) {
 	},
 	minYear: function(year) {
 		var data = year;
-		if (this.mindate) {
+		if(this.mindate) {
 			var minDate = this.minDate.split("-");
 			var newYear = Js.code.toNumber(minDate[0]);
 			
@@ -146,7 +146,7 @@ Js.widget.include("Calendar", function(js) {
 	},
 	maxYear: function(year) {
 		var data = year;
-		if (this.maxdate) {
+		if(this.maxdate) {
 			var maxDate = this.maxdate.split("-");
 			var newYear = Js.code.toNumber(maxDate[0]);
 			
@@ -163,7 +163,7 @@ Js.widget.include("Calendar", function(js) {
 		this.year = this.Dates.getFullYear();
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
-		if (this.validation()) {
+		if(this.validation()) {
 			this.renderTo.html("");
 			this.callback();
 		} else {
@@ -182,7 +182,7 @@ Js.widget.include("Calendar", function(js) {
 		this.year = this.Dates.getFullYear();
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
-		if (this.validation()) {
+		if(this.validation()) {
 			this.renderTo.html("");
 			this.callback();
 		} else {
@@ -201,7 +201,7 @@ Js.widget.include("Calendar", function(js) {
 		this.year = this.Dates.getFullYear();
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
-		if (this.validation()) {
+		if(this.validation()) {
 			this.renderTo.html("");
 			this.callback();
 		} else {
@@ -219,7 +219,7 @@ Js.widget.include("Calendar", function(js) {
 		this.year = this.Dates.getFullYear();
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
-		if (this.validation()){
+		if(this.validation()){
 			this.renderTo.html("");
 			this.callback();
 		} else {
@@ -237,7 +237,7 @@ Js.widget.include("Calendar", function(js) {
 		var tempYear = this.Dates.getFullYear();
 		this.date = [tempYear, (tempMonth + 1), this.dayOfMonth(tempMonth, tempYear)].join("-");
 		
-		if (this.validation()) {
+		if(this.validation()) {
 			this.year = tempYear;
 			this.month = tempMonth;
 			this.renderTo.html("");
@@ -257,7 +257,7 @@ Js.widget.include("Calendar", function(js) {
 		var tempYear = this.Dates.getFullYear();
 		this.date = [tempYear, (tempMonth + 1), this.dayOfMonth(tempMonth, tempYear)].join("-");
 		
-		if (this.validation()) {
+		if(this.validation()) {
 			this.year = tempYear;
 			this.month = tempMonth;
 			this.renderTo.html("");
@@ -284,13 +284,13 @@ Js.widget.include("Calendar", function(js) {
 		var minDate = Js.code.isset(this.mindate);
 		var maxDate = Js.code.isset(this.maxdate);
 		
-		if (minDate && maxDate && this.compare(this.mindate, this.date) && this.compare(this.date, this.maxdate)) {
+		if(minDate && maxDate && this.compare(this.mindate, this.date) && this.compare(this.date, this.maxdate)) {
 			data = true;
-		} else if (minDate && this.compare(this.mindate, this.date)) {
+		} else if(minDate && this.compare(this.mindate, this.date)) {
 			data = true;
-		} else if (maxDate && this.compare(this.date, this.maxdate)) {
+		} else if(maxDate && this.compare(this.date, this.maxdate)) {
 			data = true;
-		} else if (!minDate && !maxDate) {
+		} else if(!minDate && !maxDate) {
 			data = true;
 		}
 		
@@ -300,7 +300,7 @@ Js.widget.include("Calendar", function(js) {
 		var month = Js.code.pick(month, this.month);
 		var year = Js.code.pick(year, this.year);
 		
-		if (month == 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+		if(month == 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
 			var monthLength = 29;
 		}
 		
@@ -318,49 +318,43 @@ Js.widget.include("Calendar", function(js) {
 		
 		return (secondDate >= firstDate ? true : false);
 	},
-	updateValue: function(Y, m, d) {
-		var f = Js("#" + this.element + "_" + Y + m + d).first();
-		var calf = Js("#" + this.element + "_" + this.field);
-		var mi = (m < 10 ? "0" + m : m);
-		var di = (d < 10 ? "0" + d : d);
+	updateValue: function(year, month, day) {
+		var field = Js("#" + this.element + "_" + year + month + day).first();
+		var calendar = Js("#" + this.element + "_" + this.field);
+		var months = (month < 10 ? "0" + month : month);
+		var days = (day < 10 ? "0" + day : day);
 		
-		if (this.type == "single") {
-			if (!f.hasClass("calendar-day-selected")) {
+		if(this.type == "single") {
+			if(!field.hasClass("calendar-day-selected")) {
 				if (Js.code.isset(this.lastdate) && Js.code.finds(this.element + "_" + this.lastdate)) {
 					var lastdate = Js("#" + this.element + "_" + this.lastdate).set("class", "calendar-day");
 				}
 				
-				f.setClass("calendar-day-selected");
-				this.value = Y + "-" + mi + "-" + di;
+				field.setClass("calendar-day-selected");
+				this.value = [year, months, days].join("-");
 				
-				calf.val(this.value);
-				this.lastdate = Y + "" + m + "" + d;
+				calendar.val(this.value);
+				this.lastdate = [year, month, day].join("");
 			} else {
-				f.setClass("calendar-day");
-				calf.val("");
+				field.setClass("calendar-day");
+				calendar.val("");
 			}
 		} else if (this.type == "multiple") {
-			var v = calf.val();
-			var vs = v.split("|");
+			var value = calendar.val();
+			var values = value.split("|");
 			
-			if (Js.code.inArray(vs, Y + "-" + mi + "-" + di)){
-				vs.splice(vs.indexOf(Y + "-" + mi + "-" + di), 1);
-				v = vs.join("|");
+			if(Js.code.inArray(values, [year, months, days].join("-"))){
+				values.splice(values.indexOf([year, months, days].join("-")), 1);
+				value = values.join("|");
 				
-				f.setClass("calendar-day");
-				this.value = v;
-				calf.val(v);
+				field.setClass("calendar-day");
+				this.value = value;
+				calendar.val(this.value);
 			} else {
-				f.setClass("calendar-day-selected");
-				
-				if(vs.length > 0 && vs[0] != "") {
-					vs[vs.length] = (Y + "-" + mi + "-" + di);
-				} else {
-					vs[0] = Y + "-" + mi + "-" + di;
-				}
-				
-				this.value = vs.join("|");
-				calf.val(this.value);
+				field.setClass("calendar-day-selected");
+				values[values.length] = [year, months, days].join("-");
+				this.value = values.join("|");
+				calendar.val(this.value);
 			}
 		}
 		
@@ -414,33 +408,33 @@ Js.widget.include("Calendar", function(js) {
 		
 		var contrh = con.add("tr", {"class": "calendar-header"});
 		
-		for (var i = 0; i <= 6; i++) {
+		for(var i = 0; i <= 6; i++) {
 			contrh.add("td").setClass("calendar-header-day").text(this.days[i]);
 		}
 		
 		var day = 1;
 		
-		for (var i = 0; i < 6; i++) {
+		for(var i = 0; i < 6; i++) {
 			var weeks = con.add("tr", {"class": "calendar-week"});
 			
-			for (var j = 0; j <= 6; j++) {
+			for(var j = 0; j <= 6; j++) {
 				this.date = [this.year, (this.month + 1), day].join("-");
 				var days = weeks.add("td", {"class": "calendar-" + (this.validation() ? "day" : "invalid")});
 				
-				if (day <= monthLength && (i > 0 || j >= start_day)) {
+				if(day <= monthLength && (i > 0 || j >= start_day)) {
 					days.set("id", this.element + "_" + this.year + (this.month + 1) + day);
 					var tday;
 					
-					if (this.validation()) {
+					if(this.validation()) {
 						days.onclick(function() {
 							var i = Js(this).get("id").split("_");
 							var ym = that.year + "" + that.month;
-							tday = i[1].substring((ym.length), i[1].length);
+							tday = i[1].substr((ym.length), i[1].length);
 							that.updateValue(that.year, (that.month + 1), Js.code.toNumber(tday));  
 						});
 					}
 					
-					if (day == this.day) {
+					if(day == this.day) {
 						days.setClass("calendar-day-selected");
 						this.lastdate = this.year + "" + (this.month + 1) + "" + Js.code.toNumber(this.day);
 					} 
@@ -454,7 +448,7 @@ Js.widget.include("Calendar", function(js) {
 				}
 			}
 			
-			if (day > monthLength) {
+			if(day > monthLength) {
 				break;
 			}
 		}
@@ -463,7 +457,7 @@ Js.widget.include("Calendar", function(js) {
 		var tf2 = tr3.add("td", {"class": "sui-panel-footer"}).html("&nbsp;");
 		var tf3 = tr3.add("td", {"class": "sui-panel-fr"}).html("&nbsp;");
 		
-		if (this.navigation == true) {
+		if(this.navigation == true) {
 			prevbtn.setClass("prev-month").html("&nbsp;").onclick(function() {
 				that.prevMonth();															  
 			});
@@ -479,7 +473,7 @@ Js.widget.include("Calendar", function(js) {
 				that.customMonth(this.value);							
 			});
 			
-			for (var i = 0; i < 12; i++) {
+			for(var i = 0; i < 12; i++) {
 				if(this.month == i) {
 					selmonth.add("option", {"value": i, "selected": "selected"}).text(this.months[i]);
 				} else {

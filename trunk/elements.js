@@ -87,7 +87,7 @@ Js.namespace.include("Elements", function(selector, parent) {
 						
 						try {
 							this.animate[length] = new Js.ext.Animator;
-							this.animate[length].initialize(node);
+							this.animate[length].init(node);
 						} catch(e) {
 							Js.debug.log("Js.Elements.__ADD__ error on Initialize Animator: " + node +  e);
 						};

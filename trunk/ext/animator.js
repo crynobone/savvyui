@@ -197,7 +197,7 @@ Js.ext.include("Animator", function(spec) {
 			var t = this.transaction;
 			this.actStep = (this.actStep + 1);
 			this.prevEase = t[0];
-			var s = this.ease(t[0], t[1], this.step, this.actStep, this.ease);
+			var s = this.easeOut(t[0], t[1], this.step, this.actStep, this.ease);
 			
 			if (s === this.prevEase) {
 				try {
@@ -271,7 +271,7 @@ Js.ext.include("Animator", function(spec) {
 			var t = this.transaction;
 			this.actStep = (this.actStep + 1);
 			this.prevEase = t[0];
-			var s = this.ease(t[0], t[1], this.step, this.actStep, this.ease);
+			var s = this.easeOut(t[0], t[1], this.step, this.actStep, this.ease);
 			
 			if(s === this.prevEase) {
 				Js.style.set(node, does, t[1] + "px");
@@ -326,8 +326,8 @@ Js.ext.include("Animator", function(spec) {
 		var type = this.type;
 		var t = this.transaction;
 		this.actStep = (this.actStep + 1);
-		var s = this.ease(t[0], t[1], this.step, this.actStep, this.ease);
-		var u = this.ease(t[2], t[3], this.step, this.actStep, this.ease);
+		var s = this.easeOut(t[0], t[1], this.step, this.actStep, this.ease);
+		var u = this.easeOut(t[2], t[3], this.step, this.actStep, this.ease);
 		
 		if (t[0] != t[1] || t[2] != t[3]) { 
 			if (t[0] != t[1]) {
@@ -370,7 +370,7 @@ Js.ext.include("Animator", function(spec) {
 		var type = this.type;
 		this.actStep = (this.actStep + 1);
 		this.prevEase = t[0];
-		var s = this.ease(t[0], t[1], this.step, this.actStep, this.ease);
+		var s = this.easeOut(t[0], t[1], this.step, this.actStep, this.ease);
 		
 		if(s === this.prevEase) {
 			if (Js.code.inArray(this.withPx, type)) {
@@ -411,8 +411,8 @@ Js.ext.include("Animator", function(spec) {
 		var type = (this.type == "margin" ? "margin" : "position");
 		this.actStep = (this.actStep + 1);
 		
-		var s = this.ease(t[0], t[1], this.step, this.actStep, this.ease);
-		var u = this.ease(t[2], t[3], this.step, this.actStep, this.ease);
+		var s = this.easeOut(t[0], t[1], this.step, this.actStep, this.ease);
+		var u = this.easeOut(t[2], t[3], this.step, this.actStep, this.ease);
 		
 		if (t[0] != t[1] || t[2] != t[3]) {
 			var does = "";
@@ -443,7 +443,7 @@ Js.ext.include("Animator", function(spec) {
 		}
 		return this;
 	},
-	ease: function(minval, maxval, t, a, p) {
+	easeOut: function(minval, maxval, t, a, p) {
 		var i =  Math.ceil(minval + (Math.pow(((1 / t) * a), p) * (maxval - minval)));
 		return i;
     },

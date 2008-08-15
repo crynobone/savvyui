@@ -245,7 +245,7 @@ Js.ext.include("Form", function() {
 		var data = Js.code.pick(data, false);
 		var that = this;
 		
-		if (!Js.code.finds(fieldErrorId)) {
+		if(!Js.code.finds(fieldErrorId)) {
 			field.appendClass("jsextform-error").parent().add("span", {"id": fieldErrorId, "class": "extform-errormessage"}).html(text);
 			
 			field.onchange(function() {
@@ -259,23 +259,25 @@ Js.ext.include("Form", function() {
 					that.first = null;
 				}
 			});
-		} else if (Js.code.finds(fieldErrorId) && data) {
+		} else if(Js.code.finds(fieldErrorId) && data) {
 			field.appendClass("extform-error");
 			var errorNode = field.siblings("span.extform-errormessage").first();
 			var html = errorNode.html();
 			
-			if (html.match(text) === false && Js.code.trim(html) != "") {
+			if(html.match(text) === false && Js.code.trim(html) != "") {
 				errorNode.append(text);
 			}
 			
 			field.onchange(function() {
-				if (this.value != "") {
+				if(this.value != "") {
 					var node = Js(this).removeClass("extform-error");
 					
 					var errorNode = node.siblings("span.extform-errormessage").first();
+					
 					if(errorNode.count() == 1) {
 						Js.dom.remove(errorNode.fetch());
 					}
+					
 					that.first = null;
 				}
 			});
@@ -297,9 +299,9 @@ Js.ext.include("Form", function() {
 		// parameters
 		var parameter = Js.code.pick(js.parameters, js.params, "");
 		
-		if (post) {
+		if(post) {
 			// callback to onsuccess function
-			if (Js.code.isfunction(onInit)) {
+			if(Js.code.isfunction(onInit)) {
 				onInit();
 			}
 			
@@ -315,7 +317,7 @@ Js.ext.include("Form", function() {
 			return true;
 		} else {
 			// callback to onfail function
-			if (Js.code.isfunction(onFail)) {
+			if(Js.code.isfunction(onFail)) {
 				onFail();
 			}
 			return false;
@@ -337,9 +339,9 @@ Js.ext.include("Form", function() {
 		// parameters
 		var parameter = Js.code.pick(js.parameters, js.params, "");
 		
-		if (get) {
+		if(get) {
 			// callback to onsuccess function
-			if (Js.code.isfunction(onInit)) {
+			if(Js.code.isfunction(onInit)) {
 				onInit();
 			}
 			
@@ -356,7 +358,7 @@ Js.ext.include("Form", function() {
 			return true;
 		} else {
 			// callback to onfail function
-			if (Js.code.isfunction(onFail)) {
+			if(Js.code.isfunction(onFail)) {
 				onFail();
 			}
 			return false;

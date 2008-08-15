@@ -92,7 +92,7 @@ Js.ext.include("Resizable", function(js) {
 		newWidth = width + ((eWidth - node.lastMouseX) * (node.hswap ? -1 : 1));
 		newHeight = height + ((eHeight - node.lastMouseY) * (node.vswap ? -1 : 1));
 		
-		if (node.hmode) {
+		if(node.hmode) {
 			Js.style.set(node.root, "width", (nodeWidth + (newWidth - width)) + "px");
 		} else {
 			newWidth = width = 0;
@@ -119,13 +119,13 @@ Js.ext.include("Resizable", function(js) {
 		node = null;
 	},
 	fixE: function(e) {
-		if (Js.code.isnull(e)) { 
+		if(Js.code.isnull(e)) { 
 			e = window.event;
 		}
-		if (Js.code.isnull(e.layerX)) {
+		if(Js.code.isnull(e.layerX)) {
 			e.layerX = e.offsetX;
 		}
-		if (Js.code.isnull(e.layerY)) { 
+		if(Js.code.isnull(e.layerY)) { 
 			e.layerY = e.offsetY;
 		}
 		return e;

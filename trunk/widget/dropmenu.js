@@ -12,7 +12,7 @@
  * Require: Base, Core, SUI.Ext.Animator
 */
 
-Js.widget.include("DropMenu", function(sel) {
+Js.widget.include("DropMenu", function(selector) {
 	this.object = null;
 	this.node = null;
 	this.lastnode = null;
@@ -20,26 +20,26 @@ Js.widget.include("DropMenu", function(sel) {
 	this.child = null;
 	this.status = 0;
 	
-	if (!!sel && typeof(sel) === "string") {
-		this.init(sel);
+	if (!!selector && typeof(selector) === "string") {
+		this.init(selector);
 	}
 	
 	return this;
 }).prototype = {
-	init: function(sel) {
-		if (!!sel && Js.code.trim(sel) !== "") {
+	init: function(selector) {
+		if (!!selector && Js.code.trim(selector) !== "") {
 			var that = this;
-			this.object = Js(sel);
-			var mList = Js(sel + " ul > li > a");
+			this.object = Js(selector);
+			var mList = Js(selector + " ul > li > a");
 			
 			mList.each(function() {
 				Js(this).hovers(function() {
 					that.node = this.parentNode;
-					that.show(sel, this.parentNode);
+					that.show(selector, this.parentNode);
 				}, function() {
 					that.status = 0;
 					setTimeout((function() { 
-						that.hide(sel);
+						that.hide(selector);
 					}), 5);
 				}).done();
 			});

@@ -46,7 +46,7 @@ Js.util.include("AutoComplete", function(spec) {
 		this.uri = Js.code.pick(spec.uri, this.uri);
 		this.type = Js.code.pick(spec.type, this.type);
 		
-		this.method = (spec.method.match(/^(get|post)$/gi) ? spec.method.toUpperCase() : 'GET'); 
+		this.method = ((!!spec.method && !!spec.method.match(/^(get|post)$/gi)) ? spec.method.toUpperCase() : 'GET'); 
 		
 		if(!!this.element) {
 			this.object = Js(this.element);
@@ -64,10 +64,10 @@ Js.util.include("AutoComplete", function(spec) {
 			that.matched = [];
 			
 			if(that.type === "multiple") {
-				var values = this.value;
-				var val = values.split(that.separator);
-				var length = value.length;
-				var value = Js.code.trim(val[(length - 1)]);
+				var value = this.value;
+				var values = value.split(that.separator);
+				var length = values.length;
+				var value = Js.code.trim(values[(length - 1)]);
 				
 				for(var i = 0; i < (length - 1); i++) {
 					that.matched[that.matched.length] = Js.code.trim(val[i]);

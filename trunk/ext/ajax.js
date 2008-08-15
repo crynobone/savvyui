@@ -36,14 +36,14 @@ Js.ext.include("Ajax", function(js) {
 	declare: function() {
 		var xhr = false;
 		
-		if (window.XMLHttpRequest) {
+		if(window.XMLHttpRequest) {
 			// Majority of modern browser support XMLHttpRequest()
 			xhr = new XMLHttpRequest();
-		} else if (window.ActiveXObject) {
+		} else if(window.ActiveXObject) {
 			// Enable support for IE browser, IE7 and above provide option to use XMLHttpRequest()
 			var ie = ["MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.5.0", "MSXML2.XMLHTTP.6.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
 			
-			for (var i = 0; i < ie.length && !!ie[i]; i++) {
+			for(var i = 0; i < ie.length && !!ie[i]; i++) {
 				try {
 					xhr = new ActiveXObject(ie[i]);
 					break;
@@ -51,7 +51,7 @@ Js.ext.include("Ajax", function(js) {
 			}
 		}
 		
-		if (!xhr) {
+		if(!xhr) {
 			// Failed to attach any XHR object
 			Js.debug.log("Js.ext.Ajax.init() failed: browser does not support Ajax!");
 		}
@@ -59,7 +59,7 @@ Js.ext.include("Ajax", function(js) {
 		this.object = xhr;
 	},
 	init: function(js) {
-		if (this.object == null) {
+		if(this.object == null) {
 			// Initialize XHR object if undefined.
 			this.declare();
 		}
@@ -83,8 +83,8 @@ Js.ext.include("Ajax", function(js) {
 		this.timeout = (!!Js.test.isInteger(this.timeout) ? this.timeout : 0);
 		
 		// check whether XHR object is ready
-		if (this.object.readyState == 4 || this.object.readyState == 0) {
-			if (this.method == "POST") {
+		if(this.object.readyState == 4 || this.object.readyState == 0) {
+			if(this.method == "POST") {
 				// use method POST
 				this.object.open("POST", this.uri, true);
 				
@@ -114,7 +114,7 @@ Js.ext.include("Ajax", function(js) {
 			var that = this;
 			var object = this.object;
 			// Run custom callback to function
-			if (Js.code.isfunction(js.onComplete)) {
+			if(Js.code.isfunction(js.onComplete)) {
 				try {
 					this.object.onreadystatechange = function() {
 						// clear timeout (if exist)
@@ -135,7 +135,7 @@ Js.ext.include("Ajax", function(js) {
 				this.object.onreadystatechange = function() {
 					try {
 						// if request is complete and page is available
-						if (that.object.readyState === 4 && that.requestStatus()) {
+						if(that.object.readyState === 4 && that.requestStatus()) {
 							// clear timeout (if exist)
 							if(Js.code.isset(that.timeoutid)) {
 								clearTimeout(that.timeoutid);
@@ -146,12 +146,12 @@ Js.ext.include("Ajax", function(js) {
 							var reply = that.reply = Js.code.trim(that.object.responseText);
 							
 							// add to logs (if enable)
-							if (that.debug === true) {
+							if(that.debug === true) {
 								Js.debug.log("Response from XHR: " + reply);
 							}
 							
 							// reply shouldn't be empty
-							if (reply !== "") {
+							if(reply !== "") {
 								// eval the JSON string
 								var data = eval("(" + reply + ")");
 								
@@ -186,8 +186,8 @@ Js.ext.include("Ajax", function(js) {
 	methodPost: function() {
 		var p = this.parameter;
 		
-		if (p.match(/^\?/)) {
-			p = ["&", p.substring(1, p.length)].join("");
+		if(p.match(/^\?/)) {
+			p = ["&", p.substr(1)].join("");
 		}
 		
 		this.parameter = p;
@@ -203,7 +203,7 @@ Js.ext.include("Ajax", function(js) {
 		var param = "";
 		var p = this.parameter;
 		
-		if (this.uri.match(/\?/)) {
+		if(this.uri.match(/\?/)) {
 			var u = this.uri.split(/\?/);
 			
 			if (u.length > 1) {
@@ -217,14 +217,14 @@ Js.ext.include("Ajax", function(js) {
 			}
 		}
 		
-		if (p.match(/^\?/) && p.length > 0) {
-			p = "&" + p.substring(1, p.length);
+		if(p.match(/^\?/) && p.length > 0) {
+			p = "&" + p.substr(1);
 		}
 		
 		p = [param, p].join("");
 		
-		if (p.length > 0 && p.match(/^(\&|\?)/)) {
-			p = ["?", p.substring(1, p.length)].join("");
+		if(p.length > 0 && p.match(/^(\&|\?)/)) {
+			p = ["?", p.substr(1)].join("");
 		}
 		
 		this.parameter = p;
@@ -252,33 +252,28 @@ Js.ext.include("Ajax", function(js) {
 	responseNotice: function(data) {
 		var a = Js.code.pick(data.alertpop, data.notice);
 		
-		if (Js.code.isset(a) && a !== "") {
+		if(Js.code.isset(a) && a !== "") {
 			window.alert(a);
 		}
 	},
 	responseGoto: function(data) {
 		var h = Js.code.pick(data.jumpto, data.href);
 		
-		if (Js.code.isset(h) && h !== "") {
+		if(Js.code.isset(h) && h !== "") {
 			Js.code.href(h);
 		}
 	},
-	responseCustom: function(data) {
+	responseUpdate: function(data) {
 		var p = Js.code.pick(data.result, data.text);
 		var id = Js.code.pick(data.add2id, data.id);
 		var fn = Js.code.pick(data.exec, data.callback);
-		var args = Js.code.pick(data.args, null);
 		
-		if (!!p) {
-			if (!!id && typeof(id) === "string") {
+		if(!!p) {
+			if(!!id && typeof(id) === "string") {
 				var node = Js.query.selector("#" + id);
 				node[0].innerHTML = Js.parse.bbml(p);
-			} else if (Js.code.isfunction(fn)) {
-				if(args !== null && args.length > 0) {
-					fn.apply(data, args);
-				} else {
-					fn(p);
-				}
+			} else if(Js.code.isfunction(fn)) {
+				fn(p);
 			}
 		}
 	}
@@ -289,7 +284,7 @@ Js.namespace.include("Ajax", Js.ext.Ajax);
 
 Js.extend("load", (function(url, method) {
 	var key = Js.code.pick(this.index, 0);
-	var imethod = (!!Js.code.inArray(['post','get'], method.toLowerCase()) ? method.toUpperCase() : 'GET');
+	var method = ((!!method && !!Js.code.inArray(['post','get'], method.toLowerCase())) ? method.toUpperCase() : 'GET');
 	
 	if(Js.code.isset(key) && !!this.node[key]) {
 		var node = this.node[key];
@@ -303,7 +298,7 @@ Js.extend("load", (function(url, method) {
 		
 		new Js.ext.Ajax({
 			uri: url,
-			method: imethod,
+			method: method,
 			cache: false,
 			onComplete: updateNode
 		});

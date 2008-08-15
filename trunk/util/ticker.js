@@ -13,21 +13,21 @@
 */
 
 // Import Plugin
-Js.util.include("Ticker", function(sel) {
+Js.util.include("Ticker", function(selector) {
 	// Define Object's properties
 	this.element = null;
 	this.node = null;
 	
 	// start __constructor()
-	if (!!sel && Js.code.trim(sel) !== "") {
-		this.init(sel);
+	if (!!selector && Js.code.trim(selector) !== "") {
+		this.init(selector);
 	}
 	
 	return this;
 }).prototype = {
 	// Initialize the HTML Element
-	init: function(sel) {
-		this.element = Js.code.pick(sel, "");
+	init: function(selector) {
+		this.element = Js.code.pick(selector, "");
 		
 		if (Js.code.isset(this.element)) { 
 			this.node = Js(this.element);

@@ -357,7 +357,7 @@ Js.code = Js.fn = {
 			return "";
 		}
 		
-		return val.join("&");
+		return value.join("&");
 	},
 	// Parse input string value as Number using ParseInt
 	toNumber: function(value) {

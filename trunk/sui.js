@@ -193,12 +193,11 @@ Js.code = Js.fn = {
 		return node;
 	},
 	// loop callback function to each of the node
-	each: function(node, fn, args) {
+	each: function(node, fn) {
 		if(this.isfunction(fn)) {
 			// loop each node (node should be an array)
 			for(var i = 0; i < node.length && !!node[i]; i++) {
 				try {
-					var args = this.toArray(arguments, 2);
 					fn.apply(node[i], [node[i], i]);
 				} catch(e) {
 					// alternatively use call, but only can support one arguments

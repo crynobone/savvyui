@@ -32,10 +32,10 @@ Js.ext.include("Form", function() {
 			field.onblur(function() {
 				var errorNode = Js(this).siblings("span.extform-errormessage").first();
 				if(errorNode.count() == 1) {
-					Js.dom.remove(errorNode.fetch());	
+					Js.dom.remove(errorNode.fetch());
 				}
 				
-				if(this.tagName.toUpperCase().match(/^(INPUT|SELECT|TEXTAREA)$/)) {
+				if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/)) {
 					if(this.name != "") {
 						this.className = (Js.code.isset(this.className) ? this.className : "");
 						var klass = this.className.split(/\s/);
@@ -154,7 +154,7 @@ Js.ext.include("Form", function() {
 			var field = Js("#" + formId + " :input");
 			
 			field.each(function() {
-				if(this.tagName.toUpperCase().match(/^(INPUT|SELECT|TEXTAREA)$/)) {
+				if(!!this.tagName && this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) {
 					if(this.name != "") {
 						this.className = (Js.code.isset(this.className) ? this.className : "");
 						var klass = this.className.split(/\s/);

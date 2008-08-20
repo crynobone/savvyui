@@ -1172,14 +1172,14 @@ Js.namespace.include("test", {
 	},
 	isLength: function(datas, value) {
 		var data = datas.split(/\-/);
-		var length = SUI.fn.toNumber(data[1]);
+		var length = Js.code.toNumber(data[1]);
 		var rdata = null;
 		
-		if (data[0] === "max") {
+		if(data[0] === "max") {
 			rdata = (value <= length ? true : false);
-		} else if (data[0] === "min") {
+		} else if(data[0] === "min") {
 			rdata = (value >= length ? true : false);
-		} else if (data[0] === "exact") {
+		} else if(data[0] === "exact") {
 			rdata = (value == length ? true : false);
 		} else { 
 			rdata = true;

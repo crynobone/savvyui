@@ -27,7 +27,7 @@ Js.ext.include("Form", function() {
 		var that = this;
 		
 		if(!!this.object) {
-			var field = Js("#" + formId + " :input");
+			var field = Js("#" + formId).has("input, select,textarea");
 			
 			field.onblur(function() {
 				var errorNode = Js(this).siblings("span.extform-errormessage").first();
@@ -68,7 +68,7 @@ Js.ext.include("Form", function() {
 						if(error !== "") {
 							that.liveError(this, error);
 						} else {
-							Js.class.remove(this, "extform-error");
+							Js.className.remove(this, "extform-error");
 							
 							var errorNode = Js(this).siblings("span.extform-errormessage").first();
 							if(errorNode.count() == 1) {
@@ -151,7 +151,7 @@ Js.ext.include("Form", function() {
 		var that = this;
 		
 		if(!!this.object) {
-			var field = Js("#" + formId + " :input");
+			var field = Js("#" + formId).has("input,select,textarea");
 			
 			field.each(function() {
 				if(this.tagName.toUpperCase().match(/^(INPUT|SELECT|TEXTAREA)$/)) {
@@ -189,7 +189,7 @@ Js.ext.include("Form", function() {
 						if(error !== "") {
 							that.error(this, error);
 						} else {
-							Js.class.remove(this, "extform-error");
+							Js.className.remove(this, "extform-error");
 							var errorObject = Js(this).siblings("span.extform-errormessage").first();
 							
 							if(errorObject.count() == 1) {

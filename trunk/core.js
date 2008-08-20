@@ -118,7 +118,7 @@ Js.namespace.include("attr", {
 	}
 });
 
-Js.namespace.include("class", {
+Js.namespace.include("className", {
 	set: function(node, value) {
 		if(Js.dom.isElement(node)) {
 			node.className = value;
@@ -794,17 +794,17 @@ Js.namespace.include("parse", {
 });
 
 Js.namespace.include("query", {
-	is: function(node, is) {
-		var is = Js.code.trim(is);
+	is: function(node, data) {
+		var data = Js.code.trim(data);
 		var r = null;
 		var status = null;
 		var value = false;
 		var prev = node.previousSibling;
 		var next = node.nextSibling;
 		
-		if (is.match(/^(enabled|disabled|checked|selected)$/)) {
-			status = is;
-			is = "input";
+		if (data.match(/^(enabled|disabled|checked|selected)$/)) {
+			status = data;
+			data = "input";
 			
 			if (status === "enabled") {
 				value = true;
@@ -812,94 +812,77 @@ Js.namespace.include("query", {
 			}
 		}
 		
-		switch (is) {
-			case 'visible':
-				return ((Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden") || (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === "hidden") ? false : true);
-				break;
-			case 'hidden':
-				return (Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden" ? true : false);
-				break;
-			case 'first-child':
-				return (function(prev) {
-					if (!!prev) {
-						return (!prev || !!Js.dom.isFirst(prev) ? true : false);
-					} else {
-						return true;
-					}
-				})(prev);
-				break;
-			case 'last-child':
-				return (function(next) {
-					if (!!next) { 
-						return (!next || !!Js.dom.isLast(next) ? true : false);
-					} else {
-						return true;
-					}
-				})(next);
-				break;
-			case 'only-child':
-				return (function(node) {
-					if (!!node) { 
-						return Js.dom.isOnlyChild(node);
-					} else {
-						return true;
-					}
-				})(node);
-				break;
-			case 'input':
-				return (function(node, r, status, value) {
-					r = node.tagName.toLowerCase().match(/^(input|select|textarea)$/);
-					if (!!status) {
-						r = (Js.attr.get(node, status) !== false ? true : false);
-						
-						if(!!value) { 
-							r = (r ? false : true);
-						}
-					}
-					return r;			 
-				})(node, r, status, value);
-				break;
-			default:
-				return (function(node, is) {
-					if (is.match(/^(text|password|radio|checkbox|submit|image|reset|button|file|hidden)$/)) {
-						return (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === is ? true : false);
-					} else { 
-						return false;
-					}
-				})(node, is);
-		};
+		if(data == 'visible') {
+			return ((Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden") || (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === "hidden") ? false : true);
+		} else if(data == 'hidden') {
+			return (Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden" ? true : false);
+		} else if(data == 'first-child') {
+			if(!!prev) {
+				return (!prev || !!Js.dom.isFirst(prev) ? true : false);
+			} else {
+				return true;
+			}
+		} else if(data == 'last-child') {
+			if(!!next) { 
+				return (!next || !!Js.dom.isLast(next) ? true : false);
+			} else {
+				return true;
+			}
+		} else if(data == 'only-child') {
+			if(!!node) { 
+				return Js.dom.isOnlyChild(node);
+			} else {
+				return true;
+			}
+		} else if(data == 'input') {
+			r = node.tagName.toLowerCase().match(/^(input|select|textarea)$/);
+			if(!!status) {
+				r = (Js.attr.get(node, status) !== false ? true : false);
+				if(!!value) { 
+					r = (r ? false : true);
+				}
+			}
+			return r;
+		} else {
+			if(data.match(/^(text|password|radio|checkbox|submit|image|reset|button|file|hidden)$/)) {
+				return (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === data ? true : false);
+			} else { 
+				return false;
+			}
+		}
 	},
 	hasClass: function(node, klasName) {
-		return (Js.class.has(node, klasName) ? true : false);
+		return (!!Js.className.has(node, klasName) ? true : false);
 	},
-	hasAttr: function(node, attrs) {
-		var at = Js.attr.get(node, attrs[0]);
+	hasAttrs: function(node, attrs) {
+		var data = Js.attr.get(node, attrs[0]);
 		
-		if(at) {
+		if(!!data) {
 			switch (attrs[1]) {
 				case '=': // Equality
-					return (at === attrs[2]);
+					return (data === attrs[2]);
 					break;
 				case '~': // Match one of space seperated
-					return (at.match(new RegExp('\\b' + attrs[2] + '\\b')));
+					return (data.match(new RegExp('\\b' + attrs[2] + '\\b')));
 					break;
 				case '|': // Match start with value followed by optional hyphen
-					return (at.match(new RegExp('^' + attrs[2] + '-?')));
+					return (data.match(new RegExp('^' + attrs[2] + '-?')));
 					break;
 				case '^': // Match starts with value
-					return (at.indexOf(attrs[2]) === 0);
+					return (data.indexOf(attrs[2]) === 0);
 					break;
 				case '$': // Match ends with value - fails with "Warning" in Opera 7
 					return (at.lastIndexOf(attrs[2]) === at.length - attrs[2].length);
 					break;
 				case '*': // Match ends with value
-					return (at.indexOf(attrs[2]) > -1);
+					return (data.indexOf(attrs[2]) > -1);
 					break;
 				default : // Just test for existence of attribute
-					return at;
+					return data;
 			}
-		} else 
+		} else {
 			return false;
+		}
 	},
 	tagParentOf: function(tags, parents, klasName, is, attr) {
 		var context = [];
@@ -993,7 +976,7 @@ Js.namespace.include("query", {
 		var attr = Js.code.pick(attr, []);
 		
 		valid = (klasName === "" || !!Js.query.hasClass(node, klasName) ? true : false);
-		valid = ((attr.length === 0 || (attr.length === 3 && !!Js.query.hasAttr(node, attr))) && !!valid ? true : false); 
+		valid = ((attr.length === 0 || (attr.length === 3 && !!Js.query.hasAttrs(node, attr))) && !!valid ? true : false); 
 		valid = ((!is || (!!is && !!Js.query.is(node, is))) && !!valid ? true : false);
 		
 		return valid;

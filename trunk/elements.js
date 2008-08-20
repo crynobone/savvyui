@@ -418,7 +418,7 @@ Js.namespace.include("Elements", function(selector, parent) {
 	setClass: function(name) {
 		// stack the callback
 		this.__PUSH__(function(){
-			Js.class.set(this, name);
+			Js.className.set(this, name);
 		});
 		// continue chaining
 		return this;
@@ -426,7 +426,7 @@ Js.namespace.include("Elements", function(selector, parent) {
 	appendClass: function(name) {
 		// stack the callback
 		this.__PUSH__(function() { 
-			Js.class.append(this, name);
+			Js.className.append(this, name);
 		});
 		// continue chaining
 		return this;
@@ -437,17 +437,17 @@ Js.namespace.include("Elements", function(selector, parent) {
 		if (Js.code.isnull(key)) {
 			var value = [];
 			Js.code.each(this.node, function() { 
-				value[value.length] = Js.class.has(this, name);
+				value[value.length] = Js.className.has(this, name);
 			});
 			return value;
 		} else if(!!this.node[key]) {
-			return Js.class.has(this.node[key], name);
+			return Js.className.has(this.node[key], name);
 		}
 	},
 	removeClass: function(name) {
 		// stack the callback
 		this.__PUSH__(function() {
-			Js.class.remove(this, name);
+			Js.className.remove(this, name);
 		});
 		// continue chaining
 		return this;
@@ -588,12 +588,12 @@ Js.namespace.include("Elements", function(selector, parent) {
 				var value = [];
 				// retrieve the value of each HTMLelement
 				Js.code.each(this.node, function() {
-					value[value.length] = Js.code.pick(this.node[i].innerHTML, ""); // return HTML string for multiple HTMLelement
+					value[value.length] = Js.code.pick(this.innerHTML, ""); // return HTML string for multiple HTMLelement
 				});
 				// return value as array
 				return value;
-			} else if(!!this.node[i]) {
-				return Js.code.pick(this.node[i].innerHTML, ""); // return HTML string for single HTMLelement
+			} else if(!!this.node[key]) {
+				return Js.code.pick(this.node[key].innerHTML, ""); // return HTML string for single HTMLelement
 			}
 		}
 	},

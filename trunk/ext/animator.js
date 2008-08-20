@@ -71,12 +71,12 @@ Js.ext.include("Animator", function(spec) {
 				fn();
 			}
 			
-			new Js.ext.Animator(this.object).Fx(spec);
+			new Js.ext.Animator(this.object).fx(spec);
 		};
 		return this;
 	},
 	sync: function(spec) {
-		new Js.ext.Animator(this.object).Fx(spec);
+		new Js.ext.Animator(this.object).fx(spec);
 		return this;
 	},
 	fx: function(spec) {

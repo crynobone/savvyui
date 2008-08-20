@@ -27,7 +27,7 @@ Js.ext.include("Form", function() {
 		var that = this;
 		
 		if(!!this.object) {
-			var field = Js("#" + formId).has("input, select,textarea");
+			var field = Js("#" + formId + " :input");
 			
 			field.onblur(function() {
 				var errorNode = Js(this).siblings("span.extform-errormessage").first();
@@ -151,7 +151,7 @@ Js.ext.include("Form", function() {
 		var that = this;
 		
 		if(!!this.object) {
-			var field = Js("#" + formId).has("input,select,textarea");
+			var field = Js("#" + formId + " :input");
 			
 			field.each(function() {
 				if(this.tagName.toUpperCase().match(/^(INPUT|SELECT|TEXTAREA)$/)) {
@@ -233,10 +233,9 @@ Js.ext.include("Form", function() {
 			return post; // return all field data in querystring formatting
 		}
 	},
-	//node, form
 	error: function(field, text, data) {
 		// Mark first error occured!
-		this.first = (Js.code.isnull(this.first) ? node : this.first);
+		this.first = (Js.code.isnull(this.first) ? field : this.first);
 		
 		var field = Js(field);
 		var form = Js(this.object);

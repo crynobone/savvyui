@@ -794,7 +794,7 @@ Js.namespace.include("parse", {
 });
 
 Js.namespace.include("query", {
-	is: function(node, data) {
+	isValid: function(node, data) {
 		var data = Js.code.trim(data);
 		var r = null;
 		var status = null;
@@ -815,7 +815,7 @@ Js.namespace.include("query", {
 		if(data == 'visible') {
 			return ((Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden") || (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === "hidden") ? false : true);
 		} else if(data == 'hidden') {
-			return (Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden" ? true : false);
+			return (Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden" || (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === "hidden") ? true : false);
 		} else if(data == 'first-child') {
 			if(!!prev) {
 				return (!prev || !!Js.dom.isFirst(prev) ? true : false);
@@ -835,11 +835,11 @@ Js.namespace.include("query", {
 				return true;
 			}
 		} else if(data == 'input') {
-			r = node.tagName.toLowerCase().match(/^(input|select|textarea)$/);
-			if(!!status) {
+			r = (!!node.tagName.toLowerCase().match(/^(input|select|textarea)$/) ? true : false);
+			if(Js.code.isset(status)) {
 				r = (Js.attr.get(node, status) !== false ? true : false);
 				if(!!value) { 
-					r = (r ? false : true);
+					r = (!!r ? false : true);
 				}
 			}
 			return r;
@@ -969,15 +969,15 @@ Js.namespace.include("query", {
 		}
 		return context;
 	},
-	validate: function(node, klasName, is, attr) {
+	validate: function(node, klasName, data, attr) {
 		var valid = false;
 		var klasName = Js.code.pick(klasName, "");
-		var is = Js.code.pick(is, null);
+		var data = Js.code.pick(data, null);
 		var attr = Js.code.pick(attr, []);
 		
 		valid = (klasName === "" || !!Js.query.hasClass(node, klasName) ? true : false);
 		valid = ((attr.length === 0 || (attr.length === 3 && !!Js.query.hasAttrs(node, attr))) && !!valid ? true : false); 
-		valid = ((!is || (!!is && !!Js.query.is(node, is))) && !!valid ? true : false);
+		valid = ((!data || (!!data && !!Js.query.isValid(node, data))) && !!valid ? true : false);
 		
 		return valid;
 	},

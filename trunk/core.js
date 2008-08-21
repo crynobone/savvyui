@@ -835,7 +835,7 @@ Js.namespace.include("query", {
 				return true;
 			}
 		} else if(data == 'input') {
-			r = (!!node.tagName.toLowerCase().match(/^(input|select|textarea)$/) ? true : false);
+			r = (!!node.tagName && !!node.tagName.toLowerCase().match(/^(input|select|textarea)$/g) ? true : false);
 			if(Js.code.isset(status)) {
 				r = (Js.attr.get(node, status) !== false ? true : false);
 				if(!!value) { 
@@ -845,7 +845,7 @@ Js.namespace.include("query", {
 			return r;
 		} else {
 			if(data.match(/^(text|password|radio|checkbox|submit|image|reset|button|file|hidden)$/)) {
-				return (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === data ? true : false);
+				return (!!node.tagName && node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === data ? true : false);
 			} else { 
 				return false;
 			}
@@ -1060,8 +1060,8 @@ Js.namespace.include("query", {
 			} else if (!!parents && parents.length > 0) { 
 				context = parents;
 			}
-			
 			var type = 0;
+			
 			var elem = selector.split(/\s/);
 			
 			for (var i = 0; i < elem.length; i++){
@@ -1078,6 +1078,7 @@ Js.namespace.include("query", {
 					var klasName = "";
 					var attr = [];
 					var is = null;
+					type = 0;
 					
 					if (el === ">") {
 						type = 1;

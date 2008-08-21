@@ -154,7 +154,7 @@ Js.ext.include("Form", function() {
 			var field = Js("#" + formId + " :input");
 			
 			field.each(function() {
-				if(!!this.tagName && this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) {
+				if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) {
 					if(this.name != "") {
 						this.className = (Js.code.isset(this.className) ? this.className : "");
 						var klass = this.className.split(/\s/);

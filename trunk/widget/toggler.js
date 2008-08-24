@@ -12,57 +12,64 @@
  * Require: Base, Core, SUI.Ext.Animator
  */
 
-Js.widget.include("Toggler", function(js) {
-	this.button = null;
-	this.container = null;
-	this.content = null;
-	
-	this.buttonc = null;
-	this.containerc = null;
-	this.contentc = null;
-	
-	if(Js.code.isset(js) && typeof(js) == "object") {
-		this.init(js);
-	}
+Js.widget.include({
+	name: "Toggler", 
+	object: function(js) {
+		this.button = null;
+		this.container = null;
+		this.content = null;
 		
-	return this;
-}).prototype = {
-	init: function(js) {
-		var that = this;
+		this.buttonc = null;
+		this.containerc = null;
+		this.contentc = null;
 		
-		var button = this.button = js.button;
-		var container = this.container = js.container;
-		var content = this.content = js.content;
-		
-		if(Js.code.isset(button) && Js.code.isset(container) && Js.code.isset(content)) {
-			Js(button).onclick(function() {
-				var dwl = Js(container).first();
-				var stack = Js(content).first();
-				var button = Js(this).first();
-				
-				if(!button.getHash("done") || button.getHash("done") == "no") {
-					dwl.fx({
-						method:"resizeHeight",
-						type:"height",
-						transaction:[0, stack.fetch().scrollHeight]
-					});
+		if(Js.code.isset(js) && typeof(js) == "object") {
+			this.init(js);
+		}
+			
+		return this;
+	},
+	proto: {
+		init: function(js) {
+			var that = this;
+			
+			var button = this.button = js.button;
+			var container = this.container = js.container;
+			var content = this.content = js.content;
+			
+			if(Js.code.isset(button) && Js.code.isset(container) && Js.code.isset(content)) {
+				Js(button).onclick(function() {
+					var dwl = Js(container).first();
+					var stack = Js(content).first();
+					var button = Js(this).first();
 					
-					button.setHash("done", "yes");
-				} else if(button.getHash("done") == "yes") {
-					dwl.fx({
-						method:"resizeHeight",
-						type:"height",
-						transaction:[stack.fetch().scrollHeight, 0]
-					});
+					if(!button.getHash("done") || button.getHash("done") == "no") {
+						dwl.fx({
+							method: "resizeHeight",
+							type: "height",
+							transaction: [0, stack.fetch().scrollHeight]
+						});
+						
+						button.setHash("done", "yes");
+					} else if(button.getHash("done") == "yes") {
+						dwl.fx({
+							method: "resizeHeight",
+							type: "height",
+							transaction: [stack.fetch().scrollHeight, 0]
+						});
+						
+						button.setHash("done", "no");
+					}
 					
-					button.setHash("done", "no");
-				}
-				
-				return false;
-			});
+					return false;
+				});
+			}
 		}
 	}
-};
+});
 
 // Backward Compatibility
-Js.util.include("Toggler", Js.widget.Toggler);
+Js.util.include({
+	name: "Toggler", 
+	object: Js.widget.Toggler
+});

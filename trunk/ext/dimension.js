@@ -11,97 +11,92 @@
  * Require: SUI
  */
 
-Js.ext.include("dimension", {
-	// Get scrolled value of a page
-	page: {
-		scrolls: {
-			x: function() {
-				var doc = document.body;
-				var rdata = 0;
-				var offset = window.pageXOffset;
-				var el = document.documentElement;
-					
-				if(typeof(offset) == "number") {
-					rdata = offset;
-				} else if(doc && doc.scrollLeft) {
-					rdata = doc.scrollLeft;
-				} else if(el && el.scrollLeft) {
-					rdata = el.scrollLeft;	
-				}
-				return rdata;
-			},
-			y: function() {
-				var doc = document.body;
-				var rdata = 0;
-				var offset = window.pageYOffset;
-				var el = document.documentElement;
-				
-				if(typeof(offset) == "number") {
-					rdata = offset;
-				} else if(doc && doc.scrollTop) {
-					rdata = doc.scrollLeft;
-				} else if(el && el.scrollTop) {
-					rdata = el.scrollLeft;
-				}
-				return rdata;
-			},
-			xy: function() {
-				return [Js.ext.dimension.page.scrolls.x(), Js.ext.dimension.page.scrolls.y()];
-			}
-		},
-		size: {
-			width: function() {
-				
-			},
-			height: function() {
-				
-			}
-		},
-		middle: function(width, height) {
-			var doc = document.body;
-			var offset = [Js.code.toNumber(doc.offsetWidth), Js.code.toNumber(doc.offsetHeight)];
-			var axis = Js.ext.dimension.page.scrolls.xy();
-			var rdata = [];
-					
-			rdata[0] = Math.round(((offset[0] - width) / 2) + axis[0]);
-			rdata[1] = Math.round((((screen.height - 200) - height) / 2) + axis[1]);
-			rdata[0] = (rdata[0] < 0 ? 0 : rdata[0]);
-			rdata[1] = (rdata[1] < 0 ? 0 : rdata[1]);	
-			rdata.reverse();
-				
-			return rdata;
-		}
-	},
-	node: {
-		scrolls: {},
-		size: {},
-		offset: function(node) {
-			var rdata = [0, 0, 0, 0];
-			var loop = false;
-			
-			if(Js.code.isset(node)) {
-				if(node.offsetParent) {
-					loop = true;
-					rdata[0] = node.offsetWidth;
-					rdata[1] = node.offsetHeight;
-					
-					while(node.offsetParent) {
-						rdata[2] += node.offsetTop;
-						rdata[3] += node.offsetLeft;
-						node = node.offsetParent;
+Js.ext.include({
+	name: "dimension", 
+	object: {
+		// Get scrolled value of a page
+		page: {
+			scrolls: {
+				x: function() {
+					var doc = document.body;
+					var rdata = 0;
+					var offset = window.pageXOffset;
+					var el = document.documentElement;
+						
+					if(typeof(offset) == "number") {
+						rdata = offset;
+					} else if(doc && doc.scrollLeft) {
+						rdata = doc.scrollLeft;
+					} else if(el && el.scrollLeft) {
+						rdata = el.scrollLeft;	
 					}
+					return rdata;
+				},
+				y: function() {
+					var doc = document.body;
+					var rdata = 0;
+					var offset = window.pageYOffset;
+					var el = document.documentElement;
+					
+					if(typeof(offset) == "number") {
+						rdata = offset;
+					} else if(doc && doc.scrollTop) {
+						rdata = doc.scrollLeft;
+					} else if(el && el.scrollTop) {
+						rdata = el.scrollLeft;
+					}
+					return rdata;
+				},
+				xy: function() {
+					return [Js.ext.dimension.page.scrolls.x(), Js.ext.dimension.page.scrolls.y()];
+				}
+			},
+			middle: function(width, height) {
+				var doc = document.body;
+				var offset = [Js.code.toNumber(doc.offsetWidth), Js.code.toNumber(doc.offsetHeight)];
+				var axis = Js.ext.dimension.page.scrolls.xy();
+				var rdata = [];
+						
+				rdata[0] = Math.round(((offset[0] - width) / 2) + axis[0]);
+				rdata[1] = Math.round((((screen.height - 200) - height) / 2) + axis[1]);
+				rdata[0] = (rdata[0] < 0 ? 0 : rdata[0]);
+				rdata[1] = (rdata[1] < 0 ? 0 : rdata[1]);	
+				rdata.reverse();
+					
+				return rdata;
+			}
+		},
+		node: {
+			scrolls: {},
+			size: {},
+			offset: function(node) {
+				var rdata = [0, 0, 0, 0];
+				var loop = false;
+				
+				if(Js.code.isset(node)) {
+					if(node.offsetParent) {
+						loop = true;
+						rdata[0] = node.offsetWidth;
+						rdata[1] = node.offsetHeight;
+						
+						while(node.offsetParent) {
+							rdata[2] += node.offsetTop;
+							rdata[3] += node.offsetLeft;
+							node = node.offsetParent;
+						}
+					} else {
+						if(loop == false) {
+							rdata[0] = Js.code.pick(node.scrollWidth, 0);
+							rdata[1] = Js.code.pick(node.scrollHeight, 0);
+							rdata[2] = Js.code.pick(node.offsetTop, 0);
+							rdata[3] = Js.code.pick(node.offsetLeft, 0);
+						}
+					}
+					return rdata;
 				} else {
-					if(loop == false) {
-						rdata[0] = Js.code.pick(node.scrollWidth, 0);
-						rdata[1] = Js.code.pick(node.scrollHeight, 0);
-						rdata[2] = Js.code.pick(node.offsetTop, 0);
-						rdata[3] = Js.code.pick(node.offsetLeft, 0);
-					}
+					Js.debug.log("Js.ext.dimension.node.offset error : " + node + " does not exist");
+					return ret;
 				}
-				return rdata;
-			} else {
-				Js.debug.log("Js.ext.dimension.node.offset error : " + node + " does not exist");
-				return ret;
 			}
 		}
 	}

@@ -10,7 +10,26 @@
  * Require: SUI/Js
  */
 
-Js.namespace.include("base", function() {});
+Js.namespace.include({
+	name: "base",
+	object: function() {}, 
+	proto: {
+		__destruct: function() {
+			// remove all properties and method for this object
+			for (var method in this) {
+				this[method] = null;
+			}
+				
+			for (var method in this.prototype) {
+				this.prototype[method] = null;
+			}
+			
+			delete this;
+			return null;
+		}
+	}
+});
+
 Js.base.create = function(js) {	
 	var initialize = true;
 	var prototype = new Js.base;
@@ -36,15 +55,15 @@ Js.base.create = function(js) {
 		try {
 			// try to copy parent object.
 			(function(js) {
-				var mtd = ["ext", "__construct", "__destruct", "_super", "prototype"];
+				var list = ["ext", "__construct", "__destruct", "_super", "prototype"];
 				// start adding parent method and properties to this object
 				for (var method in js.prototype) {
-					if (js.prototype.hasOwnProperty(method) && (!Js.code.inArray(mtd, method) && !this[method])) {
+					if (js.prototype.hasOwnProperty(method) && (!Js.code.inArray(list, method) && !this[method])) {
 						this[method] = js.prototype[method];
 					}
 				}
 				for (var method in js) {
-					if (js.hasOwnProperty(method) && (!Js.code.inArray(mtd, method) && !this[method])) {
+					if (js.hasOwnProperty(method) && (!Js.code.inArray(list, method) && !this[method])) {
 						this[method] = js[method];
 					}
 				}
@@ -73,19 +92,4 @@ Js.base.create = function(js) {
 	delete ext;
 	
 	return Class;
-};
-Js.base.prototype = {
-	__destruct: function() {
-		// remove all properties and method for this object
-		for (var method in this) {
-			this[method] = null;
-		}
-			
-		for (var method in this.prototype) {
-			this.prototype[method] = null;
-		}
-		
-		delete this;
-		return null;
-	}
 };

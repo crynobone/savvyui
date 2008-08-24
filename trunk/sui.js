@@ -13,7 +13,6 @@
 */
 
 // Enable the code work as the global namespace of Savvy.UI but also the initializer for Js.elements Object
-// Js as primary Savvy.UI object
 var Js = window.Js = function(selector, context) {
 	var selector = selector || document;
 	
@@ -26,19 +25,28 @@ var Js = window.Js = function(selector, context) {
 	}
 };
 
+// If you prefer SUI as global namespace, there it is.
+var SUI = window.SUI = Js;
+
 // this Savvy.UI version number
-Js.version = "1.0.0-nb1";
+Js.version = "1.0.0";
 
 // Savvy.UI namespace manager
 Js.namespace = {
 	// list all namespace
 	lists: [],
 	// include new namespace
-	include: function(name, object) {
-		Js.namespace.lists[Js.namespace.lists.length] = name;
-		Js[name] = object;
-		
-		return Js[name];
+	include: function(js) {
+		if(Js.code.isset(js.name)) {
+			Js.namespace.lists[Js.namespace.lists.length] = js.name;
+			
+			var that = Js[js.name] = js.object;
+			if(Js.code.isset(js.proto)) {
+				Js[js.name].prototype = js.proto;
+			}
+			
+			return that;
+		}
 	},
 	// check whether the namespace is available (log if namespace not available)
 	require: function(name) {
@@ -65,11 +73,11 @@ Js.debug = {
 	log: function(text) {
 		this.message[this.message.length] = text;
 	
-		if(!!this.debug) {
-			if(!!console.log) {
-				console.log(text);
-			} else {
-				window.alert(text);	
+		if(!!this.enable) {
+			try {
+				console.log(text);	
+			} catch(e) { 
+				alert(text);
 			}
 		}
 	}
@@ -80,11 +88,11 @@ Js.toString = function() {
 	return ["Savvy.UI", "version", Js.version].join(" ");
 };
 // extends Savvy.UI's Js.elements
-Js.extend = function(name, fn) {
+Js.extend = function(name, object) {
 	// check whether it's a function
-	if(Js.code.isfunction(fn) && !!Js.Elements) {
+	if(Js.code.isfunction(object) && !!Js.Elements) {
 		// push the function in Js.elements
-		Js.Elements.prototype[name] = fn;
+		Js.Elements.prototype[name] = object;
 		return true;
 	} else {
 		return false;	
@@ -94,6 +102,7 @@ Js.extend = function(name, fn) {
 Js.nue = function(object) {
 	if(Js.code.typeOf(object) == "object") {
 		var node = {};
+		
 		for(var method in object) {
 			if(object.hasOwnProperty(method)) {
 				node[method] = object[method];
@@ -107,7 +116,6 @@ Js.nue = function(object) {
 
 // Add a numbers of function to Js.fn
 Js.code = Js.fn = {
-	_$: null,
 	// Check browser behaviour to determine whether it's based on IE, IE6, IE7, GECKO, OPERA or KHTML.
 	behaviour: function() {
 		// Return Object containing Boolean value of each browser object.
@@ -259,7 +267,7 @@ Js.code = Js.fn = {
 		return value.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#43;/g, "+");
 	},
 	// Get the indexOf based array's value
-	"indexOf": function(data, value) {
+	'indexOf': function(data, value) {
 		for(var i = data.length; i-- && data[i] !== value;);
 		return i;
 	},
@@ -370,7 +378,7 @@ Js.code = Js.fn = {
 		Js.code.each(data, function() {
 			var first = this.substr(0, 1).toUpperCase();
 			var other = this.substr(1);
-			rdata[rdata.length] = first + other;
+			rdata[rdata.length] = [first, other].join("");
 		});
 		
 		return rdata.join(" ");
@@ -446,11 +454,18 @@ Js.code = Js.fn = {
 
 // Namespace for Savvy.UI Extension
 Js.ext = {
-	include: function(name, fn) {
-		this.lists[this.lists.length] = name;
-		Js.namespace.lists[Js.namespace.lists.length] = "ext." + name;
-		
-		return this[name] = fn;
+	include: function(js) {
+		if(Js.code.isset(js.name)) {
+			this.lists[this.lists.length] = js.name;
+			Js.namespace.lists[Js.namespace.lists.length] = "ext." + js.name;
+			
+			var that = this[js.name] = js.object;
+			if(Js.code.isset(js.proto)) {
+				this[js.name].prototype = js.proto;
+			}
+			
+			return that;
+		}
 	},
 	lists: [],
 	require: function(name) {
@@ -466,11 +481,18 @@ Js.ext = {
 };
 
 Js.widget = {
-	include: function(name, fn) {
-		this.lists[this.lists.length] = name;
-		Js.namespace.lists[Js.namespace.lists.length] = "widget." + name;
-		
-		return this[name] = fn;
+	include: function(js) {
+		if(Js.code.isset(js.name)) {
+			this.lists[this.lists.length] = js.name;
+			Js.namespace.lists[Js.namespace.lists.length] = "widget." + js.name;
+			
+			var that = Js.widget[js.name] = js.object;
+			if(Js.code.isset(js.proto)) {
+				this[js.name].prototype = js.proto;
+			}
+			
+			return that;
+		}
 	},
 	lists: [],
 	require: function(name) {
@@ -486,19 +508,26 @@ Js.widget = {
 };
 
 Js.tool = {
-	include: function(name, fn) {
-		this.lists[this.lists.length] = name;
-		Js.namespace.lists[Js.namespace.lists.length] = "tool." + name;
-		
-		return this[name] = fn;
+	include: function(js) {
+		if(Js.code.isset(js.name)) {
+			this.lists[this.lists.length] = js.name;
+			Js.namespace.lists[Js.namespace.lists.length] = "tool." + js.name;
+			
+			var that = this[name] = js.object;
+			if(Js.code.isset(js.proto)) {
+				this[js.name].prototype = js.proto;
+			}
+			
+			return that;
+		}
 	},
 	lists: [],
 	require: function(name) {
-		var n = this.loaded(name);
-		if(!n) {
+		var isload = this.loaded(name);
+		if(!isload) {
 			Js.debug.log("Required Namespace Js.tool." + name + " is not loaded.");	
 		}
-		return n;
+		return isload;
 	},
 	loaded: function(name) {
 		return Js.code.inArray(this.lists, name);	
@@ -506,11 +535,18 @@ Js.tool = {
 };
 
 Js.util = {
-	include: function(name, fn) {
-		this.lists[this.lists.length] = name;
-		Js.namespace.lists[Js.namespace.lists.length] = "util." + name;
-		
-		return this[name] = fn;
+	include: function(js) {
+		if(Js.code.isset(js.name)) {
+			this.lists[this.lists.length] = js.name;
+			Js.namespace.lists[Js.namespace.lists.length] = "util." + js.name;
+			
+			var that = this[js.name] = js.object;
+			if(Js.code.isset(js.proto)) {
+				this[js.name].prototype = js.proto;
+			}
+			
+			return that;
+		}
 	},
 	lists: [],
 	require: function(name) {

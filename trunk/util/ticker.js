@@ -13,54 +13,58 @@
 */
 
 // Import Plugin
-Js.util.include("Ticker", function(selector) {
-	// Define Object's properties
-	this.element = null;
-	this.node = null;
-	
-	// start __constructor()
-	if (!!selector && Js.code.trim(selector) !== "") {
-		this.init(selector);
-	}
-	
-	return this;
-}).prototype = {
-	// Initialize the HTML Element
-	init: function(selector) {
-		this.element = Js.code.pick(selector, "");
+Js.util.include({
+	name: "Ticker", 
+	object: function(selector) {
+		// Define Object's properties
+		this.element = null;
+		this.node = null;
 		
-		if (Js.code.isset(this.element)) { 
-			this.node = Js(this.element);
+		// start __constructor()
+		if (!!selector && Js.code.trim(selector) !== "") {
+			this.init(selector);
 		}
 		
 		return this;
 	},
-	// checked all checkbox
-	check: function() {
-		// loop all object
-		this.node.each(function() {
-			// set checked to true
-			this.checked = true;
-		});
-	},
-	// uncheck all checkbox
-	unCheck: function() {
-		// loops all object
-		this.node.each(function() { 
-			// set checked to false
-			this.checked = false;
-		});
-	},
-	// invert checkbox selection
-	invert: function() {
-		// loops all object
-		this.node.each(function() {
-			// reverse checkbox selection
-			if (this.checked == true) {
-				this.checked = false; // uncheck
-			} else { 
-				this.checked = true; // checked
+	proto: {
+		// Initialize the HTML Element
+		init: function(selector) {
+			this.element = Js.code.pick(selector, null);
+			
+			if (Js.code.isset(this.element)) { 
+				this.node = Js(this.element);
 			}
-		});
+			
+			return this;
+		},
+		// checked all checkbox
+		check: function() {
+			// loop all object
+			this.node.each(function() {
+				// set checked to true
+				this.checked = true;
+			});
+		},
+		// uncheck all checkbox
+		unCheck: function() {
+			// loops all object
+			this.node.each(function() { 
+				// set checked to false
+				this.checked = false;
+			});
+		},
+		// invert checkbox selection
+		invert: function() {
+			// loops all object
+			this.node.each(function() {
+				// reverse checkbox selection
+				if (this.checked == true) {
+					this.checked = false; // uncheck
+				} else { 
+					this.checked = true; // checked
+				}
+			});
+		}
 	}
-};
+});

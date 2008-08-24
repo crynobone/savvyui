@@ -513,7 +513,7 @@ Js.tool = {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "tool." + js.name;
 			
-			var that = this[name] = js.object;
+			var that = this[js.name] = js.object;
 			if(Js.code.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
@@ -4484,7 +4484,7 @@ Js.namespace.include({
 			return this;
 		}
 	})
-});
+})
 /*
  * Savvy.UI JavaScript Library Application
  * Name: SUI.Util.Anchor

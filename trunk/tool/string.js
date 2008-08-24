@@ -28,4 +28,4 @@ Js.namespace.include({
 			return this;
 		}
 	})
-});
+})

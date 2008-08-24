@@ -966,11 +966,12 @@ Js.namespace.include({
 							
 							if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === parent) {
 								context[context.length] = node;
-							}
+							} 
 						}
 					}
 				}
 			}
+			
 			return context;
 		},
 		tagChildOf: function(tags, parents, klasName, is, attr) {
@@ -1036,15 +1037,20 @@ Js.namespace.include({
 			
 			if(Js.code.isset(type) && type > 0) {
 				if(type === 4) {
+					//Js.debug.log("use tagParentOf");
 					context = Js.query.tagParentOf(tags, parents, klasName, is, attr);
 				} else if(type === 2) {
+					//Js.debug.log("use tagNextOf");
 					context = Js.query.tagNextOf(tags, parents, klasName, is, attr);
 				} else if(type === 3) {
+					//Js.debug.log("use tagSiblingOf");
 					context = Js.query.tagSiblingOf(tags, parents, klasName, is, attr);
 				} else if(type === 1) {
+					//Js.debug.log("use tagChildOf");
 					context = Js.query.tagChildOf(tags, parents, klasName, is, attr);
 				}
 			} else {
+				//Js.debug.log("use tagNormal");
 				if(!parents || parents.length === 0 || !parents.length) {
 					parents = [document];
 				}
@@ -1104,7 +1110,6 @@ Js.namespace.include({
 						var klasName = "";
 						var attr = [];
 						var is = null;
-						type = 0;
 						
 						if(el === ">") {
 							type = 1;

@@ -69,7 +69,7 @@ Js.ext.include({
 							}
 							
 							if(error !== "") {
-								that.liveError(this, error);
+								that.liveErrorInit(this, error);
 							} else {
 								Js.className.remove(this, "extform-error");
 								
@@ -83,7 +83,7 @@ Js.ext.include({
 								if(klass[i].match(/(max|min|exact)\-(\d*)/)) {
 									if(!Js.test.isLength(klass[i], this.value.length)) {
 										var error = klass[i].split(/\-/);
-										that.liveError(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
+										that.liveErrorInit(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
 									}
 								}
 							}
@@ -99,7 +99,8 @@ Js.ext.include({
 				return true;
 			}
 		},
-		liveError: function(field, text, data) {
+		liveErrorInit: function(field, text, data) {
+			this.first = (Js.code.isnull(this.first) ? field : this.first);
 			// Mark first error occured!
 			var form = Js(this.object);
 			var field = Js(field);
@@ -121,7 +122,7 @@ Js.ext.include({
 						}
 					}
 				});
-			} else if (Js.code.finds(fieldErrorId) && data) {
+			} else if (Js.code.finds(fieldErrorId) && !!data) {
 				field.appendClass("extform-error");
 				var errorNode = field.siblings("span.extform-errormessage").first();
 				var html = errorNode.html();
@@ -157,6 +158,11 @@ Js.ext.include({
 				var field = Js("#" + formId + " :input");
 				
 				field.each(function() {
+					var errorNode = Js(this).siblings("span.extform-errormessage").first();
+					if(errorNode.count() == 1) {
+						Js.dom.remove(errorNode.fetch());
+					}
+					
 					if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) {
 						if(this.name != "") {
 							this.className = (Js.code.isset(this.className) ? this.className : "");
@@ -190,7 +196,7 @@ Js.ext.include({
 							}
 							
 							if(error !== "") {
-								that.error(this, error);
+								that.errorInit(this, error);
 							} else {
 								Js.className.remove(this, "extform-error");
 								var errorObject = Js(this).siblings("span.extform-errormessage").first();
@@ -204,7 +210,7 @@ Js.ext.include({
 								if(klass[i].match(/(max|min|exact)\-(\d*)/)) {
 									if(!Js.test.isLength(klass[i], this.value.length)) {
 										var error = klass[i].split(/\-/);
-										that.error(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
+										that.errorInit(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
 									}
 								}
 							}
@@ -236,7 +242,7 @@ Js.ext.include({
 				return post; // return all field data in querystring formatting
 			}
 		},
-		error: function(field, text, data) {
+		errorInit: function(field, text, data) {
 			// Mark first error occured!
 			this.first = (Js.code.isnull(this.first) ? field : this.first);
 			
@@ -261,7 +267,7 @@ Js.ext.include({
 						that.first = null;
 					}
 				});
-			} else if(Js.code.finds(fieldErrorId) && data) {
+			} else if(Js.code.finds(fieldErrorId) && !!data) {
 				field.appendClass("extform-error");
 				var errorNode = field.siblings("span.extform-errormessage").first();
 				var html = errorNode.html();

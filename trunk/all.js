@@ -1623,11 +1623,12 @@ Js.namespace.include({
 							
 							if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === parent) {
 								context[context.length] = node;
-							}
+							} 
 						}
 					}
 				}
 			}
+			
 			return context;
 		},
 		tagChildOf: function(tags, parents, klasName, is, attr) {
@@ -1693,15 +1694,20 @@ Js.namespace.include({
 			
 			if(Js.code.isset(type) && type > 0) {
 				if(type === 4) {
+					//Js.debug.log("use tagParentOf");
 					context = Js.query.tagParentOf(tags, parents, klasName, is, attr);
 				} else if(type === 2) {
+					//Js.debug.log("use tagNextOf");
 					context = Js.query.tagNextOf(tags, parents, klasName, is, attr);
 				} else if(type === 3) {
+					//Js.debug.log("use tagSiblingOf");
 					context = Js.query.tagSiblingOf(tags, parents, klasName, is, attr);
 				} else if(type === 1) {
+					//Js.debug.log("use tagChildOf");
 					context = Js.query.tagChildOf(tags, parents, klasName, is, attr);
 				}
 			} else {
+				//Js.debug.log("use tagNormal");
 				if(!parents || parents.length === 0 || !parents.length) {
 					parents = [document];
 				}
@@ -1761,7 +1767,6 @@ Js.namespace.include({
 						var klasName = "";
 						var attr = [];
 						var is = null;
-						type = 0;
 						
 						if(el === ">") {
 							type = 1;
@@ -2160,13 +2165,15 @@ Js.namespace.include({
 			
 			if (this._node.length > 0) {
 				if (this.node.length === 0) {
+					//Js.debug.log("using start()");
 					var node = (!key ? this._node : this._node[key]);
 					var object = Js.query.selector(selector, node);
 					
 					if(object.length > 0) {
 						this.addStack(object);
 					}
-				} else if (this.node.length > 0) {
+				} else if(this.node.length > 0) {
+					//Js.debug.log("extend node");
 					var node = (!key ? this.node : this.node[key]);
 					var object = Js.query.selector(selector, node);
 					
@@ -2176,8 +2183,9 @@ Js.namespace.include({
 				}
 				// continue chaining
 				return this;
-			} else if (this._node.length === 0) {
-				var node = (!key ? this.node : this.node[key]);
+			} else {
+				//Js.debug.log("new process");
+				var node = (!!key && !!this.node[key] ? this.node[key] : this.node);
 				return new Js.Elements(selector, node);
 			}
 		},
@@ -3876,7 +3884,7 @@ Js.ext.include({
 							}
 							
 							if(error !== "") {
-								that.liveError(this, error);
+								that.liveErrorInit(this, error);
 							} else {
 								Js.className.remove(this, "extform-error");
 								
@@ -3890,7 +3898,7 @@ Js.ext.include({
 								if(klass[i].match(/(max|min|exact)\-(\d*)/)) {
 									if(!Js.test.isLength(klass[i], this.value.length)) {
 										var error = klass[i].split(/\-/);
-										that.liveError(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
+										that.liveErrorInit(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
 									}
 								}
 							}
@@ -3906,7 +3914,8 @@ Js.ext.include({
 				return true;
 			}
 		},
-		liveError: function(field, text, data) {
+		liveErrorInit: function(field, text, data) {
+			this.first = (Js.code.isnull(this.first) ? field : this.first);
 			// Mark first error occured!
 			var form = Js(this.object);
 			var field = Js(field);
@@ -3928,7 +3937,7 @@ Js.ext.include({
 						}
 					}
 				});
-			} else if (Js.code.finds(fieldErrorId) && data) {
+			} else if (Js.code.finds(fieldErrorId) && !!data) {
 				field.appendClass("extform-error");
 				var errorNode = field.siblings("span.extform-errormessage").first();
 				var html = errorNode.html();
@@ -3964,6 +3973,11 @@ Js.ext.include({
 				var field = Js("#" + formId + " :input");
 				
 				field.each(function() {
+					var errorNode = Js(this).siblings("span.extform-errormessage").first();
+					if(errorNode.count() == 1) {
+						Js.dom.remove(errorNode.fetch());
+					}
+					
 					if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) {
 						if(this.name != "") {
 							this.className = (Js.code.isset(this.className) ? this.className : "");
@@ -3997,7 +4011,7 @@ Js.ext.include({
 							}
 							
 							if(error !== "") {
-								that.error(this, error);
+								that.errorInit(this, error);
 							} else {
 								Js.className.remove(this, "extform-error");
 								var errorObject = Js(this).siblings("span.extform-errormessage").first();
@@ -4011,7 +4025,7 @@ Js.ext.include({
 								if(klass[i].match(/(max|min|exact)\-(\d*)/)) {
 									if(!Js.test.isLength(klass[i], this.value.length)) {
 										var error = klass[i].split(/\-/);
-										that.error(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
+										that.errorInit(this, "This field require " + error[0] + " of " + error[1] + " characters.", true);
 									}
 								}
 							}
@@ -4043,7 +4057,7 @@ Js.ext.include({
 				return post; // return all field data in querystring formatting
 			}
 		},
-		error: function(field, text, data) {
+		errorInit: function(field, text, data) {
 			// Mark first error occured!
 			this.first = (Js.code.isnull(this.first) ? field : this.first);
 			
@@ -4068,7 +4082,7 @@ Js.ext.include({
 						that.first = null;
 					}
 				});
-			} else if(Js.code.finds(fieldErrorId) && data) {
+			} else if(Js.code.finds(fieldErrorId) && !!data) {
 				field.appendClass("extform-error");
 				var errorNode = field.siblings("span.extform-errormessage").first();
 				var html = errorNode.html();

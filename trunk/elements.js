@@ -277,13 +277,15 @@ Js.namespace.include({
 			
 			if (this._node.length > 0) {
 				if (this.node.length === 0) {
+					//Js.debug.log("using start()");
 					var node = (!key ? this._node : this._node[key]);
 					var object = Js.query.selector(selector, node);
 					
 					if(object.length > 0) {
 						this.addStack(object);
 					}
-				} else if (this.node.length > 0) {
+				} else if(this.node.length > 0) {
+					//Js.debug.log("extend node");
 					var node = (!key ? this.node : this.node[key]);
 					var object = Js.query.selector(selector, node);
 					
@@ -293,8 +295,9 @@ Js.namespace.include({
 				}
 				// continue chaining
 				return this;
-			} else if (this._node.length === 0) {
-				var node = (!key ? this.node : this.node[key]);
+			} else {
+				//Js.debug.log("new process");
+				var node = (!!key && !!this.node[key] ? this.node[key] : this.node);
 				return new Js.Elements(selector, node);
 			}
 		},

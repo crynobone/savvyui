@@ -1003,7 +1003,7 @@ Js.namespace.include({
 					return false;
 				}
 				var effect = new Js.ext.Animator;
-				effect.init(node).Fx({
+				effect.init(node).fx({
 					method: "fade",
 					transaction: fade,
 					shutter: data[0],
@@ -5596,7 +5596,21 @@ Js.widget.include({
 			})();
 		},
 		init: function() {
+			var that = this;
 			this.node = Js("body").first().add("div", {"id": "sui-message"}).show();
+			
+			var whenScroll = function() {
+				var y = Js.ext.dimension.page.scrolls.y();
+				that.node.css("top", y + "px");
+			};
+			var currentScroll = window.onscroll;
+			window.onscroll = function() {
+				if(Js.code.isfunction(currentScroll)) {
+					currentScroll();	
+				}
+				whenScroll();	
+			}
+			whenScroll();
 		}
 	}
 });

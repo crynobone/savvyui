@@ -346,7 +346,7 @@ Js.namespace.include({
 					return false;
 				}
 				var effect = new Js.ext.Animator;
-				effect.init(node).Fx({
+				effect.init(node).fx({
 					method: "fade",
 					transaction: fade,
 					shutter: data[0],

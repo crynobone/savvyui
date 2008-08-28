@@ -17,15 +17,15 @@ Js.widget.include({
 	object: {
 		node: null,
 		add: function(spec) {
-			if(Js.code.isnull(this.node)) {
+			if(Jrun.isnull(this.node)) {
 				this.init();
 			}
 			
 			var that = this;
-			var text = Js.code.pick(spec.text, "");
-			var timeout = Js.code.pick(spec.timeout, 5000);
-			var type = Js.code.pick(spec.type, "note");
-			var closable = Js.code.pick(spec.closable, true);
+			var text = Jrun.pick(spec.text, "");
+			var timeout = Jrun.pick(spec.timeout, 5000);
+			var type = Jrun.pick(spec.type, "note");
+			var closable = Jrun.pick(spec.closable, true);
 			
 			timeout = (Js.test.isInteger(timeout) ? timeout : 5000);
 			
@@ -66,7 +66,7 @@ Js.widget.include({
 			};
 			var currentScroll = window.onscroll;
 			window.onscroll = function() {
-				if(Js.code.isfunction(currentScroll)) {
+				if(Jrun.isfunction(currentScroll)) {
 					currentScroll();	
 				}
 				whenScroll();	

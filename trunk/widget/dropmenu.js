@@ -30,7 +30,7 @@ Js.widget.include({
 	},
 	proto: {
 		init: function(selector) {
-			if (!!selector && Js.code.trim(selector) !== "") {
+			if (!!selector && Jrun.trim(selector) !== "") {
 				var that = this;
 				this.object = Js(selector);
 				var mList = Js(selector + " ul > li > a");
@@ -57,8 +57,8 @@ Js.widget.include({
 				this.status = 1;
 				var t = Js.ext.dimension.node.offset(node);
 				
-				if(Js.code.finds([sel,"menucontainer"].join("_")) && Js.code.isset(this.child)) {
-					if(Js.code.isset(this.lastnode)) {
+				if(Jrun.finds([sel,"menucontainer"].join("_")) && Jrun.isset(this.child)) {
+					if(Jrun.isset(this.lastnode)) {
 						Js(this.lastnode).insert(this.content);
 						this.lastnode = null;
 					}
@@ -106,7 +106,7 @@ Js.widget.include({
 					that.status = 1;
 					that.node = node;
 				}, function() {
-					if(Js.code.finds([sel, "menucontainer"].join("_"))) {
+					if(Jrun.finds([sel, "menucontainer"].join("_"))) {
 						that.status = 0;
 						setTimeout((function() {
 							that.hide(sel);
@@ -118,8 +118,8 @@ Js.widget.include({
 		},
 		hide: function(sel) {
 			if(this.status == 0) {
-				if(Js.code.isset([sel, "menucontainer"].join("_")) && Js.code.isset(this.child)) {
-					if(Js.code.isset(this.lastnode)) {
+				if(Jrun.isset([sel, "menucontainer"].join("_")) && Jrun.isset(this.child)) {
+					if(Jrun.isset(this.lastnode)) {
 						Js(this.lastnode).insert(this.content).done();
 						this.lastnode = null;
 					}

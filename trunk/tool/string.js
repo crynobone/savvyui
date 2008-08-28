@@ -8,7 +8,7 @@ Js.namespace.include({
 			return this;
 		},
 		exec: function(data, args) {
-			var args = Js.code.toArray(arguments, 1);
+			var args = Jrun.toArray(arguments, 1);
 			var value = this._super;
 			value = new String(value);
 			value = value[data].call(value, args);
@@ -16,16 +16,18 @@ Js.namespace.include({
 			return this;
 		},
 		trim: function() {
-			this.value = this._super = Js.code.trim(this._super);
+			this.value = this._super = Jrun.trim(this._super);
 			return this;
 		},
 		htmlEntities: function() {
-			this.value = this._super = Js.code.htmlEntities(this._super);
+			this.value = this._super = Jrun.htmlEntities(this._super);
 			return this;
 		},
 		stripTags: function () {
-			this.value = this._super = Js.code.stripTags(this._super);
+			this.value = this._super = Jrun.stripTags(this._super);
 			return this;
 		}
 	})
-})
+});
+
+var Jstring = Js.string;

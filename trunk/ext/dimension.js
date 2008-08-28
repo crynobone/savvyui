@@ -53,7 +53,7 @@ Js.ext.include({
 			},
 			middle: function(width, height) {
 				var doc = document.body;
-				var offset = [Js.code.toNumber(doc.offsetWidth), Js.code.toNumber(doc.offsetHeight)];
+				var offset = [Jrun.toNumber(doc.offsetWidth), Jrun.toNumber(doc.offsetHeight)];
 				var axis = Js.ext.dimension.page.scrolls.xy();
 				var rdata = [];
 						
@@ -73,7 +73,7 @@ Js.ext.include({
 				var rdata = [0, 0, 0, 0];
 				var loop = false;
 				
-				if(Js.code.isset(node)) {
+				if(Jrun.isset(node)) {
 					if(node.offsetParent) {
 						loop = true;
 						rdata[0] = node.offsetWidth;
@@ -86,10 +86,10 @@ Js.ext.include({
 						}
 					} else {
 						if(loop == false) {
-							rdata[0] = Js.code.pick(node.scrollWidth, 0);
-							rdata[1] = Js.code.pick(node.scrollHeight, 0);
-							rdata[2] = Js.code.pick(node.offsetTop, 0);
-							rdata[3] = Js.code.pick(node.offsetLeft, 0);
+							rdata[0] = Jrun.pick(node.scrollWidth, 0);
+							rdata[1] = Jrun.pick(node.scrollHeight, 0);
+							rdata[2] = Jrun.pick(node.offsetTop, 0);
+							rdata[3] = Jrun.pick(node.offsetLeft, 0);
 						}
 					}
 					return rdata;

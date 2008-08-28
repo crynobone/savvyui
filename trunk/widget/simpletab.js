@@ -25,7 +25,7 @@ Js.widget.include({
 		this.activeHeader = null;
 		
 		// start __constructor()
-		if(Js.code.typeOf(js) === "object" || Js.code.typeOf(js) === "string") {
+		if(Jrun.typeOf(js) === "object" || Jrun.typeOf(js) === "string") {
 			this.init(js);
 		}
 		
@@ -68,12 +68,12 @@ Js.widget.include({
 		},
 		addTab: function(spec) {
 			var that = this;
-			if(!!spec.id && Js.code.typeOf(spec.id) === "string") {
-				var title = Js.code.pick(spec.title, "Untitled");
+			if(!!spec.id && Jrun.typeOf(spec.id) === "string") {
+				var title = Jrun.pick(spec.title, "Untitled");
 				var id = spec.id;
-				var content = Js.code.pick(spec.content, "");
-				var closable = Js.code.pick(spec.closable, false);
-				var set = Js.code.pick(spec.activate, false);
+				var content = Jrun.pick(spec.content, "");
+				var closable = Jrun.pick(spec.closable, false);
+				var set = Jrun.pick(spec.activate, false);
 				
 				var obj = this.object.add("div", {"id": id, "class": "simpletab-hidden"}).html(content);
 				var li = this.header.add("li");

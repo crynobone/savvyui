@@ -23,7 +23,7 @@ Js.widget.include({
 		this.containerc = null;
 		this.contentc = null;
 		
-		if(Js.code.isset(js) && typeof(js) == "object") {
+		if(Jrun.isset(js) && typeof(js) == "object") {
 			this.init(js);
 		}
 			
@@ -37,7 +37,7 @@ Js.widget.include({
 			var container = this.container = js.container;
 			var content = this.content = js.content;
 			
-			if(Js.code.isset(button) && Js.code.isset(container) && Js.code.isset(content)) {
+			if(Jrun.isset(button) && Jrun.isset(container) && Jrun.isset(content)) {
 				Js(button).onclick(function() {
 					var dwl = Js(container).first();
 					var stack = Js(content).first();

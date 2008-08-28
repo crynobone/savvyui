@@ -50,7 +50,7 @@ Js.ext.include({
 			if (typeof(spec) == "string") {
 				var el = spec;
 				
-				if (Js.code.finds(el)) {
+				if (Jrun.finds(el)) {
 					node = Js.query.id(el);
 				} else {
 					node = Js.query.create("div");
@@ -59,8 +59,8 @@ Js.ext.include({
 			} else if (spec && spec.nodeType === 1) {
 				node = spec;
 			} else {
-				var object = Js.code.pick(spec.object, spec.node);
-				node = Js.code.prepare(object, spec.element, "object");
+				var object = Jrun.pick(spec.object, spec.node);
+				node = Jrun.prepare(object, spec.element, "object");
 			}
 			
 			this.object = node;
@@ -70,7 +70,7 @@ Js.ext.include({
 			var that = this;
 			fn = this.oncomplete;
 			this.onComplete = function() {
-				if (Js.code.isfunction(fn)) {
+				if (Jrun.isfunction(fn)) {
 					fn();
 				}
 				
@@ -84,12 +84,12 @@ Js.ext.include({
 		},
 		fx: function(spec) {
 			if (this.interval === null) {
-				this.does = spec.method = (Js.code.inArray(this.methods, spec.method) ? spec.method : "moveUp");
-				this.oncomplete = spec.oncomplete = Js.code.pick(spec.onComplete, null);
+				this.does = spec.method = (Jrun.inArray(this.methods, spec.method) ? spec.method : "moveUp");
+				this.oncomplete = spec.oncomplete = Jrun.pick(spec.onComplete, null);
 				this.grid();
-				this.shutter = spec.shutter = Js.code.pick(spec.shutter, 20);
-				this.step = spec.step = Js.code.pick(spec.step, 80);
-				this.ease = Js.code.pick(spec.ease, 0.8);
+				this.shutter = spec.shutter = Jrun.pick(spec.shutter, 20);
+				this.step = spec.step = Jrun.pick(spec.step, 80);
+				this.ease = Jrun.pick(spec.ease, 0.8);
 				this.actStep = 0;
 				var that = this;
 				
@@ -97,27 +97,27 @@ Js.ext.include({
 					var ts = spec.transaction;
 					
 					if (this.does.match(/^move(Left|Right)$/)) {
-						this.type = Js.code.pick(spec.property, "marginLeft");
+						this.type = Jrun.pick(spec.property, "marginLeft");
 						
 						if (this.type != "marginLeft" && Js.style.get(this.object, "position")) {
 							this.type = "left";
-							this.transaction[0] = Js.code.pick(ts[0], this.left);
+							this.transaction[0] = Jrun.pick(ts[0], this.left);
 							this.transaction[1] = ts[1];
 						} else {
 							this.type = "marginLeft";
-							this.transaction[0] = Js.code.pick(ts[0], this.margin[3]);
+							this.transaction[0] = Jrun.pick(ts[0], this.margin[3]);
 							this.transaction[1] = ts[1];
 						}
 					} else if (this.does.match(/^move(Up|Down)$/)) {
-						this.type = Js.code.pick(spec.property, "marginTop");
+						this.type = Jrun.pick(spec.property, "marginTop");
 						
 						if (this.type != "marginTop" && Js.style.get(this.object, "position")) {
 							this.type = "top";
-							this.transaction[0] = Js.code.pick(ts[0], this.top);
+							this.transaction[0] = Jrun.pick(ts[0], this.top);
 							this.transaction[1] = ts[1];
 						} else {
 							this.type = "marginTop";
-							this.transaction[0] = Js.code.pick(ts[0], this.margin[0]);
+							this.transaction[0] = Jrun.pick(ts[0], this.margin[0]);
 							this.transaction[1] = ts[1];
 						}
 					}
@@ -127,19 +127,19 @@ Js.ext.include({
 					}, this.shutter);
 				} else if (this.does == "move") {
 					var ts = spec.transaction;
-					this.type = Js.code.pick(spec.property, "margin");
+					this.type = Jrun.pick(spec.property, "margin");
 					
 					if (this.type != "margin" && Js.style.get(this.object, "position")) {
 						this.type = "position";	
-						this.transaction[0] = Js.code.pick(ts[0], this.top);
+						this.transaction[0] = Jrun.pick(ts[0], this.top);
 						this.transaction[1] = ts[1];
-						this.transaction[2] = Js.code.pick(ts[2], this.left);
+						this.transaction[2] = Jrun.pick(ts[2], this.left);
 						this.transaction[3] = ts[3];
 					} else {
 						this.type = "margin";
-						this.transaction[0] = Js.code.pick(ts[0], this.margin[0]);
+						this.transaction[0] = Jrun.pick(ts[0], this.margin[0]);
 						this.transaction[1] = ts[1];
-						this.transaction[2] = Js.code.pick(ts[2], this.margin[3]);
+						this.transaction[2] = Jrun.pick(ts[2], this.margin[3]);
 						this.transaction[3] = ts[3];
 					}
 					
@@ -147,15 +147,15 @@ Js.ext.include({
 						that.customMove();
 					}, this.shutter);
 				} else if (this.does.match(/^resize(Width|Height)$/)) {
-					this.type = Js.code.pick(spec.property, "normal");
+					this.type = Jrun.pick(spec.property, "normal");
 					this.does = (spec.method == "resizeWidth" ? "width" : "height");
 					var ts 	= spec.transaction;
 					
 					if (this.does == "width") {
-						this.transaction[0] = Js.code.pick(ts[0], this.width);
+						this.transaction[0] = Jrun.pick(ts[0], this.width);
 						this.transaction[1] = ts[1];
 					} else {
-						this.transaction[0] = Js.code.pick(ts[0], this.height);
+						this.transaction[0] = Jrun.pick(ts[0], this.height);
 						this.transaction[1] = ts[1];
 					}
 					
@@ -163,11 +163,11 @@ Js.ext.include({
 						that.size();
 					}, this.shutter);
 				} else if (this.does == "resize") {
-					this.type = Js.code.pick(spec.property, "normal");
+					this.type = Jrun.pick(spec.property, "normal");
 					var ts 	= spec.transaction;
-					this.transaction[0] = Js.code.pick(ts[0], this.width);
+					this.transaction[0] = Jrun.pick(ts[0], this.width);
 					this.transaction[1] = ts[1];
-					this.transaction[2] = Js.code.pick(ts[2], this.height);
+					this.transaction[2] = Jrun.pick(ts[2], this.height);
 					this.transaction[3] = ts[3];
 					
 					this.interval = setInterval(function() {
@@ -196,7 +196,7 @@ Js.ext.include({
 		fade: function() {
 			var node = this.object;
 			
-			if (Js.code.isset(node)) {
+			if (Jrun.isset(node)) {
 				var t = this.transaction;
 				this.actStep = (this.actStep + 1);
 				this.prevEase = t[0];
@@ -210,7 +210,7 @@ Js.ext.include({
 							Js.style.show(node);
 						}
 						
-						if (window.ActiveXObject || Js.code.behaviour.ie == true) {
+						if (window.ActiveXObject || Jrun.behaviour.ie == true) {
 							if (!node.currentStyle || !node.currentStyle.hasLayout) {
 								Js.style.set(node, "zoom", 1);
 							}
@@ -225,8 +225,8 @@ Js.ext.include({
 					}
 					
 					var fn = this.oncomplete;
-					if(Js.code.isfunction(fn)) {
-						Js.code.callback(this, fn);
+					if(Jrun.isfunction(fn)) {
+						Jrun.callback(this, fn);
 					}
 					
 					clearInterval(this.interval);
@@ -239,7 +239,7 @@ Js.ext.include({
 							Js.style.show(node);
 						}
 						
-						if (window.ActiveXObject || Js.code.behaviour.ie == true) {
+						if (window.ActiveXObject || Jrun.behaviour.ie == true) {
 							if (!node.currentStyle || !node.currentStyle.hasLayout) {
 								Js.style.set(node, "zoom", 1);
 							}
@@ -255,8 +255,8 @@ Js.ext.include({
 					this.transaction[0] = s;
 				} else {
 					var fn = this.oncomplete;
-					if(Js.code.isfunction(fn)) {
-						Js.code.callback(this, fn);
+					if(Jrun.isfunction(fn)) {
+						Jrun.callback(this, fn);
 					}
 					
 					clearInterval(this.interval);
@@ -289,8 +289,8 @@ Js.ext.include({
 						}
 					}
 					var fn = this.oncomplete;
-					if(Js.code.isfunction(fn)) {
-						Js.code.callback(this, fn);
+					if(Jrun.isfunction(fn)) {
+						Jrun.callback(this, fn);
 					}
 					
 					clearInterval(this.interval);
@@ -310,8 +310,8 @@ Js.ext.include({
 					this.transaction = [s, t[1]];
 				} else {
 					var fn = this.oncomplete;
-					if(Js.code.isfunction(fn)) {
-						Js.code.callback(this, fn);
+					if(Jrun.isfunction(fn)) {
+						Jrun.callback(this, fn);
 					}
 					
 					clearInterval(this.interval);
@@ -358,8 +358,8 @@ Js.ext.include({
 				}
 			} else {
 				var fn = this.oncomplete;
-				if (Js.code.isfunction(fn)) {
-					Js.code.callback(this, fn);
+				if (Jrun.isfunction(fn)) {
+					Jrun.callback(this, fn);
 				}
 				
 				clearInterval(this.interval);
@@ -376,21 +376,21 @@ Js.ext.include({
 			var s = this.easeOut(t[0], t[1], this.step, this.actStep, this.ease);
 			
 			if(s === this.prevEase) {
-				if (Js.code.inArray(this.withPx, type)) {
+				if (Jrun.inArray(this.withPx, type)) {
 					Js.style.set(node, type, t[1] + "px");
 				} else {
 					Js.style.set(node, type, t[1]);
 				}
 				
 				var fn = this.oncomplete;
-				if (Js.code.isfunction(fn)) {
-					Js.code.callback(this, fn);
+				if (Jrun.isfunction(fn)) {
+					Jrun.callback(this, fn);
 				}
 				
 				clearInterval(this.interval);
 				this.interval = null;
 			} else if (t[0] !== t[1]) {
-				if (Js.code.inArray(this.withPx, type)) {
+				if (Jrun.inArray(this.withPx, type)) {
 					Js.style.set(node, type, s + "px");
 				} else {
 					Js.style.set(node, type, s);
@@ -399,8 +399,8 @@ Js.ext.include({
 				this.transaction[0] = s;
 			} else {
 				var fn = this.oncomplete;
-				if (Js.code.isfunction(fn)) {
-					Js.code.callback(this, fn);
+				if (Jrun.isfunction(fn)) {
+					Jrun.callback(this, fn);
 				}
 				
 				clearInterval(this.interval);
@@ -437,8 +437,8 @@ Js.ext.include({
 				}
 			} else {
 				var fn = this.oncomplete;
-				if(Js.code.isfunction(fn)) {
-					Js.code.callback(this, fn);
+				if(Jrun.isfunction(fn)) {
+					Jrun.callback(this, fn);
 				}
 				
 				clearInterval(this.interval);
@@ -451,7 +451,7 @@ Js.ext.include({
 			return i;
 		},
 		calc: function(node, option, alt) {
-			return Js.code.pick(Js.code.toNumber(Js.style.get(node, option)), alt);
+			return Jrun.pick(Jrun.toNumber(Js.style.get(node, option)), alt);
 		},
 		grid: function() {
 			var node = this.object;
@@ -471,19 +471,19 @@ Js.ext.include({
 			var m = [];
 			
 			m = (Js.style.get(node, "margin") ? Js.style.get(node, "margin").split(" ") : [0, 0, 0, 0]);
-			m[0] = Js.code.toNumber(m[0]);
-			m[1] = (Js.code.isset(m[1]) || !isNaN(m[1]) ? Js.code.toNumber(m[1]) : m[0]);
-			m[2] = (Js.code.isset(m[2]) || !isNaN(m[2]) ? Js.code.toNumber(m[2]) : m[0]);
-			m[3] = (Js.code.isset(m[3]) || !isNaN(m[3]) ? Js.code.toNumber(m[3]) : m[1]);
+			m[0] = Jrun.toNumber(m[0]);
+			m[1] = (Jrun.isset(m[1]) || !isNaN(m[1]) ? Jrun.toNumber(m[1]) : m[0]);
+			m[2] = (Jrun.isset(m[2]) || !isNaN(m[2]) ? Jrun.toNumber(m[2]) : m[0]);
+			m[3] = (Jrun.isset(m[3]) || !isNaN(m[3]) ? Jrun.toNumber(m[3]) : m[1]);
 			
-			var mgT = (Js.code.isnull(mT) || isNaN(mT) ? 0 : mT);
-			mgT = (Js.code.isnull(m[0]) || isNaN(m[0]) ? mgT : m[0]);
-			var mgB = (Js.code.isnull(mB) || isNaN(mB) ? 0 : mB);
-			mgB = (Js.code.isnull(m[2]) || isNaN(m[2]) ? marginBottom : m[2]);
-			var mgL = (Js.code.isnull(mL) || isNaN(mL) ? 0 : mL);
-			mgL = (Js.code.isnull(m[3]) || isNaN(m[3]) ? mgL : m[3]);
-			var mgR = (Js.code.isnull(mR) || isNaN(mR) ? 0 : mR);
-			mgR = (Js.code.isnull(m[1]) || isNaN(m[1]) ? mgR : m[1]);
+			var mgT = (Jrun.isnull(mT) || isNaN(mT) ? 0 : mT);
+			mgT = (Jrun.isnull(m[0]) || isNaN(m[0]) ? mgT : m[0]);
+			var mgB = (Jrun.isnull(mB) || isNaN(mB) ? 0 : mB);
+			mgB = (Jrun.isnull(m[2]) || isNaN(m[2]) ? marginBottom : m[2]);
+			var mgL = (Jrun.isnull(mL) || isNaN(mL) ? 0 : mL);
+			mgL = (Jrun.isnull(m[3]) || isNaN(m[3]) ? mgL : m[3]);
+			var mgR = (Jrun.isnull(mR) || isNaN(mR) ? 0 : mR);
+			mgR = (Jrun.isnull(m[1]) || isNaN(m[1]) ? mgR : m[1]);
 			
 			Js.style.setup(this.object, {
 				"marginTop": mgT + "px",
@@ -503,10 +503,10 @@ Js.namespace.include({
 });
 
 Js.extend("fx", (function(spec) {
-	var key = Js.code.pick(this.index, null);
+	var key = Jrun.pick(this.index, null);
 	
-	if (Js.code.isnull(key)) {
-		Js.code.each(this.animate, function() {
+	if (Jrun.isnull(key)) {
+		Jrun.each(this.animate, function() {
 			this.fx(spec);
 		});
 	} else if (!!this.node[key]) {
@@ -517,10 +517,10 @@ Js.extend("fx", (function(spec) {
 }));
 
 Js.extend("syncFx", (function(spec) {
-	var key = Js.code.pick(this.index, null);
+	var key = Jrun.pick(this.index, null);
 	
-	if (Js.code.isnull(key)) {
-		Js.code.each(this.animate, function(){
+	if (Jrun.isnull(key)) {
+		Jrun.each(this.animate, function(){
 			this.sync(spec);
 		});
 	} else if (!!this.node[key]) { 
@@ -531,10 +531,10 @@ Js.extend("syncFx", (function(spec) {
 }));
 
 Js.extend("queueFx", (function(spec) {
-	var key = Js.code.pick(this.index, null);
+	var key = Jrun.pick(this.index, null);
 	
-	if (Js.code.isnull(key)) {
-		Js.code.each(this.animate, function(){ 
+	if (Jrun.isnull(key)) {
+		Jrun.each(this.animate, function(){ 
 			this.queue(spec); 
 		});
 	} else if (!!this.node[key]) {

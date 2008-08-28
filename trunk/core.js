@@ -15,7 +15,7 @@ Js.namespace.include({
 	object: {
 		// Set Attribute value for an Element
 		set: function(node, attr, value) {
-			var attr = Js.code.trim(attr.toLowerCase());
+			var attr = Jrun.trim(attr.toLowerCase());
 			
 			if(Js.dom.isElement(node)) {
 				if(attr == "class") { 
@@ -39,7 +39,7 @@ Js.namespace.include({
 		},
 		// Get Attribute value from an Element
 		get: function(node, attr) {
-			var attr = Js.code.trim(attr.toLowerCase());
+			var attr = Jrun.trim(attr.toLowerCase());
 			var value = false;
 			
 			if(Js.dom.isElement(node)) {
@@ -62,7 +62,7 @@ Js.namespace.include({
 		},
 		// Remove Attribute value from an Element
 		remove: function(node, attr) {
-			var attr = Js.code.trim(attr.toLowerCase());
+			var attr = Jrun.trim(attr.toLowerCase());
 			
 			if(Js.dom.isElement(node)) {
 				if(attr == "class" && node.className) {
@@ -91,9 +91,9 @@ Js.namespace.include({
 			var node = node;
 			
 			// Get JSON attributes
-			var data = Js.code.pick(data, []);
+			var data = Jrun.pick(data, []);
 			
-			if(Js.code.typeOf(data) !== "array") {
+			if(Jrun.typeOf(data) !== "array") {
 				data = [data];
 			}
 			
@@ -104,7 +104,7 @@ Js.namespace.include({
 				
 				for(var value in object) {
 					// trim and ensure val's value is lowercased
-					value = Js.code.trim(value.toLowerCase());
+					value = Jrun.trim(value.toLowerCase());
 					
 					if(value != "class") {
 						if(object.hasOwnProperty(value)) {
@@ -136,10 +136,10 @@ Js.namespace.include({
 			if(Js.dom.isElement(node)) {
 				var klasName = node.className;
 				
-				if(Js.code.isset(klasName) && Js.code.trim(klasName) != "") {
-					var klass = Js.code.trim(klasName).split(/\s/g);
-					klass[klass.length] = Js.code.trim(value);
-					klass = Js.code.unique(klass);
+				if(Jrun.isset(klasName) && Jrun.trim(klasName) != "") {
+					var klass = Jrun.trim(klasName).split(/\s/g);
+					klass[klass.length] = Jrun.trim(value);
+					klass = Jrun.unique(klass);
 					value = klass.join(" ");
 				} else {
 					value = value;	
@@ -157,11 +157,11 @@ Js.namespace.include({
 		},
 		has: function(node, value) {
 			var klasName = node.className;
-			var value = Js.code.trim(value);
+			var value = Jrun.trim(value);
 			
 			if(Js.dom.isElement(node)) {
-				if(Js.code.isset(klasName) && Js.code.trim(klasName) != "") {
-					return Js.code.inArray(klasName.split(/\s/), value);
+				if(Jrun.isset(klasName) && Jrun.trim(klasName) != "") {
+					return Jrun.inArray(klasName.split(/\s/), value);
 				} else { 
 					return false;
 				}
@@ -173,7 +173,7 @@ Js.namespace.include({
 			var klasName = node.className;
 			
 			if(Js.dom.isElement(node)) {
-				if(Js.code.isset(klasName) && Js.code.trim(klasName) != ""){
+				if(Jrun.isset(klasName) && Jrun.trim(klasName) != ""){
 					var data = [];
 					var klass = klasName.split(/\s/);
 					
@@ -203,8 +203,8 @@ Js.namespace.include({
 	name: "style", 
 	object: {
 		set: function(node, data, value) {
-			var data = Js.code.trim(data);
-			var val = Js.code.trim(value);
+			var data = Jrun.trim(data);
+			var val = Jrun.trim(value);
 			
 			if(Js.dom.isElement(node)) {
 				try {
@@ -220,9 +220,9 @@ Js.namespace.include({
 		},
 		setup: function(node, js) {
 			var node = node;
-			var data = Js.code.pick(js, []);
+			var data = Jrun.pick(js, []);
 			
-			if(Js.code.typeOf(data) !== "array") {
+			if(Jrun.typeOf(data) !== "array") {
 				data = [data];
 			}
 			
@@ -230,7 +230,7 @@ Js.namespace.include({
 				var obj = data[i];
 				
 				for(var value in obj) {
-					value = Js.code.trim(value);
+					value = Jrun.trim(value);
 					
 					if(obj.hasOwnProperty(value)) {
 						Js.style.set(node, value, obj[value]);
@@ -240,7 +240,7 @@ Js.namespace.include({
 			return node;
 		},
 		get: function(node, data) {
-			var data = Js.code.trim(data);
+			var data = Jrun.trim(data);
 			
 			if(Js.dom.isElement(node)) {
 				try {
@@ -256,7 +256,7 @@ Js.namespace.include({
 		alpha: function(node, value) {
 			var value = (value > 100 ? 100 : (value < 0 ? 0 : value));
 			
-			if(Js.code.isset(node)) {
+			if(Jrun.isset(node)) {
 				try {
 					if (value == 0 && this.get(node, "visibility") != "hidden") {
 						this.hide(node);
@@ -264,7 +264,7 @@ Js.namespace.include({
 						this.show(node);
 					}
 					
-					if(Js.code.behaviour.ie == true) {
+					if(Jrun.behaviour.ie == true) {
 						if(!node.currentStyle || !node.currentStyle.hasLayout) {
 							this.set(node, "zoom", 1);
 						}
@@ -282,13 +282,13 @@ Js.namespace.include({
 		png: function(node, uri, js) {
 			var node = node;
 			var uri = uri;
-			var gecko = Js.code.pick(js.gecko, "");
-			var ie = Js.code.pick(js.ie, "scale");
+			var gecko = Jrun.pick(js.gecko, "");
+			var ie = Jrun.pick(js.ie, "scale");
 			
 			ie = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + uri + "',sizingMethod='" + ie + "')";
 			gecko = "url('" + uri + "') " + gecko;
 			
-			if(window.ActiveXObject && (Js.code.behaviour.ie && !Js.code.behaviour.ie7)) {
+			if(window.ActiveXObject && (Jrun.behaviour.ie && !Jrun.behaviour.ie7)) {
 				this.set(node, "filter", ie);
 			} else {
 				this.set(node, "background", gecko);
@@ -331,7 +331,7 @@ Js.namespace.include({
 			} else return false;
 		},
 		effect: function(node, fx, value) {
-			var fx = (Js.code.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
+			var fx = (Jrun.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
 			var id = Js.attr.get(node, "id");
 			var data = [20, 0.8, 80];
 			var value = (value.match(/^(show|hide)$/) ? value : 'show');
@@ -367,7 +367,7 @@ Js.namespace.include({
 	name: "dom", 
 	object: {
 		add: function(parent, child) {
-			if(!Js.code.isset(child)) {
+			if(!Jrun.isset(child)) {
 				var child = parent;
 				var parent = document.body;
 			}
@@ -381,7 +381,7 @@ Js.namespace.include({
 			}
 		},
 		addText: function(parent, text) {
-			if(Js.code.isset(parent)) {
+			if(Jrun.isset(parent)) {
 				return this.add(parent, document.createTextNode(text));
 			} else {
 				Js.debug.log("Js.dom.addText failed: " + e);
@@ -389,16 +389,16 @@ Js.namespace.include({
 			}
 		},
 		addBefore: function(args) {
-			var args = Js.code.toArray(arguments);
+			var args = Jrun.toArray(arguments);
 			var parent = null;
 			var child = null;
 			var reference = null;
 			
-			if(args.length == 3 && Js.code.isset(args[0]) && Js.code.isset(args[1]) && Js.code.isset(args[2])) {
+			if(args.length == 3 && Jrun.isset(args[0]) && Jrun.isset(args[1]) && Jrun.isset(args[2])) {
 				parent = args[0];
 				child = args[1];
 				reference = args[2];
-			} else if(args.length == 2 && Js.code.isset(args[0]) && Js.code.isset(args[1])) {
+			} else if(args.length == 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])) {
 				parent = args[1].parentNode;
 				child = args[0];
 				reference = args[1];
@@ -421,7 +421,7 @@ Js.namespace.include({
 			var child = null;
 			var reference = null;
 			
-			if(args.length == 3 && Js.code.isset(args[0]) && Js.code.isset(args[1]) && Js.code.isset(args[2])) {
+			if(args.length == 3 && Jrun.isset(args[0]) && Jrun.isset(args[1]) && Jrun.isset(args[2])) {
 				parent = args[0];
 				child = args[1];
 				reference = this.next(args[2]);
@@ -432,7 +432,7 @@ Js.namespace.include({
 			}
 			
 			try {
-				if(Js.code.isset(reference)) {
+				if(Jrun.isset(reference)) {
 					return this.addBefore(parent, child, reference);
 				} else {
 					return this.add(parent, child);
@@ -447,10 +447,10 @@ Js.namespace.include({
 			var parent = null;
 			var child = null;
 			
-			if(args.length === 2 && Js.code.isset(args[0]) && Js.code.isset(args[1])){
+			if(args.length === 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])){
 				parent = args[0];
 				child = args[1];
-			} else if(args.length == 1 && Js.code.isset(args[0])){
+			} else if(args.length == 1 && Jrun.isset(args[0])){
 				parent = args[0].parentNode;
 				child = args[0];
 			}
@@ -537,7 +537,7 @@ Js.namespace.include({
 			return f === l;
 		},
 		isElement: function(node) {
-			return (Js.code.isset(node) && node.nodeType ? true : false);
+			return (Jrun.isset(node) && node.nodeType ? true : false);
 		},
 		parent: function(node) {
 			return node.parentNode;
@@ -559,7 +559,7 @@ Js.namespace.include({
 			return (function(fn, node) {
 				if(!!that.done) {
 					if(!!node && node !== document) {
-						Js.code.callback(node, fn);
+						Jrun.callback(node, fn);
 					} else { 
 						fn();
 					}
@@ -597,7 +597,7 @@ Js.namespace.include({
 					}, 10);
 				}
 				
-				if (!!Js.code.behaviour.ie) {
+				if (!!Jrun.behaviour.ie) {
 					try {
 						document.write("<script id=__ie_onload defer src=//0><\/scr"+"ipt>");
 						that.script = document.getElementById("__ie_onload");
@@ -635,9 +635,9 @@ Js.namespace.include({
 					var fn = Js.domReady.fn[i];
 					var node = Js.domReady.node[i];
 					
-					if (Js.code.isfunction(fn)) {
+					if (Jrun.isfunction(fn)) {
 						if(!!node && node !== document) {
-							Js.code.callback(node, fn);
+							Jrun.callback(node, fn);
 						} else { 
 							fn();
 						}
@@ -675,9 +675,9 @@ Js.namespace.include({
 			var p = true;
 			var r;
 			
-			this.node = Js.code.pick(js.object, this.node);
-			this.type = Js.code.pick(js.on, this.type, "load");
-			this.fn = Js.code.pick(js.callback, this.fn);
+			this.node = Jrun.pick(js.object, this.node);
+			this.type = Jrun.pick(js.on, this.type, "load");
+			this.fn = Jrun.pick(js.callback, this.fn);
 			
 			if(this.node.addEventListener) {
 				try { 
@@ -703,9 +703,9 @@ Js.namespace.include({
 			}
 			
 			if(!pass) {
-				var fn = Js.code.pick(this.object["on" + this.type], null);
-				Js.code.on(this.node, this.type, function() {
-					if(Js.code.isset(fn) && Js.code.isfunction(fn)) {
+				var fn = Jrun.pick(this.object["on" + this.type], null);
+				Jrun.on(this.node, this.type, function() {
+					if(Jrun.isset(fn) && Jrun.isfunction(fn)) {
 						fn();
 					}
 					that.fn();
@@ -715,9 +715,9 @@ Js.namespace.include({
 		off: function (js) {
 			var that = this;
 			var r = false;
-			this.node = Js.code.pick(js.object, this.node);
-			this.type = Js.code.pick(js.on, this.type, "load");
-			this.fn = Js.code.pick(js.callback, this.fn);
+			this.node = Jrun.pick(js.object, this.node);
+			this.type = Jrun.pick(js.on, this.type, "load");
+			this.fn = Jrun.pick(js.callback, this.fn);
 			
 			if(this.node.detachEvent) {
 				try { 
@@ -748,8 +748,8 @@ Js.namespace.include({
 		set: function(node, data, value) {
 			var name = this.verify(node);
 			
-			if (Js.code.isset(name)) {
-				if (!Js.code.isset(this.object[name])) {
+			if (Jrun.isset(name)) {
+				if (!Jrun.isset(this.object[name])) {
 					this.object[name] = {};
 				}
 				
@@ -759,8 +759,8 @@ Js.namespace.include({
 		get: function(node, data) {
 			var name = this.verify(node);
 			
-			if (Js.code.isset(name)) {
-				if (Js.code.isset(this.object[name]) && Js.code.isset(this.object[name][data])) {
+			if (Jrun.isset(name)) {
+				if (Jrun.isset(this.object[name]) && Jrun.isset(this.object[name][data])) {
 					return this.object[name][data];
 				} else {
 					return false;
@@ -772,10 +772,10 @@ Js.namespace.include({
 		remove: function(node, data) {
 			var name = this.verify(node);
 			
-			if (Js.code.isset(name)) {
+			if (Jrun.isset(name)) {
 				this.object[name][data] = null;
 				
-				if (Js.code.isset(this.object[name]) && Js.code.isset(this.object[name][data])) {
+				if (Jrun.isset(this.object[name]) && Jrun.isset(this.object[name][data])) {
 					this.object[name][data] = null;
 				} else {
 					return false;
@@ -797,7 +797,7 @@ Js.namespace.include({
 		html: {
 			to: function(value) {
 				var value = new String(value);
-				value = Js.code.htmlEntities(value);
+				value = Jrun.htmlEntities(value);
 				value = encodeURIComponent(value);
 				
 				return value;
@@ -805,7 +805,7 @@ Js.namespace.include({
 			from: function(value) {
 				var value = new String(value);
 				value = decodeURIComponent(value);
-				value = Js.code.htmlEntityDecode(value);
+				value = Jrun.htmlEntityDecode(value);
 				
 				return value;
 			}
@@ -821,7 +821,7 @@ Js.namespace.include({
 	name: "query", 
 	object: {
 		isValid: function(node, data) {
-			var data = Js.code.trim(data);
+			var data = Jrun.trim(data);
 			var r = null;
 			var status = null;
 			var value = false;
@@ -862,7 +862,7 @@ Js.namespace.include({
 				}
 			} else if(data == 'input') {
 				r = (!!node.tagName && !!node.tagName.toLowerCase().match(/^(input|select|textarea)$/g) ? true : false);
-				if(Js.code.isset(status)) {
+				if(Jrun.isset(status)) {
 					r = (Js.attr.get(node, status) !== false ? true : false);
 					if(!!value) { 
 						r = (!!r ? false : true);
@@ -998,9 +998,9 @@ Js.namespace.include({
 		},
 		validate: function(node, klasName, data, attr) {
 			var valid = false;
-			var klasName = Js.code.pick(klasName, "");
-			var data = Js.code.pick(data, null);
-			var attr = Js.code.pick(attr, []);
+			var klasName = Jrun.pick(klasName, "");
+			var data = Jrun.pick(data, null);
+			var attr = Jrun.pick(attr, []);
 			
 			valid = (klasName === "" || !!Js.query.hasClass(node, klasName) ? true : false);
 			valid = ((attr.length === 0 || (attr.length === 3 && !!Js.query.hasAttrs(node, attr))) && !!valid ? true : false); 
@@ -1010,19 +1010,19 @@ Js.namespace.include({
 		},
 		create: function(tags, attr) {
 			var node = null;
-			var tags = Js.code.trim(tags);
+			var tags = Jrun.trim(tags);
 			
 			if(/\#/.test(tags)) {
 				var tag = tags.split(/\#/);
-				var el = Js.code.trim(tag[0]);
-				var id = Js.code.trim(tag[1]);
+				var el = Jrun.trim(tag[0]);
+				var id = Jrun.trim(tag[1]);
 				node = document.createElementNS ? document.createElementNS('http://www.w3.org/1999/xhtml', el) : document.createElement(el);
 				Js.attr.set(node, "id", id);
 			} else {
 				node = document.createElementNS ? document.createElementNS('http://www.w3.org/1999/xhtml', tags) : document.createElement(tags);
 			}
 			
-			if (Js.code.isset(attr)) { 
+			if (Jrun.isset(attr)) { 
 				Js.attr.setup(node, attr);
 			}
 			
@@ -1030,12 +1030,12 @@ Js.namespace.include({
 		},
 		tags: function(tags, parents, klasName, is, attr, type) {
 			var context = [];
-			var klasName = Js.code.trim(Js.code.pick(klasName, ""));
-			var is = Js.code.pick(is, null);
-			var attr = Js.code.pick(attr, []);
-			var tags = Js.code.pick(tags, "*");
+			var klasName = Jrun.trim(Jrun.pick(klasName, ""));
+			var is = Jrun.pick(is, null);
+			var attr = Jrun.pick(attr, []);
+			var tags = Jrun.pick(tags, "*");
 			
-			if(Js.code.isset(type) && type > 0) {
+			if(Jrun.isset(type) && type > 0) {
 				if(type === 4) {
 					//Js.debug.log("use tagParentOf");
 					context = Js.query.tagParentOf(tags, parents, klasName, is, attr);
@@ -1071,7 +1071,7 @@ Js.namespace.include({
 			return (context.length > 0 ? context : false);
 		},
 		id: function(id, parents, tags, is) {
-			var tags = Js.code.trim(Js.code.pick(tags, "*")).toUpperCase();
+			var tags = Jrun.trim(Jrun.pick(tags, "*")).toUpperCase();
 			var el = document.getElementById(id);
 			var is = (!!is ? this.is(el, is) : true);
 				
@@ -1102,7 +1102,7 @@ Js.namespace.include({
 						break;
 					}
 					
-					var el = Js.code.trim(elem[i]);
+					var el = Jrun.trim(elem[i]);
 					
 					if(el !== "") {
 						var tags = "";
@@ -1157,7 +1157,7 @@ Js.namespace.include({
 								context = [];
 								break;
 							} else {
-								context = Js.code.unique(context);
+								context = Jrun.unique(context);
 							}
 							
 							type = 0;
@@ -1167,11 +1167,11 @@ Js.namespace.include({
 				return context;
 			};
 			
-			var elem = Js.code.trim(selector).split(/,/);
-			elem = Js.code.unique(elem);
+			var elem = Jrun.trim(selector).split(/,/);
+			elem = Jrun.unique(elem);
 			
 			for(var m = 0; m < elem.length && !!elem[m]; m++) {
-				var el = Js.code.trim(elem[m]);
+				var el = Jrun.trim(elem[m]);
 				
 				if(el !== "") {
 					var node = init(el, parents);
@@ -1207,7 +1207,7 @@ Js.namespace.include({
 		},
 		isLength: function(datas, value) {
 			var data = datas.split(/\-/);
-			var length = Js.code.toNumber(data[1]);
+			var length = Jrun.toNumber(data[1]);
 			var rdata = null;
 			
 			if(data[0] === "max") {

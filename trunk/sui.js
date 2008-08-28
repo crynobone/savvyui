@@ -14,14 +14,10 @@
 
 // Enable the code work as the global namespace of Savvy.UI but also the initializer for Js.elements Object
 var Js = window.Js = function(selector, context) {
-	var selector = selector || document;
-	
-	if(this === window && !!Js.Elements) {
-		// return this as Js.elements Object
-		return new Js.Elements(selector, context);
+	if(this ===  window && !!Js.Elements) {
+		return new Js.Elements((selector || document), context) : true);
 	} else {
-		// return as global namespace
-		return this;
+		return false;
 	}
 };
 
@@ -37,11 +33,11 @@ Js.namespace = {
 	lists: [],
 	// include new namespace
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
-			Js.namespace.lists[Js.namespace.lists.length] = js.name;
+		if(Jrun.isset(js.name)) {
+			this.lists[this.lists.length] = js.name;
 			
 			var that = Js[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				Js[js.name].prototype = js.proto;
 			}
 			
@@ -60,7 +56,7 @@ Js.namespace = {
 	},
 	// identical to this.require but just return boolean
 	loaded: function(name) {
-		return Js.code.inArray(Js.namespace.lists, name);	
+		return Jrun.inArray(Js.namespace.lists, name);	
 	}
 };
 
@@ -90,7 +86,7 @@ Js.toString = function() {
 // extends Savvy.UI's Js.elements
 Js.extend = function(name, object) {
 	// check whether it's a function
-	if(Js.code.isfunction(object) && !!Js.Elements) {
+	if(Jrun.isfunction(object) && !!Js.Elements) {
 		// push the function in Js.elements
 		Js.Elements.prototype[name] = object;
 		return true;
@@ -100,7 +96,7 @@ Js.extend = function(name, object) {
 };
 
 Js.nue = function(object) {
-	if(Js.code.typeOf(object) == "object") {
+	if(Jrun.typeOf(object) == "object") {
 		var node = {};
 		
 		for(var method in object) {
@@ -115,7 +111,7 @@ Js.nue = function(object) {
 };
 
 // Add a numbers of function to Js.fn
-Js.code = Js.fn = {
+var Jrun = Js.code = {
 	// Check browser behaviour to determine whether it's based on IE, IE6, IE7, GECKO, OPERA or KHTML.
 	behaviour: function() {
 		// Return Object containing Boolean value of each browser object.
@@ -256,7 +252,7 @@ Js.code = Js.fn = {
 				window.open(url, target);
 			}
 		} catch(e) {
-			Js.debug.log("Js.code.href() failed: " + e);
+			Js.debug.log("Jrun.href() failed: " + e);
 		}
 	},
 	// Convert all string characters to HTML entities
@@ -320,7 +316,7 @@ Js.code = Js.fn = {
 				}
 			}
 		} catch(e) {
-			Js.debug.log("Js.code.on() failed: " + fn + e);
+			Js.debug.log("Jrun.on() failed: " + fn + e);
 		}
 	},
 	// Loop each option until find an option which does not return null and return it.
@@ -375,7 +371,7 @@ Js.code = Js.fn = {
 		var data = value.split(/ /g);
 		var rdata = [];
 		
-		Js.code.each(data, function() {
+		Jrun.each(data, function() {
 			var first = this.substr(0, 1).toUpperCase();
 			var other = this.substr(1);
 			rdata[rdata.length] = [first, other].join("");
@@ -455,12 +451,12 @@ Js.code = Js.fn = {
 // Namespace for Savvy.UI Extension
 Js.ext = {
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
+		if(Jrun.isset(js.name)) {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "ext." + js.name;
 			
 			var that = this[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
 			
@@ -476,18 +472,18 @@ Js.ext = {
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.code.inArray(this.lists, name);	
+		return Jrun.inArray(this.lists, name);	
 	}
 };
 
 Js.widget = {
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
+		if(Jrun.isset(js.name)) {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "widget." + js.name;
 			
 			var that = Js.widget[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
 			
@@ -503,18 +499,18 @@ Js.widget = {
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.code.inArray(this.lists, name);	
+		return Jrun.inArray(this.lists, name);	
 	}
 };
 
 Js.tool = {
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
+		if(Jrun.isset(js.name)) {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "tool." + js.name;
 			
 			var that = this[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
 			
@@ -530,18 +526,18 @@ Js.tool = {
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.code.inArray(this.lists, name);	
+		return Jrun.inArray(this.lists, name);	
 	}
 };
 
 Js.util = {
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
+		if(Jrun.isset(js.name)) {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "util." + js.name;
 			
 			var that = this[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
 			
@@ -557,6 +553,6 @@ Js.util = {
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.code.inArray(this.lists, name);	
+		return Jrun.inArray(this.lists, name);	
 	}
 };

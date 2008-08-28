@@ -47,17 +47,17 @@ Js.widget.include({
 		init: function(js) {
 			var that = this;
 			// Set Object's properties value for usage
-			this.width = Js.code.pick(js.width, this.width);
-			this.height = Js.code.pick(js.height, this.height);
-			this.layout = Js.code.pick(js.layout, this.layout);
-			this.title = Js.code.pick(js.title, this.title);
-			this.renderTo = Js.code.pick(js.renderTo, this.renderTo);
-			this.allowClose = Js.code.pick(js.allowClose, this.allowClose);
-			this.allowMinimize = Js.code.pick(js.allowMinimize, this.allowMinimize);
-			this.allowResize = Js.code.pick(js.allowResize, this.allowResize);
-			this.scrolling = Js.code.pick(js.scrolling, this.scrolling);
-			this.css = Js.code.pick(js.css, this.css);
-			this.onclose = Js.code.pick(js.onClose, null);
+			this.width = Jrun.pick(js.width, this.width);
+			this.height = Jrun.pick(js.height, this.height);
+			this.layout = Jrun.pick(js.layout, this.layout);
+			this.title = Jrun.pick(js.title, this.title);
+			this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
+			this.allowClose = Jrun.pick(js.allowClose, this.allowClose);
+			this.allowMinimize = Jrun.pick(js.allowMinimize, this.allowMinimize);
+			this.allowResize = Jrun.pick(js.allowResize, this.allowResize);
+			this.scrolling = Jrun.pick(js.scrolling, this.scrolling);
+			this.css = Jrun.pick(js.css, this.css);
+			this.onclose = Jrun.pick(js.onClose, null);
 			
 			// set renderTo DOM.Element
 			if (!this.renderTo || !this.renderTo.nodeType) {
@@ -79,12 +79,12 @@ Js.widget.include({
 			this.renderTo.done();
 			
 			// set TABLE width
-			if (Js.code.isset(this.width)) {
+			if (Jrun.isset(this.width)) {
 				this.object.css("width", this.width + "px");
 			}
 			
 			// set TABLE height
-			if (Js.code.isset(this.height)) {
+			if (Jrun.isset(this.height)) {
 				this.object.css("height", this.height + "px");
 			}
 			
@@ -172,7 +172,7 @@ Js.widget.include({
 			}).css("cssText", this.css);
 			
 			// set height and scrolling option for content CONTAINER
-			if(Js.code.isset(this.height) && !!this.scrolling) {
+			if(Jrun.isset(this.height) && !!this.scrolling) {
 				this.node.css({
 					"height": (this.height - (23 + 11)) + "px",
 					"overflow": "auto"
@@ -239,7 +239,7 @@ Js.widget.include({
 		closePanel: function() {
 			// callback to close panel
 			var fn = this.onclose;
-			if (Js.code.isfunction(fn)) {
+			if (Jrun.isfunction(fn)) {
 				fn();
 			}
 			
@@ -248,7 +248,7 @@ Js.widget.include({
 			return this;
 		},
 		fixResize: function() {
-			if(Js.code.isset(this.height) && !!this.scrolling) {
+			if(Jrun.isset(this.height) && !!this.scrolling) {
 				this.node.css({
 					"height": (this.height - (23 + 11)) + "px", 
 					"overflow": "auto"

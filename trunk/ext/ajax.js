@@ -70,22 +70,22 @@ Js.ext.include({
 			}
 			
 			// Check XHR method: GET/POST
-			this.method = (!Js.code.isset(js.method) || js.method != "GET" ? "POST" : "GET");
+			this.method = (!Jrun.isset(js.method) || js.method != "GET" ? "POST" : "GET");
 			// Set caching option for the request
-			this.cache = Js.code.pick(js.cache, this.cache);
+			this.cache = Jrun.pick(js.cache, this.cache);
 			// Enable debugging for XHR request
-			this.debug = Js.code.pick(js.debug, this.debug);
+			this.debug = Jrun.pick(js.debug, this.debug);
 			// XHR uri request
-			this.uri = (js.uri ? Js.code.trim(js.uri) : this.uri);
+			this.uri = (js.uri ? Jrun.trim(js.uri) : this.uri);
 			// XHR parameters
-			this.parameter = (js.parameters ? Js.code.trim(js.parameters) : this.parameter);
+			this.parameter = (js.parameters ? Jrun.trim(js.parameters) : this.parameter);
 			
 			// XHR data
 			this.data = (!!js.data ? js.data : this.data);
-			this.data = (!!this.data ? Js.code.serialize(this.data) : "");
+			this.data = (!!this.data ? Jrun.serialize(this.data) : "");
 			
 			// Set timeout.
-			this.timeout = Js.code.pick(js.timeout, this.timeout);
+			this.timeout = Jrun.pick(js.timeout, this.timeout);
 			this.timeout = (!!Js.test.isInteger(this.timeout) ? this.timeout : 0);
 			
 			// check whether XHR object is ready
@@ -94,7 +94,7 @@ Js.ext.include({
 					// use method POST
 					this.object.open("POST", this.uri, true);
 					
-					this.type = Js.code.trim(Js.code.pick(js.type, "application/x-www-form-urlencoded"));
+					this.type = Jrun.trim(Jrun.pick(js.type, "application/x-www-form-urlencoded"));
 					this.object.setRequestHeader("Content-Type", this.type);
 					
 					if(this.object.overrideMimeType) {
@@ -120,12 +120,12 @@ Js.ext.include({
 				var that = this;
 				var object = this.object;
 				// Run custom callback to function
-				if(Js.code.isfunction(js.onComplete)) {
+				if(Jrun.isfunction(js.onComplete)) {
 					try {
 						this.object.onreadystatechange = function() {
 							// clear timeout (if exist)
 							if(this.readyState === 4 && that.requestStatus()) {
-								if(Js.code.isset(that.timeoutid)) {
+								if(Jrun.isset(that.timeoutid)) {
 									clearTimeout(that.timeoutid);
 									that.timeoutid = null;
 								}
@@ -143,13 +143,13 @@ Js.ext.include({
 							// if request is complete and page is available
 							if(that.object.readyState === 4 && that.requestStatus()) {
 								// clear timeout (if exist)
-								if(Js.code.isset(that.timeoutid)) {
+								if(Jrun.isset(that.timeoutid)) {
 									clearTimeout(that.timeoutid);
 									that.timeoutid = null;
 								}
 								
 								// get response text
-								var reply = that.reply = Js.code.trim(that.object.responseText);
+								var reply = that.reply = Jrun.trim(that.object.responseText);
 								
 								// add to logs (if enable)
 								if(that.debug === true) {
@@ -249,7 +249,7 @@ Js.ext.include({
 				var local = (!r && location.protocol == 'file:');
 				var range = (r >= 200 && r < 300);
 				var unmodified = (r == 304);
-				var safari = (Js.code.behaviour.safari && typeof(r) == "undefined");
+				var safari = (Jrun.behaviour.safari && typeof(r) == "undefined");
 				return  (local || range || unmodified || safari);
 			} catch(e) {
 				Js.debug.log("Status failed: " + e);	
@@ -257,28 +257,28 @@ Js.ext.include({
 			return false;
 		},
 		responseNotice: function(data) {
-			var note = Js.code.pick(data.notice);
+			var note = Jrun.pick(data.notice);
 			
-			if(Js.code.isset(note) && note !== "") {
+			if(Jrun.isset(note) && note !== "") {
 				window.alert(note);
 			}
 		},
 		responseHref: function(data) {
-			var href = Js.code.pick(data.href);
+			var href = Jrun.pick(data.href);
 			
-			if(Js.code.isset(href) && href !== "") {
-				Js.code.href(href);
+			if(Jrun.isset(href) && href !== "") {
+				Jrun.href(href);
 			}
 		},
 		responseUpdate: function(data) {
-			var args = Js.code.pick(data.text);
-			var id = Js.code.pick(data.id);
-			var object = Js.code.pick(data.exec, data.callback);
+			var args = Jrun.pick(data.text);
+			var id = Jrun.pick(data.id);
+			var object = Jrun.pick(data.exec, data.callback);
 			
 			if(!!args) {
 				if(!!id && typeof(id) === "string") {
 					Js.query.id(id).innerHTML = Js.parse.bbml(args);
-				} else if(Js.code.isfunction(object)) {
+				} else if(Jrun.isfunction(object)) {
 					object(args);
 				}
 			}
@@ -293,10 +293,10 @@ Js.namespace.include({
 });
 
 Js.extend("load", function(url, method) {
-	var key = Js.code.pick(this.index, 0);
+	var key = Jrun.pick(this.index, 0);
 	var method = ((!!method && !!method.toLowerCase().match(/^(get|post)$/)) ? method.toUpperCase() : 'GET');
 	
-	if(Js.code.isset(key) && !!this.node[key]) {
+	if(Jrun.isset(key) && !!this.node[key]) {
 		var node = this.node[key];
 		
 		var update = function() {

@@ -21,7 +21,7 @@ Js.util.include({
 		this.node = null;
 		
 		// start __constructor()
-		if (!!selector && Js.code.trim(selector) !== "") {
+		if (!!selector && Jrun.trim(selector) !== "") {
 			this.init(selector);
 		}
 		
@@ -30,9 +30,9 @@ Js.util.include({
 	proto: {
 		// Initialize the HTML Element
 		init: function(selector) {
-			this.element = Js.code.pick(selector, null);
+			this.element = Jrun.pick(selector, null);
 			
-			if (Js.code.isset(this.element)) { 
+			if (Jrun.isset(this.element)) { 
 				this.node = Js(this.element);
 			}
 			

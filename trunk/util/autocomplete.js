@@ -41,13 +41,13 @@ Js.util.include({
 		init: function(spec) {
 			var that = this;
 			
-			this.element = Js.code.pick(spec.element, this.element);
-			this.separator = Js.code.pick(spec.separator, this.separator);
-			this.object = Js.code.pick(spec.object, this.object);
-			this.minimum = Js.code.pick(spec.minimum, this.minimum);
-			this.delay = Js.code.pick(spec.delay, this.delay);
-			this.uri = Js.code.pick(spec.uri, this.uri);
-			this.type = Js.code.pick(spec.type, this.type);
+			this.element = Jrun.pick(spec.element, this.element);
+			this.separator = Jrun.pick(spec.separator, this.separator);
+			this.object = Jrun.pick(spec.object, this.object);
+			this.minimum = Jrun.pick(spec.minimum, this.minimum);
+			this.delay = Jrun.pick(spec.delay, this.delay);
+			this.uri = Jrun.pick(spec.uri, this.uri);
+			this.type = Jrun.pick(spec.type, this.type);
 			
 			this.method = ((!!spec.method && !!spec.method.match(/^(get|post)$/gi)) ? spec.method.toUpperCase() : 'GET'); 
 			
@@ -70,13 +70,13 @@ Js.util.include({
 					var value = this.value;
 					var values = value.split(that.separator);
 					var length = values.length;
-					var value = Js.code.trim(values[(length - 1)]);
+					var value = Jrun.trim(values[(length - 1)]);
 					
 					for(var i = 0; i < (length - 1); i++) {
-						that.matched[that.matched.length] = Js.code.trim(val[i]);
+						that.matched[that.matched.length] = Jrun.trim(val[i]);
 					}
 				} else {
-					var value = Js.code.trim(this.value);	
+					var value = Jrun.trim(this.value);	
 				}
 				
 				if(value.length > that.minimum && value !== that.value) {
@@ -140,11 +140,11 @@ Js.util.include({
 				var reply = eval("(" + text + ")");
 				var ul = that.div.add("ul");
 				
-				var arr = Js.code.toArray(reply);
+				var arr = Jrun.toArray(reply);
 				
-				if(arr.length >= 2 || (arr.length === 1 && Js.code.trim(arr[0]) !== "")) {
-					Js.code.each(arr, function() {
-						if(Js.code.trim(this) !== "") {
+				if(arr.length >= 2 || (arr.length === 1 && Jrun.trim(arr[0]) !== "")) {
+					Jrun.each(arr, function() {
+						if(Jrun.trim(this) !== "") {
 							var li = ul.add("li");
 							var a = li.add("a", {
 								"href": "#"

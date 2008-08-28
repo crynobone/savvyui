@@ -27,21 +27,21 @@ Js.ext.include({
 	proto: {
 		init: function(js) {
 			var that = this;
-			var node = this.object = Js.code.pick(js.object, js.node);
-			node.root = Js.code.pick(js.objectRoot, js.nodeRoot, node);
+			var node = this.object = Jrun.pick(js.object, js.node);
+			node.root = Jrun.pick(js.objectRoot, js.nodeRoot, node);
 			
 			node.onmousedown = function(e) { 
 				that.start(e);
 			};
 			
-			node.hmode = Js.code.pick(js.hmode, true);
-			node.vmode = Js.code.pick(js.vmode, true);
-			node.hswap = Js.code.pick(js.hswap, false);
-			node.vswap = Js.code.pick(js.vswap, false);
-			node.minX = Js.code.pick(js.minX, null);
-			node.minY = Js.code.pick(js.minY, null);
-			node.maxX = Js.code.pick(js.maxX, null);
-			node.maxY = Js.code.pick(js.maxY, null);
+			node.hmode = Jrun.pick(js.hmode, true);
+			node.vmode = Jrun.pick(js.vmode, true);
+			node.hswap = Jrun.pick(js.hswap, false);
+			node.vswap = Jrun.pick(js.vswap, false);
+			node.minX = Jrun.pick(js.minX, null);
+			node.minY = Jrun.pick(js.minY, null);
+			node.maxX = Jrun.pick(js.maxX, null);
+			node.maxY = Jrun.pick(js.maxY, null);
 			
 			node.root.onResizeStart = new Function();
 			node.root.onResizeEnd = new Function();
@@ -54,8 +54,8 @@ Js.ext.include({
 			var that = this;
 			var node = this.object;
 			var e = this.fixE(e);
-			var height = Js.code.toNumber(Js.style.get(node.root, "height"));
-			var width = Js.code.toNumber(Js.style.get(node.root, "width"));
+			var height = Jrun.toNumber(Js.style.get(node.root, "height"));
+			var width = Jrun.toNumber(Js.style.get(node.root, "width"));
 			
 			node.root.onResizeStart(width, height);
 			node.lastMouseX = e.clientX;
@@ -80,8 +80,8 @@ Js.ext.include({
 			var node = this.object;
 			var eHeight = e.clientY;
 			var eWidth = e.clientX;
-			var height = Js.code.toNumber(Js.style.get(node.root, "height"));
-			var width = Js.code.toNumber(Js.style.get(node.root, "width"));
+			var height = Jrun.toNumber(Js.style.get(node.root, "height"));
+			var width = Jrun.toNumber(Js.style.get(node.root, "width"));
 			var nodeWidth = width;
 			var nodeHeight = height;
 			var newWidth;
@@ -118,17 +118,17 @@ Js.ext.include({
 			document.onmousemove = null;
 			document.onmouseup = null;
 			var data = node.root;
-			data.onResizeEnd(Js.code.toNumber(data.style.width), Js.code.toNumber(data.style.height), data);
+			data.onResizeEnd(Jrun.toNumber(data.style.width), Jrun.toNumber(data.style.height), data);
 			node = null;
 		},
 		fixE: function(e) {
-			if(Js.code.isnull(e)) { 
+			if(Jrun.isnull(e)) { 
 				e = window.event;
 			}
-			if(Js.code.isnull(e.layerX)) {
+			if(Jrun.isnull(e.layerX)) {
 				e.layerX = e.offsetX;
 			}
-			if(Js.code.isnull(e.layerY)) { 
+			if(Jrun.isnull(e.layerY)) { 
 				e.layerY = e.offsetY;
 			}
 			return e;
@@ -137,14 +137,14 @@ Js.ext.include({
 			var parend = js.object;
 			var child = js.child;
 			
-			Js.code.each(child, function() {
+			Jrun.each(child, function() {
 				try { 
-					Js.style.set(this, "width", (Js.code.toNumber(Js.style.get(this, "width")) + js.width)+"px");
+					Js.style.set(this, "width", (Jrun.toNumber(Js.style.get(this, "width")) + js.width)+"px");
 				} catch(e) { 
 					/* on failed continue */ 
 				}
 				
-				Js.style.set(this, "height", (Js.code.toNumber(Js.style.get(this, "height")) + js.height)+"px");
+				Js.style.set(this, "height", (Jrun.toNumber(Js.style.get(this, "height")) + js.height)+"px");
 			});
 		}
 	}
@@ -156,7 +156,7 @@ Js.namespace.include({
 });
 
 Js.extend('resizable', function(js) {
-	var key = Js.code.pick(this.index, null);
+	var key = Jrun.pick(this.index, null);
 	var js = (!js ? {} : js);
 		
 	this.pushStack(function() {

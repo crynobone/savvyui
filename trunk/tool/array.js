@@ -9,7 +9,7 @@ Js.namespace.include({
 			return this;
 		},
 		exec: function(data, args) {
-			var args = Js.code.toArray(arguments, 1);
+			var args = Jrun.toArray(arguments, 1);
 			var value = this._super;
 			value = new Number(value);
 			value = value[data].apply(value, args);
@@ -22,3 +22,5 @@ Js.namespace.include({
 		}
 	})
 });
+
+Jarray = Js.array;

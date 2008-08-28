@@ -14,15 +14,7 @@
 
 // Enable the code work as the global namespace of Savvy.UI but also the initializer for Js.elements Object
 var Js = window.Js = function(selector, context) {
-	var selector = selector || document;
-	
-	if(this === window && !!Js.Elements) {
-		// return this as Js.elements Object
-		return new Js.Elements(selector, context);
-	} else {
-		// return as global namespace
-		return this;
-	}
+	return ((this ===  window && !!Js.use) ? Js.use((selector || document), context) : this);
 };
 
 // If you prefer SUI as global namespace, there it is.
@@ -37,11 +29,11 @@ Js.namespace = {
 	lists: [],
 	// include new namespace
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
-			Js.namespace.lists[Js.namespace.lists.length] = js.name;
+		if(Jrun.isset(js.name)) {
+			this.lists[this.lists.length] = js.name;
 			
 			var that = Js[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				Js[js.name].prototype = js.proto;
 			}
 			
@@ -60,7 +52,7 @@ Js.namespace = {
 	},
 	// identical to this.require but just return boolean
 	loaded: function(name) {
-		return Js.code.inArray(Js.namespace.lists, name);	
+		return Jrun.inArray(Js.namespace.lists, name);	
 	}
 };
 
@@ -90,7 +82,7 @@ Js.toString = function() {
 // extends Savvy.UI's Js.elements
 Js.extend = function(name, object) {
 	// check whether it's a function
-	if(Js.code.isfunction(object) && !!Js.Elements) {
+	if(Jrun.isfunction(object) && !!Js.Elements) {
 		// push the function in Js.elements
 		Js.Elements.prototype[name] = object;
 		return true;
@@ -100,7 +92,7 @@ Js.extend = function(name, object) {
 };
 
 Js.nue = function(object) {
-	if(Js.code.typeOf(object) == "object") {
+	if(Jrun.typeOf(object) == "object") {
 		var node = {};
 		
 		for(var method in object) {
@@ -115,7 +107,7 @@ Js.nue = function(object) {
 };
 
 // Add a numbers of function to Js.fn
-Js.code = Js.fn = {
+var Jrun = Js.code = {
 	// Check browser behaviour to determine whether it's based on IE, IE6, IE7, GECKO, OPERA or KHTML.
 	behaviour: function() {
 		// Return Object containing Boolean value of each browser object.
@@ -256,7 +248,7 @@ Js.code = Js.fn = {
 				window.open(url, target);
 			}
 		} catch(e) {
-			Js.debug.log("Js.code.href() failed: " + e);
+			Js.debug.log("Jrun.href() failed: " + e);
 		}
 	},
 	// Convert all string characters to HTML entities
@@ -320,7 +312,7 @@ Js.code = Js.fn = {
 				}
 			}
 		} catch(e) {
-			Js.debug.log("Js.code.on() failed: " + fn + e);
+			Js.debug.log("Jrun.on() failed: " + fn + e);
 		}
 	},
 	// Loop each option until find an option which does not return null and return it.
@@ -375,7 +367,7 @@ Js.code = Js.fn = {
 		var data = value.split(/ /g);
 		var rdata = [];
 		
-		Js.code.each(data, function() {
+		Jrun.each(data, function() {
 			var first = this.substr(0, 1).toUpperCase();
 			var other = this.substr(1);
 			rdata[rdata.length] = [first, other].join("");
@@ -455,12 +447,12 @@ Js.code = Js.fn = {
 // Namespace for Savvy.UI Extension
 Js.ext = {
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
+		if(Jrun.isset(js.name)) {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "ext." + js.name;
 			
 			var that = this[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
 			
@@ -476,18 +468,18 @@ Js.ext = {
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.code.inArray(this.lists, name);	
+		return Jrun.inArray(this.lists, name);	
 	}
 };
 
 Js.widget = {
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
+		if(Jrun.isset(js.name)) {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "widget." + js.name;
 			
 			var that = Js.widget[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
 			
@@ -503,18 +495,18 @@ Js.widget = {
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.code.inArray(this.lists, name);	
+		return Jrun.inArray(this.lists, name);	
 	}
 };
 
 Js.tool = {
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
+		if(Jrun.isset(js.name)) {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "tool." + js.name;
 			
 			var that = this[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
 			
@@ -530,18 +522,18 @@ Js.tool = {
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.code.inArray(this.lists, name);	
+		return Jrun.inArray(this.lists, name);	
 	}
 };
 
 Js.util = {
 	include: function(js) {
-		if(Js.code.isset(js.name)) {
+		if(Jrun.isset(js.name)) {
 			this.lists[this.lists.length] = js.name;
 			Js.namespace.lists[Js.namespace.lists.length] = "util." + js.name;
 			
 			var that = this[js.name] = js.object;
-			if(Js.code.isset(js.proto)) {
+			if(Jrun.isset(js.proto)) {
 				this[js.name].prototype = js.proto;
 			}
 			
@@ -557,7 +549,7 @@ Js.util = {
 		return isload;
 	},
 	loaded: function(name) {
-		return Js.code.inArray(this.lists, name);	
+		return Jrun.inArray(this.lists, name);	
 	}
 };
 /*
@@ -599,33 +591,33 @@ Js.base.create = function(js) {
 	
 	function Class() {
 		if(!initialize && !!this.construct) {
-			this.construct.apply(this, Js.code.toArray(arguments));
+			this.construct.apply(this, Jrun.toArray(arguments));
 		}
 	};
 	
 	Class.prototype = prototype;
-	Class.prototype.construct = Js.code.pick(js.__construct, null);
+	Class.prototype.construct = Jrun.pick(js.__construct, null);
 	Class.constructor = Class;
 	Class.extend = function(js) {
 		js.ext = this;
 		return Js.base.create(js);
 	};
 	
-	var ext = Js.code.pick(js.ext, null);
+	var ext = Jrun.pick(js.ext, null);
 	
-	if(Js.code.isset(ext)) {
+	if(Jrun.isset(ext)) {
 		try {
 			// try to copy parent object.
 			(function(js) {
 				var list = ["ext", "__construct", "__destruct", "_super", "prototype"];
 				// start adding parent method and properties to this object
 				for (var method in js.prototype) {
-					if (js.prototype.hasOwnProperty(method) && (!Js.code.inArray(list, method) && !this[method])) {
+					if (js.prototype.hasOwnProperty(method) && (!Jrun.inArray(list, method) && !this[method])) {
 						this[method] = js.prototype[method];
 					}
 				}
 				for (var method in js) {
-					if (js.hasOwnProperty(method) && (!Js.code.inArray(list, method) && !this[method])) {
+					if (js.hasOwnProperty(method) && (!Jrun.inArray(list, method) && !this[method])) {
 						this[method] = js[method];
 					}
 				}
@@ -644,7 +636,7 @@ Js.base.create = function(js) {
 		
 		// start adding method and properties to this object
 		for (var method in js) {
-			if (js.hasOwnProperty(method) && (!Js.code.inArray(mtd, method) && !this[method])) {
+			if (js.hasOwnProperty(method) && (!Jrun.inArray(mtd, method) && !this[method])) {
 				this[method] = js[method];
 			}
 		};
@@ -672,7 +664,7 @@ Js.namespace.include({
 	object: {
 		// Set Attribute value for an Element
 		set: function(node, attr, value) {
-			var attr = Js.code.trim(attr.toLowerCase());
+			var attr = Jrun.trim(attr.toLowerCase());
 			
 			if(Js.dom.isElement(node)) {
 				if(attr == "class") { 
@@ -696,7 +688,7 @@ Js.namespace.include({
 		},
 		// Get Attribute value from an Element
 		get: function(node, attr) {
-			var attr = Js.code.trim(attr.toLowerCase());
+			var attr = Jrun.trim(attr.toLowerCase());
 			var value = false;
 			
 			if(Js.dom.isElement(node)) {
@@ -719,7 +711,7 @@ Js.namespace.include({
 		},
 		// Remove Attribute value from an Element
 		remove: function(node, attr) {
-			var attr = Js.code.trim(attr.toLowerCase());
+			var attr = Jrun.trim(attr.toLowerCase());
 			
 			if(Js.dom.isElement(node)) {
 				if(attr == "class" && node.className) {
@@ -748,9 +740,9 @@ Js.namespace.include({
 			var node = node;
 			
 			// Get JSON attributes
-			var data = Js.code.pick(data, []);
+			var data = Jrun.pick(data, []);
 			
-			if(Js.code.typeOf(data) !== "array") {
+			if(Jrun.typeOf(data) !== "array") {
 				data = [data];
 			}
 			
@@ -761,7 +753,7 @@ Js.namespace.include({
 				
 				for(var value in object) {
 					// trim and ensure val's value is lowercased
-					value = Js.code.trim(value.toLowerCase());
+					value = Jrun.trim(value.toLowerCase());
 					
 					if(value != "class") {
 						if(object.hasOwnProperty(value)) {
@@ -793,10 +785,10 @@ Js.namespace.include({
 			if(Js.dom.isElement(node)) {
 				var klasName = node.className;
 				
-				if(Js.code.isset(klasName) && Js.code.trim(klasName) != "") {
-					var klass = Js.code.trim(klasName).split(/\s/g);
-					klass[klass.length] = Js.code.trim(value);
-					klass = Js.code.unique(klass);
+				if(Jrun.isset(klasName) && Jrun.trim(klasName) != "") {
+					var klass = Jrun.trim(klasName).split(/\s/g);
+					klass[klass.length] = Jrun.trim(value);
+					klass = Jrun.unique(klass);
 					value = klass.join(" ");
 				} else {
 					value = value;	
@@ -814,11 +806,11 @@ Js.namespace.include({
 		},
 		has: function(node, value) {
 			var klasName = node.className;
-			var value = Js.code.trim(value);
+			var value = Jrun.trim(value);
 			
 			if(Js.dom.isElement(node)) {
-				if(Js.code.isset(klasName) && Js.code.trim(klasName) != "") {
-					return Js.code.inArray(klasName.split(/\s/), value);
+				if(Jrun.isset(klasName) && Jrun.trim(klasName) != "") {
+					return Jrun.inArray(klasName.split(/\s/), value);
 				} else { 
 					return false;
 				}
@@ -830,7 +822,7 @@ Js.namespace.include({
 			var klasName = node.className;
 			
 			if(Js.dom.isElement(node)) {
-				if(Js.code.isset(klasName) && Js.code.trim(klasName) != ""){
+				if(Jrun.isset(klasName) && Jrun.trim(klasName) != ""){
 					var data = [];
 					var klass = klasName.split(/\s/);
 					
@@ -860,8 +852,8 @@ Js.namespace.include({
 	name: "style", 
 	object: {
 		set: function(node, data, value) {
-			var data = Js.code.trim(data);
-			var val = Js.code.trim(value);
+			var data = Jrun.trim(data);
+			var val = Jrun.trim(value);
 			
 			if(Js.dom.isElement(node)) {
 				try {
@@ -877,9 +869,9 @@ Js.namespace.include({
 		},
 		setup: function(node, js) {
 			var node = node;
-			var data = Js.code.pick(js, []);
+			var data = Jrun.pick(js, []);
 			
-			if(Js.code.typeOf(data) !== "array") {
+			if(Jrun.typeOf(data) !== "array") {
 				data = [data];
 			}
 			
@@ -887,7 +879,7 @@ Js.namespace.include({
 				var obj = data[i];
 				
 				for(var value in obj) {
-					value = Js.code.trim(value);
+					value = Jrun.trim(value);
 					
 					if(obj.hasOwnProperty(value)) {
 						Js.style.set(node, value, obj[value]);
@@ -897,7 +889,7 @@ Js.namespace.include({
 			return node;
 		},
 		get: function(node, data) {
-			var data = Js.code.trim(data);
+			var data = Jrun.trim(data);
 			
 			if(Js.dom.isElement(node)) {
 				try {
@@ -913,7 +905,7 @@ Js.namespace.include({
 		alpha: function(node, value) {
 			var value = (value > 100 ? 100 : (value < 0 ? 0 : value));
 			
-			if(Js.code.isset(node)) {
+			if(Jrun.isset(node)) {
 				try {
 					if (value == 0 && this.get(node, "visibility") != "hidden") {
 						this.hide(node);
@@ -921,7 +913,7 @@ Js.namespace.include({
 						this.show(node);
 					}
 					
-					if(Js.code.behaviour.ie == true) {
+					if(Jrun.behaviour.ie == true) {
 						if(!node.currentStyle || !node.currentStyle.hasLayout) {
 							this.set(node, "zoom", 1);
 						}
@@ -939,13 +931,13 @@ Js.namespace.include({
 		png: function(node, uri, js) {
 			var node = node;
 			var uri = uri;
-			var gecko = Js.code.pick(js.gecko, "");
-			var ie = Js.code.pick(js.ie, "scale");
+			var gecko = Jrun.pick(js.gecko, "");
+			var ie = Jrun.pick(js.ie, "scale");
 			
 			ie = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + uri + "',sizingMethod='" + ie + "')";
 			gecko = "url('" + uri + "') " + gecko;
 			
-			if(window.ActiveXObject && (Js.code.behaviour.ie && !Js.code.behaviour.ie7)) {
+			if(window.ActiveXObject && (Jrun.behaviour.ie && !Jrun.behaviour.ie7)) {
 				this.set(node, "filter", ie);
 			} else {
 				this.set(node, "background", gecko);
@@ -988,7 +980,7 @@ Js.namespace.include({
 			} else return false;
 		},
 		effect: function(node, fx, value) {
-			var fx = (Js.code.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
+			var fx = (Jrun.isset(fx) && fx.match(/(fast|slow)/g) ? fx : false);
 			var id = Js.attr.get(node, "id");
 			var data = [20, 0.8, 80];
 			var value = (value.match(/^(show|hide)$/) ? value : 'show');
@@ -1024,7 +1016,7 @@ Js.namespace.include({
 	name: "dom", 
 	object: {
 		add: function(parent, child) {
-			if(!Js.code.isset(child)) {
+			if(!Jrun.isset(child)) {
 				var child = parent;
 				var parent = document.body;
 			}
@@ -1038,7 +1030,7 @@ Js.namespace.include({
 			}
 		},
 		addText: function(parent, text) {
-			if(Js.code.isset(parent)) {
+			if(Jrun.isset(parent)) {
 				return this.add(parent, document.createTextNode(text));
 			} else {
 				Js.debug.log("Js.dom.addText failed: " + e);
@@ -1046,16 +1038,16 @@ Js.namespace.include({
 			}
 		},
 		addBefore: function(args) {
-			var args = Js.code.toArray(arguments);
+			var args = Jrun.toArray(arguments);
 			var parent = null;
 			var child = null;
 			var reference = null;
 			
-			if(args.length == 3 && Js.code.isset(args[0]) && Js.code.isset(args[1]) && Js.code.isset(args[2])) {
+			if(args.length == 3 && Jrun.isset(args[0]) && Jrun.isset(args[1]) && Jrun.isset(args[2])) {
 				parent = args[0];
 				child = args[1];
 				reference = args[2];
-			} else if(args.length == 2 && Js.code.isset(args[0]) && Js.code.isset(args[1])) {
+			} else if(args.length == 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])) {
 				parent = args[1].parentNode;
 				child = args[0];
 				reference = args[1];
@@ -1078,7 +1070,7 @@ Js.namespace.include({
 			var child = null;
 			var reference = null;
 			
-			if(args.length == 3 && Js.code.isset(args[0]) && Js.code.isset(args[1]) && Js.code.isset(args[2])) {
+			if(args.length == 3 && Jrun.isset(args[0]) && Jrun.isset(args[1]) && Jrun.isset(args[2])) {
 				parent = args[0];
 				child = args[1];
 				reference = this.next(args[2]);
@@ -1089,7 +1081,7 @@ Js.namespace.include({
 			}
 			
 			try {
-				if(Js.code.isset(reference)) {
+				if(Jrun.isset(reference)) {
 					return this.addBefore(parent, child, reference);
 				} else {
 					return this.add(parent, child);
@@ -1104,10 +1096,10 @@ Js.namespace.include({
 			var parent = null;
 			var child = null;
 			
-			if(args.length === 2 && Js.code.isset(args[0]) && Js.code.isset(args[1])){
+			if(args.length === 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])){
 				parent = args[0];
 				child = args[1];
-			} else if(args.length == 1 && Js.code.isset(args[0])){
+			} else if(args.length == 1 && Jrun.isset(args[0])){
 				parent = args[0].parentNode;
 				child = args[0];
 			}
@@ -1194,7 +1186,7 @@ Js.namespace.include({
 			return f === l;
 		},
 		isElement: function(node) {
-			return (Js.code.isset(node) && node.nodeType ? true : false);
+			return (Jrun.isset(node) && node.nodeType ? true : false);
 		},
 		parent: function(node) {
 			return node.parentNode;
@@ -1216,7 +1208,7 @@ Js.namespace.include({
 			return (function(fn, node) {
 				if(!!that.done) {
 					if(!!node && node !== document) {
-						Js.code.callback(node, fn);
+						Jrun.callback(node, fn);
 					} else { 
 						fn();
 					}
@@ -1254,7 +1246,7 @@ Js.namespace.include({
 					}, 10);
 				}
 				
-				if (!!Js.code.behaviour.ie) {
+				if (!!Jrun.behaviour.ie) {
 					try {
 						document.write("<script id=__ie_onload defer src=//0><\/scr"+"ipt>");
 						that.script = document.getElementById("__ie_onload");
@@ -1292,9 +1284,9 @@ Js.namespace.include({
 					var fn = Js.domReady.fn[i];
 					var node = Js.domReady.node[i];
 					
-					if (Js.code.isfunction(fn)) {
+					if (Jrun.isfunction(fn)) {
 						if(!!node && node !== document) {
-							Js.code.callback(node, fn);
+							Jrun.callback(node, fn);
 						} else { 
 							fn();
 						}
@@ -1332,9 +1324,9 @@ Js.namespace.include({
 			var p = true;
 			var r;
 			
-			this.node = Js.code.pick(js.object, this.node);
-			this.type = Js.code.pick(js.on, this.type, "load");
-			this.fn = Js.code.pick(js.callback, this.fn);
+			this.node = Jrun.pick(js.object, this.node);
+			this.type = Jrun.pick(js.on, this.type, "load");
+			this.fn = Jrun.pick(js.callback, this.fn);
 			
 			if(this.node.addEventListener) {
 				try { 
@@ -1360,9 +1352,9 @@ Js.namespace.include({
 			}
 			
 			if(!pass) {
-				var fn = Js.code.pick(this.object["on" + this.type], null);
-				Js.code.on(this.node, this.type, function() {
-					if(Js.code.isset(fn) && Js.code.isfunction(fn)) {
+				var fn = Jrun.pick(this.object["on" + this.type], null);
+				Jrun.on(this.node, this.type, function() {
+					if(Jrun.isset(fn) && Jrun.isfunction(fn)) {
 						fn();
 					}
 					that.fn();
@@ -1372,9 +1364,9 @@ Js.namespace.include({
 		off: function (js) {
 			var that = this;
 			var r = false;
-			this.node = Js.code.pick(js.object, this.node);
-			this.type = Js.code.pick(js.on, this.type, "load");
-			this.fn = Js.code.pick(js.callback, this.fn);
+			this.node = Jrun.pick(js.object, this.node);
+			this.type = Jrun.pick(js.on, this.type, "load");
+			this.fn = Jrun.pick(js.callback, this.fn);
 			
 			if(this.node.detachEvent) {
 				try { 
@@ -1405,8 +1397,8 @@ Js.namespace.include({
 		set: function(node, data, value) {
 			var name = this.verify(node);
 			
-			if (Js.code.isset(name)) {
-				if (!Js.code.isset(this.object[name])) {
+			if (Jrun.isset(name)) {
+				if (!Jrun.isset(this.object[name])) {
 					this.object[name] = {};
 				}
 				
@@ -1416,8 +1408,8 @@ Js.namespace.include({
 		get: function(node, data) {
 			var name = this.verify(node);
 			
-			if (Js.code.isset(name)) {
-				if (Js.code.isset(this.object[name]) && Js.code.isset(this.object[name][data])) {
+			if (Jrun.isset(name)) {
+				if (Jrun.isset(this.object[name]) && Jrun.isset(this.object[name][data])) {
 					return this.object[name][data];
 				} else {
 					return false;
@@ -1429,10 +1421,10 @@ Js.namespace.include({
 		remove: function(node, data) {
 			var name = this.verify(node);
 			
-			if (Js.code.isset(name)) {
+			if (Jrun.isset(name)) {
 				this.object[name][data] = null;
 				
-				if (Js.code.isset(this.object[name]) && Js.code.isset(this.object[name][data])) {
+				if (Jrun.isset(this.object[name]) && Jrun.isset(this.object[name][data])) {
 					this.object[name][data] = null;
 				} else {
 					return false;
@@ -1454,7 +1446,7 @@ Js.namespace.include({
 		html: {
 			to: function(value) {
 				var value = new String(value);
-				value = Js.code.htmlEntities(value);
+				value = Jrun.htmlEntities(value);
 				value = encodeURIComponent(value);
 				
 				return value;
@@ -1462,7 +1454,7 @@ Js.namespace.include({
 			from: function(value) {
 				var value = new String(value);
 				value = decodeURIComponent(value);
-				value = Js.code.htmlEntityDecode(value);
+				value = Jrun.htmlEntityDecode(value);
 				
 				return value;
 			}
@@ -1478,7 +1470,7 @@ Js.namespace.include({
 	name: "query", 
 	object: {
 		isValid: function(node, data) {
-			var data = Js.code.trim(data);
+			var data = Jrun.trim(data);
 			var r = null;
 			var status = null;
 			var value = false;
@@ -1519,7 +1511,7 @@ Js.namespace.include({
 				}
 			} else if(data == 'input') {
 				r = (!!node.tagName && !!node.tagName.toLowerCase().match(/^(input|select|textarea)$/g) ? true : false);
-				if(Js.code.isset(status)) {
+				if(Jrun.isset(status)) {
 					r = (Js.attr.get(node, status) !== false ? true : false);
 					if(!!value) { 
 						r = (!!r ? false : true);
@@ -1655,9 +1647,9 @@ Js.namespace.include({
 		},
 		validate: function(node, klasName, data, attr) {
 			var valid = false;
-			var klasName = Js.code.pick(klasName, "");
-			var data = Js.code.pick(data, null);
-			var attr = Js.code.pick(attr, []);
+			var klasName = Jrun.pick(klasName, "");
+			var data = Jrun.pick(data, null);
+			var attr = Jrun.pick(attr, []);
 			
 			valid = (klasName === "" || !!Js.query.hasClass(node, klasName) ? true : false);
 			valid = ((attr.length === 0 || (attr.length === 3 && !!Js.query.hasAttrs(node, attr))) && !!valid ? true : false); 
@@ -1667,19 +1659,19 @@ Js.namespace.include({
 		},
 		create: function(tags, attr) {
 			var node = null;
-			var tags = Js.code.trim(tags);
+			var tags = Jrun.trim(tags);
 			
 			if(/\#/.test(tags)) {
 				var tag = tags.split(/\#/);
-				var el = Js.code.trim(tag[0]);
-				var id = Js.code.trim(tag[1]);
+				var el = Jrun.trim(tag[0]);
+				var id = Jrun.trim(tag[1]);
 				node = document.createElementNS ? document.createElementNS('http://www.w3.org/1999/xhtml', el) : document.createElement(el);
 				Js.attr.set(node, "id", id);
 			} else {
 				node = document.createElementNS ? document.createElementNS('http://www.w3.org/1999/xhtml', tags) : document.createElement(tags);
 			}
 			
-			if (Js.code.isset(attr)) { 
+			if (Jrun.isset(attr)) { 
 				Js.attr.setup(node, attr);
 			}
 			
@@ -1687,12 +1679,12 @@ Js.namespace.include({
 		},
 		tags: function(tags, parents, klasName, is, attr, type) {
 			var context = [];
-			var klasName = Js.code.trim(Js.code.pick(klasName, ""));
-			var is = Js.code.pick(is, null);
-			var attr = Js.code.pick(attr, []);
-			var tags = Js.code.pick(tags, "*");
+			var klasName = Jrun.trim(Jrun.pick(klasName, ""));
+			var is = Jrun.pick(is, null);
+			var attr = Jrun.pick(attr, []);
+			var tags = Jrun.pick(tags, "*");
 			
-			if(Js.code.isset(type) && type > 0) {
+			if(Jrun.isset(type) && type > 0) {
 				if(type === 4) {
 					//Js.debug.log("use tagParentOf");
 					context = Js.query.tagParentOf(tags, parents, klasName, is, attr);
@@ -1728,7 +1720,7 @@ Js.namespace.include({
 			return (context.length > 0 ? context : false);
 		},
 		id: function(id, parents, tags, is) {
-			var tags = Js.code.trim(Js.code.pick(tags, "*")).toUpperCase();
+			var tags = Jrun.trim(Jrun.pick(tags, "*")).toUpperCase();
 			var el = document.getElementById(id);
 			var is = (!!is ? this.is(el, is) : true);
 				
@@ -1759,7 +1751,7 @@ Js.namespace.include({
 						break;
 					}
 					
-					var el = Js.code.trim(elem[i]);
+					var el = Jrun.trim(elem[i]);
 					
 					if(el !== "") {
 						var tags = "";
@@ -1814,7 +1806,7 @@ Js.namespace.include({
 								context = [];
 								break;
 							} else {
-								context = Js.code.unique(context);
+								context = Jrun.unique(context);
 							}
 							
 							type = 0;
@@ -1824,11 +1816,11 @@ Js.namespace.include({
 				return context;
 			};
 			
-			var elem = Js.code.trim(selector).split(/,/);
-			elem = Js.code.unique(elem);
+			var elem = Jrun.trim(selector).split(/,/);
+			elem = Jrun.unique(elem);
 			
 			for(var m = 0; m < elem.length && !!elem[m]; m++) {
-				var el = Js.code.trim(elem[m]);
+				var el = Jrun.trim(elem[m]);
 				
 				if(el !== "") {
 					var node = init(el, parents);
@@ -1864,7 +1856,7 @@ Js.namespace.include({
 		},
 		isLength: function(datas, value) {
 			var data = datas.split(/\-/);
-			var length = Js.code.toNumber(data[1]);
+			var length = Jrun.toNumber(data[1]);
 			var rdata = null;
 			
 			if(data[0] === "max") {
@@ -1995,11 +1987,11 @@ Js.namespace.include({
 			this.index = (!this.index && this.node.length === 1 ? 0 : null);
 		},
 		pushStack: function(fn) {
-			if(Js.code.isfunction(fn)) {
-				var key = Js.code.pick(this.index, null);
+			if(Jrun.isfunction(fn)) {
+				var key = Jrun.pick(this.index, null);
 				
-				if(Js.code.isnull(key)) {
-					Js.code.each(this.node, fn);
+				if(Jrun.isnull(key)) {
+					Jrun.each(this.node, fn);
 				} else if(!!this.node[key]) {
 					try { 
 						fn.call(this.node[key]);
@@ -2036,15 +2028,15 @@ Js.namespace.include({
 			return this;						
 		},
 		'find': function(selector) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			var n1 = (!key ? this.node : this.node[key]);
 			var n2 = (!key ? this._node : this._node[key]);
-			var node = Js.code.pick(n1, n2);
+			var node = Jrun.pick(n1, n2);
 			
 			return new Js.Elements(selector, node);
 		},
 		childOf: function(selector) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			var elem = selector.split(",");
 			
 			for(var i = 0; i < elem.length && !!elem[i]; i++) {
@@ -2076,7 +2068,7 @@ Js.namespace.include({
 			}
 		},
 		has: function(selector) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			var elem = selector.split(",");
 			
 			for(var i = 0; i < elem.length && !!elem[i]; i++) {
@@ -2108,7 +2100,7 @@ Js.namespace.include({
 			}
 		},
 		is: function(selector) {
-			var key = Js.code.pick(this.index, 0);
+			var key = Jrun.pick(this.index, 0);
 			var node = Js.query.selector(selector);
 			var object = null;
 			
@@ -2133,11 +2125,11 @@ Js.namespace.include({
 			return (!!node ? new Js.Elements(node) : false);						
 		},
 		fetch: function(key) {
-			var key = Js.code.pick(this.index, key);
+			var key = Jrun.pick(this.index, key);
 			
-			if (Js.code.isnull(key)) { 
+			if (Jrun.isnull(key)) { 
 				return this.node;
-			} else if (!!Js.code.isset(this.node[key])) {
+			} else if (!!Jrun.isset(this.node[key])) {
 				return this.node[key];
 			} else {
 				return false;
@@ -2148,13 +2140,13 @@ Js.namespace.include({
 			return this.parent();
 		},
 		parent: function(key) {
-			var key = Js.code.pick(this.index, 0);
-			var node = Js.code.pick(this.node[key].parentNode, false);
+			var key = Jrun.pick(this.index, 0);
+			var node = Jrun.pick(this.node[key].parentNode, false);
 			
 			return (!!node ? new Js.Elements(node) : false);
 		},
 		siblings: function(selector) {
-			var key = Js.code.pick(this.index, 0);
+			var key = Jrun.pick(this.index, 0);
 			var elem = selector.split(",");
 			
 			for(var i = 0; i < elem.length && !!elem[i]; i++) {
@@ -2236,14 +2228,14 @@ Js.namespace.include({
 			return this.node.length;
 		},
 		each: function(fn) {
-			if(this.count() > 0 && Js.code.isfunction(fn)) {
-				Js.code.each(this.node, fn);
+			if(this.count() > 0 && Jrun.isfunction(fn)) {
+				Jrun.each(this.node, fn);
 			}
 			// continue chaining
 			return this;
 		},
 		callback: function(fn) {
-			if(Js.code.isfunction(fn)) {
+			if(Jrun.isfunction(fn)) {
 				try {
 					fn.apply(this);
 				} catch(e) {
@@ -2256,9 +2248,9 @@ Js.namespace.include({
 		add: function(selector, data) {
 			var args = arguments;
 			
-			var key = Js.code.pick(this.index, 0);
+			var key = Jrun.pick(this.index, 0);
 			
-			if (Js.code.isset(this.node[key])) {
+			if (Jrun.isset(this.node[key])) {
 				var node = new Js.Elements;
 				node.create(selector, this.node[key], data);
 				
@@ -2287,12 +2279,12 @@ Js.namespace.include({
 			return this;
 		},
 		get: function(data) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			
-			if (Js.code.isnull(key)){
+			if (Jrun.isnull(key)){
 				var value = [];
 				
-				Js.code.each(this.node, function() { 
+				Jrun.each(this.node, function() { 
 					value[value.length] = Js.attr.get(this, data);
 				});
 				
@@ -2329,11 +2321,11 @@ Js.namespace.include({
 			return this;
 		},
 		hasClass: function(name) {
-			var key = Js.code.pick(this.index, null);		
+			var key = Jrun.pick(this.index, null);		
 			
-			if (Js.code.isnull(key)) {
+			if (Jrun.isnull(key)) {
 				var value = [];
-				Js.code.each(this.node, function() { 
+				Jrun.each(this.node, function() { 
 					value[value.length] = Js.className.has(this, name);
 				});
 				return value;
@@ -2381,18 +2373,18 @@ Js.namespace.include({
 			return this;
 		},
 		getStyle: function(data) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			
-			if(Js.code.isnull(key)) {
+			if(Jrun.isnull(key)) {
 				var value = [];
 				
-				Js.code.each(this.node, function() {
-					value[value.length] = Js.code.pick(Js.style.get(this, data), false);
+				Jrun.each(this.node, function() {
+					value[value.length] = Jrun.pick(Js.style.get(this, data), false);
 				});
 				
 				return value;
 			} else if(!!this.node[key]) {
-				return Js.code.pick(Js.style.get(this.node[key], data), false);
+				return Jrun.pick(Js.style.get(this.node[key], data), false);
 			}
 		},
 		alpha: function(value) {
@@ -2435,7 +2427,7 @@ Js.namespace.include({
 			return this;
 		},
 		insert: function(child) {
-			if(Js.code.isset(this.index)) {
+			if(Jrun.isset(this.index)) {
 				// stack the callback
 				this.pushStack(function() { 
 					Js.dom.add(this, child);
@@ -2453,7 +2445,7 @@ Js.namespace.include({
 			return this;
 		},
 		remove: function(child) {
-			if(Js.code.isset(this.index)) {
+			if(Jrun.isset(this.index)) {
 				// stack the callback
 				this.pushStack(function() { 
 					Js.dom.remove(this, child);
@@ -2479,18 +2471,18 @@ Js.namespace.include({
 				// continue chaining
 				return this;
 			} else if (!text || typeof(text) == "number") {
-				var key = Js.code.pick(this.index, null);
+				var key = Jrun.pick(this.index, null);
 				
-				if(Js.code.isnull(key)) {
+				if(Jrun.isnull(key)) {
 					var value = [];
 					// retrieve the value of each HTMLelement
-					Js.code.each(this.node, function() {
-						value[value.length] = Js.code.pick(this.innerHTML, ""); // return HTML string for multiple HTMLelement
+					Jrun.each(this.node, function() {
+						value[value.length] = Jrun.pick(this.innerHTML, ""); // return HTML string for multiple HTMLelement
 					});
 					// return value as array
 					return value;
 				} else if(!!this.node[key]) {
-					return Js.code.pick(this.node[key].innerHTML, ""); // return HTML string for single HTMLelement
+					return Jrun.pick(this.node[key].innerHTML, ""); // return HTML string for single HTMLelement
 				}
 			}
 		},
@@ -2506,18 +2498,18 @@ Js.namespace.include({
 				// continue chaining
 				return this;
 			} else if(!text || typeof(text) == "number") {
-				var key = Js.code.pick(this.index, null);
+				var key = Jrun.pick(this.index, null);
 				
-				if(Js.code.isnull(key)) {
+				if(Jrun.isnull(key)) {
 					var value = [];
 					// retrieve the value of each HTMLelement
-					Js.code.each(this.node, function() {
-						value[value.length] = Js.code.pick(this.node[key].value, "");
+					Jrun.each(this.node, function() {
+						value[value.length] = Jrun.pick(this.node[key].value, "");
 					});
 					// return the value as array
 					return value;
 				} else if(!!this.node[key]) {
-					return Js.code.pick(this.node[key].value, ""); // retrieve single HTMLelement value
+					return Jrun.pick(this.node[key].value, ""); // retrieve single HTMLelement value
 				}
 			}
 		},
@@ -2535,7 +2527,7 @@ Js.namespace.include({
 		on: function(handler, fn1, fn2) {
 			// stack the callback
 			this.pushStack(function() { 
-				Js.code.on(this, handler, fn1, fn2);
+				Jrun.on(this, handler, fn1, fn2);
 			});
 			// continue chaining
 			return this;
@@ -2549,7 +2541,7 @@ Js.namespace.include({
 		unbind: function(handler) {
 			// stack the callback
 			this.pushStack(function() {
-				Js.code.on(this, handler, function() {
+				Jrun.on(this, handler, function() {
 					return true;
 				});
 			});
@@ -2580,12 +2572,12 @@ Js.namespace.include({
 		},
 		// get hashtable value
 		getHash: function(data) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			
-			if (Js.code.isnull(key)) {
+			if (Jrun.isnull(key)) {
 				var value = [];			
 				// get each value of hash from an array
-				Js.code.each(this.node, function() { 
+				Jrun.each(this.node, function() { 
 					value[value.length] = Js.hash.get(this, data);
 				});
 				// return the value in array
@@ -2616,7 +2608,7 @@ Js.namespace.include({
 			// stack the callback
 			this.pushStack(function() {
 				// get current HTML string
-				var html = Js.code.pick(this.innerHTML, "");
+				var html = Jrun.pick(this.innerHTML, "");
 				
 				if(option == "after") {
 					// append the HTML string
@@ -2637,7 +2629,7 @@ Js.namespace.include({
 	// array listing all the supported event handler
 	var handler = ["click", "mouseover", "mouseout", "change", "keyup", "keypress", "submit", "blur", "focus", "hover"];
 	// Loop the array and implement each event handler
-	Js.code.each(handler, function() {
+	Jrun.each(handler, function() {
 		// this is the values of array
 		var that = this;
 		// add 's' or 'es' at the end of array value (prevent problem without having s)
@@ -2663,18 +2655,18 @@ Js.use = function(selector, context) {
 };
 
 Js.restore = function(opt) {
-	var opt = Js.code.pick(opt, true);
+	var opt = Jrun.pick(opt, true);
 	if(opt == true) {
-		if(Js.code.isset(Js.code.$)) {
-			window.$ = Js.code.$;
-			Js.code.$ = null;
+		if(Jrun.isset(Jrun.$)) {
+			window.$ = Jrun.$;
+			Jrun.$ = null;
 		}
 	}
 	
 	return Js.use;
 };
 Js.simplify = function() {
-	Js.code.$ = window.$;
+	Jrun.$ = window.$;
 	window.$ = Js.use;
 }
 /*
@@ -2749,22 +2741,22 @@ Js.ext.include({
 			}
 			
 			// Check XHR method: GET/POST
-			this.method = (!Js.code.isset(js.method) || js.method != "GET" ? "POST" : "GET");
+			this.method = (!Jrun.isset(js.method) || js.method != "GET" ? "POST" : "GET");
 			// Set caching option for the request
-			this.cache = Js.code.pick(js.cache, this.cache);
+			this.cache = Jrun.pick(js.cache, this.cache);
 			// Enable debugging for XHR request
-			this.debug = Js.code.pick(js.debug, this.debug);
+			this.debug = Jrun.pick(js.debug, this.debug);
 			// XHR uri request
-			this.uri = (js.uri ? Js.code.trim(js.uri) : this.uri);
+			this.uri = (js.uri ? Jrun.trim(js.uri) : this.uri);
 			// XHR parameters
-			this.parameter = (js.parameters ? Js.code.trim(js.parameters) : this.parameter);
+			this.parameter = (js.parameters ? Jrun.trim(js.parameters) : this.parameter);
 			
 			// XHR data
 			this.data = (!!js.data ? js.data : this.data);
-			this.data = (!!this.data ? Js.code.serialize(this.data) : "");
+			this.data = (!!this.data ? Jrun.serialize(this.data) : "");
 			
 			// Set timeout.
-			this.timeout = Js.code.pick(js.timeout, this.timeout);
+			this.timeout = Jrun.pick(js.timeout, this.timeout);
 			this.timeout = (!!Js.test.isInteger(this.timeout) ? this.timeout : 0);
 			
 			// check whether XHR object is ready
@@ -2773,7 +2765,7 @@ Js.ext.include({
 					// use method POST
 					this.object.open("POST", this.uri, true);
 					
-					this.type = Js.code.trim(Js.code.pick(js.type, "application/x-www-form-urlencoded"));
+					this.type = Jrun.trim(Jrun.pick(js.type, "application/x-www-form-urlencoded"));
 					this.object.setRequestHeader("Content-Type", this.type);
 					
 					if(this.object.overrideMimeType) {
@@ -2799,12 +2791,12 @@ Js.ext.include({
 				var that = this;
 				var object = this.object;
 				// Run custom callback to function
-				if(Js.code.isfunction(js.onComplete)) {
+				if(Jrun.isfunction(js.onComplete)) {
 					try {
 						this.object.onreadystatechange = function() {
 							// clear timeout (if exist)
 							if(this.readyState === 4 && that.requestStatus()) {
-								if(Js.code.isset(that.timeoutid)) {
+								if(Jrun.isset(that.timeoutid)) {
 									clearTimeout(that.timeoutid);
 									that.timeoutid = null;
 								}
@@ -2822,13 +2814,13 @@ Js.ext.include({
 							// if request is complete and page is available
 							if(that.object.readyState === 4 && that.requestStatus()) {
 								// clear timeout (if exist)
-								if(Js.code.isset(that.timeoutid)) {
+								if(Jrun.isset(that.timeoutid)) {
 									clearTimeout(that.timeoutid);
 									that.timeoutid = null;
 								}
 								
 								// get response text
-								var reply = that.reply = Js.code.trim(that.object.responseText);
+								var reply = that.reply = Jrun.trim(that.object.responseText);
 								
 								// add to logs (if enable)
 								if(that.debug === true) {
@@ -2928,7 +2920,7 @@ Js.ext.include({
 				var local = (!r && location.protocol == 'file:');
 				var range = (r >= 200 && r < 300);
 				var unmodified = (r == 304);
-				var safari = (Js.code.behaviour.safari && typeof(r) == "undefined");
+				var safari = (Jrun.behaviour.safari && typeof(r) == "undefined");
 				return  (local || range || unmodified || safari);
 			} catch(e) {
 				Js.debug.log("Status failed: " + e);	
@@ -2936,28 +2928,28 @@ Js.ext.include({
 			return false;
 		},
 		responseNotice: function(data) {
-			var note = Js.code.pick(data.notice);
+			var note = Jrun.pick(data.notice);
 			
-			if(Js.code.isset(note) && note !== "") {
+			if(Jrun.isset(note) && note !== "") {
 				window.alert(note);
 			}
 		},
 		responseHref: function(data) {
-			var href = Js.code.pick(data.href);
+			var href = Jrun.pick(data.href);
 			
-			if(Js.code.isset(href) && href !== "") {
-				Js.code.href(href);
+			if(Jrun.isset(href) && href !== "") {
+				Jrun.href(href);
 			}
 		},
 		responseUpdate: function(data) {
-			var args = Js.code.pick(data.text);
-			var id = Js.code.pick(data.id);
-			var object = Js.code.pick(data.exec, data.callback);
+			var args = Jrun.pick(data.text);
+			var id = Jrun.pick(data.id);
+			var object = Jrun.pick(data.exec, data.callback);
 			
 			if(!!args) {
 				if(!!id && typeof(id) === "string") {
 					Js.query.id(id).innerHTML = Js.parse.bbml(args);
-				} else if(Js.code.isfunction(object)) {
+				} else if(Jrun.isfunction(object)) {
 					object(args);
 				}
 			}
@@ -2972,10 +2964,10 @@ Js.namespace.include({
 });
 
 Js.extend("load", function(url, method) {
-	var key = Js.code.pick(this.index, 0);
+	var key = Jrun.pick(this.index, 0);
 	var method = ((!!method && !!method.toLowerCase().match(/^(get|post)$/)) ? method.toUpperCase() : 'GET');
 	
-	if(Js.code.isset(key) && !!this.node[key]) {
+	if(Jrun.isset(key) && !!this.node[key]) {
 		var node = this.node[key];
 		
 		var update = function() {
@@ -3046,7 +3038,7 @@ Js.ext.include({
 			if (typeof(spec) == "string") {
 				var el = spec;
 				
-				if (Js.code.finds(el)) {
+				if (Jrun.finds(el)) {
 					node = Js.query.id(el);
 				} else {
 					node = Js.query.create("div");
@@ -3055,8 +3047,8 @@ Js.ext.include({
 			} else if (spec && spec.nodeType === 1) {
 				node = spec;
 			} else {
-				var object = Js.code.pick(spec.object, spec.node);
-				node = Js.code.prepare(object, spec.element, "object");
+				var object = Jrun.pick(spec.object, spec.node);
+				node = Jrun.prepare(object, spec.element, "object");
 			}
 			
 			this.object = node;
@@ -3066,7 +3058,7 @@ Js.ext.include({
 			var that = this;
 			fn = this.oncomplete;
 			this.onComplete = function() {
-				if (Js.code.isfunction(fn)) {
+				if (Jrun.isfunction(fn)) {
 					fn();
 				}
 				
@@ -3080,12 +3072,12 @@ Js.ext.include({
 		},
 		fx: function(spec) {
 			if (this.interval === null) {
-				this.does = spec.method = (Js.code.inArray(this.methods, spec.method) ? spec.method : "moveUp");
-				this.oncomplete = spec.oncomplete = Js.code.pick(spec.onComplete, null);
+				this.does = spec.method = (Jrun.inArray(this.methods, spec.method) ? spec.method : "moveUp");
+				this.oncomplete = spec.oncomplete = Jrun.pick(spec.onComplete, null);
 				this.grid();
-				this.shutter = spec.shutter = Js.code.pick(spec.shutter, 20);
-				this.step = spec.step = Js.code.pick(spec.step, 80);
-				this.ease = Js.code.pick(spec.ease, 0.8);
+				this.shutter = spec.shutter = Jrun.pick(spec.shutter, 20);
+				this.step = spec.step = Jrun.pick(spec.step, 80);
+				this.ease = Jrun.pick(spec.ease, 0.8);
 				this.actStep = 0;
 				var that = this;
 				
@@ -3093,27 +3085,27 @@ Js.ext.include({
 					var ts = spec.transaction;
 					
 					if (this.does.match(/^move(Left|Right)$/)) {
-						this.type = Js.code.pick(spec.property, "marginLeft");
+						this.type = Jrun.pick(spec.property, "marginLeft");
 						
 						if (this.type != "marginLeft" && Js.style.get(this.object, "position")) {
 							this.type = "left";
-							this.transaction[0] = Js.code.pick(ts[0], this.left);
+							this.transaction[0] = Jrun.pick(ts[0], this.left);
 							this.transaction[1] = ts[1];
 						} else {
 							this.type = "marginLeft";
-							this.transaction[0] = Js.code.pick(ts[0], this.margin[3]);
+							this.transaction[0] = Jrun.pick(ts[0], this.margin[3]);
 							this.transaction[1] = ts[1];
 						}
 					} else if (this.does.match(/^move(Up|Down)$/)) {
-						this.type = Js.code.pick(spec.property, "marginTop");
+						this.type = Jrun.pick(spec.property, "marginTop");
 						
 						if (this.type != "marginTop" && Js.style.get(this.object, "position")) {
 							this.type = "top";
-							this.transaction[0] = Js.code.pick(ts[0], this.top);
+							this.transaction[0] = Jrun.pick(ts[0], this.top);
 							this.transaction[1] = ts[1];
 						} else {
 							this.type = "marginTop";
-							this.transaction[0] = Js.code.pick(ts[0], this.margin[0]);
+							this.transaction[0] = Jrun.pick(ts[0], this.margin[0]);
 							this.transaction[1] = ts[1];
 						}
 					}
@@ -3123,19 +3115,19 @@ Js.ext.include({
 					}, this.shutter);
 				} else if (this.does == "move") {
 					var ts = spec.transaction;
-					this.type = Js.code.pick(spec.property, "margin");
+					this.type = Jrun.pick(spec.property, "margin");
 					
 					if (this.type != "margin" && Js.style.get(this.object, "position")) {
 						this.type = "position";	
-						this.transaction[0] = Js.code.pick(ts[0], this.top);
+						this.transaction[0] = Jrun.pick(ts[0], this.top);
 						this.transaction[1] = ts[1];
-						this.transaction[2] = Js.code.pick(ts[2], this.left);
+						this.transaction[2] = Jrun.pick(ts[2], this.left);
 						this.transaction[3] = ts[3];
 					} else {
 						this.type = "margin";
-						this.transaction[0] = Js.code.pick(ts[0], this.margin[0]);
+						this.transaction[0] = Jrun.pick(ts[0], this.margin[0]);
 						this.transaction[1] = ts[1];
-						this.transaction[2] = Js.code.pick(ts[2], this.margin[3]);
+						this.transaction[2] = Jrun.pick(ts[2], this.margin[3]);
 						this.transaction[3] = ts[3];
 					}
 					
@@ -3143,15 +3135,15 @@ Js.ext.include({
 						that.customMove();
 					}, this.shutter);
 				} else if (this.does.match(/^resize(Width|Height)$/)) {
-					this.type = Js.code.pick(spec.property, "normal");
+					this.type = Jrun.pick(spec.property, "normal");
 					this.does = (spec.method == "resizeWidth" ? "width" : "height");
 					var ts 	= spec.transaction;
 					
 					if (this.does == "width") {
-						this.transaction[0] = Js.code.pick(ts[0], this.width);
+						this.transaction[0] = Jrun.pick(ts[0], this.width);
 						this.transaction[1] = ts[1];
 					} else {
-						this.transaction[0] = Js.code.pick(ts[0], this.height);
+						this.transaction[0] = Jrun.pick(ts[0], this.height);
 						this.transaction[1] = ts[1];
 					}
 					
@@ -3159,11 +3151,11 @@ Js.ext.include({
 						that.size();
 					}, this.shutter);
 				} else if (this.does == "resize") {
-					this.type = Js.code.pick(spec.property, "normal");
+					this.type = Jrun.pick(spec.property, "normal");
 					var ts 	= spec.transaction;
-					this.transaction[0] = Js.code.pick(ts[0], this.width);
+					this.transaction[0] = Jrun.pick(ts[0], this.width);
 					this.transaction[1] = ts[1];
-					this.transaction[2] = Js.code.pick(ts[2], this.height);
+					this.transaction[2] = Jrun.pick(ts[2], this.height);
 					this.transaction[3] = ts[3];
 					
 					this.interval = setInterval(function() {
@@ -3192,7 +3184,7 @@ Js.ext.include({
 		fade: function() {
 			var node = this.object;
 			
-			if (Js.code.isset(node)) {
+			if (Jrun.isset(node)) {
 				var t = this.transaction;
 				this.actStep = (this.actStep + 1);
 				this.prevEase = t[0];
@@ -3206,7 +3198,7 @@ Js.ext.include({
 							Js.style.show(node);
 						}
 						
-						if (window.ActiveXObject || Js.code.behaviour.ie == true) {
+						if (window.ActiveXObject || Jrun.behaviour.ie == true) {
 							if (!node.currentStyle || !node.currentStyle.hasLayout) {
 								Js.style.set(node, "zoom", 1);
 							}
@@ -3221,8 +3213,8 @@ Js.ext.include({
 					}
 					
 					var fn = this.oncomplete;
-					if(Js.code.isfunction(fn)) {
-						Js.code.callback(this, fn);
+					if(Jrun.isfunction(fn)) {
+						Jrun.callback(this, fn);
 					}
 					
 					clearInterval(this.interval);
@@ -3235,7 +3227,7 @@ Js.ext.include({
 							Js.style.show(node);
 						}
 						
-						if (window.ActiveXObject || Js.code.behaviour.ie == true) {
+						if (window.ActiveXObject || Jrun.behaviour.ie == true) {
 							if (!node.currentStyle || !node.currentStyle.hasLayout) {
 								Js.style.set(node, "zoom", 1);
 							}
@@ -3251,8 +3243,8 @@ Js.ext.include({
 					this.transaction[0] = s;
 				} else {
 					var fn = this.oncomplete;
-					if(Js.code.isfunction(fn)) {
-						Js.code.callback(this, fn);
+					if(Jrun.isfunction(fn)) {
+						Jrun.callback(this, fn);
 					}
 					
 					clearInterval(this.interval);
@@ -3285,8 +3277,8 @@ Js.ext.include({
 						}
 					}
 					var fn = this.oncomplete;
-					if(Js.code.isfunction(fn)) {
-						Js.code.callback(this, fn);
+					if(Jrun.isfunction(fn)) {
+						Jrun.callback(this, fn);
 					}
 					
 					clearInterval(this.interval);
@@ -3306,8 +3298,8 @@ Js.ext.include({
 					this.transaction = [s, t[1]];
 				} else {
 					var fn = this.oncomplete;
-					if(Js.code.isfunction(fn)) {
-						Js.code.callback(this, fn);
+					if(Jrun.isfunction(fn)) {
+						Jrun.callback(this, fn);
 					}
 					
 					clearInterval(this.interval);
@@ -3354,8 +3346,8 @@ Js.ext.include({
 				}
 			} else {
 				var fn = this.oncomplete;
-				if (Js.code.isfunction(fn)) {
-					Js.code.callback(this, fn);
+				if (Jrun.isfunction(fn)) {
+					Jrun.callback(this, fn);
 				}
 				
 				clearInterval(this.interval);
@@ -3372,21 +3364,21 @@ Js.ext.include({
 			var s = this.easeOut(t[0], t[1], this.step, this.actStep, this.ease);
 			
 			if(s === this.prevEase) {
-				if (Js.code.inArray(this.withPx, type)) {
+				if (Jrun.inArray(this.withPx, type)) {
 					Js.style.set(node, type, t[1] + "px");
 				} else {
 					Js.style.set(node, type, t[1]);
 				}
 				
 				var fn = this.oncomplete;
-				if (Js.code.isfunction(fn)) {
-					Js.code.callback(this, fn);
+				if (Jrun.isfunction(fn)) {
+					Jrun.callback(this, fn);
 				}
 				
 				clearInterval(this.interval);
 				this.interval = null;
 			} else if (t[0] !== t[1]) {
-				if (Js.code.inArray(this.withPx, type)) {
+				if (Jrun.inArray(this.withPx, type)) {
 					Js.style.set(node, type, s + "px");
 				} else {
 					Js.style.set(node, type, s);
@@ -3395,8 +3387,8 @@ Js.ext.include({
 				this.transaction[0] = s;
 			} else {
 				var fn = this.oncomplete;
-				if (Js.code.isfunction(fn)) {
-					Js.code.callback(this, fn);
+				if (Jrun.isfunction(fn)) {
+					Jrun.callback(this, fn);
 				}
 				
 				clearInterval(this.interval);
@@ -3433,8 +3425,8 @@ Js.ext.include({
 				}
 			} else {
 				var fn = this.oncomplete;
-				if(Js.code.isfunction(fn)) {
-					Js.code.callback(this, fn);
+				if(Jrun.isfunction(fn)) {
+					Jrun.callback(this, fn);
 				}
 				
 				clearInterval(this.interval);
@@ -3447,7 +3439,7 @@ Js.ext.include({
 			return i;
 		},
 		calc: function(node, option, alt) {
-			return Js.code.pick(Js.code.toNumber(Js.style.get(node, option)), alt);
+			return Jrun.pick(Jrun.toNumber(Js.style.get(node, option)), alt);
 		},
 		grid: function() {
 			var node = this.object;
@@ -3467,19 +3459,19 @@ Js.ext.include({
 			var m = [];
 			
 			m = (Js.style.get(node, "margin") ? Js.style.get(node, "margin").split(" ") : [0, 0, 0, 0]);
-			m[0] = Js.code.toNumber(m[0]);
-			m[1] = (Js.code.isset(m[1]) || !isNaN(m[1]) ? Js.code.toNumber(m[1]) : m[0]);
-			m[2] = (Js.code.isset(m[2]) || !isNaN(m[2]) ? Js.code.toNumber(m[2]) : m[0]);
-			m[3] = (Js.code.isset(m[3]) || !isNaN(m[3]) ? Js.code.toNumber(m[3]) : m[1]);
+			m[0] = Jrun.toNumber(m[0]);
+			m[1] = (Jrun.isset(m[1]) || !isNaN(m[1]) ? Jrun.toNumber(m[1]) : m[0]);
+			m[2] = (Jrun.isset(m[2]) || !isNaN(m[2]) ? Jrun.toNumber(m[2]) : m[0]);
+			m[3] = (Jrun.isset(m[3]) || !isNaN(m[3]) ? Jrun.toNumber(m[3]) : m[1]);
 			
-			var mgT = (Js.code.isnull(mT) || isNaN(mT) ? 0 : mT);
-			mgT = (Js.code.isnull(m[0]) || isNaN(m[0]) ? mgT : m[0]);
-			var mgB = (Js.code.isnull(mB) || isNaN(mB) ? 0 : mB);
-			mgB = (Js.code.isnull(m[2]) || isNaN(m[2]) ? marginBottom : m[2]);
-			var mgL = (Js.code.isnull(mL) || isNaN(mL) ? 0 : mL);
-			mgL = (Js.code.isnull(m[3]) || isNaN(m[3]) ? mgL : m[3]);
-			var mgR = (Js.code.isnull(mR) || isNaN(mR) ? 0 : mR);
-			mgR = (Js.code.isnull(m[1]) || isNaN(m[1]) ? mgR : m[1]);
+			var mgT = (Jrun.isnull(mT) || isNaN(mT) ? 0 : mT);
+			mgT = (Jrun.isnull(m[0]) || isNaN(m[0]) ? mgT : m[0]);
+			var mgB = (Jrun.isnull(mB) || isNaN(mB) ? 0 : mB);
+			mgB = (Jrun.isnull(m[2]) || isNaN(m[2]) ? marginBottom : m[2]);
+			var mgL = (Jrun.isnull(mL) || isNaN(mL) ? 0 : mL);
+			mgL = (Jrun.isnull(m[3]) || isNaN(m[3]) ? mgL : m[3]);
+			var mgR = (Jrun.isnull(mR) || isNaN(mR) ? 0 : mR);
+			mgR = (Jrun.isnull(m[1]) || isNaN(m[1]) ? mgR : m[1]);
 			
 			Js.style.setup(this.object, {
 				"marginTop": mgT + "px",
@@ -3499,10 +3491,10 @@ Js.namespace.include({
 });
 
 Js.extend("fx", (function(spec) {
-	var key = Js.code.pick(this.index, null);
+	var key = Jrun.pick(this.index, null);
 	
-	if (Js.code.isnull(key)) {
-		Js.code.each(this.animate, function() {
+	if (Jrun.isnull(key)) {
+		Jrun.each(this.animate, function() {
 			this.fx(spec);
 		});
 	} else if (!!this.node[key]) {
@@ -3513,10 +3505,10 @@ Js.extend("fx", (function(spec) {
 }));
 
 Js.extend("syncFx", (function(spec) {
-	var key = Js.code.pick(this.index, null);
+	var key = Jrun.pick(this.index, null);
 	
-	if (Js.code.isnull(key)) {
-		Js.code.each(this.animate, function(){
+	if (Jrun.isnull(key)) {
+		Jrun.each(this.animate, function(){
 			this.sync(spec);
 		});
 	} else if (!!this.node[key]) { 
@@ -3527,10 +3519,10 @@ Js.extend("syncFx", (function(spec) {
 }));
 
 Js.extend("queueFx", (function(spec) {
-	var key = Js.code.pick(this.index, null);
+	var key = Jrun.pick(this.index, null);
 	
-	if (Js.code.isnull(key)) {
-		Js.code.each(this.animate, function(){ 
+	if (Jrun.isnull(key)) {
+		Jrun.each(this.animate, function(){ 
 			this.queue(spec); 
 		});
 	} else if (!!this.node[key]) {
@@ -3594,7 +3586,7 @@ Js.ext.include({
 			},
 			middle: function(width, height) {
 				var doc = document.body;
-				var offset = [Js.code.toNumber(doc.offsetWidth), Js.code.toNumber(doc.offsetHeight)];
+				var offset = [Jrun.toNumber(doc.offsetWidth), Jrun.toNumber(doc.offsetHeight)];
 				var axis = Js.ext.dimension.page.scrolls.xy();
 				var rdata = [];
 						
@@ -3614,7 +3606,7 @@ Js.ext.include({
 				var rdata = [0, 0, 0, 0];
 				var loop = false;
 				
-				if(Js.code.isset(node)) {
+				if(Jrun.isset(node)) {
 					if(node.offsetParent) {
 						loop = true;
 						rdata[0] = node.offsetWidth;
@@ -3627,10 +3619,10 @@ Js.ext.include({
 						}
 					} else {
 						if(loop == false) {
-							rdata[0] = Js.code.pick(node.scrollWidth, 0);
-							rdata[1] = Js.code.pick(node.scrollHeight, 0);
-							rdata[2] = Js.code.pick(node.offsetTop, 0);
-							rdata[3] = Js.code.pick(node.offsetLeft, 0);
+							rdata[0] = Jrun.pick(node.scrollWidth, 0);
+							rdata[1] = Jrun.pick(node.scrollHeight, 0);
+							rdata[2] = Jrun.pick(node.offsetTop, 0);
+							rdata[3] = Jrun.pick(node.offsetLeft, 0);
 						}
 					}
 					return rdata;
@@ -3671,27 +3663,27 @@ Js.ext.include({
 	},
 	proto: {
 		init: function(js) {
-			var node = this.object = Js.code.pick(js.object, js.node);
+			var node = this.object = Jrun.pick(js.object, js.node);
 			var that = this;
-			node.root = Js.code.pick(js.objectRoot, js.nodeRoot, node);
+			node.root = Jrun.pick(js.objectRoot, js.nodeRoot, node);
 			
 			node.onmousedown = function(e) {
 				that.start(e);
 			};
 			
-			node.hmode = Js.code.pick(js.hmode, true);
-			node.vmode = Js.code.pick(js.vmode, true);
-			node.hswap = Js.code.pick(js.hswap, false);
-			node.vswap = Js.code.pick(js.vswap, false);
-			node.minX = Js.code.pick(js.minX, null);
-			node.maxX = Js.code.pick(js.maxX, null);
-			node.minY = Js.code.pick(js.minY, null);
-			node.maxY = Js.code.pick(js.maxY, null);
+			node.hmode = Jrun.pick(js.hmode, true);
+			node.vmode = Jrun.pick(js.vmode, true);
+			node.hswap = Jrun.pick(js.hswap, false);
+			node.vswap = Jrun.pick(js.vswap, false);
+			node.minX = Jrun.pick(js.minX, null);
+			node.maxX = Jrun.pick(js.maxX, null);
+			node.minY = Jrun.pick(js.minY, null);
+			node.maxY = Jrun.pick(js.maxY, null);
 			
-			if (isNaN(Js.code.toNumber(Js.style.get(node.root, "left")))) {
+			if (isNaN(Jrun.toNumber(Js.style.get(node.root, "left")))) {
 				Js.style.set(node.root, "left", "0px");
 			}
-			if (isNaN(Js.code.toNumber(Js.style.get(node.root, "top")))) { 
+			if (isNaN(Jrun.toNumber(Js.style.get(node.root, "top")))) { 
 				Js.style.set(node.root, "top", "0px");
 			}
 			node.root.onDragStart = new Function();
@@ -3705,8 +3697,8 @@ Js.ext.include({
 			var that = this;
 			var node = this.object;
 			var e = this.fixE(e);
-			var y = Js.code.toNumber(Js.style.get(node.root, "top"));
-			var x = Js.code.toNumber(Js.style.get(node.root, "left"));
+			var y = Jrun.toNumber(Js.style.get(node.root, "top"));
+			var x = Jrun.toNumber(Js.style.get(node.root, "left"));
 			
 			node.root.onDragStart(x, y);
 			node.lastMouseX = e.clientX;
@@ -3739,8 +3731,8 @@ Js.ext.include({
 			var node = this.object;
 			var eY	= e.clientY;
 			var eX	= e.clientX;
-			var y = Js.code.toNumber(Js.style.get(node.root, "top"));
-			var x = Js.code.toNumber(Js.style.get(node.root, "left"));
+			var y = Jrun.toNumber(Js.style.get(node.root, "top"));
+			var x = Jrun.toNumber(Js.style.get(node.root, "left"));
 			var newX;
 			var newY;
 			
@@ -3770,17 +3762,17 @@ Js.ext.include({
 			document.onmousemove = null;
 			document.onmouseup = null;
 			var data = node.root;
-			data.onDragEnd(Js.code.toNumber(data.style.left), Js.code.toNumber(data.style.top), data);
+			data.onDragEnd(Jrun.toNumber(data.style.left), Jrun.toNumber(data.style.top), data);
 			node = null;
 		},
 		fixE: function(e) {
-			if(Js.code.isnull(e)) {
+			if(Jrun.isnull(e)) {
 				e = window.event;
 			}
-			if(Js.code.isnull(e.layerX)) {
+			if(Jrun.isnull(e.layerX)) {
 				e.layerX = e.offsetX;
 			}
-			if(Js.code.isnull(e.layerY)) {
+			if(Jrun.isnull(e.layerY)) {
 				e.layerY = e.offsetY;
 			}
 			
@@ -3837,10 +3829,10 @@ Js.ext.include({
 	},
 	proto: {
 		liveValidate: function(node, custom) {
-			this.object = Js.code.pick(node, this.object);
+			this.object = Jrun.pick(node, this.object);
 			
 			var formId = Js.attr.get(this.object, "id");
-			var custom = Js.code.pick(custom, null);
+			var custom = Jrun.pick(custom, null);
 			var post = "";
 			var that = this;
 			
@@ -3855,30 +3847,30 @@ Js.ext.include({
 					
 					if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/)) {
 						if(this.name != "") {
-							this.className = (Js.code.isset(this.className) ? this.className : "");
+							this.className = (Jrun.isset(this.className) ? this.className : "");
 							var klass = this.className.split(/\s/);
 							var error = "";
 							
-							if(Js.code.inArray(klass, "required") && Js.code.trim(this.value) === "") {
+							if(Jrun.inArray(klass, "required") && Jrun.trim(this.value) === "") {
 								error = "This field require an input!";
 							}
 							
-							if(Js.code.inArray(klass, "string") && !Js.test.isString(this.value) && Js.code.trim(this.value) !== "") {
+							if(Jrun.inArray(klass, "string") && !Js.test.isString(this.value) && Jrun.trim(this.value) !== "") {
 								error = "This field require valid alphanumeric!";
-							} else if((Js.code.inArray(klass, "integer") || Js.code.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Js.code.trim(this.value) !== "") { 
+							} else if((Jrun.inArray(klass, "integer") || Jrun.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Jrun.trim(this.value) !== "") { 
 								error = "This field require valid numbers!";
-							} else if(Js.code.inArray(klass, "email") && !Js.test.isEmail(this.value) && Js.code.trim(this.value) !== "") {
+							} else if(Jrun.inArray(klass, "email") && !Js.test.isEmail(this.value) && Jrun.trim(this.value) !== "") {
 								error = "This field require valid e-mail address!";
 							}
 							
-							if(Js.code.isset(custom)) {
+							if(Jrun.isset(custom)) {
 								var validate = custom[Js.attr.get(this, "id")];
 								
-								if(Js.code.isset(validate)) {
-									if(Js.code.isfunction(validate.callback) && !validate.callback(this.value)) { 
-										error = Js.code.pick(validate.error, error);
-									} else if(Js.code.isset(validate.test) && !this.value.match(validate.test)) {
-										error = Js.code.pick(validate.error, error);
+								if(Jrun.isset(validate)) {
+									if(Jrun.isfunction(validate.callback) && !validate.callback(this.value)) { 
+										error = Jrun.pick(validate.error, error);
+									} else if(Jrun.isset(validate.test) && !this.value.match(validate.test)) {
+										error = Jrun.pick(validate.error, error);
 									}
 								}
 							}
@@ -3907,7 +3899,7 @@ Js.ext.include({
 				});
 			}
 			
-			if(Js.code.isset(this.first)) { 
+			if(Jrun.isset(this.first)) { 
 				// stop form processing
 				return false;
 			} else {
@@ -3915,16 +3907,16 @@ Js.ext.include({
 			}
 		},
 		liveErrorInit: function(field, text, data) {
-			this.first = (Js.code.isnull(this.first) ? field : this.first);
+			this.first = (Jrun.isnull(this.first) ? field : this.first);
 			// Mark first error occured!
 			var form = Js(this.object);
 			var field = Js(field);
 			var fieldId = field.get("name");
 			var fieldErrorId = [form.get("id"), fieldId, "error"].join("-");
-			var data = Js.code.pick(data, false);
+			var data = Jrun.pick(data, false);
 			var that = this;
 			
-			if (!Js.code.finds(fieldErrorId)) {
+			if (!Jrun.finds(fieldErrorId)) {
 				field.appendClass("extform-error").parent().add("span", {"id": fieldErrorId, "class": "extform-errormessage"}).html(text);
 				
 				field.onfocus(function() {
@@ -3937,12 +3929,12 @@ Js.ext.include({
 						}
 					}
 				});
-			} else if (Js.code.finds(fieldErrorId) && !!data) {
+			} else if (Jrun.finds(fieldErrorId) && !!data) {
 				field.appendClass("extform-error");
 				var errorNode = field.siblings("span.extform-errormessage").first();
 				var html = errorNode.html();
 				
-				if (html.match(text) === false && Js.code.trim(html) != "") {
+				if (html.match(text) === false && Jrun.trim(html) != "") {
 					errorNode.append(" " + text);
 				}
 				
@@ -3960,10 +3952,10 @@ Js.ext.include({
 			}
 		},
 		validate: function(node, custom) {
-			this.object = Js.code.pick(node, this.object);
+			this.object = Jrun.pick(node, this.object);
 			
 			var formId = Js.attr.get(this.object, "id");
-			var custom = Js.code.pick(custom, null);
+			var custom = Jrun.pick(custom, null);
 			var post = "";
 			
 			this.first = null;
@@ -3980,32 +3972,32 @@ Js.ext.include({
 					
 					if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) {
 						if(this.name != "") {
-							this.className = (Js.code.isset(this.className) ? this.className : "");
+							this.className = (Jrun.isset(this.className) ? this.className : "");
 							var klass = this.className.split(/\s/);
 							var error = "";
 													
-							if(Js.code.inArray(klass, "required") && Js.code.trim(this.value) === "") {
+							if(Jrun.inArray(klass, "required") && Jrun.trim(this.value) === "") {
 								error = "This field require an input!";
 							}
 							
-							if(Js.code.inArray(klass, "string") && !Js.test.isString(this.value) && Js.code.trim(this.value) !== "") {
+							if(Jrun.inArray(klass, "string") && !Js.test.isString(this.value) && Jrun.trim(this.value) !== "") {
 								error = "This field require valid alphanumeric!";
-							} else if((Js.code.inArray(klass, "integer") || Js.code.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Js.code.trim(this.value) !== "") { 
+							} else if((Jrun.inArray(klass, "integer") || Jrun.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Jrun.trim(this.value) !== "") { 
 								error = "This field require valid numbers!";
-							} else if(Js.code.inArray(klass, "email") && !Js.test.isEmail(this.value) && Js.code.trim(this.value) !== "") {
+							} else if(Jrun.inArray(klass, "email") && !Js.test.isEmail(this.value) && Jrun.trim(this.value) !== "") {
 								error = "This field require valid e-mail address!";
 							}
 							
-							if(Js.code.isset(custom)) {
+							if(Jrun.isset(custom)) {
 								var validate = custom[Js.attr.get(this, "id")];
 								
-								if(Js.code.isset(validate)) {
-									if(Js.code.isfunction(validate.callback) && !validate.callback(this.value)) {
-										error = Js.code.pick(validate.error, error);
-									} else if(Js.code.isset(validate.test) && !this.value.match(validate.test)) {
-										error = Js.code.pick(validate.error, error);
+								if(Jrun.isset(validate)) {
+									if(Jrun.isfunction(validate.callback) && !validate.callback(this.value)) {
+										error = Jrun.pick(validate.error, error);
+									} else if(Jrun.isset(validate.test) && !this.value.match(validate.test)) {
+										error = Jrun.pick(validate.error, error);
 									} else {
-										error = Js.code.pick(validate.error, error);
+										error = Jrun.pick(validate.error, error);
 									}
 								}
 							}
@@ -4048,7 +4040,7 @@ Js.ext.include({
 				});
 			}
 			
-			if(Js.code.isset(this.first)) { 
+			if(Jrun.isset(this.first)) { 
 				// there an error, set focus to first invalid field
 				this.first.focus();
 				// stop form processing
@@ -4059,16 +4051,16 @@ Js.ext.include({
 		},
 		errorInit: function(field, text, data) {
 			// Mark first error occured!
-			this.first = (Js.code.isnull(this.first) ? field : this.first);
+			this.first = (Jrun.isnull(this.first) ? field : this.first);
 			
 			var field = Js(field);
 			var form = Js(this.object);
 			var fieldName = field.get("name");
 			var fieldErrorId = [form.get("id"), fieldName, "error"].join("-");
-			var data = Js.code.pick(data, false);
+			var data = Jrun.pick(data, false);
 			var that = this;
 			
-			if(!Js.code.finds(fieldErrorId)) {
+			if(!Jrun.finds(fieldErrorId)) {
 				field.appendClass("jsextform-error").parent().add("span", {"id": fieldErrorId, "class": "extform-errormessage"}).html(text);
 				
 				field.onchange(function() {
@@ -4082,12 +4074,12 @@ Js.ext.include({
 						that.first = null;
 					}
 				});
-			} else if(Js.code.finds(fieldErrorId) && !!data) {
+			} else if(Jrun.finds(fieldErrorId) && !!data) {
 				field.appendClass("extform-error");
 				var errorNode = field.siblings("span.extform-errormessage").first();
 				var html = errorNode.html();
 				
-				if(html.match(text) === false && Js.code.trim(html) != "") {
+				if(html.match(text) === false && Jrun.trim(html) != "") {
 					errorNode.append(text);
 				}
 				
@@ -4108,27 +4100,27 @@ Js.ext.include({
 		},
 		post: function(js) {
 			// form object
-			var object = Js.code.pick(js.object, js.node);
+			var object = Jrun.pick(js.object, js.node);
 			// choose to use object
-			var node = Js.code.prepare(object, js.element, "object");
+			var node = Jrun.prepare(object, js.element, "object");
 			// add custom field validation
-			var custom = Js.code.pick(js.custom, null);
+			var custom = Jrun.pick(js.custom, null);
 			// onsuccess function
-			var onInit = Js.code.pick(js.onSuccess, js.onStart, null);
+			var onInit = Jrun.pick(js.onSuccess, js.onStart, null);
 			// onfaild function
-			var onFail = Js.code.pick(js.onFail, null);
+			var onFail = Jrun.pick(js.onFail, null);
 			// validate selected form
 			var post = this.validate(node, custom);
 			// parameters
-			var parameter = Js.code.pick(js.parameters, js.params, "");
+			var parameter = Jrun.pick(js.parameters, js.params, "");
 			
 			if(post) {
 				// callback to onsuccess function
-				if(Js.code.isfunction(onInit)) {
+				if(Jrun.isfunction(onInit)) {
 					onInit();
 				}
 				
-				parameter += (Js.code.trim(post) !== "" ? post : "");
+				parameter += (Jrun.trim(post) !== "" ? post : "");
 				
 				// send XHR request
 				new Js.ext.Ajax({
@@ -4140,7 +4132,7 @@ Js.ext.include({
 				return true;
 			} else {
 				// callback to onfail function
-				if(Js.code.isfunction(onFail)) {
+				if(Jrun.isfunction(onFail)) {
 					onFail();
 				}
 				return false;
@@ -4148,27 +4140,27 @@ Js.ext.include({
 		},
 		get: function(js) {
 			// form object
-			var object = Js.code.pick(js.object, js.node);
+			var object = Jrun.pick(js.object, js.node);
 			// choose to use object
-			var node = Js.code.prepare(object, js.element, "object");
+			var node = Jrun.prepare(object, js.element, "object");
 			// add custom field validation
-			var custom = Js.code.pick(js.custom, null);
+			var custom = Jrun.pick(js.custom, null);
 			// onsuccess function
-			var onInit = Js.code.pick(js.onSuccess, js.onStart, null);
+			var onInit = Jrun.pick(js.onSuccess, js.onStart, null);
 			// onfaild function
-			var onFail = Js.code.pick(js.onFail, null);
+			var onFail = Jrun.pick(js.onFail, null);
 			// validate selected form
 			var get = this.validate(node, custom);
 			// parameters
-			var parameter = Js.code.pick(js.parameters, js.params, "");
+			var parameter = Jrun.pick(js.parameters, js.params, "");
 			
 			if(get) {
 				// callback to onsuccess function
-				if(Js.code.isfunction(onInit)) {
+				if(Jrun.isfunction(onInit)) {
 					onInit();
 				}
 				
-				parameter += (Js.code.trim(get) !== "" ? post : "");
+				parameter += (Jrun.trim(get) !== "" ? post : "");
 				
 				// send XHR request
 				new Js.ext.Ajax({
@@ -4181,7 +4173,7 @@ Js.ext.include({
 				return true;
 			} else {
 				// callback to onfail function
-				if(Js.code.isfunction(onFail)) {
+				if(Jrun.isfunction(onFail)) {
 					onFail();
 				}
 				return false;
@@ -4233,21 +4225,21 @@ Js.ext.include({
 	proto: {
 		init: function(js) {
 			var that = this;
-			var node = this.object = Js.code.pick(js.object, js.node);
-			node.root = Js.code.pick(js.objectRoot, js.nodeRoot, node);
+			var node = this.object = Jrun.pick(js.object, js.node);
+			node.root = Jrun.pick(js.objectRoot, js.nodeRoot, node);
 			
 			node.onmousedown = function(e) { 
 				that.start(e);
 			};
 			
-			node.hmode = Js.code.pick(js.hmode, true);
-			node.vmode = Js.code.pick(js.vmode, true);
-			node.hswap = Js.code.pick(js.hswap, false);
-			node.vswap = Js.code.pick(js.vswap, false);
-			node.minX = Js.code.pick(js.minX, null);
-			node.minY = Js.code.pick(js.minY, null);
-			node.maxX = Js.code.pick(js.maxX, null);
-			node.maxY = Js.code.pick(js.maxY, null);
+			node.hmode = Jrun.pick(js.hmode, true);
+			node.vmode = Jrun.pick(js.vmode, true);
+			node.hswap = Jrun.pick(js.hswap, false);
+			node.vswap = Jrun.pick(js.vswap, false);
+			node.minX = Jrun.pick(js.minX, null);
+			node.minY = Jrun.pick(js.minY, null);
+			node.maxX = Jrun.pick(js.maxX, null);
+			node.maxY = Jrun.pick(js.maxY, null);
 			
 			node.root.onResizeStart = new Function();
 			node.root.onResizeEnd = new Function();
@@ -4260,8 +4252,8 @@ Js.ext.include({
 			var that = this;
 			var node = this.object;
 			var e = this.fixE(e);
-			var height = Js.code.toNumber(Js.style.get(node.root, "height"));
-			var width = Js.code.toNumber(Js.style.get(node.root, "width"));
+			var height = Jrun.toNumber(Js.style.get(node.root, "height"));
+			var width = Jrun.toNumber(Js.style.get(node.root, "width"));
 			
 			node.root.onResizeStart(width, height);
 			node.lastMouseX = e.clientX;
@@ -4286,8 +4278,8 @@ Js.ext.include({
 			var node = this.object;
 			var eHeight = e.clientY;
 			var eWidth = e.clientX;
-			var height = Js.code.toNumber(Js.style.get(node.root, "height"));
-			var width = Js.code.toNumber(Js.style.get(node.root, "width"));
+			var height = Jrun.toNumber(Js.style.get(node.root, "height"));
+			var width = Jrun.toNumber(Js.style.get(node.root, "width"));
 			var nodeWidth = width;
 			var nodeHeight = height;
 			var newWidth;
@@ -4324,17 +4316,17 @@ Js.ext.include({
 			document.onmousemove = null;
 			document.onmouseup = null;
 			var data = node.root;
-			data.onResizeEnd(Js.code.toNumber(data.style.width), Js.code.toNumber(data.style.height), data);
+			data.onResizeEnd(Jrun.toNumber(data.style.width), Jrun.toNumber(data.style.height), data);
 			node = null;
 		},
 		fixE: function(e) {
-			if(Js.code.isnull(e)) { 
+			if(Jrun.isnull(e)) { 
 				e = window.event;
 			}
-			if(Js.code.isnull(e.layerX)) {
+			if(Jrun.isnull(e.layerX)) {
 				e.layerX = e.offsetX;
 			}
-			if(Js.code.isnull(e.layerY)) { 
+			if(Jrun.isnull(e.layerY)) { 
 				e.layerY = e.offsetY;
 			}
 			return e;
@@ -4343,14 +4335,14 @@ Js.ext.include({
 			var parend = js.object;
 			var child = js.child;
 			
-			Js.code.each(child, function() {
+			Jrun.each(child, function() {
 				try { 
-					Js.style.set(this, "width", (Js.code.toNumber(Js.style.get(this, "width")) + js.width)+"px");
+					Js.style.set(this, "width", (Jrun.toNumber(Js.style.get(this, "width")) + js.width)+"px");
 				} catch(e) { 
 					/* on failed continue */ 
 				}
 				
-				Js.style.set(this, "height", (Js.code.toNumber(Js.style.get(this, "height")) + js.height)+"px");
+				Js.style.set(this, "height", (Jrun.toNumber(Js.style.get(this, "height")) + js.height)+"px");
 			});
 		}
 	}
@@ -4362,7 +4354,7 @@ Js.namespace.include({
 });
 
 Js.extend('resizable', function(js) {
-	var key = Js.code.pick(this.index, null);
+	var key = Jrun.pick(this.index, null);
 	var js = (!js ? {} : js);
 		
 	this.pushStack(function() {
@@ -4390,7 +4382,7 @@ Js.namespace.include({
 			return this;
 		},
 		exec: function(data, args) {
-			var args = Js.code.toArray(arguments, 1);
+			var args = Jrun.toArray(arguments, 1);
 			var value = this._super;
 			value = new Number(value);
 			value = value[data].apply(value, args);
@@ -4403,6 +4395,8 @@ Js.namespace.include({
 		}
 	})
 });
+
+Jarray = Js.array;
 Js.tool.include({
 	name: "Debugger", 
 	object: function() {
@@ -4417,7 +4411,7 @@ Js.tool.include({
 		
 		Js.debug.object = object;
 		Js.debug.log = function(text) {
-			var text = Js.code.trim(text);
+			var text = Jrun.trim(text);
 			Js.debug.message[Js.debug.message.length] = text;
 			
 			try {
@@ -4430,7 +4424,10 @@ Js.tool.include({
 			Js.dom.addText(li, text);
 			
 			if(!!Js.widget.loaded("message")) {
-				Js.widget.message.add({text: text, type: "error"});	
+				Js.widget.message.add({
+					text: text, 
+					type: "error"
+				});	
 			}
 		};
 	}
@@ -4446,7 +4443,7 @@ Js.namespace.include({
 			return this;
 		},
 		exec: function(data, args) {
-			var args = Js.code.toArray(arguments, 1);
+			var args = Jrun.toArray(arguments, 1);
 			var value = this._super;
 			value = new Number(value);
 			value = value[data].apply(value, args);
@@ -4454,7 +4451,10 @@ Js.namespace.include({
 			return this;
 		}
 	})
-});Js.namespace.include({
+});
+
+var Jnumber = Js.number;
+Js.namespace.include({
 	name: "string", 
 	object: Js.base.create({
 		ext: String.prototype,
@@ -4464,7 +4464,7 @@ Js.namespace.include({
 			return this;
 		},
 		exec: function(data, args) {
-			var args = Js.code.toArray(arguments, 1);
+			var args = Jrun.toArray(arguments, 1);
 			var value = this._super;
 			value = new String(value);
 			value = value[data].call(value, args);
@@ -4472,20 +4472,21 @@ Js.namespace.include({
 			return this;
 		},
 		trim: function() {
-			this.value = this._super = Js.code.trim(this._super);
+			this.value = this._super = Jrun.trim(this._super);
 			return this;
 		},
 		htmlEntities: function() {
-			this.value = this._super = Js.code.htmlEntities(this._super);
+			this.value = this._super = Jrun.htmlEntities(this._super);
 			return this;
 		},
 		stripTags: function () {
-			this.value = this._super = Js.code.stripTags(this._super);
+			this.value = this._super = Jrun.stripTags(this._super);
 			return this;
 		}
 	})
-})
-/*
+});
+
+var Jstring = Js.string;/*
  * Savvy.UI JavaScript Library Application
  * Name: SUI.Util.Anchor
  * Type: Utility/Plug-In
@@ -4509,9 +4510,9 @@ Js.util.include({
 		element: null,
 		option: null,
 		__construct: function(selector) {
-			this.element = Js.code.pick(selector, null);
+			this.element = Jrun.pick(selector, null);
 			
-			if(Js.code.isset(this.element)) {
+			if(Jrun.isset(this.element)) {
 				this.selector();
 				this.check();
 			} else {
@@ -4522,7 +4523,7 @@ Js.util.include({
 			}
 		},
 		destruct: function() {
-			if(Js.code.isset(this.interval)) {
+			if(Jrun.isset(this.interval)) {
 				clearInterval(this.interval);
 				this.interval == null;
 			}
@@ -4536,7 +4537,7 @@ Js.util.include({
 			
 			Js(this.element).onclick(function() {
 				var href = Js(this).get("href");
-				var anchors = (Js.code.isset(href) ? href : this.href);
+				var anchors = (Jrun.isset(href) ? href : this.href);
 				
 				if(anchors.match(/^\#/)) {
 					var ahref = ["", anchors.substr(1)];
@@ -4544,7 +4545,7 @@ Js.util.include({
 					var ahref = anchors.split(/\#/);
 				}
 				
-				if(Js.code.isset(ahref[1])) {
+				if(Jrun.isset(ahref[1])) {
 					that.repeat = (ahref[1] === that.last);
 					
 					that.last = ahref[1];
@@ -4606,13 +4607,13 @@ Js.util.include({
 		init: function(spec) {
 			var that = this;
 			
-			this.element = Js.code.pick(spec.element, this.element);
-			this.separator = Js.code.pick(spec.separator, this.separator);
-			this.object = Js.code.pick(spec.object, this.object);
-			this.minimum = Js.code.pick(spec.minimum, this.minimum);
-			this.delay = Js.code.pick(spec.delay, this.delay);
-			this.uri = Js.code.pick(spec.uri, this.uri);
-			this.type = Js.code.pick(spec.type, this.type);
+			this.element = Jrun.pick(spec.element, this.element);
+			this.separator = Jrun.pick(spec.separator, this.separator);
+			this.object = Jrun.pick(spec.object, this.object);
+			this.minimum = Jrun.pick(spec.minimum, this.minimum);
+			this.delay = Jrun.pick(spec.delay, this.delay);
+			this.uri = Jrun.pick(spec.uri, this.uri);
+			this.type = Jrun.pick(spec.type, this.type);
 			
 			this.method = ((!!spec.method && !!spec.method.match(/^(get|post)$/gi)) ? spec.method.toUpperCase() : 'GET'); 
 			
@@ -4635,13 +4636,13 @@ Js.util.include({
 					var value = this.value;
 					var values = value.split(that.separator);
 					var length = values.length;
-					var value = Js.code.trim(values[(length - 1)]);
+					var value = Jrun.trim(values[(length - 1)]);
 					
 					for(var i = 0; i < (length - 1); i++) {
-						that.matched[that.matched.length] = Js.code.trim(val[i]);
+						that.matched[that.matched.length] = Jrun.trim(val[i]);
 					}
 				} else {
-					var value = Js.code.trim(this.value);	
+					var value = Jrun.trim(this.value);	
 				}
 				
 				if(value.length > that.minimum && value !== that.value) {
@@ -4705,11 +4706,11 @@ Js.util.include({
 				var reply = eval("(" + text + ")");
 				var ul = that.div.add("ul");
 				
-				var arr = Js.code.toArray(reply);
+				var arr = Jrun.toArray(reply);
 				
-				if(arr.length >= 2 || (arr.length === 1 && Js.code.trim(arr[0]) !== "")) {
-					Js.code.each(arr, function() {
-						if(Js.code.trim(this) !== "") {
+				if(arr.length >= 2 || (arr.length === 1 && Jrun.trim(arr[0]) !== "")) {
+					Jrun.each(arr, function() {
+						if(Jrun.trim(this) !== "") {
 							var li = ul.add("li");
 							var a = li.add("a", {
 								"href": "#"
@@ -4800,7 +4801,7 @@ Js.util.include({
 		this.node = null;
 		
 		// start __constructor()
-		if (!!selector && Js.code.trim(selector) !== "") {
+		if (!!selector && Jrun.trim(selector) !== "") {
 			this.init(selector);
 		}
 		
@@ -4809,9 +4810,9 @@ Js.util.include({
 	proto: {
 		// Initialize the HTML Element
 		init: function(selector) {
-			this.element = Js.code.pick(selector, null);
+			this.element = Jrun.pick(selector, null);
 			
-			if (Js.code.isset(this.element)) { 
+			if (Jrun.isset(this.element)) { 
 				this.node = Js(this.element);
 			}
 			
@@ -4905,9 +4906,9 @@ Js.widget.include({
 	},
 	proto: {
 		init: function(js) {
-			this.element = Js.code.prepare(js.object, js.element);
+			this.element = Jrun.prepare(js.object, js.element);
 			var regexp = new RegExp(/^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/);
-			this.renderTo = Js.code.pick(js.renderTo, this.renderTo);
+			this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
 			
 			if(!this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType)) {
 				this.renderTo = Js("body").first().add("div");
@@ -4915,16 +4916,16 @@ Js.widget.include({
 				this.renderTo = Js(this.renderTo).first();
 			}
 			
-			js.range = Js.code.pick(js.range, this.range, [null, null]);
-			this.field = Js.code.pick(js.field, this.field, "value");
-			this.type = Js.code.pick(js.type, this.type, "single");
+			js.range = Jrun.pick(js.range, this.range, [null, null]);
+			this.field = Jrun.pick(js.field, this.field, "value");
+			this.type = Jrun.pick(js.type, this.type, "single");
 			
 			if(!!js.mindate && regexp.test(js.mindate)) {
-				this.mindate = Js.code.pick(js.mindate, null);
+				this.mindate = Jrun.pick(js.mindate, null);
 			}
 			
 			if(!!js.maxdate && regexp.test(js.maxdate)) {
-				this.maxdate = Js.code.pick(js.maxdate, null);
+				this.maxdate = Jrun.pick(js.maxdate, null);
 			}
 			
 			if(!!js.value && regexp.test(js.value)) {
@@ -4941,11 +4942,11 @@ Js.widget.include({
 			
 			this.month = ((!js.month || isNaN(js.month) || js.month > 12 || js.month < 0) ? this.Dates.getMonth() : Math.abs(js.month - 1));
 			this.year = ((!js.year || isNaN(js.year) || js.year < 1000) ? this.Dates.getFullYear() : js.year);
-			this.day = Js.code.pick(js.day, this.day);
+			this.day = Jrun.pick(js.day, this.day);
 			
-			this.date = [this.year, (this.month + 1), Js.code.pick(this.day, 1)].join("-");
-			this.onupdate = Js.code.pick(js.onUpdate, null);
-			this.navigation = Js.code.pick(js.navigate, true);
+			this.date = [this.year, (this.month + 1), Jrun.pick(this.day, 1)].join("-");
+			this.onupdate = Jrun.pick(js.onUpdate, null);
+			this.navigation = Jrun.pick(js.navigate, true);
 			
 			if(this.navigation == true) {
 				if(!js.range[0] || js.range[0].toLowerCase() == "now") {
@@ -4953,9 +4954,9 @@ Js.widget.include({
 				} else if(Js.test.isInteger(js.range[0]) && (js.range[0] > 1000 && js.range[0] < 9999)) {
 					js.range[0] = js.range[0];
 				} else if(js.range[0].charAt(0) == "-") {
-					js.range[0] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[0]));
+					js.range[0] = (this.Dates.getFullYear() + Jrun.toNumber(js.range[0]));
 				} else if(js.range[0].charAt(0) == "+") {
-					js.range[0] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[0]));
+					js.range[0] = (this.Dates.getFullYear() + Jrun.toNumber(js.range[0]));
 				}
 				
 				if(!js.range[1] || js.range[1].toLowerCase() == "now") {
@@ -4963,9 +4964,9 @@ Js.widget.include({
 				} else if(Js.test.isInteger(js.range[1]) && (js.range[1] > 1000 && js.range[1] < 9999)) {
 					js.range[1] = s_.range[1];
 				} else if(js.range[1].charAt(0) == "-") {
-					js.range[1] = (this.Dates.getFullYear() + (Js.code.toNumber(js.range[1]) + 0));
+					js.range[1] = (this.Dates.getFullYear() + (Jrun.toNumber(js.range[1]) + 0));
 				} else if(js.range[1].charAt(0) == "+") {
-					js.range[1] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[1]));
+					js.range[1] = (this.Dates.getFullYear() + Jrun.toNumber(js.range[1]));
 				}
 				
 				if(js.range[0] < js.range[1]) {
@@ -4978,7 +4979,7 @@ Js.widget.include({
 				this.range = [this.maxYear(js.range[0]), this.minYear(js.range[1])];
 			}
 			
-			this.drag = Js.code.pick(js.draggable, false);
+			this.drag = Jrun.pick(js.draggable, false);
 			this.renderTo.html("");
 			this.callback();
 			
@@ -4988,7 +4989,7 @@ Js.widget.include({
 			var data = year;
 			if(this.mindate) {
 				var minDate = this.minDate.split("-");
-				var newYear = Js.code.toNumber(minDate[0]);
+				var newYear = Jrun.toNumber(minDate[0]);
 				
 				if(newYear > data) { 
 					data = newYear;
@@ -5000,7 +5001,7 @@ Js.widget.include({
 			var data = year;
 			if(this.maxdate) {
 				var maxDate = this.maxdate.split("-");
-				var newYear = Js.code.toNumber(maxDate[0]);
+				var newYear = Jrun.toNumber(maxDate[0]);
 				
 				if(newYear < data) {
 					data = newYear;
@@ -5133,8 +5134,8 @@ Js.widget.include({
 		},
 		validation: function() {
 			var data = false;
-			var minDate = Js.code.isset(this.mindate);
-			var maxDate = Js.code.isset(this.maxdate);
+			var minDate = Jrun.isset(this.mindate);
+			var maxDate = Jrun.isset(this.maxdate);
 			
 			if(minDate && maxDate && this.compare(this.mindate, this.date) && this.compare(this.date, this.maxdate)) {
 				data = true;
@@ -5149,23 +5150,23 @@ Js.widget.include({
 			return data;
 		},
 		dayOfMonth: function(month, year) {
-			var month = Js.code.pick(month, this.month);
-			var year = Js.code.pick(year, this.year);
+			var month = Jrun.pick(month, this.month);
+			var year = Jrun.pick(year, this.year);
 			
 			if(month == 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
 				var monthLength = 29;
 			}
 			
-			return Js.code.pick(monthLength, this.daysinmonth[month]);
+			return Jrun.pick(monthLength, this.daysinmonth[month]);
 		},
 		compare: function(first, second) {
 			var firsts = first.split("-");
 			var seconds = second.split("-");
 			
-			var firstDate = new Date(firstDate[0], (Js.code.toNumber(firstDate[1]) - 1));
+			var firstDate = new Date(firstDate[0], (Jrun.toNumber(firstDate[1]) - 1));
 			firstDate.setDate(firstDate[2]);
 			
-			var secondDate = new Date(secondDate[0], (Js.code.toNumber(secondDate[1]) - 1));
+			var secondDate = new Date(secondDate[0], (Jrun.toNumber(secondDate[1]) - 1));
 			secondDate.setDate(secondDate[2]);
 			
 			return (secondDate >= firstDate ? true : false);
@@ -5178,7 +5179,7 @@ Js.widget.include({
 			
 			if(this.type == "single") {
 				if(!field.hasClass("calendar-day-selected")) {
-					if (Js.code.isset(this.lastdate) && Js.code.finds(this.element + "_" + this.lastdate)) {
+					if (Jrun.isset(this.lastdate) && Jrun.finds(this.element + "_" + this.lastdate)) {
 						var lastdate = Js("#" + this.element + "_" + this.lastdate).set("class", "calendar-day");
 					}
 					
@@ -5195,7 +5196,7 @@ Js.widget.include({
 				var value = calendar.val();
 				var values = value.split("|");
 				
-				if(Js.code.inArray(values, [year, months, days].join("-"))){
+				if(Jrun.inArray(values, [year, months, days].join("-"))){
 					values.splice(values.indexOf([year, months, days].join("-")), 1);
 					value = values.join("|");
 					
@@ -5212,7 +5213,7 @@ Js.widget.include({
 			
 			var fn = this.onupdate;
 			if(fn != null && typeof(fn) == "function") {
-				Js.code.callback(this, fn);
+				Jrun.callback(this, fn);
 			}
 			
 			return this;
@@ -5282,13 +5283,13 @@ Js.widget.include({
 								var i = Js(this).get("id").split("_");
 								var ym = that.year + "" + that.month;
 								tday = i[1].substr((ym.length), i[1].length);
-								that.updateValue(that.year, (that.month + 1), Js.code.toNumber(tday));  
+								that.updateValue(that.year, (that.month + 1), Jrun.toNumber(tday));  
 							});
 						}
 						
 						if(day == this.day) {
 							days.setClass("calendar-day-selected");
-							this.lastdate = this.year + "" + (this.month + 1) + "" + Js.code.toNumber(this.day);
+							this.lastdate = this.year + "" + (this.month + 1) + "" + Jrun.toNumber(this.day);
 						} 
 						
 						days.css("cursor", "pointer");
@@ -5376,18 +5377,18 @@ Js.widget.include({
 				title.setClass("this-month").html(this.months[this.month] + "&nbsp;" + this.year);
 			}
 			
-			if (Js.code.isset(this.field)) {
+			if (Jrun.isset(this.field)) {
 				var input = tf2.add("input", {
 					"id": [this.element, this.field].join("-"),
 					"name": this.field,
 					"type": this.fieldtype
 				});
 				
-				if (Js.code.isset(this.day)) {
+				if (Jrun.isset(this.day)) {
 					var m = (this.month + 1);
 					this.value = [this.year, (m < 10 ? "0" + m : m), this.day].join("-");
 					input.val(this.value);
-					this.lastdate = [this.year, (this.month + 1), Js.code.toNumber(this.day)].join("");
+					this.lastdate = [this.year, (this.month + 1), Jrun.toNumber(this.day)].join("");
 				}
 			}
 			return this;
@@ -5431,7 +5432,7 @@ Js.widget.include({
 	},
 	proto: {
 		init: function(selector) {
-			if (!!selector && Js.code.trim(selector) !== "") {
+			if (!!selector && Jrun.trim(selector) !== "") {
 				var that = this;
 				this.object = Js(selector);
 				var mList = Js(selector + " ul > li > a");
@@ -5458,8 +5459,8 @@ Js.widget.include({
 				this.status = 1;
 				var t = Js.ext.dimension.node.offset(node);
 				
-				if(Js.code.finds([sel,"menucontainer"].join("_")) && Js.code.isset(this.child)) {
-					if(Js.code.isset(this.lastnode)) {
+				if(Jrun.finds([sel,"menucontainer"].join("_")) && Jrun.isset(this.child)) {
+					if(Jrun.isset(this.lastnode)) {
 						Js(this.lastnode).insert(this.content);
 						this.lastnode = null;
 					}
@@ -5507,7 +5508,7 @@ Js.widget.include({
 					that.status = 1;
 					that.node = node;
 				}, function() {
-					if(Js.code.finds([sel, "menucontainer"].join("_"))) {
+					if(Jrun.finds([sel, "menucontainer"].join("_"))) {
 						that.status = 0;
 						setTimeout((function() {
 							that.hide(sel);
@@ -5519,8 +5520,8 @@ Js.widget.include({
 		},
 		hide: function(sel) {
 			if(this.status == 0) {
-				if(Js.code.isset([sel, "menucontainer"].join("_")) && Js.code.isset(this.child)) {
-					if(Js.code.isset(this.lastnode)) {
+				if(Jrun.isset([sel, "menucontainer"].join("_")) && Jrun.isset(this.child)) {
+					if(Jrun.isset(this.lastnode)) {
 						Js(this.lastnode).insert(this.content).done();
 						this.lastnode = null;
 					}
@@ -5556,15 +5557,15 @@ Js.widget.include({
 	object: {
 		node: null,
 		add: function(spec) {
-			if(Js.code.isnull(this.node)) {
+			if(Jrun.isnull(this.node)) {
 				this.init();
 			}
 			
 			var that = this;
-			var text = Js.code.pick(spec.text, "");
-			var timeout = Js.code.pick(spec.timeout, 5000);
-			var type = Js.code.pick(spec.type, "note");
-			var closable = Js.code.pick(spec.closable, true);
+			var text = Jrun.pick(spec.text, "");
+			var timeout = Jrun.pick(spec.timeout, 5000);
+			var type = Jrun.pick(spec.type, "note");
+			var closable = Jrun.pick(spec.closable, true);
 			
 			timeout = (Js.test.isInteger(timeout) ? timeout : 5000);
 			
@@ -5605,7 +5606,7 @@ Js.widget.include({
 			};
 			var currentScroll = window.onscroll;
 			window.onscroll = function() {
-				if(Js.code.isfunction(currentScroll)) {
+				if(Jrun.isfunction(currentScroll)) {
 					currentScroll();	
 				}
 				whenScroll();	
@@ -5663,17 +5664,17 @@ Js.widget.include({
 		init: function(js) {
 			var that = this;
 			// Set Object's properties value for usage
-			this.width = Js.code.pick(js.width, this.width);
-			this.height = Js.code.pick(js.height, this.height);
-			this.layout = Js.code.pick(js.layout, this.layout);
-			this.title = Js.code.pick(js.title, this.title);
-			this.renderTo = Js.code.pick(js.renderTo, this.renderTo);
-			this.allowClose = Js.code.pick(js.allowClose, this.allowClose);
-			this.allowMinimize = Js.code.pick(js.allowMinimize, this.allowMinimize);
-			this.allowResize = Js.code.pick(js.allowResize, this.allowResize);
-			this.scrolling = Js.code.pick(js.scrolling, this.scrolling);
-			this.css = Js.code.pick(js.css, this.css);
-			this.onclose = Js.code.pick(js.onClose, null);
+			this.width = Jrun.pick(js.width, this.width);
+			this.height = Jrun.pick(js.height, this.height);
+			this.layout = Jrun.pick(js.layout, this.layout);
+			this.title = Jrun.pick(js.title, this.title);
+			this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
+			this.allowClose = Jrun.pick(js.allowClose, this.allowClose);
+			this.allowMinimize = Jrun.pick(js.allowMinimize, this.allowMinimize);
+			this.allowResize = Jrun.pick(js.allowResize, this.allowResize);
+			this.scrolling = Jrun.pick(js.scrolling, this.scrolling);
+			this.css = Jrun.pick(js.css, this.css);
+			this.onclose = Jrun.pick(js.onClose, null);
 			
 			// set renderTo DOM.Element
 			if (!this.renderTo || !this.renderTo.nodeType) {
@@ -5695,12 +5696,12 @@ Js.widget.include({
 			this.renderTo.done();
 			
 			// set TABLE width
-			if (Js.code.isset(this.width)) {
+			if (Jrun.isset(this.width)) {
 				this.object.css("width", this.width + "px");
 			}
 			
 			// set TABLE height
-			if (Js.code.isset(this.height)) {
+			if (Jrun.isset(this.height)) {
 				this.object.css("height", this.height + "px");
 			}
 			
@@ -5788,7 +5789,7 @@ Js.widget.include({
 			}).css("cssText", this.css);
 			
 			// set height and scrolling option for content CONTAINER
-			if(Js.code.isset(this.height) && !!this.scrolling) {
+			if(Jrun.isset(this.height) && !!this.scrolling) {
 				this.node.css({
 					"height": (this.height - (23 + 11)) + "px",
 					"overflow": "auto"
@@ -5855,7 +5856,7 @@ Js.widget.include({
 		closePanel: function() {
 			// callback to close panel
 			var fn = this.onclose;
-			if (Js.code.isfunction(fn)) {
+			if (Jrun.isfunction(fn)) {
 				fn();
 			}
 			
@@ -5864,7 +5865,7 @@ Js.widget.include({
 			return this;
 		},
 		fixResize: function() {
-			if(Js.code.isset(this.height) && !!this.scrolling) {
+			if(Jrun.isset(this.height) && !!this.scrolling) {
 				this.node.css({
 					"height": (this.height - (23 + 11)) + "px", 
 					"overflow": "auto"
@@ -5902,7 +5903,7 @@ Js.widget.include({
 		this.activeHeader = null;
 		
 		// start __constructor()
-		if(Js.code.typeOf(js) === "object" || Js.code.typeOf(js) === "string") {
+		if(Jrun.typeOf(js) === "object" || Jrun.typeOf(js) === "string") {
 			this.init(js);
 		}
 		
@@ -5945,12 +5946,12 @@ Js.widget.include({
 		},
 		addTab: function(spec) {
 			var that = this;
-			if(!!spec.id && Js.code.typeOf(spec.id) === "string") {
-				var title = Js.code.pick(spec.title, "Untitled");
+			if(!!spec.id && Jrun.typeOf(spec.id) === "string") {
+				var title = Jrun.pick(spec.title, "Untitled");
 				var id = spec.id;
-				var content = Js.code.pick(spec.content, "");
-				var closable = Js.code.pick(spec.closable, false);
-				var set = Js.code.pick(spec.activate, false);
+				var content = Jrun.pick(spec.content, "");
+				var closable = Jrun.pick(spec.closable, false);
+				var set = Jrun.pick(spec.activate, false);
 				
 				var obj = this.object.add("div", {"id": id, "class": "simpletab-hidden"}).html(content);
 				var li = this.header.add("li");
@@ -6080,7 +6081,7 @@ Js.widget.include({
 		this.containerc = null;
 		this.contentc = null;
 		
-		if(Js.code.isset(js) && typeof(js) == "object") {
+		if(Jrun.isset(js) && typeof(js) == "object") {
 			this.init(js);
 		}
 			
@@ -6094,7 +6095,7 @@ Js.widget.include({
 			var container = this.container = js.container;
 			var content = this.content = js.content;
 			
-			if(Js.code.isset(button) && Js.code.isset(container) && Js.code.isset(content)) {
+			if(Jrun.isset(button) && Jrun.isset(container) && Jrun.isset(content)) {
 				Js(button).onclick(function() {
 					var dwl = Js(container).first();
 					var stack = Js(content).first();
@@ -6176,16 +6177,16 @@ Js.widget.include({
 			
 			if (!this.initialize) {
 				this.initialize = true;
-				Js.widget.WinPanel.zindex = Js.code.pick(Js.widget.WinPanel.zindex, 101);
+				Js.widget.WinPanel.zindex = Jrun.pick(Js.widget.WinPanel.zindex, 101);
 				
 				var elem = this.element = js.element + "_win";
-				Js.widget.WinPanel.nodes = Js.code.pick(Js.widget.WinPanel.nodes, []);
+				Js.widget.WinPanel.nodes = Jrun.pick(Js.widget.WinPanel.nodes, []);
 				Js.widget.WinPanel.nodes.push(elem);
 				
-				this.zindex = Js.code.pick(js.zindex, ++Js.widget.WinPanel.zindex);
-				this.autoFocus = Js.code.pick(js.autoFocus, this.autoFocus);
-				this.allowDrag = Js.code.pick(js.allowDrag, this.allowDrag);
-				this.onclose = Js.code.pick(js.onClose, this.onclose);
+				this.zindex = Jrun.pick(js.zindex, ++Js.widget.WinPanel.zindex);
+				this.autoFocus = Jrun.pick(js.autoFocus, this.autoFocus);
+				this.allowDrag = Jrun.pick(js.allowDrag, this.allowDrag);
+				this.onclose = Jrun.pick(js.onClose, this.onclose);
 				js.onclose = null;
 				
 				if(this.allowDrag) { 
@@ -6223,8 +6224,8 @@ Js.widget.include({
 				}
 				
 				var doc = document.body;
-				var hW = Js.code.toNumber(doc.offsetWidth);
-				var hH = Js.code.toNumber(doc.offsetHeight);
+				var hW = Jrun.toNumber(doc.offsetWidth);
+				var hH = Jrun.toNumber(doc.offsetHeight);
 				var oW = this.panel.width;
 				var oH = this.panel.height;
 				var sXY = Js.ext.dimension.page.scrolls.xy();
@@ -6268,7 +6269,7 @@ Js.widget.include({
 		},
 		closePanel: function() {
 			var fn = this.onclose;
-			if (Js.code.isfunction(fn)) {
+			if (Jrun.isfunction(fn)) {
 				fn();
 			}
 			
@@ -6278,7 +6279,7 @@ Js.widget.include({
 				this.object = null;
 				this.element = null;
 				var arrays = Js.widget.WinPanel.nodes;
-				var deindex = Js.code.indexOf(arrays, this.element);
+				var deindex = Jrun.indexOf(arrays, this.element);
 				arrays.splice(deindex, 1);
 				Js.widget.WinPanel.nodes = arrays;
 			} catch(e) { }

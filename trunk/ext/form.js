@@ -22,10 +22,10 @@ Js.ext.include({
 	},
 	proto: {
 		liveValidate: function(node, custom) {
-			this.object = Js.code.pick(node, this.object);
+			this.object = Jrun.pick(node, this.object);
 			
 			var formId = Js.attr.get(this.object, "id");
-			var custom = Js.code.pick(custom, null);
+			var custom = Jrun.pick(custom, null);
 			var post = "";
 			var that = this;
 			
@@ -40,30 +40,30 @@ Js.ext.include({
 					
 					if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/)) {
 						if(this.name != "") {
-							this.className = (Js.code.isset(this.className) ? this.className : "");
+							this.className = (Jrun.isset(this.className) ? this.className : "");
 							var klass = this.className.split(/\s/);
 							var error = "";
 							
-							if(Js.code.inArray(klass, "required") && Js.code.trim(this.value) === "") {
+							if(Jrun.inArray(klass, "required") && Jrun.trim(this.value) === "") {
 								error = "This field require an input!";
 							}
 							
-							if(Js.code.inArray(klass, "string") && !Js.test.isString(this.value) && Js.code.trim(this.value) !== "") {
+							if(Jrun.inArray(klass, "string") && !Js.test.isString(this.value) && Jrun.trim(this.value) !== "") {
 								error = "This field require valid alphanumeric!";
-							} else if((Js.code.inArray(klass, "integer") || Js.code.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Js.code.trim(this.value) !== "") { 
+							} else if((Jrun.inArray(klass, "integer") || Jrun.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Jrun.trim(this.value) !== "") { 
 								error = "This field require valid numbers!";
-							} else if(Js.code.inArray(klass, "email") && !Js.test.isEmail(this.value) && Js.code.trim(this.value) !== "") {
+							} else if(Jrun.inArray(klass, "email") && !Js.test.isEmail(this.value) && Jrun.trim(this.value) !== "") {
 								error = "This field require valid e-mail address!";
 							}
 							
-							if(Js.code.isset(custom)) {
+							if(Jrun.isset(custom)) {
 								var validate = custom[Js.attr.get(this, "id")];
 								
-								if(Js.code.isset(validate)) {
-									if(Js.code.isfunction(validate.callback) && !validate.callback(this.value)) { 
-										error = Js.code.pick(validate.error, error);
-									} else if(Js.code.isset(validate.test) && !this.value.match(validate.test)) {
-										error = Js.code.pick(validate.error, error);
+								if(Jrun.isset(validate)) {
+									if(Jrun.isfunction(validate.callback) && !validate.callback(this.value)) { 
+										error = Jrun.pick(validate.error, error);
+									} else if(Jrun.isset(validate.test) && !this.value.match(validate.test)) {
+										error = Jrun.pick(validate.error, error);
 									}
 								}
 							}
@@ -92,7 +92,7 @@ Js.ext.include({
 				});
 			}
 			
-			if(Js.code.isset(this.first)) { 
+			if(Jrun.isset(this.first)) { 
 				// stop form processing
 				return false;
 			} else {
@@ -100,16 +100,16 @@ Js.ext.include({
 			}
 		},
 		liveErrorInit: function(field, text, data) {
-			this.first = (Js.code.isnull(this.first) ? field : this.first);
+			this.first = (Jrun.isnull(this.first) ? field : this.first);
 			// Mark first error occured!
 			var form = Js(this.object);
 			var field = Js(field);
 			var fieldId = field.get("name");
 			var fieldErrorId = [form.get("id"), fieldId, "error"].join("-");
-			var data = Js.code.pick(data, false);
+			var data = Jrun.pick(data, false);
 			var that = this;
 			
-			if (!Js.code.finds(fieldErrorId)) {
+			if (!Jrun.finds(fieldErrorId)) {
 				field.appendClass("extform-error").parent().add("span", {"id": fieldErrorId, "class": "extform-errormessage"}).html(text);
 				
 				field.onfocus(function() {
@@ -122,12 +122,12 @@ Js.ext.include({
 						}
 					}
 				});
-			} else if (Js.code.finds(fieldErrorId) && !!data) {
+			} else if (Jrun.finds(fieldErrorId) && !!data) {
 				field.appendClass("extform-error");
 				var errorNode = field.siblings("span.extform-errormessage").first();
 				var html = errorNode.html();
 				
-				if (html.match(text) === false && Js.code.trim(html) != "") {
+				if (html.match(text) === false && Jrun.trim(html) != "") {
 					errorNode.append(" " + text);
 				}
 				
@@ -145,10 +145,10 @@ Js.ext.include({
 			}
 		},
 		validate: function(node, custom) {
-			this.object = Js.code.pick(node, this.object);
+			this.object = Jrun.pick(node, this.object);
 			
 			var formId = Js.attr.get(this.object, "id");
-			var custom = Js.code.pick(custom, null);
+			var custom = Jrun.pick(custom, null);
 			var post = "";
 			
 			this.first = null;
@@ -165,32 +165,32 @@ Js.ext.include({
 					
 					if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) {
 						if(this.name != "") {
-							this.className = (Js.code.isset(this.className) ? this.className : "");
+							this.className = (Jrun.isset(this.className) ? this.className : "");
 							var klass = this.className.split(/\s/);
 							var error = "";
 													
-							if(Js.code.inArray(klass, "required") && Js.code.trim(this.value) === "") {
+							if(Jrun.inArray(klass, "required") && Jrun.trim(this.value) === "") {
 								error = "This field require an input!";
 							}
 							
-							if(Js.code.inArray(klass, "string") && !Js.test.isString(this.value) && Js.code.trim(this.value) !== "") {
+							if(Jrun.inArray(klass, "string") && !Js.test.isString(this.value) && Jrun.trim(this.value) !== "") {
 								error = "This field require valid alphanumeric!";
-							} else if((Js.code.inArray(klass, "integer") || Js.code.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Js.code.trim(this.value) !== "") { 
+							} else if((Jrun.inArray(klass, "integer") || Jrun.inArray(klass, "number")) && !Js.test.isInteger(this.value) && Jrun.trim(this.value) !== "") { 
 								error = "This field require valid numbers!";
-							} else if(Js.code.inArray(klass, "email") && !Js.test.isEmail(this.value) && Js.code.trim(this.value) !== "") {
+							} else if(Jrun.inArray(klass, "email") && !Js.test.isEmail(this.value) && Jrun.trim(this.value) !== "") {
 								error = "This field require valid e-mail address!";
 							}
 							
-							if(Js.code.isset(custom)) {
+							if(Jrun.isset(custom)) {
 								var validate = custom[Js.attr.get(this, "id")];
 								
-								if(Js.code.isset(validate)) {
-									if(Js.code.isfunction(validate.callback) && !validate.callback(this.value)) {
-										error = Js.code.pick(validate.error, error);
-									} else if(Js.code.isset(validate.test) && !this.value.match(validate.test)) {
-										error = Js.code.pick(validate.error, error);
+								if(Jrun.isset(validate)) {
+									if(Jrun.isfunction(validate.callback) && !validate.callback(this.value)) {
+										error = Jrun.pick(validate.error, error);
+									} else if(Jrun.isset(validate.test) && !this.value.match(validate.test)) {
+										error = Jrun.pick(validate.error, error);
 									} else {
-										error = Js.code.pick(validate.error, error);
+										error = Jrun.pick(validate.error, error);
 									}
 								}
 							}
@@ -233,7 +233,7 @@ Js.ext.include({
 				});
 			}
 			
-			if(Js.code.isset(this.first)) { 
+			if(Jrun.isset(this.first)) { 
 				// there an error, set focus to first invalid field
 				this.first.focus();
 				// stop form processing
@@ -244,16 +244,16 @@ Js.ext.include({
 		},
 		errorInit: function(field, text, data) {
 			// Mark first error occured!
-			this.first = (Js.code.isnull(this.first) ? field : this.first);
+			this.first = (Jrun.isnull(this.first) ? field : this.first);
 			
 			var field = Js(field);
 			var form = Js(this.object);
 			var fieldName = field.get("name");
 			var fieldErrorId = [form.get("id"), fieldName, "error"].join("-");
-			var data = Js.code.pick(data, false);
+			var data = Jrun.pick(data, false);
 			var that = this;
 			
-			if(!Js.code.finds(fieldErrorId)) {
+			if(!Jrun.finds(fieldErrorId)) {
 				field.appendClass("jsextform-error").parent().add("span", {"id": fieldErrorId, "class": "extform-errormessage"}).html(text);
 				
 				field.onchange(function() {
@@ -267,12 +267,12 @@ Js.ext.include({
 						that.first = null;
 					}
 				});
-			} else if(Js.code.finds(fieldErrorId) && !!data) {
+			} else if(Jrun.finds(fieldErrorId) && !!data) {
 				field.appendClass("extform-error");
 				var errorNode = field.siblings("span.extform-errormessage").first();
 				var html = errorNode.html();
 				
-				if(html.match(text) === false && Js.code.trim(html) != "") {
+				if(html.match(text) === false && Jrun.trim(html) != "") {
 					errorNode.append(text);
 				}
 				
@@ -293,27 +293,27 @@ Js.ext.include({
 		},
 		post: function(js) {
 			// form object
-			var object = Js.code.pick(js.object, js.node);
+			var object = Jrun.pick(js.object, js.node);
 			// choose to use object
-			var node = Js.code.prepare(object, js.element, "object");
+			var node = Jrun.prepare(object, js.element, "object");
 			// add custom field validation
-			var custom = Js.code.pick(js.custom, null);
+			var custom = Jrun.pick(js.custom, null);
 			// onsuccess function
-			var onInit = Js.code.pick(js.onSuccess, js.onStart, null);
+			var onInit = Jrun.pick(js.onSuccess, js.onStart, null);
 			// onfaild function
-			var onFail = Js.code.pick(js.onFail, null);
+			var onFail = Jrun.pick(js.onFail, null);
 			// validate selected form
 			var post = this.validate(node, custom);
 			// parameters
-			var parameter = Js.code.pick(js.parameters, js.params, "");
+			var parameter = Jrun.pick(js.parameters, js.params, "");
 			
 			if(post) {
 				// callback to onsuccess function
-				if(Js.code.isfunction(onInit)) {
+				if(Jrun.isfunction(onInit)) {
 					onInit();
 				}
 				
-				parameter += (Js.code.trim(post) !== "" ? post : "");
+				parameter += (Jrun.trim(post) !== "" ? post : "");
 				
 				// send XHR request
 				new Js.ext.Ajax({
@@ -325,7 +325,7 @@ Js.ext.include({
 				return true;
 			} else {
 				// callback to onfail function
-				if(Js.code.isfunction(onFail)) {
+				if(Jrun.isfunction(onFail)) {
 					onFail();
 				}
 				return false;
@@ -333,27 +333,27 @@ Js.ext.include({
 		},
 		get: function(js) {
 			// form object
-			var object = Js.code.pick(js.object, js.node);
+			var object = Jrun.pick(js.object, js.node);
 			// choose to use object
-			var node = Js.code.prepare(object, js.element, "object");
+			var node = Jrun.prepare(object, js.element, "object");
 			// add custom field validation
-			var custom = Js.code.pick(js.custom, null);
+			var custom = Jrun.pick(js.custom, null);
 			// onsuccess function
-			var onInit = Js.code.pick(js.onSuccess, js.onStart, null);
+			var onInit = Jrun.pick(js.onSuccess, js.onStart, null);
 			// onfaild function
-			var onFail = Js.code.pick(js.onFail, null);
+			var onFail = Jrun.pick(js.onFail, null);
 			// validate selected form
 			var get = this.validate(node, custom);
 			// parameters
-			var parameter = Js.code.pick(js.parameters, js.params, "");
+			var parameter = Jrun.pick(js.parameters, js.params, "");
 			
 			if(get) {
 				// callback to onsuccess function
-				if(Js.code.isfunction(onInit)) {
+				if(Jrun.isfunction(onInit)) {
 					onInit();
 				}
 				
-				parameter += (Js.code.trim(get) !== "" ? post : "");
+				parameter += (Jrun.trim(get) !== "" ? post : "");
 				
 				// send XHR request
 				new Js.ext.Ajax({
@@ -366,7 +366,7 @@ Js.ext.include({
 				return true;
 			} else {
 				// callback to onfail function
-				if(Js.code.isfunction(onFail)) {
+				if(Jrun.isfunction(onFail)) {
 					onFail();
 				}
 				return false;

@@ -37,33 +37,33 @@ Js.base.create = function(js) {
 	
 	function Class() {
 		if(!initialize && !!this.construct) {
-			this.construct.apply(this, Js.code.toArray(arguments));
+			this.construct.apply(this, Jrun.toArray(arguments));
 		}
 	};
 	
 	Class.prototype = prototype;
-	Class.prototype.construct = Js.code.pick(js.__construct, null);
+	Class.prototype.construct = Jrun.pick(js.__construct, null);
 	Class.constructor = Class;
 	Class.extend = function(js) {
 		js.ext = this;
 		return Js.base.create(js);
 	};
 	
-	var ext = Js.code.pick(js.ext, null);
+	var ext = Jrun.pick(js.ext, null);
 	
-	if(Js.code.isset(ext)) {
+	if(Jrun.isset(ext)) {
 		try {
 			// try to copy parent object.
 			(function(js) {
 				var list = ["ext", "__construct", "__destruct", "_super", "prototype"];
 				// start adding parent method and properties to this object
 				for (var method in js.prototype) {
-					if (js.prototype.hasOwnProperty(method) && (!Js.code.inArray(list, method) && !this[method])) {
+					if (js.prototype.hasOwnProperty(method) && (!Jrun.inArray(list, method) && !this[method])) {
 						this[method] = js.prototype[method];
 					}
 				}
 				for (var method in js) {
-					if (js.hasOwnProperty(method) && (!Js.code.inArray(list, method) && !this[method])) {
+					if (js.hasOwnProperty(method) && (!Jrun.inArray(list, method) && !this[method])) {
 						this[method] = js[method];
 					}
 				}
@@ -82,7 +82,7 @@ Js.base.create = function(js) {
 		
 		// start adding method and properties to this object
 		for (var method in js) {
-			if (js.hasOwnProperty(method) && (!Js.code.inArray(mtd, method) && !this[method])) {
+			if (js.hasOwnProperty(method) && (!Jrun.inArray(mtd, method) && !this[method])) {
 				this[method] = js[method];
 			}
 		};

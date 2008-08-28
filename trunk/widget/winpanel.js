@@ -44,16 +44,16 @@ Js.widget.include({
 			
 			if (!this.initialize) {
 				this.initialize = true;
-				Js.widget.WinPanel.zindex = Js.code.pick(Js.widget.WinPanel.zindex, 101);
+				Js.widget.WinPanel.zindex = Jrun.pick(Js.widget.WinPanel.zindex, 101);
 				
 				var elem = this.element = js.element + "_win";
-				Js.widget.WinPanel.nodes = Js.code.pick(Js.widget.WinPanel.nodes, []);
+				Js.widget.WinPanel.nodes = Jrun.pick(Js.widget.WinPanel.nodes, []);
 				Js.widget.WinPanel.nodes.push(elem);
 				
-				this.zindex = Js.code.pick(js.zindex, ++Js.widget.WinPanel.zindex);
-				this.autoFocus = Js.code.pick(js.autoFocus, this.autoFocus);
-				this.allowDrag = Js.code.pick(js.allowDrag, this.allowDrag);
-				this.onclose = Js.code.pick(js.onClose, this.onclose);
+				this.zindex = Jrun.pick(js.zindex, ++Js.widget.WinPanel.zindex);
+				this.autoFocus = Jrun.pick(js.autoFocus, this.autoFocus);
+				this.allowDrag = Jrun.pick(js.allowDrag, this.allowDrag);
+				this.onclose = Jrun.pick(js.onClose, this.onclose);
 				js.onclose = null;
 				
 				if(this.allowDrag) { 
@@ -91,8 +91,8 @@ Js.widget.include({
 				}
 				
 				var doc = document.body;
-				var hW = Js.code.toNumber(doc.offsetWidth);
-				var hH = Js.code.toNumber(doc.offsetHeight);
+				var hW = Jrun.toNumber(doc.offsetWidth);
+				var hH = Jrun.toNumber(doc.offsetHeight);
 				var oW = this.panel.width;
 				var oH = this.panel.height;
 				var sXY = Js.ext.dimension.page.scrolls.xy();
@@ -136,7 +136,7 @@ Js.widget.include({
 		},
 		closePanel: function() {
 			var fn = this.onclose;
-			if (Js.code.isfunction(fn)) {
+			if (Jrun.isfunction(fn)) {
 				fn();
 			}
 			
@@ -146,7 +146,7 @@ Js.widget.include({
 				this.object = null;
 				this.element = null;
 				var arrays = Js.widget.WinPanel.nodes;
-				var deindex = Js.code.indexOf(arrays, this.element);
+				var deindex = Jrun.indexOf(arrays, this.element);
 				arrays.splice(deindex, 1);
 				Js.widget.WinPanel.nodes = arrays;
 			} catch(e) { }

@@ -27,27 +27,27 @@ Js.ext.include({
 	},
 	proto: {
 		init: function(js) {
-			var node = this.object = Js.code.pick(js.object, js.node);
+			var node = this.object = Jrun.pick(js.object, js.node);
 			var that = this;
-			node.root = Js.code.pick(js.objectRoot, js.nodeRoot, node);
+			node.root = Jrun.pick(js.objectRoot, js.nodeRoot, node);
 			
 			node.onmousedown = function(e) {
 				that.start(e);
 			};
 			
-			node.hmode = Js.code.pick(js.hmode, true);
-			node.vmode = Js.code.pick(js.vmode, true);
-			node.hswap = Js.code.pick(js.hswap, false);
-			node.vswap = Js.code.pick(js.vswap, false);
-			node.minX = Js.code.pick(js.minX, null);
-			node.maxX = Js.code.pick(js.maxX, null);
-			node.minY = Js.code.pick(js.minY, null);
-			node.maxY = Js.code.pick(js.maxY, null);
+			node.hmode = Jrun.pick(js.hmode, true);
+			node.vmode = Jrun.pick(js.vmode, true);
+			node.hswap = Jrun.pick(js.hswap, false);
+			node.vswap = Jrun.pick(js.vswap, false);
+			node.minX = Jrun.pick(js.minX, null);
+			node.maxX = Jrun.pick(js.maxX, null);
+			node.minY = Jrun.pick(js.minY, null);
+			node.maxY = Jrun.pick(js.maxY, null);
 			
-			if (isNaN(Js.code.toNumber(Js.style.get(node.root, "left")))) {
+			if (isNaN(Jrun.toNumber(Js.style.get(node.root, "left")))) {
 				Js.style.set(node.root, "left", "0px");
 			}
-			if (isNaN(Js.code.toNumber(Js.style.get(node.root, "top")))) { 
+			if (isNaN(Jrun.toNumber(Js.style.get(node.root, "top")))) { 
 				Js.style.set(node.root, "top", "0px");
 			}
 			node.root.onDragStart = new Function();
@@ -61,8 +61,8 @@ Js.ext.include({
 			var that = this;
 			var node = this.object;
 			var e = this.fixE(e);
-			var y = Js.code.toNumber(Js.style.get(node.root, "top"));
-			var x = Js.code.toNumber(Js.style.get(node.root, "left"));
+			var y = Jrun.toNumber(Js.style.get(node.root, "top"));
+			var x = Jrun.toNumber(Js.style.get(node.root, "left"));
 			
 			node.root.onDragStart(x, y);
 			node.lastMouseX = e.clientX;
@@ -95,8 +95,8 @@ Js.ext.include({
 			var node = this.object;
 			var eY	= e.clientY;
 			var eX	= e.clientX;
-			var y = Js.code.toNumber(Js.style.get(node.root, "top"));
-			var x = Js.code.toNumber(Js.style.get(node.root, "left"));
+			var y = Jrun.toNumber(Js.style.get(node.root, "top"));
+			var x = Jrun.toNumber(Js.style.get(node.root, "left"));
 			var newX;
 			var newY;
 			
@@ -126,17 +126,17 @@ Js.ext.include({
 			document.onmousemove = null;
 			document.onmouseup = null;
 			var data = node.root;
-			data.onDragEnd(Js.code.toNumber(data.style.left), Js.code.toNumber(data.style.top), data);
+			data.onDragEnd(Jrun.toNumber(data.style.left), Jrun.toNumber(data.style.top), data);
 			node = null;
 		},
 		fixE: function(e) {
-			if(Js.code.isnull(e)) {
+			if(Jrun.isnull(e)) {
 				e = window.event;
 			}
-			if(Js.code.isnull(e.layerX)) {
+			if(Jrun.isnull(e.layerX)) {
 				e.layerX = e.offsetX;
 			}
-			if(Js.code.isnull(e.layerY)) {
+			if(Jrun.isnull(e.layerY)) {
 				e.layerY = e.offsetY;
 			}
 			

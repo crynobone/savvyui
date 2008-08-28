@@ -56,9 +56,9 @@ Js.widget.include({
 	},
 	proto: {
 		init: function(js) {
-			this.element = Js.code.prepare(js.object, js.element);
+			this.element = Jrun.prepare(js.object, js.element);
 			var regexp = new RegExp(/^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/);
-			this.renderTo = Js.code.pick(js.renderTo, this.renderTo);
+			this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
 			
 			if(!this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType)) {
 				this.renderTo = Js("body").first().add("div");
@@ -66,16 +66,16 @@ Js.widget.include({
 				this.renderTo = Js(this.renderTo).first();
 			}
 			
-			js.range = Js.code.pick(js.range, this.range, [null, null]);
-			this.field = Js.code.pick(js.field, this.field, "value");
-			this.type = Js.code.pick(js.type, this.type, "single");
+			js.range = Jrun.pick(js.range, this.range, [null, null]);
+			this.field = Jrun.pick(js.field, this.field, "value");
+			this.type = Jrun.pick(js.type, this.type, "single");
 			
 			if(!!js.mindate && regexp.test(js.mindate)) {
-				this.mindate = Js.code.pick(js.mindate, null);
+				this.mindate = Jrun.pick(js.mindate, null);
 			}
 			
 			if(!!js.maxdate && regexp.test(js.maxdate)) {
-				this.maxdate = Js.code.pick(js.maxdate, null);
+				this.maxdate = Jrun.pick(js.maxdate, null);
 			}
 			
 			if(!!js.value && regexp.test(js.value)) {
@@ -92,11 +92,11 @@ Js.widget.include({
 			
 			this.month = ((!js.month || isNaN(js.month) || js.month > 12 || js.month < 0) ? this.Dates.getMonth() : Math.abs(js.month - 1));
 			this.year = ((!js.year || isNaN(js.year) || js.year < 1000) ? this.Dates.getFullYear() : js.year);
-			this.day = Js.code.pick(js.day, this.day);
+			this.day = Jrun.pick(js.day, this.day);
 			
-			this.date = [this.year, (this.month + 1), Js.code.pick(this.day, 1)].join("-");
-			this.onupdate = Js.code.pick(js.onUpdate, null);
-			this.navigation = Js.code.pick(js.navigate, true);
+			this.date = [this.year, (this.month + 1), Jrun.pick(this.day, 1)].join("-");
+			this.onupdate = Jrun.pick(js.onUpdate, null);
+			this.navigation = Jrun.pick(js.navigate, true);
 			
 			if(this.navigation == true) {
 				if(!js.range[0] || js.range[0].toLowerCase() == "now") {
@@ -104,9 +104,9 @@ Js.widget.include({
 				} else if(Js.test.isInteger(js.range[0]) && (js.range[0] > 1000 && js.range[0] < 9999)) {
 					js.range[0] = js.range[0];
 				} else if(js.range[0].charAt(0) == "-") {
-					js.range[0] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[0]));
+					js.range[0] = (this.Dates.getFullYear() + Jrun.toNumber(js.range[0]));
 				} else if(js.range[0].charAt(0) == "+") {
-					js.range[0] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[0]));
+					js.range[0] = (this.Dates.getFullYear() + Jrun.toNumber(js.range[0]));
 				}
 				
 				if(!js.range[1] || js.range[1].toLowerCase() == "now") {
@@ -114,9 +114,9 @@ Js.widget.include({
 				} else if(Js.test.isInteger(js.range[1]) && (js.range[1] > 1000 && js.range[1] < 9999)) {
 					js.range[1] = s_.range[1];
 				} else if(js.range[1].charAt(0) == "-") {
-					js.range[1] = (this.Dates.getFullYear() + (Js.code.toNumber(js.range[1]) + 0));
+					js.range[1] = (this.Dates.getFullYear() + (Jrun.toNumber(js.range[1]) + 0));
 				} else if(js.range[1].charAt(0) == "+") {
-					js.range[1] = (this.Dates.getFullYear() + Js.code.toNumber(js.range[1]));
+					js.range[1] = (this.Dates.getFullYear() + Jrun.toNumber(js.range[1]));
 				}
 				
 				if(js.range[0] < js.range[1]) {
@@ -129,7 +129,7 @@ Js.widget.include({
 				this.range = [this.maxYear(js.range[0]), this.minYear(js.range[1])];
 			}
 			
-			this.drag = Js.code.pick(js.draggable, false);
+			this.drag = Jrun.pick(js.draggable, false);
 			this.renderTo.html("");
 			this.callback();
 			
@@ -139,7 +139,7 @@ Js.widget.include({
 			var data = year;
 			if(this.mindate) {
 				var minDate = this.minDate.split("-");
-				var newYear = Js.code.toNumber(minDate[0]);
+				var newYear = Jrun.toNumber(minDate[0]);
 				
 				if(newYear > data) { 
 					data = newYear;
@@ -151,7 +151,7 @@ Js.widget.include({
 			var data = year;
 			if(this.maxdate) {
 				var maxDate = this.maxdate.split("-");
-				var newYear = Js.code.toNumber(maxDate[0]);
+				var newYear = Jrun.toNumber(maxDate[0]);
 				
 				if(newYear < data) {
 					data = newYear;
@@ -284,8 +284,8 @@ Js.widget.include({
 		},
 		validation: function() {
 			var data = false;
-			var minDate = Js.code.isset(this.mindate);
-			var maxDate = Js.code.isset(this.maxdate);
+			var minDate = Jrun.isset(this.mindate);
+			var maxDate = Jrun.isset(this.maxdate);
 			
 			if(minDate && maxDate && this.compare(this.mindate, this.date) && this.compare(this.date, this.maxdate)) {
 				data = true;
@@ -300,23 +300,23 @@ Js.widget.include({
 			return data;
 		},
 		dayOfMonth: function(month, year) {
-			var month = Js.code.pick(month, this.month);
-			var year = Js.code.pick(year, this.year);
+			var month = Jrun.pick(month, this.month);
+			var year = Jrun.pick(year, this.year);
 			
 			if(month == 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
 				var monthLength = 29;
 			}
 			
-			return Js.code.pick(monthLength, this.daysinmonth[month]);
+			return Jrun.pick(monthLength, this.daysinmonth[month]);
 		},
 		compare: function(first, second) {
 			var firsts = first.split("-");
 			var seconds = second.split("-");
 			
-			var firstDate = new Date(firstDate[0], (Js.code.toNumber(firstDate[1]) - 1));
+			var firstDate = new Date(firstDate[0], (Jrun.toNumber(firstDate[1]) - 1));
 			firstDate.setDate(firstDate[2]);
 			
-			var secondDate = new Date(secondDate[0], (Js.code.toNumber(secondDate[1]) - 1));
+			var secondDate = new Date(secondDate[0], (Jrun.toNumber(secondDate[1]) - 1));
 			secondDate.setDate(secondDate[2]);
 			
 			return (secondDate >= firstDate ? true : false);
@@ -329,7 +329,7 @@ Js.widget.include({
 			
 			if(this.type == "single") {
 				if(!field.hasClass("calendar-day-selected")) {
-					if (Js.code.isset(this.lastdate) && Js.code.finds(this.element + "_" + this.lastdate)) {
+					if (Jrun.isset(this.lastdate) && Jrun.finds(this.element + "_" + this.lastdate)) {
 						var lastdate = Js("#" + this.element + "_" + this.lastdate).set("class", "calendar-day");
 					}
 					
@@ -346,7 +346,7 @@ Js.widget.include({
 				var value = calendar.val();
 				var values = value.split("|");
 				
-				if(Js.code.inArray(values, [year, months, days].join("-"))){
+				if(Jrun.inArray(values, [year, months, days].join("-"))){
 					values.splice(values.indexOf([year, months, days].join("-")), 1);
 					value = values.join("|");
 					
@@ -363,7 +363,7 @@ Js.widget.include({
 			
 			var fn = this.onupdate;
 			if(fn != null && typeof(fn) == "function") {
-				Js.code.callback(this, fn);
+				Jrun.callback(this, fn);
 			}
 			
 			return this;
@@ -433,13 +433,13 @@ Js.widget.include({
 								var i = Js(this).get("id").split("_");
 								var ym = that.year + "" + that.month;
 								tday = i[1].substr((ym.length), i[1].length);
-								that.updateValue(that.year, (that.month + 1), Js.code.toNumber(tday));  
+								that.updateValue(that.year, (that.month + 1), Jrun.toNumber(tday));  
 							});
 						}
 						
 						if(day == this.day) {
 							days.setClass("calendar-day-selected");
-							this.lastdate = this.year + "" + (this.month + 1) + "" + Js.code.toNumber(this.day);
+							this.lastdate = this.year + "" + (this.month + 1) + "" + Jrun.toNumber(this.day);
 						} 
 						
 						days.css("cursor", "pointer");
@@ -527,18 +527,18 @@ Js.widget.include({
 				title.setClass("this-month").html(this.months[this.month] + "&nbsp;" + this.year);
 			}
 			
-			if (Js.code.isset(this.field)) {
+			if (Jrun.isset(this.field)) {
 				var input = tf2.add("input", {
 					"id": [this.element, this.field].join("-"),
 					"name": this.field,
 					"type": this.fieldtype
 				});
 				
-				if (Js.code.isset(this.day)) {
+				if (Jrun.isset(this.day)) {
 					var m = (this.month + 1);
 					this.value = [this.year, (m < 10 ? "0" + m : m), this.day].join("-");
 					input.val(this.value);
-					this.lastdate = [this.year, (this.month + 1), Js.code.toNumber(this.day)].join("");
+					this.lastdate = [this.year, (this.month + 1), Jrun.toNumber(this.day)].join("");
 				}
 			}
 			return this;

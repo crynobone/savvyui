@@ -22,9 +22,9 @@ Js.util.include({
 		element: null,
 		option: null,
 		__construct: function(selector) {
-			this.element = Js.code.pick(selector, null);
+			this.element = Jrun.pick(selector, null);
 			
-			if(Js.code.isset(this.element)) {
+			if(Jrun.isset(this.element)) {
 				this.selector();
 				this.check();
 			} else {
@@ -35,7 +35,7 @@ Js.util.include({
 			}
 		},
 		destruct: function() {
-			if(Js.code.isset(this.interval)) {
+			if(Jrun.isset(this.interval)) {
 				clearInterval(this.interval);
 				this.interval == null;
 			}
@@ -49,7 +49,7 @@ Js.util.include({
 			
 			Js(this.element).onclick(function() {
 				var href = Js(this).get("href");
-				var anchors = (Js.code.isset(href) ? href : this.href);
+				var anchors = (Jrun.isset(href) ? href : this.href);
 				
 				if(anchors.match(/^\#/)) {
 					var ahref = ["", anchors.substr(1)];
@@ -57,7 +57,7 @@ Js.util.include({
 					var ahref = anchors.split(/\#/);
 				}
 				
-				if(Js.code.isset(ahref[1])) {
+				if(Jrun.isset(ahref[1])) {
 					that.repeat = (ahref[1] === that.last);
 					
 					that.last = ahref[1];

@@ -107,11 +107,11 @@ Js.namespace.include({
 			this.index = (!this.index && this.node.length === 1 ? 0 : null);
 		},
 		pushStack: function(fn) {
-			if(Js.code.isfunction(fn)) {
-				var key = Js.code.pick(this.index, null);
+			if(Jrun.isfunction(fn)) {
+				var key = Jrun.pick(this.index, null);
 				
-				if(Js.code.isnull(key)) {
-					Js.code.each(this.node, fn);
+				if(Jrun.isnull(key)) {
+					Jrun.each(this.node, fn);
 				} else if(!!this.node[key]) {
 					try { 
 						fn.call(this.node[key]);
@@ -148,15 +148,15 @@ Js.namespace.include({
 			return this;						
 		},
 		'find': function(selector) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			var n1 = (!key ? this.node : this.node[key]);
 			var n2 = (!key ? this._node : this._node[key]);
-			var node = Js.code.pick(n1, n2);
+			var node = Jrun.pick(n1, n2);
 			
 			return new Js.Elements(selector, node);
 		},
 		childOf: function(selector) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			var elem = selector.split(",");
 			
 			for(var i = 0; i < elem.length && !!elem[i]; i++) {
@@ -188,7 +188,7 @@ Js.namespace.include({
 			}
 		},
 		has: function(selector) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			var elem = selector.split(",");
 			
 			for(var i = 0; i < elem.length && !!elem[i]; i++) {
@@ -220,7 +220,7 @@ Js.namespace.include({
 			}
 		},
 		is: function(selector) {
-			var key = Js.code.pick(this.index, 0);
+			var key = Jrun.pick(this.index, 0);
 			var node = Js.query.selector(selector);
 			var object = null;
 			
@@ -245,11 +245,11 @@ Js.namespace.include({
 			return (!!node ? new Js.Elements(node) : false);						
 		},
 		fetch: function(key) {
-			var key = Js.code.pick(this.index, key);
+			var key = Jrun.pick(this.index, key);
 			
-			if (Js.code.isnull(key)) { 
+			if (Jrun.isnull(key)) { 
 				return this.node;
-			} else if (!!Js.code.isset(this.node[key])) {
+			} else if (!!Jrun.isset(this.node[key])) {
 				return this.node[key];
 			} else {
 				return false;
@@ -260,13 +260,13 @@ Js.namespace.include({
 			return this.parent();
 		},
 		parent: function(key) {
-			var key = Js.code.pick(this.index, 0);
-			var node = Js.code.pick(this.node[key].parentNode, false);
+			var key = Jrun.pick(this.index, 0);
+			var node = Jrun.pick(this.node[key].parentNode, false);
 			
 			return (!!node ? new Js.Elements(node) : false);
 		},
 		siblings: function(selector) {
-			var key = Js.code.pick(this.index, 0);
+			var key = Jrun.pick(this.index, 0);
 			var elem = selector.split(",");
 			
 			for(var i = 0; i < elem.length && !!elem[i]; i++) {
@@ -348,14 +348,14 @@ Js.namespace.include({
 			return this.node.length;
 		},
 		each: function(fn) {
-			if(this.count() > 0 && Js.code.isfunction(fn)) {
-				Js.code.each(this.node, fn);
+			if(this.count() > 0 && Jrun.isfunction(fn)) {
+				Jrun.each(this.node, fn);
 			}
 			// continue chaining
 			return this;
 		},
 		callback: function(fn) {
-			if(Js.code.isfunction(fn)) {
+			if(Jrun.isfunction(fn)) {
 				try {
 					fn.apply(this);
 				} catch(e) {
@@ -368,9 +368,9 @@ Js.namespace.include({
 		add: function(selector, data) {
 			var args = arguments;
 			
-			var key = Js.code.pick(this.index, 0);
+			var key = Jrun.pick(this.index, 0);
 			
-			if (Js.code.isset(this.node[key])) {
+			if (Jrun.isset(this.node[key])) {
 				var node = new Js.Elements;
 				node.create(selector, this.node[key], data);
 				
@@ -399,12 +399,12 @@ Js.namespace.include({
 			return this;
 		},
 		get: function(data) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			
-			if (Js.code.isnull(key)){
+			if (Jrun.isnull(key)){
 				var value = [];
 				
-				Js.code.each(this.node, function() { 
+				Jrun.each(this.node, function() { 
 					value[value.length] = Js.attr.get(this, data);
 				});
 				
@@ -441,11 +441,11 @@ Js.namespace.include({
 			return this;
 		},
 		hasClass: function(name) {
-			var key = Js.code.pick(this.index, null);		
+			var key = Jrun.pick(this.index, null);		
 			
-			if (Js.code.isnull(key)) {
+			if (Jrun.isnull(key)) {
 				var value = [];
-				Js.code.each(this.node, function() { 
+				Jrun.each(this.node, function() { 
 					value[value.length] = Js.className.has(this, name);
 				});
 				return value;
@@ -493,18 +493,18 @@ Js.namespace.include({
 			return this;
 		},
 		getStyle: function(data) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			
-			if(Js.code.isnull(key)) {
+			if(Jrun.isnull(key)) {
 				var value = [];
 				
-				Js.code.each(this.node, function() {
-					value[value.length] = Js.code.pick(Js.style.get(this, data), false);
+				Jrun.each(this.node, function() {
+					value[value.length] = Jrun.pick(Js.style.get(this, data), false);
 				});
 				
 				return value;
 			} else if(!!this.node[key]) {
-				return Js.code.pick(Js.style.get(this.node[key], data), false);
+				return Jrun.pick(Js.style.get(this.node[key], data), false);
 			}
 		},
 		alpha: function(value) {
@@ -547,7 +547,7 @@ Js.namespace.include({
 			return this;
 		},
 		insert: function(child) {
-			if(Js.code.isset(this.index)) {
+			if(Jrun.isset(this.index)) {
 				// stack the callback
 				this.pushStack(function() { 
 					Js.dom.add(this, child);
@@ -565,7 +565,7 @@ Js.namespace.include({
 			return this;
 		},
 		remove: function(child) {
-			if(Js.code.isset(this.index)) {
+			if(Jrun.isset(this.index)) {
 				// stack the callback
 				this.pushStack(function() { 
 					Js.dom.remove(this, child);
@@ -591,18 +591,18 @@ Js.namespace.include({
 				// continue chaining
 				return this;
 			} else if (!text || typeof(text) == "number") {
-				var key = Js.code.pick(this.index, null);
+				var key = Jrun.pick(this.index, null);
 				
-				if(Js.code.isnull(key)) {
+				if(Jrun.isnull(key)) {
 					var value = [];
 					// retrieve the value of each HTMLelement
-					Js.code.each(this.node, function() {
-						value[value.length] = Js.code.pick(this.innerHTML, ""); // return HTML string for multiple HTMLelement
+					Jrun.each(this.node, function() {
+						value[value.length] = Jrun.pick(this.innerHTML, ""); // return HTML string for multiple HTMLelement
 					});
 					// return value as array
 					return value;
 				} else if(!!this.node[key]) {
-					return Js.code.pick(this.node[key].innerHTML, ""); // return HTML string for single HTMLelement
+					return Jrun.pick(this.node[key].innerHTML, ""); // return HTML string for single HTMLelement
 				}
 			}
 		},
@@ -618,18 +618,18 @@ Js.namespace.include({
 				// continue chaining
 				return this;
 			} else if(!text || typeof(text) == "number") {
-				var key = Js.code.pick(this.index, null);
+				var key = Jrun.pick(this.index, null);
 				
-				if(Js.code.isnull(key)) {
+				if(Jrun.isnull(key)) {
 					var value = [];
 					// retrieve the value of each HTMLelement
-					Js.code.each(this.node, function() {
-						value[value.length] = Js.code.pick(this.node[key].value, "");
+					Jrun.each(this.node, function() {
+						value[value.length] = Jrun.pick(this.node[key].value, "");
 					});
 					// return the value as array
 					return value;
 				} else if(!!this.node[key]) {
-					return Js.code.pick(this.node[key].value, ""); // retrieve single HTMLelement value
+					return Jrun.pick(this.node[key].value, ""); // retrieve single HTMLelement value
 				}
 			}
 		},
@@ -647,7 +647,7 @@ Js.namespace.include({
 		on: function(handler, fn1, fn2) {
 			// stack the callback
 			this.pushStack(function() { 
-				Js.code.on(this, handler, fn1, fn2);
+				Jrun.on(this, handler, fn1, fn2);
 			});
 			// continue chaining
 			return this;
@@ -661,7 +661,7 @@ Js.namespace.include({
 		unbind: function(handler) {
 			// stack the callback
 			this.pushStack(function() {
-				Js.code.on(this, handler, function() {
+				Jrun.on(this, handler, function() {
 					return true;
 				});
 			});
@@ -692,12 +692,12 @@ Js.namespace.include({
 		},
 		// get hashtable value
 		getHash: function(data) {
-			var key = Js.code.pick(this.index, null);
+			var key = Jrun.pick(this.index, null);
 			
-			if (Js.code.isnull(key)) {
+			if (Jrun.isnull(key)) {
 				var value = [];			
 				// get each value of hash from an array
-				Js.code.each(this.node, function() { 
+				Jrun.each(this.node, function() { 
 					value[value.length] = Js.hash.get(this, data);
 				});
 				// return the value in array
@@ -728,7 +728,7 @@ Js.namespace.include({
 			// stack the callback
 			this.pushStack(function() {
 				// get current HTML string
-				var html = Js.code.pick(this.innerHTML, "");
+				var html = Jrun.pick(this.innerHTML, "");
 				
 				if(option == "after") {
 					// append the HTML string
@@ -749,7 +749,7 @@ Js.namespace.include({
 	// array listing all the supported event handler
 	var handler = ["click", "mouseover", "mouseout", "change", "keyup", "keypress", "submit", "blur", "focus", "hover"];
 	// Loop the array and implement each event handler
-	Js.code.each(handler, function() {
+	Jrun.each(handler, function() {
 		// this is the values of array
 		var that = this;
 		// add 's' or 'es' at the end of array value (prevent problem without having s)
@@ -775,17 +775,17 @@ Js.use = function(selector, context) {
 };
 
 Js.restore = function(opt) {
-	var opt = Js.code.pick(opt, true);
+	var opt = Jrun.pick(opt, true);
 	if(opt == true) {
-		if(Js.code.isset(Js.code.$)) {
-			window.$ = Js.code.$;
-			Js.code.$ = null;
+		if(Jrun.isset(Jrun.$)) {
+			window.$ = Jrun.$;
+			Jrun.$ = null;
 		}
 	}
 	
 	return Js.use;
 };
 Js.simplify = function() {
-	Js.code.$ = window.$;
+	Jrun.$ = window.$;
 	window.$ = Js.use;
 }

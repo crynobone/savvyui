@@ -12,7 +12,7 @@ Js.tool.include({
 		
 		Js.debug.object = object;
 		Js.debug.log = function(text) {
-			var text = Js.code.trim(text);
+			var text = Jrun.trim(text);
 			Js.debug.message[Js.debug.message.length] = text;
 			
 			try {
@@ -25,7 +25,10 @@ Js.tool.include({
 			Js.dom.addText(li, text);
 			
 			if(!!Js.widget.loaded("message")) {
-				Js.widget.message.add({text: text, type: "error"});	
+				Js.widget.message.add({
+					text: text, 
+					type: "error"
+				});	
 			}
 		};
 	}

@@ -30,10 +30,10 @@ Js.widget.include({
 			timeout = (Js.test.isInteger(timeout) ? timeout : 5000);
 			
 			(function() {
-				var div = that.node.add("div", {"class": "sui-messagebox"}).css("margin", "2px 0px").hide();
+				var div = that.node.add("div", {"class": "widgetmessage-box"}).css("margin", "2px 0px").hide();
 				
 				if(!!closable) {
-					var span = div.add("span", {"class": "sui-messagebox-close"}).text("x");
+					var span = div.add("span", {"class": "widgetmessage-close"}).text("x");
 				}
 				
 				var p = div.add("p").text(text);
@@ -58,7 +58,7 @@ Js.widget.include({
 		},
 		init: function() {
 			var that = this;
-			this.node = Js("body").first().add("div", {"id": "sui-message"}).show();
+			this.node = Js("body").first().add("div", {"id": "widgetmessage"});
 			
 			var whenScroll = function() {
 				var y = Js.ext.dimension.page.scrolls.y();
@@ -70,7 +70,7 @@ Js.widget.include({
 					currentScroll();	
 				}
 				whenScroll();	
-			}
+			};
 			whenScroll();
 		}
 	}

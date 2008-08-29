@@ -14,7 +14,13 @@
 
 // Enable the code work as the global namespace of Savvy.UI but also the initializer for Js.elements Object
 var Js = window.Js = function(selector, context) {
-	return ((this ===  window && !!Js.use) ? Js.use((selector || document), context) : this);
+	var selector = (selector || document);
+	
+	if(this ===  window && !!Js.Elements) {
+		return new Js.Elements(selector, context);
+	} else {
+		return this;
+	}
 };
 
 // If you prefer SUI as global namespace, there it is.
@@ -1878,7 +1884,8 @@ Js.namespace.include({
 			return (value.match(/^\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\]$/));
 		}
 	}
-});/*
+});
+/*
  * Savvy.UI JavaScript Library Application
  * Name: Elements
  * Last Updated: 25th July 2008
@@ -2668,7 +2675,7 @@ Js.restore = function(opt) {
 Js.simplify = function() {
 	Jrun.$ = window.$;
 	window.$ = Js.use;
-}
+};
 /*
  * Savvy.UI JavaScript Library Application
  * Name: SUI.Ext.Ajax
@@ -5570,10 +5577,10 @@ Js.widget.include({
 			timeout = (Js.test.isInteger(timeout) ? timeout : 5000);
 			
 			(function() {
-				var div = that.node.add("div", {"class": "sui-messagebox"}).css("margin", "2px 0px").hide();
+				var div = that.node.add("div", {"class": "widgetmessage-box"}).css("margin", "2px 0px").hide();
 				
 				if(!!closable) {
-					var span = div.add("span", {"class": "sui-messagebox-close"}).text("x");
+					var span = div.add("span", {"class": "widgetmessage-close"}).text("x");
 				}
 				
 				var p = div.add("p").text(text);
@@ -5598,7 +5605,7 @@ Js.widget.include({
 		},
 		init: function() {
 			var that = this;
-			this.node = Js("body").first().add("div", {"id": "sui-message"}).show();
+			this.node = Js("body").first().add("div", {"id": "widgetmessage"});
 			
 			var whenScroll = function() {
 				var y = Js.ext.dimension.page.scrolls.y();
@@ -5610,7 +5617,7 @@ Js.widget.include({
 					currentScroll();	
 				}
 				whenScroll();	
-			}
+			};
 			whenScroll();
 		}
 	}

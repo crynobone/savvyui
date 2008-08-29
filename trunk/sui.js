@@ -14,10 +14,12 @@
 
 // Enable the code work as the global namespace of Savvy.UI but also the initializer for Js.elements Object
 var Js = window.Js = function(selector, context) {
+	var selector = (selector || document);
+	
 	if(this ===  window && !!Js.Elements) {
-		return new Js.Elements((selector || document), context) : true);
+		return new Js.Elements(selector, context);
 	} else {
-		return false;
+		return this;
 	}
 };
 

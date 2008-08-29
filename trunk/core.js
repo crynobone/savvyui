@@ -282,6 +282,7 @@ Js.namespace.include({
 		png: function(node, uri, js) {
 			var node = node;
 			var uri = uri;
+			var js = Jrun.pick(js, {});
 			var gecko = Jrun.pick(js.gecko, "");
 			var ie = Jrun.pick(js.ie, "scale");
 			

@@ -788,4 +788,4 @@ Js.restore = function(opt) {
 Js.simplify = function() {
 	Jrun.$ = window.$;
 	window.$ = Js.use;
-}
+};

@@ -1,0 +1,50 @@
+@charset "utf-8";
+
+/*=EXT=*/
+/*===Form===*/
+span.extform-errormessage { 
+	display: block; 
+	width: 50%; 
+	background: #ffc; 
+	border: 1px solid #ff6; 
+	margin: 3px 0px; 
+	padding: 2px; 
+}
+
+/*=WIDGET=*/
+/*===message===*/
+#widgetmessage {
+	position: absolute;
+	width: 200px;
+	top: 0px;
+	right: 0px;
+	padding: 2px;
+	x-index: 50;
+}
+div.widgetmessage-box {
+	color: #fff;
+	width: 190px;
+	-moz-border-radius: 2px;
+}
+div.note {
+	background: #333;
+}
+div.error {
+	background: #a00;
+}
+div.success {
+	background: #393;
+}
+.widgetmessage-box span.widgetmessage-close {
+	float: right;
+	width: 10px;
+	height: 10px;
+	margin: 2px 5px;
+	font: bold 11px verdana;
+	cursor: pointer;
+}
+.widgetmessage-box p {
+	margin: 0px;
+	padding: 3px 5px;
+	text-align: left;
+}

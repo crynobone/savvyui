@@ -431,8 +431,9 @@ Js.widget.include({
 						if(this.validation()) {
 							days.onclick(function() {
 								var i = Js(this).get("id").split("_");
+								var count = (i.length - 1);
 								var ym = that.year + "" + that.month;
-								tday = i[1].substr((ym.length), i[1].length);
+								tday = i[count].substr((ym.length), i[count].length);
 								that.updateValue(that.year, (that.month + 1), Jrun.toNumber(tday));  
 							});
 						}

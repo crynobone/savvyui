@@ -29,5 +29,3 @@ Js.namespace.include({
 		}
 	})
 });
-
-var Jstring = Js.string;

@@ -22,5 +22,3 @@ Js.namespace.include({
 		}
 	})
 });
-
-Jarray = Js.array;

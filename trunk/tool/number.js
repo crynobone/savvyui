@@ -18,5 +18,3 @@ Js.namespace.include({
 		}
 	})
 });
-
-var Jnumber = Js.number;

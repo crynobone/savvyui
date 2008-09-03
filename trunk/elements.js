@@ -822,7 +822,12 @@ Js.restore = function(opt) {
 	
 	return Js.use;
 };
-Js.simplify = function() {
-	Jrun.$ = window.$;
-	window.$ = Js.use;
+Js.simplify = function(opt) {
+	var opt = Jrun.pick(opt, true);
+	if(opt == true) {
+		Jrun.$ = window.$;
+		window.$ = Js.use;
+	} else {
+		return Js.use;	
+	}
 };

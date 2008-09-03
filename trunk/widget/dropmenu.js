@@ -13,7 +13,7 @@
 */
 
 Js.widget.include({
-	name: "DropMenu", 
+	name: "DropMenu",
 	object: function(selector) {
 		this.object = null;
 		this.node = null;
@@ -33,106 +33,17 @@ Js.widget.include({
 			if (!!selector && Jrun.trim(selector) !== "") {
 				var that = this;
 				this.object = Js(selector);
-				var mList = Js(selector + " ul > li > a");
+				var mUL = Js(selector + " > ul");
+				var mLI = Js("li", mUL.fetch()); 
 				
-				mList.each(function() {
-					Js(this).onhover(function() {
-						that.node = this.parentNode;
-						that.show(selector, this.parentNode);
-					}, function() {
-						that.status = 0;
-						setTimeout((function() { 
-							that.hide(selector);
-						}), 5);
-					}).done();
+				mUL.appendClass("widgetdropmenu-container");
+				mLI.onhover(function() {
+					Js(this).appendClass("widgetdropmenu-hover");
+				}, function() {
+					Js(this).removeClass("widgetdropmenu-hover");
 				});
 			}
 			return this;
-		},
-		show: function(sel, node) {
-			var that = this;
-			var sUL = Js("> ul", node);
-			
-			if(sUL.count() > 0) {
-				this.status = 1;
-				var t = Js.ext.dimension.node.offset(node);
-				
-				if(Jrun.finds([sel,"menucontainer"].join("_")) && Jrun.isset(this.child)) {
-					if(Jrun.isset(this.lastnode)) {
-						Js(this.lastnode).insert(this.content);
-						this.lastnode = null;
-					}
-					
-					Js.dom.remove(this.child.first().fetch());
-					this.child = null;
-				}
-				
-				this.child = Js("body").add("div").css("visibility", "hidden").alpha(0);
-				this.child.setup({
-					"id": [sel, "menucontainer"].join("_"),
-					"class": "dropmenu-box"
-				});
-				
-				this.content = sUL.first().fetch();
-				
-				var text = "<ul>" + this.content.innerHTML + "</ul>";
-				
-				if (this.child.html() != text) {
-					this.child.insert(this.content);
-					var h = this.child.fetch().offsetHeight;
-					
-					this.child.css({
-						"left": t[3] + "px",
-						"top": (t[1] + t[2] - 4) + "px",
-						"height": "0px"
-					}).fx({
-						method: "fade",
-						transaction: [0, 97],
-						ease: 1.3,
-						step: 40,
-						shutter: 40
-					}).syncFx({
-						method: "resizeHeight",
-						transaction: [0, h],
-						ease: 0.9,
-						step: 100,
-						shutter: 20
-					});
-					
-				}
-				this.lastnode = node;
-				
-				this.child.onhover(function() {
-					that.status = 1;
-					that.node = node;
-				}, function() {
-					if(Jrun.finds([sel, "menucontainer"].join("_"))) {
-						that.status = 0;
-						setTimeout((function() {
-							that.hide(sel);
-						}), 5);
-					}
-				}).done();
-			}
-			sUL.done();
-		},
-		hide: function(sel) {
-			if(this.status == 0) {
-				if(Jrun.isset([sel, "menucontainer"].join("_")) && Jrun.isset(this.child)) {
-					if(Jrun.isset(this.lastnode)) {
-						Js(this.lastnode).insert(this.content).done();
-						this.lastnode = null;
-					}
-					
-					Js.dom.remove(this.child.first().fetch());
-					this.child = null;
-				}
-			}
 		}
 	}
-});
-
-Js.util.include({
-	name: "DropMenu", 
-	object: Js.widget.DropMenu
 });

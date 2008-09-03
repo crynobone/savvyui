@@ -48,3 +48,90 @@ div.success {
 	padding: 3px 5px;
 	text-align: left;
 }
+
+/*===ddmenu===*/
+.widgetdropmenu-container {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+.widgetdropmenu-container a, .widgetdropmenu-container a:link, .widgetdropmenu-container a:hover {
+	text-decoration: none;
+	font-size: 12px;
+	border: none;
+	display: block;
+	margin: 0 1px 0 0;
+	padding: 0 10px;
+}
+.widgetdropmenu-container a img {
+	border: none;
+}
+.widgetdropmenu-container a .left { 
+	display: block;
+	float: left;
+	padding: 6px 2px; 
+	border: none;
+}
+.widgetdropmenu-container a .right { 
+	display: block;
+	float: right;
+	padding: 6px 2px; 
+	border: none;
+}
+
+.widgetdropmenu-container li {
+	float: left;
+	display: block;
+	margin: 0 5px 0 0;
+	line-height: 33px;
+	position: relative;
+}
+.widgetdropmenu-container li ul a, .widgetdropmenu-container li ul a:link {
+	border: 1px solid #fff; 
+}
+.widgetdropmenu-container li ul a:hover {
+	color: #fff;
+	background: #066bb4; 
+	border: 1px solid #fefefe; 
+}
+.widgetdropmenu-container li ul {
+	list-style: none;
+	display: none;
+	position: absolute;
+	width: 13em;
+	left: -999em;
+	margin: -3px 0 0 0;
+	padding: 0px;
+	border-top: 1px solid #c3b2a5;
+	border-bottom: 1px solid #c3b2a5;
+}
+.widgetdropmenu-container li:hover ul, .widgetdropmenu-container li.widgetdropmenu-hover ul {
+	display: block;
+	left: auto;
+	z-index: 1000;	
+}
+.widgetdropmenu-container li ul li {
+    background: #fff;			
+	line-height: 28px;
+	border-left: 1px solid #c3b2a5;
+	border-right: 1px solid #c3b2a5;
+	width: 13em;
+	border-top: 0;
+	position: relative;
+	
+}
+.widgetdropmenu-container li ul ul {
+	margin: -29px 0 0 13em;
+}
+.widgetdropmenu-container li:hover ul ul, .widgetdropmenu-container li.widgetdropmenu-hover ul ul {
+	left: -999em;
+}
+.widgetdropmenu-container li:hover ul, .widgetdropmenu-container li li:hover ul, .widgetdropmenu-container li.widgetdropmenu-hover ul, .widgetdropmenu-container li li.widgetdropmenu-hover ul {
+	left: auto;
+}
+.widgetdropmenu-container li:hover ul ul, .widgetdropmenu-container li:hover ul ul ul, .widgetdropmenu-container li.widgetdropmenu-hover ul ul, .widgetdropmenu-container li.widgetdropmenu-hover ul ul ul {
+	left: -999em;
+}
+.widgetdropmenu-container li:hover ul, .widgetdropmenu-container li li:hover ul, .widgetdropmenu-container li li li:hover ul, .widgetdropmenu-container li.widgetdropmenu-hover ul, .widgetdropmenu-container li li.widgetdropmenu-hover ul, .widgetdropmenu-container li li li.widgetdropmenu-hover ul {
+	left: auto;
+}

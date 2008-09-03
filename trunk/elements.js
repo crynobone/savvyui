@@ -606,7 +606,7 @@ Js.namespace.include({
 		},
 		removeSelf: function() {
 			this.pushStack(function() {
-				Jd.dom.remove(this);			
+				Js.dom.remove(this);			
 			});
 			
 			return this;

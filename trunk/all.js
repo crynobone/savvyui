@@ -1084,7 +1084,6 @@ Js.namespace.include({
 			} else if(args.length == 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])) {
 				parent = this.parent(args[1]);
 				child = args[0];
-				alert(child);
 				reference = this.next(args[1]);
 			}
 			
@@ -2495,7 +2494,7 @@ Js.namespace.include({
 		},
 		removeSelf: function() {
 			this.pushStack(function() {
-				Jd.dom.remove(this);			
+				Js.dom.remove(this);			
 			});
 			
 			return this;

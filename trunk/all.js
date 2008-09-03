@@ -2493,6 +2493,13 @@ Js.namespace.include({
 			// continue chaining
 			return this;
 		},
+		removeSelf: function() {
+			this.pushStack(function() {
+				Jd.dom.remove(this);			
+			});
+			
+			return this;
+		},
 		html: function(text, option) {
 			var args = arguments;
 			

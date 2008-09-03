@@ -937,6 +937,7 @@ Js.namespace.include({
 		png: function(node, uri, js) {
 			var node = node;
 			var uri = uri;
+			var js = Jrun.pick(js, {});
 			var gecko = Jrun.pick(js.gecko, "");
 			var ie = Jrun.pick(js.ie, "scale");
 			
@@ -1054,7 +1055,7 @@ Js.namespace.include({
 				child = args[1];
 				reference = args[2];
 			} else if(args.length == 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])) {
-				parent = args[1].parentNode;
+				parent = this.parent(args[1]);
 				child = args[0];
 				reference = args[1];
 			} else {
@@ -1071,7 +1072,7 @@ Js.namespace.include({
 			}
 		},
 		addAfter: function(args) {
-			var args = arguments;
+			var args = Jrun.toArray(arguments);
 			var parent = null;
 			var child = null;
 			var reference = null;
@@ -1080,9 +1081,10 @@ Js.namespace.include({
 				parent = args[0];
 				child = args[1];
 				reference = this.next(args[2]);
-			} else {
+			} else if(args.length == 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])) {
 				parent = this.parent(args[1]);
 				child = args[0];
+				alert(child);
 				reference = this.next(args[1]);
 			}
 			
@@ -1914,7 +1916,7 @@ Js.namespace.include({
 		} else if(!!selector && typeof(selector) !== "string" && selector.length > 0) {
 			// selector is actually a nodeList (semi Array), add to stack
 			this.addStack(selector);
-		} else if (!!selector && typeof(selector) == "string") {
+		} else if(!!selector && typeof(selector) == "string") {
 			// selector is a string.
 			this.query(selector, context);
 		}
@@ -2264,6 +2266,36 @@ Js.namespace.include({
 				return node;
 			} else {
 				return false;
+			}
+		},
+		addBefore: function(selector, data) {
+			var args = arguments;
+			
+			var key = Jrun.pick(this.index, 0);
+			
+			if(Jrun.isset(this.node[key])) {
+				var node = new Js.Elements;
+				node.create(selector, data);
+				Js.dom.addBefore(node.node[0], this.node[key]);
+				
+				return node;
+			} else {
+				return false;	
+			}
+		},
+		addAfter: function(selector, data) {
+			var args = arguments;
+			
+			var key = Jrun.pick(this.index, 0);
+			
+			if(Jrun.isset(this.node[key])) {
+				var node = new Js.Elements;
+				node.create(selector, data);
+				Js.dom.addAfter(node.node[0], this.node[key]);
+				
+				return node;
+			} else {
+				return false;	
 			}
 		},
 		insertion: function(element, data, i) {
@@ -4402,8 +4434,6 @@ Js.namespace.include({
 		}
 	})
 });
-
-Jarray = Js.array;
 Js.tool.include({
 	name: "Debugger", 
 	object: function() {
@@ -4459,8 +4489,6 @@ Js.namespace.include({
 		}
 	})
 });
-
-var Jnumber = Js.number;
 Js.namespace.include({
 	name: "string", 
 	object: Js.base.create({
@@ -4492,8 +4520,7 @@ Js.namespace.include({
 		}
 	})
 });
-
-var Jstring = Js.string;/*
+/*
  * Savvy.UI JavaScript Library Application
  * Name: SUI.Util.Anchor
  * Type: Utility/Plug-In
@@ -5288,8 +5315,9 @@ Js.widget.include({
 						if(this.validation()) {
 							days.onclick(function() {
 								var i = Js(this).get("id").split("_");
+								var count = (i.length - 1);
 								var ym = that.year + "" + that.month;
-								tday = i[1].substr((ym.length), i[1].length);
+								tday = i[count].substr((ym.length), i[count].length);
 								that.updateValue(that.year, (that.month + 1), Jrun.toNumber(tday));  
 							});
 						}

@@ -400,7 +400,7 @@ Js.namespace.include({
 				child = args[1];
 				reference = args[2];
 			} else if(args.length == 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])) {
-				parent = args[1].parentNode;
+				parent = this.parent(args[1]);
 				child = args[0];
 				reference = args[1];
 			} else {
@@ -417,7 +417,7 @@ Js.namespace.include({
 			}
 		},
 		addAfter: function(args) {
-			var args = arguments;
+			var args = Jrun.toArray(arguments);
 			var parent = null;
 			var child = null;
 			var reference = null;
@@ -426,9 +426,10 @@ Js.namespace.include({
 				parent = args[0];
 				child = args[1];
 				reference = this.next(args[2]);
-			} else {
+			} else if(args.length == 2 && Jrun.isset(args[0]) && Jrun.isset(args[1])) {
 				parent = this.parent(args[1]);
 				child = args[0];
+				alert(child);
 				reference = this.next(args[1]);
 			}
 			

@@ -27,7 +27,7 @@ Js.namespace.include({
 		} else if(!!selector && typeof(selector) !== "string" && selector.length > 0) {
 			// selector is actually a nodeList (semi Array), add to stack
 			this.addStack(selector);
-		} else if (!!selector && typeof(selector) == "string") {
+		} else if(!!selector && typeof(selector) == "string") {
 			// selector is a string.
 			this.query(selector, context);
 		}
@@ -377,6 +377,36 @@ Js.namespace.include({
 				return node;
 			} else {
 				return false;
+			}
+		},
+		addBefore: function(selector, data) {
+			var args = arguments;
+			
+			var key = Jrun.pick(this.index, 0);
+			
+			if(Jrun.isset(this.node[key])) {
+				var node = new Js.Elements;
+				node.create(selector, data);
+				Js.dom.addBefore(node.node[0], this.node[key]);
+				
+				return node;
+			} else {
+				return false;	
+			}
+		},
+		addAfter: function(selector, data) {
+			var args = arguments;
+			
+			var key = Jrun.pick(this.index, 0);
+			
+			if(Jrun.isset(this.node[key])) {
+				var node = new Js.Elements;
+				node.create(selector, data);
+				Js.dom.addAfter(node.node[0], this.node[key]);
+				
+				return node;
+			} else {
+				return false;	
 			}
 		},
 		insertion: function(element, data, i) {

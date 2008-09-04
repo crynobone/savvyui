@@ -5519,11 +5519,11 @@ Js.widget.include({
 			
 			var that = this;
 			var text = Jrun.pick(spec.text, "");
-			var timeout = Jrun.pick(spec.timeout, 5000);
+			var timeout = Jrun.pick(spec.timeout, 8000);
 			var type = Jrun.pick(spec.type, "note");
 			var closable = Jrun.pick(spec.closable, true);
 			
-			timeout = (Js.test.isInteger(timeout) ? timeout : 5000);
+			timeout = (Js.test.isInteger(timeout) ? timeout : 8000);
 			
 			(function() {
 				var div = that.node.add("div", {"class": "widgetmessage-box"}).css("margin", "2px 0px").hide();
@@ -5532,7 +5532,8 @@ Js.widget.include({
 					var span = div.add("span", {"class": "widgetmessage-close"}).text("x");
 				}
 				
-				var p = div.add("p").text(text);
+				var p = div.add("p").html(text);
+				
 				var t = setTimeout(function() {
 					div.remove(span.fetch());
 					div.remove(p.fetch());

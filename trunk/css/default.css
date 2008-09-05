@@ -21,21 +21,25 @@ span.extform-errormessage {
 	padding: 2px;
 	x-index: 50;
 }
-div.widgetmessage-box {
+#widgetmessage div.widgetmessage-box {
 	color: #fff;
 	width: 190px;
 	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
 }
-div.note {
+#widgetmessage div.widgetmessage-box a, #widgetmessage div.widgetmessage-box a:link {
+	color: #ff3;
+}
+#widgetmessage div.note {
 	background: #333;
 }
-div.error {
+#widgetmessage div.error {
 	background: #a00;
 }
-div.success {
+#widgetmessage div.success {
 	background: #393;
 }
-.widgetmessage-box span.widgetmessage-close {
+#widgetmessage div.widgetmessage-box span.widgetmessage-close {
 	float: right;
 	width: 10px;
 	height: 10px;
@@ -43,13 +47,13 @@ div.success {
 	font: bold 11px verdana;
 	cursor: pointer;
 }
-.widgetmessage-box p {
+#widgetmessage div.widgetmessage-box p {
 	margin: 0px;
 	padding: 3px 5px;
 	text-align: left;
 }
 
-/*===ddmenu===*/
+/*===dropmenu===*/
 .widgetdropmenu-container {
 	list-style: none;
 	margin: 0px;
@@ -60,8 +64,8 @@ div.success {
 	font-size: 12px;
 	border: none;
 	display: block;
-	margin: 0 1px 0 0;
-	padding: 0 10px;
+	margin: 1px;
+	padding: 0 5px;
 }
 .widgetdropmenu-container a img {
 	border: none;
@@ -69,13 +73,13 @@ div.success {
 .widgetdropmenu-container a .left { 
 	display: block;
 	float: left;
-	padding: 6px 2px; 
+	padding: 4px 2px; 
 	border: none;
 }
 .widgetdropmenu-container a .right { 
 	display: block;
 	float: right;
-	padding: 6px 2px; 
+	padding: 4px 2px; 
 	border: none;
 }
 
@@ -83,16 +87,21 @@ div.success {
 	float: left;
 	display: block;
 	margin: 0 5px 0 0;
+	padding: 0;
 	line-height: 33px;
 	position: relative;
 }
 .widgetdropmenu-container li ul a, .widgetdropmenu-container li ul a:link {
-	border: 1px solid #fff; 
+	border: 1px solid #fff;
+	color: #3b5998;
+}
+.widgetdropmenu-container li ul a.separator {
+	border-bottom: 1px solid #7a94c9;
 }
 .widgetdropmenu-container li ul a:hover {
 	color: #fff;
-	background: #066bb4; 
-	border: 1px solid #fefefe; 
+	background: #6d84b4; 
+	border: 1px solid #7a94c9; 
 }
 .widgetdropmenu-container li ul {
 	list-style: none;
@@ -102,8 +111,8 @@ div.success {
 	left: -999em;
 	margin: -3px 0 0 0;
 	padding: 0px;
-	border-top: 1px solid #c3b2a5;
-	border-bottom: 1px solid #c3b2a5;
+	border-top: 1px solid #7a94c9;
+	border-bottom: 1px solid #7a94c9;
 }
 .widgetdropmenu-container li:hover ul, .widgetdropmenu-container li.widgetdropmenu-hover ul {
 	display: block;
@@ -112,12 +121,13 @@ div.success {
 }
 .widgetdropmenu-container li ul li {
     background: #fff;			
-	line-height: 28px;
-	border-left: 1px solid #c3b2a5;
-	border-right: 1px solid #c3b2a5;
+	line-height: 24px;
+	border-left: 1px solid #7a94c9;
+	border-right: 1px solid #7a94c9;
 	width: 13em;
 	border-top: 0;
 	position: relative;
+	padding: 0;
 	
 }
 .widgetdropmenu-container li ul ul {
@@ -134,4 +144,81 @@ div.success {
 }
 .widgetdropmenu-container li:hover ul, .widgetdropmenu-container li li:hover ul, .widgetdropmenu-container li li li:hover ul, .widgetdropmenu-container li.widgetdropmenu-hover ul, .widgetdropmenu-container li li.widgetdropmenu-hover ul, .widgetdropmenu-container li li li.widgetdropmenu-hover ul {
 	left: auto;
+}
+
+/*===simpletab===*/
+.widgetsimpletab-toolbar-container {
+	clear: both;
+}
+
+.widgetsimpletab-toolbar {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.widgetsimpletab-toolbar li {
+	display: inline;
+	position: relative;
+}
+
+.widgetsimpletab-toolbar li a {
+	text-decoration: none;
+	text-align: center;
+	padding: 2px 10px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	margin-right: 5px;
+	color: #6d84b4;
+	border: 1px solid #fff;
+}
+
+.widgetsimpletab-toolbar li a:hover {
+}
+
+.widgetsimpletab-toolbar li a.current {
+	color: #fff;
+	border: 1px solid #7a94c9;
+	background-color: #6d84b4;
+}
+
+.widgetsimpletab-container {
+	clear: both;
+	margin-top: 10px;
+	padding: 5px;
+	border-top: 1px solid #7a94c9;
+}
+
+.widgetsimpletab-container ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.widgetsimpletab-container ul li {
+	padding: 3px 5px;
+	clear: both;
+	background-color: #fff;
+	border-bottom: 1px solid #cedaf2;
+}
+
+.widgetsimpletab-container ul li a {
+	text-decoration: none;
+	color: #6d84b4;
+}
+
+.widgetsimpletab-container ul li a:hover {
+
+}
+
+.widgetsimpletab-container ul li a.current {
+
+}
+
+.widgetsimpletab-active {
+    display: block;
+}
+
+.widgetsimpletab-hidden{
+    display: none;
 }

@@ -4893,7 +4893,7 @@ Js.util.include({
 		}
 	}
 });
-Js.widget.include({
+Js.util.include({
 	name: "Editable",
 	object: Js.base.create({
 		object: null,

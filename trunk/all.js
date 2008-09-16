@@ -4898,7 +4898,8 @@ Js.util.include({
 	object: Js.base.create({
 		object: null,
 		selector: null,
-		value: null,
+		value: "Other",
+		defaults: "",
 		message: "Please enter a new option value...",
 		__construct: function() {
 			return this;
@@ -4915,7 +4916,7 @@ Js.util.include({
 				var object = Js(this);
 				if(object.val() == that.value) {
 					var winprompt = window.prompt(that.message.toString(), that.defaults.toString());
-					if(!!winprompt && Jrun.inArray(option, winprompt)) {
+					if(!!winprompt && !Jrun.inArray(option, winprompt)) {
 						object.add("option", {"value": winprompt, "selected": "selected"}).text(winprompt);
 					} else {
 						object.fetch().options[0].selected = true;

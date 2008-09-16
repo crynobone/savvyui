@@ -984,7 +984,7 @@ Js.namespace.include({
 					
 					if(!!parent && parent.nodeType == 1) {
 						var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
-					
+						
 						for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 							var node = tag[ii];
 							

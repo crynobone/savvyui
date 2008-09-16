@@ -147,22 +147,22 @@ span.extform-errormessage {
 }
 
 /*===simpletab===*/
-.widgetsimpletab-toolbar-container {
+.simpletab-toolbar-container {
 	clear: both;
 }
 
-.widgetsimpletab-toolbar {
+.simpletab-toolbar {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
 
-.widgetsimpletab-toolbar li {
+.simpletab-toolbar li {
 	display: inline;
 	position: relative;
 }
 
-.widgetsimpletab-toolbar li a {
+.simpletab-toolbar li a {
 	text-decoration: none;
 	text-align: center;
 	padding: 2px 10px;
@@ -173,52 +173,52 @@ span.extform-errormessage {
 	border: 1px solid #fff;
 }
 
-.widgetsimpletab-toolbar li a:hover {
+.simpletab-toolbar li a:hover {
 }
 
-.widgetsimpletab-toolbar li a.current {
+.simpletab-toolbar li a.current {
 	color: #fff;
 	border: 1px solid #7a94c9;
 	background-color: #6d84b4;
 }
 
-.widgetsimpletab-container {
+.simpletab-container {
 	clear: both;
 	margin-top: 10px;
 	padding: 5px;
 	border-top: 1px solid #7a94c9;
 }
 
-.widgetsimpletab-container ul {
+.simpletab-container ul {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
 
-.widgetsimpletab-container ul li {
+.simpletab-container ul li {
 	padding: 3px 5px;
 	clear: both;
 	background-color: #fff;
 	border-bottom: 1px solid #cedaf2;
 }
 
-.widgetsimpletab-container ul li a {
+.simpletab-container ul li a {
 	text-decoration: none;
 	color: #6d84b4;
 }
 
-.widgetsimpletab-container ul li a:hover {
+.simpletab-container ul li a:hover {
 
 }
 
-.widgetsimpletab-container ul li a.current {
+.simpletab-container ul li a.current {
 
 }
 
-.widgetsimpletab-active {
+.simpletab-active {
     display: block;
 }
 
-.widgetsimpletab-hidden{
+.simpletab-hidden{
     display: none;
 }

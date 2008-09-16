@@ -1639,7 +1639,7 @@ Js.namespace.include({
 					
 					if(!!parent && parent.nodeType == 1) {
 						var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
-					
+						
 						for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 							var node = tag[ii];
 							
@@ -2095,7 +2095,7 @@ Js.namespace.include({
 					}
 				} else if(this.node.length > 0) {
 					var node = (!key ? this.node : this.node[key]);
-					var object = Js.query.selector(elem, node);
+					var object = Js.query.selector(selector, node);
 					
 					if(object.length > 0) { 
 						this.addStack(object);
@@ -4893,7 +4893,38 @@ Js.util.include({
 		}
 	}
 });
-/*
+Js.widget.include({
+	name: "Editable",
+	object: Js.base.create({
+		object: null,
+		selector: null,
+		value: null,
+		message: "Please enter a new option value...",
+		__construct: function() {
+			return this;
+		},
+		init: function(selector) {
+			var that = this;
+			
+			this.selector = Jrun.pick(this.selector, selector);
+			this.object = Js(this.selector);
+			
+			var option = this.object.has("option").val();
+			
+			this.object.onchange(function() {
+				var object = Js(this);
+				if(object.val() == that.value) {
+					var winprompt = window.prompt(that.message.toString(), that.defaults.toString());
+					if(!!winprompt && Jrun.inArray(option, winprompt)) {
+						object.add("option", {"value": winprompt, "selected": "selected"}).text(winprompt);
+					} else {
+						object.fetch().options[0].selected = true;
+					}
+				}
+			});
+		}
+	});
+});/*
  * Savvy.UI JavaScript Library Extension
  * Name: Calendar
  * Type: Widget
@@ -5849,7 +5880,7 @@ Js.widget.include({
 
 Js.widget.include({
 	name: "SimpleTab", 
-	object: function(js) {
+	object: function(sel, handler) {
 		this.temp = null;
 		this.height = null;
 		this.toolbar = null;
@@ -5858,45 +5889,39 @@ Js.widget.include({
 		this.element = null;
 		this.activeTab = null;
 		this.activeHeader = null;
+		this.handler = null;
 		
 		// start __constructor()
-		if(Jrun.typeOf(js) === "object" || Jrun.typeOf(js) === "string") {
-			this.init(js);
+		if(Jrun.typeOf(sel) === "object" || Jrun.typeOf(sel) === "string") {
+			this.init(sel, handler);
 		}
 		
 		return this;
 	}, 
 	proto: {
-		init: function(sel) {
+		init: function(sel, handler) {
 			var that = this;
 			this.object = Js(sel);
-			this.object.setClass("widgetsimpletab-container");
+			this.object.setClass("simpletab-container");
 			this.element = this.object.first().get("id");
+			this.handler = Jrun.pick(handler, "click");
 			
-			var child = this.object.has("div.widgetsimpletab, div.widgetsimpletab-panel");
-			var h = window.location.hash;
+			this.handler = (this.handler.match(/^(click|mouseover)$/g) ? this.handler : 'click');
 			
-			if(h.match(/^#(.+)/)) {
-				var hashtab = this.object.has(h);
-				if(hashtab.count() > 0) {
-					this.activeTab = hashtab;
-				} else {
-					this.activeTab = Js(child.first().fetch());
-				}
-			} else {
-				this.activeTab = Js(child.first().fetch());
-			}
+			var child = this.object.has("div.simpletab, div.simpletab-panel");
+			
+			this.activeTab = Js(child.first().fetch());
 			
 			this.addToolbar(this.element);
 			
 			child.each(function() {
 				that.addHeader(this);
-				Js(this).setClass("widgetsimpletab-hidden");			
+				Js(this).setClass("simpletab-hidden");			
 			});
 				
 			this.activeHeader = Js("a[href=#" + this.activeTab.get("id") + "]");
 			this.activeHeader.setClass("current");
-			this.activeTab.setClass("widgetsimpletab-active");
+			this.activeTab.setClass("simpletab-active");
 		},
 		makeActive: function(hash) {
 			
@@ -5910,22 +5935,23 @@ Js.widget.include({
 				var closable = Jrun.pick(spec.closable, false);
 				var set = Jrun.pick(spec.activate, false);
 				
-				var obj = this.object.add("div", {"id": id, "class": "widgetsimpletab-hidden"}).html(content);
+				var obj = this.object.add("div", {"id": id, "class": "simpletab-hidden"}).html(content);
 				var li = this.header.add("li");
 				var a = li.add("a", {
 					"href": "#" + id,
 					"title": title
 				});
 				a.add("em");
-				a.text(title).onclick(function() {
+				a.text(title).on(this.handler, function() {
 					that.activate(this);
+					return false;
 				});
 				
 				if (!!closable) {
 					a.add("span").css("paddingLeft", "10px").text("x").onclick(function() { // clicks to mouseovers
 						var href = Js(this.parentNode).get("href");
 						that.activeHeader.setClass("").done();
-						that.activeTab.setClass("widgetsimpletab-hidden").done();
+						that.activeTab.setClass("simpletab-hidden").done();
 						that.object.remove(Js(href).fetch());
 						Js.dom.remove(this.parentNode.parentNode);
 						
@@ -5939,7 +5965,7 @@ Js.widget.include({
 		},
 		addToolbar: function(el) {
 			div = Js("body").first().add("div", {
-				"class": "widgetsimpletab-toolbar-container",
+				"class": "simpletab-toolbar-container",
 				"id": this.element + "toolbar"
 			});
 			
@@ -5948,22 +5974,23 @@ Js.widget.include({
 			
 			this.header = this.toolbar.add("ul", {
 				"id": [el, "toolbar"].join("-"),
-				"class": "widgetsimpletab-toolbar"
+				"class": "simpletab-toolbar"
 			});
 			var div2 = div.add("div").css("display", "block");
 		},
 		activate: function(obj) {
 			var that = this;
 			this.activeHeader.setClass("");
-			this.activeTab.setClass("widgetsimpletab-hidden");
+			this.activeTab.setClass("simpletab-hidden");
 			
 			this.activeHeader = Js(obj);
 			var href = this.activeHeader.get("href");
 			this.activeTab = Js(href);
 			
 			this.activeHeader.setClass("current");
-			this.activeTab.setClass("widgetsimpletab-active");
-			window.location.hash = href;
+			this.activeTab.setClass("simpletab-active");
+			
+			return false;
 		},
 		revert: function() {
 			var activecon = this.header.has("li > a");
@@ -5985,8 +6012,9 @@ Js.widget.include({
 			});
 			
 			a.add("em");
-			a.text(title).onclick(function() {
+			a.text(title).on(this.handler, function() {
 				that.activate(this);
+				return false;
 			});
 			
 			if(!!closable) {
@@ -5997,7 +6025,7 @@ Js.widget.include({
 					
 					var href = my.get("href");
 					that.activeHeader.setClass("").done();
-					that.activeTab.setClass("widgetsimpletab-hidden").done();
+					that.activeTab.setClass("simpletab-hidden").done();
 					that.object.remove(Js(href).fetch());
 					Js.dom.remove(this.parentNode.parentNode);
 					

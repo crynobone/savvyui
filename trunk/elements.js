@@ -207,7 +207,7 @@ Js.namespace.include({
 					}
 				} else if(this.node.length > 0) {
 					var node = (!key ? this.node : this.node[key]);
-					var object = Js.query.selector(elem, node);
+					var object = Js.query.selector(selector, node);
 					
 					if(object.length > 0) { 
 						this.addStack(object);

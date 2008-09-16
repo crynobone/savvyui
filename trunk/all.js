@@ -2542,14 +2542,14 @@ Js.namespace.include({
 				});
 				// continue chaining
 				return this;
-			} else if(!text || typeof(text) == "number") {
+			} else if(!text) {
 				var key = Jrun.pick(this.index, null);
 				
 				if(Jrun.isnull(key)) {
 					var value = [];
 					// retrieve the value of each HTMLelement
 					Jrun.each(this.node, function() {
-						value[value.length] = Jrun.pick(this.node[key].value, "");
+						value[value.length] = Jrun.pick(this.value, "");
 					});
 					// return the value as array
 					return value;

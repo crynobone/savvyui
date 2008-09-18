@@ -158,10 +158,11 @@ Js.namespace.include({
 		has: function(node, value) {
 			var klasName = node.className;
 			var value = Jrun.trim(value);
+			var re = new RegExp("(^|\\s)" + value + "(\\s|$)");
 			
 			if(Js.dom.isElement(node)) {
 				if(Jrun.isset(klasName) && Jrun.trim(klasName) != "") {
-					return Jrun.inArray(klasName.split(/\s/), value);
+					return (re.test(klasName) ? true : false);
 				} else { 
 					return false;
 				}
@@ -501,31 +502,31 @@ Js.namespace.include({
 		prev: function(node) {
 			do {
 			   node = node.previousSibling;
-			} while(node && node.nodeType != 1);
+			} while(!!node && node.nodeType != 1);
 			
 			return node;
 		},
 		next: function(node) {
 			do {
 				node = node.nextSibling;
-			} while(node && node.nodeType != 1);
+			} while(!!node && node.nodeType != 1);
 			
 			return node;
 		},
 		first: function(node) {
-			node = node.firstChild;
-			return (node && node.nodeType != 1 ? this.next(node) : node);
+			var node = node.firstChild;
+			return (!!node && node.nodeType != 1 ? this.next(node) : node);
 		},
 		last: function(node) {
-			node = node.lastChild;
-			return (node && node.nodeType != 1 ? this.prev(node) : node);
+			var node = node.lastChild;
+			return (!!node && node.nodeType != 1 ? this.prev(node) : node);
 		},
 		isFirst: function(node) {
-			var n = this.next(this.parent(node).firstChild);
+			var n = this.first(this.parent(node));
 			return n === node;
 		},
 		isLast: function(node) {
-			var n = this.prev(this.parent(node).lastChild);
+			var n = this.last(this.parent(node));
 			return n === node;
 		},
 		isParentOf: function(node, parNode) {
@@ -826,8 +827,7 @@ Js.namespace.include({
 			var r = null;
 			var status = null;
 			var value = false;
-			var prev = node.previousSibling;
-			var next = node.nextSibling;
+			var tagName = node.tagName.toLowerCase();
 			
 			if(data.match(/^(enabled|disabled|checked|selected)$/)) {
 				status = data;
@@ -840,29 +840,25 @@ Js.namespace.include({
 			}
 			
 			if(data == 'visible') {
-				return ((Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden") || (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === "hidden") ? false : true);
+				r = (Js.style.get(node, "display") === "none" ? true : false);
+				r = (r === true || Js.style.get(node, "visibility") === "hidden" ? true : false);
+				r = (r === true || Js.style.get(node, "visibility") === "hidden" ? true : false);
+				r = (r === true || (tagName === "input" && Js.attr.get(node, "type") !== "hidden") ? true : false);
+				return r;
 			} else if(data == 'hidden') {
-				return (Js.style.get(node, "display") === "none" || Js.style.get(node, "visibility") === "hidden" || (node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === "hidden") ? true : false);
+				r = (Js.style.get(node, "display") === "none" ? true : false);
+				r = (r === true || Js.style.get(node, "visibility") === "hidden" ? true : false);
+				r = (r === true || Js.style.get(node, "visibility") === "hidden" ? true : false);
+				r = (r === true || (tagName === "input" && Js.attr.get(node, "type") === "hidden") ? true : false);
+				return r;
 			} else if(data == 'first-child') {
-				if(!!prev) {
-					return (!prev || !!Js.dom.isFirst(prev) ? true : false);
-				} else {
-					return true;
-				}
+				return Js.dom.isFirst(node);
 			} else if(data == 'last-child') {
-				if(!!next) { 
-					return (!next || !!Js.dom.isLast(next) ? true : false);
-				} else {
-					return true;
-				}
+				return Js.dom.isLast(node);
 			} else if(data == 'only-child') {
-				if(!!node) { 
-					return Js.dom.isOnlyChild(node);
-				} else {
-					return true;
-				}
+				return Js.dom.isOnlyChild(node);
 			} else if(data == 'input') {
-				r = (!!node.tagName && !!node.tagName.toLowerCase().match(/^(input|select|textarea)$/g) ? true : false);
+				r = (!!tagName && !!tagName.match(/^(input|select|textarea)$/g) ? true : false);
 				if(Jrun.isset(status)) {
 					r = (Js.attr.get(node, status) !== false ? true : false);
 					if(!!value) { 
@@ -870,9 +866,24 @@ Js.namespace.include({
 					}
 				}
 				return r;
+			} else if(data.match(/^contains\(.*\)$/)) {
+				var value = RegExp.$1;
+				var content = (!!node.innerText && Jrun.typeOf(node.innerText) == "string" ? node.innerText : "");
+				var re = new RegExp("(^|\\s)" + value + "(\\s|$)");
+				return (re.test(content) ? true : false);
+			} else if(data.match(/^not\(.*\)$/)) {
+				var value = RegExp.$1;
+				var elem = this.selector(value);
+				r = true;
+				for(var i = 0; i < elem.length && !!elem; i++) {
+					if(node === elem[i]) {
+						r = false;	
+					}
+				}
+				return r;
 			} else {
 				if(data.match(/^(text|password|radio|checkbox|submit|image|reset|button|file|hidden)$/)) {
-					return (!!node.tagName && node.tagName.toLowerCase() === "input" && Js.attr.get(node, "type") === data ? true : false);
+					return (!!tagName && tagName === "input" && Js.attr.get(node, "type") === data ? true : false);
 				} else { 
 					return false;
 				}
@@ -881,47 +892,55 @@ Js.namespace.include({
 		hasClass: function(node, klasName) {
 			return (!!Js.className.has(node, klasName) ? true : false);
 		},
-		hasAttrs: function(node, attrs) {
-			var data = Js.attr.get(node, attrs[0]);
-			
-			if(!!data) {
-				switch (attrs[1]) {
-					case '=': // Equality
-						return (data === attrs[2]);
-						break;
-					case '~': // Match one of space seperated
-						return (data.match(new RegExp('\\b' + attrs[2] + '\\b')));
-						break;
-					case '|': // Match start with value followed by optional hyphen
-						return (data.match(new RegExp('^' + attrs[2] + '-?')));
-						break;
-					case '^': // Match starts with value
-						return (data.indexOf(attrs[2]) === 0);
-						break;
-					case '$': // Match ends with value - fails with "Warning" in Opera 7
-						return (at.lastIndexOf(attrs[2]) === at.length - attrs[2].length);
-						break;
-					case '*': // Match ends with value
-						return (data.indexOf(attrs[2]) > -1);
-						break;
-					default : // Just test for existence of attribute
-						return data;
+		hasAttrs: function(node, attr) {
+			var runTest = function(node, attrs, type, value) {
+				var data = Js.attr.get(node, attrs);
+				if(!!data) {
+					switch (type) {
+						case '=': // Equality
+							return (data === value);
+							break;
+						case '~': // Match one of space separated
+							return (data.match(new RegExp('\\b' + value + '\\b')));
+							break;
+						case '|': // Match start with value followed by optional hyphen
+							return (data.match(new RegExp('^' + value + '-?')));
+							break;
+						case '^': // Match starts with value
+							return (data.indexOf(value) === 0);
+							break;
+						case '$': // Match ends with value7
+							return data.match(new RegExp(value + '$'));
+							break;
+						case '*': // Match any with value
+							return (data.indexOf(value) > -1);
+							break;
+						default : // Just test for existence of attribute
+							return !!data;
+					}
+				} else {
+					return false;
 				}
-			} else {
-				return false;
+			};
+			var r = true;
+			var temp = true;
+			for(var i = 0; i < attr.length; i++) {
+				temp = (runTest(node, attr[i][0], attr[i][1], attr[i][2]) ? true : false);
+				r = (!!r && !!temp ? true : false);
 			}
+			return r;
 		},
-		tagParentOf: function(tags, parents, klasName, is, attr) {
+		tagParentOf: function(dom, parents) {
 			var context = [];
 			
 			if(parents.length > 0) {
-				var tag = (tags === "*" && document.all ? document.all : document.getElementsByTagName(tags));
+				var tag = (dom.tags === "*" && document.all ? document.all : document.getElementsByTagName(dom.tags));
 				
 				for(var i = 0; i < parents.length && parents[i]; i++) {
 					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 						var node = tag[ii];
 						
-						if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node === parents[i].parentNode) {
+						if(node.nodeType === 1 && !!Js.query.validate(node, dom) && node === parents[i].parentNode) {
 							context[context.length] = node;
 						}
 					}
@@ -929,7 +948,7 @@ Js.namespace.include({
 			}
 			return context;
 		},
-		tagNextOf: function(tags, parents, klasName, is, attr) {
+		tagNextOf: function(dom, parents) {
 			var context = [];
 			
 			if(parents.length > 0) {
@@ -937,13 +956,13 @@ Js.namespace.include({
 					var parent = parents[i].parentNode;
 					
 					if(!!parent && parent.nodeType) {
-						var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
+						var tag = (dom.tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(dom.tags));
 					
 						for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 							var node = tag[ii];
 							var tnode = Js.dom.prev(node);
 							
-							if(tnode === parents[i] && node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr)) {
+							if(tnode === parents[i] && node.nodeType === 1 && !!Js.query.validate(node, dom)) {
 								context[context.length] = node;
 							}
 						}
@@ -952,7 +971,7 @@ Js.namespace.include({
 			}
 			return context;
 		},
-		tagSiblingOf: function(tags, parents, klasName, is, attr) {
+		tagSiblingOf: function(dom, parents) {
 			var context = [];
 			
 			if(parents.length > 0) {
@@ -960,12 +979,12 @@ Js.namespace.include({
 					var parent = parents[i].parentNode;
 					
 					if(!!parent && parent.nodeType) {
-						var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
+						var tag = (dom.tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(dom.tags));
 					
 						for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 							var node = tag[ii];
 							
-							if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === parent) {
+							if(node.nodeType === 1 && !!Js.query.validate(node, dom) && node.parentNode === parent) {
 								context[context.length] = node;
 							} 
 						}
@@ -975,7 +994,7 @@ Js.namespace.include({
 			
 			return context;
 		},
-		tagChildOf: function(tags, parents, klasName, is, attr) {
+		tagChildOf: function(dom, parents) {
 			var context = [];
 			
 			if(parents.length > 0) {
@@ -983,12 +1002,12 @@ Js.namespace.include({
 					var parent = parents[i];
 					
 					if(!!parent && parent.nodeType == 1) {
-						var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
+						var tag = (dom.tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(dom.tags));
 						
 						for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 							var node = tag[ii];
 							
-							if(node.nodeType === 1 && !!Js.query.validate(node, klasName, is, attr) && node.parentNode === parent) {
+							if(node.nodeType === 1 && !!Js.query.validate(node, dom) && node.parentNode === parent) {
 								context[context.length] = node;
 							}
 						}
@@ -997,15 +1016,12 @@ Js.namespace.include({
 			}
 			return context;
 		},
-		validate: function(node, klasName, data, attr) {
+		validate: function(node, dom) {
 			var valid = false;
-			var klasName = Jrun.pick(klasName, "");
-			var data = Jrun.pick(data, null);
-			var attr = Jrun.pick(attr, []);
 			
-			valid = (klasName === "" || !!Js.query.hasClass(node, klasName) ? true : false);
-			valid = ((attr.length === 0 || (attr.length === 3 && !!Js.query.hasAttrs(node, attr))) && !!valid ? true : false); 
-			valid = ((!data || (!!data && !!Js.query.isValid(node, data))) && !!valid ? true : false);
+			valid = (dom.klasName === "" || !!Js.query.hasClass(node, dom.klasName) ? true : false);
+			valid = ((dom.attr.length === 0 || (!!Js.query.hasAttrs(node, dom.attr))) && !!valid ? true : false); 
+			valid = ((!dom.is || (!!dom.is && !!Js.query.isValid(node, dom.is))) && !!valid ? true : false);
 			
 			return valid;
 		},
@@ -1029,26 +1045,26 @@ Js.namespace.include({
 			
 			return node;
 		},
-		tags: function(tags, parents, klasName, is, attr, type) {
+		tags: function(dom, parents, type) {
 			var context = [];
-			var klasName = Jrun.trim(Jrun.pick(klasName, ""));
-			var is = Jrun.pick(is, null);
-			var attr = Jrun.pick(attr, []);
-			var tags = Jrun.pick(tags, "*");
+			dom.klasName = Jrun.trim(Jrun.pick(dom.klasName, ""));
+			dom.is = Jrun.pick(dom.is, null);
+			dom.attr = Jrun.pick(dom.attr, []);
+			dom.tags = Jrun.pick(dom.tags, "*");
 			
 			if(Jrun.isset(type) && type > 0) {
 				if(type === 4) {
 					//Js.debug.log("use tagParentOf");
-					context = Js.query.tagParentOf(tags, parents, klasName, is, attr);
+					context = Js.query.tagParentOf(dom, parents);
 				} else if(type === 2) {
 					//Js.debug.log("use tagNextOf");
-					context = Js.query.tagNextOf(tags, parents, klasName, is, attr);
+					context = Js.query.tagNextOf(dom, parents);
 				} else if(type === 3) {
 					//Js.debug.log("use tagSiblingOf");
-					context = Js.query.tagSiblingOf(tags, parents, klasName, is, attr);
+					context = Js.query.tagSiblingOf(dom, parents);
 				} else if(type === 1) {
 					//Js.debug.log("use tagChildOf");
-					context = Js.query.tagChildOf(tags, parents, klasName, is, attr);
+					context = Js.query.tagChildOf(dom, parents);
 				}
 			} else {
 				//Js.debug.log("use tagNormal");
@@ -1058,12 +1074,12 @@ Js.namespace.include({
 				
 				for(var i = 0; i < parents.length && parents[i]; i++) {
 					var parent = parents[i];
-					var tag = (tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(tags));
+					var tag = (dom.tags === "*" && parent.all ? parent.all : parent.getElementsByTagName(dom.tags));
 					
 					for(var ii = 0; ii < tag.length && tag[ii]; ii++) {
 						var node = tag[ii];
 						
-						if(node.nodeType === 1 && Js.query.validate(node, klasName, is, attr)) {
+						if(node.nodeType === 1 && Js.query.validate(node, dom)) {
 							context[context.length] = node;
 						}
 					}
@@ -1071,13 +1087,13 @@ Js.namespace.include({
 			}
 			return (context.length > 0 ? context : false);
 		},
-		id: function(id, parents, tags, is) {
-			var tags = Jrun.trim(Jrun.pick(tags, "*")).toUpperCase();
-			var el = document.getElementById(id);
-			var is = (!!is ? this.is(el, is) : true);
+		id: function(dom, parents) {
+			var tags = Jrun.trim(Jrun.pick(dom.tags, "*")).toUpperCase();
+			var node = document.getElementById(dom.id);
+			var is = (!!dom.is ? this.is(node, dom.is) : true);
 				
-			if(el && (tags == "*" || tags == el.tagName.toUpperCase()) && !!is) {
-				return el;
+			if(node && (tags == "*" || tags == node.tagName.toUpperCase()) && !!is) {
+				return node;
 			} else { 
 				return false;
 			}
@@ -1106,11 +1122,14 @@ Js.namespace.include({
 					var el = Jrun.trim(elem[i]);
 					
 					if(el !== "") {
-						var tags = "";
-						var id = "";
-						var klasName = "";
-						var attr = [];
-						var is = null;
+						var dom = {
+							tags: "",
+							id: "",
+							klasName: "",
+							attr: [],
+							is: null,
+							name: ""
+						};
 						
 						if(el === ">") {
 							type = 1;
@@ -1122,36 +1141,47 @@ Js.namespace.include({
 							type = 4;
 						} else {
 							if(el.match(/^(\w*)\[(\w+)([=~\|\^\$\*]?)=?"?([^\]"]*)"?\]$/)){
-								tags = RegExp.$1;
-								attr[0] = RegExp.$2;
-								attr[1] = RegExp.$3;
-								attr[2] = RegExp.$4;
+	 							dom.tags = RegExp.$1;
+								var attrs = [RegExp.$2, RegExp.$3, RegExp.$4];
+								
+								dom.attr[dom.attr.length] = attrs;
 							} else {
 								if (el.indexOf(":") > -1) {
-									var pr = el.split(":");
-									el = pr[0];
-									is = pr[1];
+									var fragment = el.split(":");
+									el = fragment[0];
+									dom.is = fragment[1];
+								}
+								
+								if (el.indexOf("@") > -1) {
+									var fragment = el.split("@");
+									el = fragment[0];
+									var attrs = ["name", "=", fragment[1]];
+									dom.attr[dom.attr.length] = attrs;
 								}
 								
 								if(el.indexOf(".") > -1) {
-									var pr = el.split(".");
-									tags = pr[0];
-									klasName = pr[1];
+									var fragment = el.split(".");
+									dom.tags = fragment[0];
+									dom.klasName = fragment[1];
 								} else if(el.indexOf("#") > -1) {
-									var pr = el.split("#");
-									tags = pr[0];
-									id = pr[1];
+									var fragment = el.split("#");
+									dom.tags = fragment[0];
+									dom.id = fragment[1];
 								} else {
-									tags = el;
+									dom.tags = el;
 								}
 								
-								tags = (tags == "" ? "*" : tags);
+								dom.tags = Jrun.trim(Jrun.trim(dom.tags) == "" ? "*" : dom.tags);
+								if(dom.is == "root") {
+									dom.is = null;
+									dom.tags = "body";
+								}
 							}
 							
-							if(!!id && id !== "") {
-								context = [Js.query.id(id, context, tags, is)];
+							if(!!dom.id && dom.id !== "") {
+								context = [Js.query.id(dom, context)];
 							} else {
-								context = Js.query.tags(tags, context, klasName, is, attr, type);
+								context = Js.query.tags(dom, context, type);
 							}
 							
 							if(!context) {

@@ -19,15 +19,19 @@ Js.util.include({
 			
 			this.object.onchange(function() {
 				var object = Js(this);
+				
 				if(object.val() == that.value) {
-					var winprompt = window.prompt(that.message.toString(), that.defaults.toString());
-					if(!!winprompt && !Jrun.inArray(option, winprompt)) {
-						object.add("option", {"value": winprompt, "selected": "selected"}).text(winprompt);
+					var wprompt = window.prompt(that.getMessage(), that.defaults.toString());
+					if(!!wprompt && !Jrun.inArray(option, wprompt)) {
+						object.add("option", {"value": wprompt, "selected": "selected"}).text(wprompt);
 					} else {
 						object.fetch().options[0].selected = true;
 					}
 				}
 			});
+		},
+		getMessage: function() {
+			return this.message;	
 		}
-	});
+	})
 });

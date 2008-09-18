@@ -156,7 +156,6 @@ Js.ext.include({
 			
 			if(!!this.object) {
 				var field = Js("#" + formId + " :input");
-				
 				field.each(function() {
 					var errorNode = Js(this).siblings("span.extform-errormessage").first();
 					if(errorNode.count() == 1) {
@@ -232,7 +231,7 @@ Js.ext.include({
 					}
 				});
 			}
-			
+			alert(this.first);
 			if(Jrun.isset(this.first)) { 
 				// there an error, set focus to first invalid field
 				this.first.focus();

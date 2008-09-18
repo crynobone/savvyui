@@ -314,11 +314,13 @@ var Jrun = Js.code = {
 					// Anything else
 					if(this.isfunction(fn1)) {
 						node["on" + handler] = fn1;
+					} else {
+						return node["on" + handler];	
 					}
 				}
 			}
 		} catch(e) {
-			Js.debug.log("Jrun.on() failed: " + fn + e);
+			Js.debug.log("Jrun.on: " + e);
 		}
 	},
 	// Loop each option until find an option which does not return null and return it.
@@ -333,12 +335,39 @@ var Jrun = Js.code = {
 		}
 		return null;
 	},
+	prettyList: function(data, between, last) {
+		var length = data.length;
+		var value = new String;
+		if(length > 1) {
+			for(var i = 0; i < (length - 1); i++) {
+				value = value + (i == 0 ? "" : between).data[i];	
+			}
+			value = value + last + data[(length - 1)];
+		} else {
+			value = data[0];	
+		}
+		
+		return value;
+	},
+	rand: function(args) {
+		var args = this.toArray(arguments);
+		var length = 0;
+		var offset = 0;
+		
+		if(args.length === 2) {
+			offset = args[0];
+			length = args[1];
+		} else if(args.length === 1) {
+			length = args[0];
+		}
+		return (Math.floor(Math.random() * length) + offset);
+	},
 	// Trim right of a string.
 	rtrim: function(value) {
 		return new String(value).replace(/\s$/g, "");
 	},
 	stripTags: function(value) {
-		return new String(value).replace(/<([^>]+)>/g, '');
+		return new String(value).replace(/<([^>]+)>/g, "");
 	},
 	serialize: function(data) {
 		var value = [];
@@ -374,8 +403,9 @@ var Jrun = Js.code = {
 		var rdata = [];
 		
 		Jrun.each(data, function() {
-			var first = this.substr(0, 1).toUpperCase();
-			var other = this.substr(1);
+			var val = this.toString();
+			var first = val.substr(0, 1).toUpperCase();
+			var other = val.substr(1);
 			rdata[rdata.length] = [first, other].join("");
 		});
 		

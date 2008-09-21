@@ -314,11 +314,13 @@ var Jrun = Js.code = {
 					// Anything else
 					if(this.isfunction(fn1)) {
 						node["on" + handler] = fn1;
+					} else {
+						return node["on" + handler];	
 					}
 				}
 			}
 		} catch(e) {
-			Js.debug.log("Jrun.on() failed: " + fn + e);
+			Js.debug.log("Jrun.on: " + e);
 		}
 	},
 	// Loop each option until find an option which does not return null and return it.
@@ -333,12 +335,39 @@ var Jrun = Js.code = {
 		}
 		return null;
 	},
+	prettyList: function(data, between, last) {
+		var length = data.length;
+		var value = new String;
+		if(length > 1) {
+			for(var i = 0; i < (length - 1); i++) {
+				value = value + (i == 0 ? "" : between).data[i];	
+			}
+			value = value + last + data[(length - 1)];
+		} else {
+			value = data[0];	
+		}
+		
+		return value;
+	},
+	rand: function(args) {
+		var args = this.toArray(arguments);
+		var length = 0;
+		var offset = 0;
+		
+		if(args.length === 2) {
+			offset = args[0];
+			length = args[1];
+		} else if(args.length === 1) {
+			length = args[0];
+		}
+		return (Math.floor(Math.random() * length) + offset);
+	},
 	// Trim right of a string.
 	rtrim: function(value) {
 		return new String(value).replace(/\s$/g, "");
 	},
 	stripTags: function(value) {
-		return new String(value).replace(/<([^>]+)>/g, '');
+		return new String(value).replace(/<([^>]+)>/g, "");
 	},
 	serialize: function(data) {
 		var value = [];
@@ -374,8 +403,9 @@ var Jrun = Js.code = {
 		var rdata = [];
 		
 		Jrun.each(data, function() {
-			var first = this.substr(0, 1).toUpperCase();
-			var other = this.substr(1);
+			var val = this.toString();
+			var first = val.substr(0, 1).toUpperCase();
+			var other = val.substr(1);
 			rdata[rdata.length] = [first, other].join("");
 		});
 		
@@ -1520,6 +1550,7 @@ Js.namespace.include({
 						r = (!!r ? false : true);
 					}
 				}
+				return r;
 			} else if(data.match(/^contains\(.*\)$/)) {
 				var value = RegExp.$1;
 				var content = (!!node.innerText && Jrun.typeOf(node.innerText) == "string" ? node.innerText : "");
@@ -1825,7 +1856,7 @@ Js.namespace.include({
 									dom.tags = el;
 								}
 								
-								dom.tags = (dom.tags == "" ? "*" : dom.tags);
+								dom.tags = Jrun.trim(Jrun.trim(dom.tags) == "" ? "*" : dom.tags);
 								if(dom.is == "root") {
 									dom.is = null;
 									dom.tags = "body";
@@ -2600,16 +2631,35 @@ Js.namespace.include({
 		// bind a event handler
 		on: function(handler, fn1, fn2) {
 			// stack the callback
-			this.pushStack(function() { 
-				Jrun.on(this, handler, fn1, fn2);
-			});
-			// continue chaining
-			return this;
+			if(Jrun.isfunction(fn1) || Jrun.isfunction(fn2)) {
+				this.pushStack(function() { 
+					Jrun.on(this, handler, fn1, fn2);
+				});
+				// continue chaining
+				return this;
+			} else {
+				var key = Jrun.pick(this.index, null);
+				
+				if(Jrun.isnull(key)) {
+					var value = [];
+					// retrieve the value of each HTMLelement
+					Jrun.each(this.node, function() {
+						value[value.length] = Jrun.on(this, handler);
+					});
+					// return the value as array
+					return value;
+				} else if(!!this.node[key]) {
+					return Jrun.on(this.node[key], handler); // retrieve single HTMLelement value
+				}
+			}
 		},
 		// bind a event handler
-		bind: function(handler, fn1, fn2) {
+		bind: function(handlers, fn1, fn2) {
 			// refer this.on function
-			return this.on(handler, fn1, fn2);
+			var handler = handlers.split(/ /g);
+			for(var i = 0; i < handler || !!handler[i]; i++) {
+				this.on(handler[i], fn1, fn2);
+			}
 		},
 		// unbind a event handler
 		unbind: function(handler) {
@@ -2694,6 +2744,9 @@ Js.namespace.include({
 			});
 			// enable chaining
 			return this;
+		},
+		toString: function() {
+			return "Savvy.UI DOMElement: " + this.node;	
 		}
 	}
 });
@@ -4042,7 +4095,6 @@ Js.ext.include({
 			
 			if(!!this.object) {
 				var field = Js("#" + formId + " :input");
-				
 				field.each(function() {
 					var errorNode = Js(this).siblings("span.extform-errormessage").first();
 					if(errorNode.count() == 1) {
@@ -4074,8 +4126,6 @@ Js.ext.include({
 									if(Jrun.isfunction(validate.callback) && !validate.callback(this.value)) {
 										error = Jrun.pick(validate.error, error);
 									} else if(Jrun.isset(validate.test) && !this.value.match(validate.test)) {
-										error = Jrun.pick(validate.error, error);
-									} else {
 										error = Jrun.pick(validate.error, error);
 									}
 								}

@@ -683,16 +683,35 @@ Js.namespace.include({
 		// bind a event handler
 		on: function(handler, fn1, fn2) {
 			// stack the callback
-			this.pushStack(function() { 
-				Jrun.on(this, handler, fn1, fn2);
-			});
-			// continue chaining
-			return this;
+			if(Jrun.isfunction(fn1) || Jrun.isfunction(fn2)) {
+				this.pushStack(function() { 
+					Jrun.on(this, handler, fn1, fn2);
+				});
+				// continue chaining
+				return this;
+			} else {
+				var key = Jrun.pick(this.index, null);
+				
+				if(Jrun.isnull(key)) {
+					var value = [];
+					// retrieve the value of each HTMLelement
+					Jrun.each(this.node, function() {
+						value[value.length] = Jrun.on(this, handler);
+					});
+					// return the value as array
+					return value;
+				} else if(!!this.node[key]) {
+					return Jrun.on(this.node[key], handler); // retrieve single HTMLelement value
+				}
+			}
 		},
 		// bind a event handler
-		bind: function(handler, fn1, fn2) {
+		bind: function(handlers, fn1, fn2) {
 			// refer this.on function
-			return this.on(handler, fn1, fn2);
+			var handler = handlers.split(/ /g);
+			for(var i = 0; i < handler || !!handler[i]; i++) {
+				this.on(handler[i], fn1, fn2);
+			}
 		},
 		// unbind a event handler
 		unbind: function(handler) {
@@ -777,6 +796,9 @@ Js.namespace.include({
 			});
 			// enable chaining
 			return this;
+		},
+		toString: function() {
+			return "Savvy.UI DOMElement: " + this.node;	
 		}
 	}
 });

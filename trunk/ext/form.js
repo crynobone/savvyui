@@ -188,8 +188,6 @@ Js.ext.include({
 										error = Jrun.pick(validate.error, error);
 									} else if(Jrun.isset(validate.test) && !this.value.match(validate.test)) {
 										error = Jrun.pick(validate.error, error);
-									} else {
-										error = Jrun.pick(validate.error, error);
 									}
 								}
 							}
@@ -231,7 +229,7 @@ Js.ext.include({
 					}
 				});
 			}
-			alert(this.first);
+			
 			if(Jrun.isset(this.first)) { 
 				// there an error, set focus to first invalid field
 				this.first.focus();

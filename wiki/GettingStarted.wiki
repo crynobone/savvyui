@@ -1,0 +1,4 @@
+If this is your first time using Savvy.UI and you feel a bit lost let me guide you on how to start developing application using Savvy.UI using narrative documentation.
+
+===Downloading===
+At the moment, Savvy.UI package is available in (.ZIP) format. Unlike other available JavaScript alternative, we provide both compressed and uncompressed script in a single package so you can use the same package for development as well as production. In case you need to compressed the code, Savvy.UI Team recommend JavaScript Compressor.

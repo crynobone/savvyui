@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+.calendar-panel { margin: 0; padding: 3px 2px; border: 2px solid #999; position: relative; width: 180px; font-size: 11px; }
+	.calendar-panel .prev-month { display: block; float: left; width: 16px; height: 16px; margin: 1px 3px; cursor: pointer; text-align: left; }
+	.calendar-panel .next-month { display: block; float: right; width: 16px; height: 16px; margin: 1px 3px; cursor: pointer; text-align: right; }
+	.calendar-panel .this-month { display: block; text-align: center; font-size: 12px; }
+	.calendar-panel .calendar-content { clear: left; text-align: center; }
+		.calendar-panel .calendar-body { width: 95%; margin: 2px auto; text-align: center; }
+			.calendar-panel .calendar-body td { padding: 1px; }
+			.calendar-panel .calendar-day-selected { background: #999; }
+	.calendar-panel .calendar-option { margin: 2px auto; width: 170px; font-size: 10px; display: none; }
+		.calendar-option .select-today { width: 95%; margin: 2px auto; }

@@ -1,0 +1,13 @@
+@charset "utf-8";
+
+.simpletab-toolbar-container { margin: 15px 0 0;  border-bottom: 1px solid #D3DAE8; height: 25px; }
+	ul.simpletab-toolbar { list-style: none; margin: 0; padding: 0; }
+		ul.simpletab-toolbar li { display: block; float: left; margin: 0 2px; padding: 0; }
+			ul.simpletab-toolbar li a { display: block; font-weight: 600; background: #D8DFEA; color: #3B5998; padding: 4px 10px 5px; border-bottom: 1px solid #D8DFEA; outline: none; }
+			ul.simpletab-toolbar li a.current, ul.simpletab-toolbar li a.current:hover { display: block; background: #fff; color: #333; border: 1px solid #D3DAE8; border-bottom: 1px solid #fff; }
+			ul.simpletab-toolbar li a:hover { display: block; background: #3B5998; color: #fff; border-bottom: 1px solid #D8DFEA; }
+
+.simpletab-hidden { display: none; padding: 15px 5px 5px; }
+.simpletab-active { display: block; padding: 15px 5px 5px; }
+
+

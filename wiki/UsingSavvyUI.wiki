@@ -1,3 +1,0 @@
-#summary Using Savvy.UI with jQuery
-
-In this documentation, we will introduce you on the simple method on writing JavaScript with Savvy.UI. Some of the detail here may not only explain on Savvy.UI but also consist of explanation on JavaScript itself.

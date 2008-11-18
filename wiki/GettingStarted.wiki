@@ -1,5 +1,5 @@
 #labels Featured
-#Getting Started with Savvy.UI
+# Getting Started with Savvy.UI
 If this is your first time using Savvy.UI and you feel a bit lost let me guide you on how to start developing application using Savvy.UI using narrative documentation.
 
 ===Downloading===

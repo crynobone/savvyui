@@ -9,4 +9,4 @@ At the moment, Savvy.UI package is available in (.ZIP) format from [http://code.
 Savvy.UI Team will update the Savvy.UI from time to time with new feature and bugfix based on current release which is available through our GoogleCode SVN Server. Check out our latest code from [http://code.google.com/p/savvyui/source/browse Repo-browser].
 
 ===Requirement===
-Starting from version 1.1.0 Savvy.UI will be using jQuery JavaScript Library from DOM Manipulation.
+Starting from version 1.1.0 Savvy.UI will be using [http://jquery.com jQuery JavaScript Library] from DOM Manipulation.

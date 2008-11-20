@@ -1,7 +1,7 @@
-.sui-panel { padding: 3px; margin: 0px; color: #333; display: none; border: 3px solid #999; background: #fff; }
-	.sui-panel .sui-panel-title { overflow: hidden; padding: 3px 0px 1px 5px; font-weight: 500; font-size: 15px; color: #555; }
-	.sui-panel .sui-panel-ext { height: 22px; overflow: hidden; float: right; margin-right: 10px; font-weight: bold; color: #999 }
+.sui-panel { padding: 3px; margin: 0px; color: #333; display: none; border: 1px solid #5C75AA; background: #fff; }
+	.sui-panel .sui-panel-title { overflow: hidden; padding: 3px 0px 1px 5px; font-weight: bold; font-size: 12px; color: #333; }
+	.sui-panel .sui-panel-ext { height: 22px; overflow: hidden; float: right; margin-right: 10px; font-weight: bold; color: #3B5998; }
 		.sui-panel-ext span.sui-panel-min { display: block; float: right; width: 14px; height: 22px; }
 		.sui-panel-ext span.sui-panel-close { display: block; float: right; width: 14px; height: 22px; }
-	.sui-panel .sui-panel-container { padding: 5px 5px 0; margin: 0px 2px; border-top: 1px solid #aaa; }
+	.sui-panel .sui-panel-container { padding: 5px 5px 0; margin: 0px 2px; border-top: 1px solid #D8DFEA; }
 		

@@ -20,7 +20,7 @@ Js.widget.iconizer.prototype = {
 					var icon = RegExp.$3;
 					
 					if(!!append) {
-						var obj = jQuery("<span></span>").css({
+						var obj = jQuery("<span/>").css({
 							"display": "block",
 							"cssFloat": pos,
 							"width": "16px",

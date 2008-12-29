@@ -26,11 +26,11 @@ Js.widget.iconizer.prototype = {
 			for(var i = 0; i < klass.length; i++) {
 				if(klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) {
 					var append = (RegExp.$1 == "-append" ? true : false);
-					var pos = (jQuery.inArray(RegExp.$2, ["left", "right"]) < 0 ? "left" : RegExp.$2);
+					var pos = (!!Jrun.inArray(RegExp.$2, ["left", "right"]) ? "left" : RegExp.$2);
 					var icon = RegExp.$3;
 					
 					if(!!append) {
-						var obj = jQuery("<span></span>").css({
+						var obj = jQuery("<span/>").css({
 							"display": "block",
 							"cssFloat": pos,
 							"width": "16px",
@@ -38,24 +38,24 @@ Js.widget.iconizer.prototype = {
 						}).prependTo(object);
 						if(pos == "left") {
 							obj.css({
-								"background": "url('" + that.folder + icon + "." + that.ext + "') no-repeat left",
+								"background": "url('" + that.setting.folder + icon + "." + that.setting.filetype + "') no-repeat left",
 								"marginRight": "3px"
 							});
 						} else {
 							obj.css({
-								"background": "url('" + that.folder + icon + "." + that.ext + "') no-repeat right",
+								"background": "url('" + that.setting.folder + icon + "." + that.setting.filetype + "') no-repeat right",
 								"marginLeft": "3px"
 							});
 						}
 					} else {
 						if(pos == "left") {
 							object.css({
-								"background": "url('" + that.folder + icon + "." + that.ext + "') no-repeat left center",
+								"background": "url('" + that.setting.folder + icon + "." + that.setting.filetype + "') no-repeat left center",
 								"paddingLeft": "17px"
 							});
 						} else {
 							object.css({
-								"background": "url('" + that.folder + icon + "." + that.ext + "') no-repeat right center",
+								"background": "url('" + that.setting.folder + icon + "." + that.setting.filetype + "') no-repeat right center",
 								"paddingRight": "17px"
 							});
 						}

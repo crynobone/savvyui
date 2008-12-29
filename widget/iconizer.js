@@ -26,7 +26,7 @@ Js.widget.iconizer.prototype = {
 			for(var i = 0; i < klass.length; i++) {
 				if(klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) {
 					var append = (RegExp.$1 == "-append" ? true : false);
-					var pos = (!!Jrun.inArray(RegExp.$2, ["left", "right"]) ? "left" : RegExp.$2);
+					var pos = (!Jrun.inArray(RegExp.$2, ["left", "right"]) ? "left" : RegExp.$2);
 					var icon = RegExp.$3;
 					
 					if(!!append) {

@@ -177,7 +177,7 @@ Js.ext.form.prototype = {
 		} 
 		else if (jQuery("#" + fieldErrorId).length == 1 && !!data) {
 			field.addClass("extform-error");
-			var errorNode = field.siblings("span.extform-errormessage").eq(0);
+			var errorNode = field.siblings(this.setting.error.node + "." + this.setting.error.cssMessage).eq(0);
 			var html = errorNode.html();
 			
 			if(html.match(text) === false && Jrun.trim(html) != "") {

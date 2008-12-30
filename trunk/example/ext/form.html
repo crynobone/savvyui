@@ -4,9 +4,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Js.ext.form</title>
 		<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="../../base.js"></script>
-		<script type="text/javascript" src="../../core.js"></script>
-		<script type="text/javascript" src="../../ext/form.js"></script>
+		<script type="text/javascript" src="../../lib/savvyui.js"></script>
+		<script type="text/javascript" src="../unit-testing.js"></script>
 		<style type="text/css">
 		<!--
 		span { display: block; }
@@ -14,6 +13,29 @@
 		</style>
 	</head>
 	<body>
+		<pre>
+			var form = new Js.ext.form;
+			form.setting.custom = {
+				'date': {
+					error: 'Require valid date format',
+					test: /^\d{2}\-\d{2}\-\d{4}$/g
+				}
+			}
+			jQuery(function() {
+				jQuery("#sample").submit(function() {
+					Js.debug.log("start ext.form");
+					
+					var validate = form.validate(this);
+					if(!!validate) {
+						Js.util.Assert.isTrue(true, true, "Form has been validated, return following arguments: " + validate)
+					} else {
+						Js.util.Assert.isTrue(true, true, "Form not validated");
+					}
+					
+					return false;
+				});
+			});
+		</pre>
 		<h1>Js.ext.form</h1>
 		<form id="sample">
 			<div>
@@ -27,6 +49,9 @@
 			</div>
 			<input type="submit" value="Submit" />
 		</form>
+		<div id="result">
+			<h2>Result</h2>
+		</div>
 		<script type="text/javascript">
 		<!--
 		var form = new Js.ext.form;
@@ -42,9 +67,9 @@
 				
 				var validate = form.validate(this);
 				if(!!validate) {
-					alert(validate);
+					Js.util.Assert.isTrue(true, true, "Form has been validated, return following arguments: " + validate)
 				} else {
-					alert('failed');
+					Js.util.Assert.isTrue(true, true, "Form not validated");
 				}
 				
 				return false;

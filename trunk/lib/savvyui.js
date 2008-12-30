@@ -890,6 +890,28 @@ Js.test = {
 		return (data.match(/^\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\]$/));
 	}
 };/**
+ * @projectDescription Adapter for Savvy.UI and jQuery Framework
+ * @version 0.0.1
+ * @extends jQuery-1.2.6
+ * @author Mior Muhammad Zaki crynobone@gmail.com
+ * @license MIT
+ */
+
+jQuery.fn.extend({
+	/**
+	 * revert and set new className to jQuery object
+	 * <br>Equal to: $("div").removeClass().addClass(value);
+	 * @param {Object} value
+	 * @return {jQuery}
+	 */
+	setClass: function(value) 
+	{
+		return this.each(function() {
+			this.className = value;
+		});
+	}
+});
+/**
  * @projectDescription Form extension for Savvy.UI
  * @memberOf Js.ext
  * @version 0.9.4
@@ -1606,7 +1628,7 @@ Js.widget.calendar.prototype =
 			{
 				result = year; 
 			}
-			else if (data.match(/^(+|-)?(\d{1,4})$/)) 
+			else if (data.match(/^(\+|\-)?(\d{1,4})$/)) 
 			{
 				var plus = RegExp.$1;
 				var value = RegExp.$2;
@@ -1957,12 +1979,14 @@ Js.widget.calendar.prototype =
 		var monthLength = this.dayOfMonth();
 		cal.html("");
 		
-		var wrapper = this.object = jQuery("<div/>").attr({
+		this.object = jQuery("<div/>").attr({
 			"id": [this.element, "calendar"].join("-"), 
 			"class": "calendar-panel"
 		}).css({
 			"display": "block"
 		}).appendTo(cal);
+		
+		var wrapper = this.object;
 		
 		var header = jQuery("<div/>").appendTo(wrapper);
 		var content = jQuery("<div/>").appendTo(wrapper);
@@ -2374,6 +2398,7 @@ Js.widget.simpleTab = function(node, option)
 Js.widget.simpleTab.prototype = {
 	init: function(node, option) 
 	{
+		Js.debug.log("Js.widget.simpleTab: started");
 		var that = this;
 		
 		// setting should be available
@@ -2399,19 +2424,7 @@ Js.widget.simpleTab.prototype = {
 	addToolbar: function() 
 	{
 		var that = this;
-		
-		// find all possible tabs
-		var child = jQuery(this.setting.identifier, this.node);
-		
-		child.each(function(index, data) {
-			// add the tab title
-			that.addHeader(data);
-			// hide the tab
-			jQuery(data).setClass(that.setting.panel.hidden);
-		});
-		
-		// first tab should be activated
-		this.activeTab = child.eq(0);
+		Js.debug.log("Js.widget.simpleTab: load Toolbar");
 		
 		// DOM insert tab toolbar container
 		var div = jQuery("<div/>").attr({
@@ -2426,15 +2439,29 @@ Js.widget.simpleTab.prototype = {
 			className: this.setting.panel.toolbar
 		}).appendTo(this.toolbar);
 		
+		// find all possible tabs
+		var child = jQuery("." + this.setting.identifier, this.node);
+		
+		child.each(function(index, data) {
+			// add the tab title
+			that.addHeader(data);
+			// hide the tab
+			jQuery(data).setClass(that.setting.panel.hidden);
+		});
+		
+		// first tab should be activated
+		this.activeTab = child.eq(0);
+		
 		var div2 = jQuery("<div/>").css("display", "block").appendTo(div);
 	},
 	addHeader: function(node) 
 	{
+		Js.debug.log("Js.widget.simpleTab: add header");
 		var that = this;
 		
 		var node = jQuery(node);
 		var title = node.attr("title");
-		var closable = node.hasClass("tab-closable");
+		var closable = node.hasClass(this.setting.closable);
 		
 		var li = jQuery("<li/>").appendTo(this.header);
 		var a = jQuery("<a/>").attr({
@@ -2472,7 +2499,7 @@ Js.widget.simpleTab.prototype = {
 		this.activeHeader.removeClass(this.setting.panel.currentHeader);
 		this.activeTab.setClass(this.setting.panel.hidden);
 		
-		this.activeHeader = jQuery(obj);
+		this.activeHeader = jQuery(node);
 		var href = this.activeHeader.attr("href");
 		this.activeTab = jQuery(href);
 		
@@ -2545,6 +2572,8 @@ Js.widget.simpleTab.prototype = {
 					});
 					jQuery(href).remove();
 					jQuery(this.parentNode.parentNode).remove();
+					
+					that.revert();
 				}).css("paddingLeft", "10px").text("x").appendTo(a);
 			}
 			
@@ -2564,7 +2593,8 @@ Js.widget.simpleTab.prototype = {
 Js.config.widget.simpleTab = {
 	handler: "click",
 	identifier: "simpletab",
-	closable: "tab-closable",
+	closable: "closable",
+	disabled: "disabled",
 	panel: {
 		toolbar: "simpletab-toolbar",
 		toolbarContainer: "simpletab-toolbar-container",

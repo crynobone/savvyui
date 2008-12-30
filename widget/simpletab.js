@@ -40,6 +40,7 @@ Js.widget.simpleTab = function(node, option)
 Js.widget.simpleTab.prototype = {
 	init: function(node, option) 
 	{
+		Js.debug.log("Js.widget.simpleTab: started");
 		var that = this;
 		
 		// setting should be available
@@ -65,19 +66,7 @@ Js.widget.simpleTab.prototype = {
 	addToolbar: function() 
 	{
 		var that = this;
-		
-		// find all possible tabs
-		var child = jQuery(this.setting.identifier, this.node);
-		
-		child.each(function(index, data) {
-			// add the tab title
-			that.addHeader(data);
-			// hide the tab
-			jQuery(data).setClass(that.setting.panel.hidden);
-		});
-		
-		// first tab should be activated
-		this.activeTab = child.eq(0);
+		Js.debug.log("Js.widget.simpleTab: load Toolbar");
 		
 		// DOM insert tab toolbar container
 		var div = jQuery("<div/>").attr({
@@ -92,15 +81,29 @@ Js.widget.simpleTab.prototype = {
 			className: this.setting.panel.toolbar
 		}).appendTo(this.toolbar);
 		
+		// find all possible tabs
+		var child = jQuery("." + this.setting.identifier, this.node);
+		
+		child.each(function(index, data) {
+			// add the tab title
+			that.addHeader(data);
+			// hide the tab
+			jQuery(data).setClass(that.setting.panel.hidden);
+		});
+		
+		// first tab should be activated
+		this.activeTab = child.eq(0);
+		
 		var div2 = jQuery("<div/>").css("display", "block").appendTo(div);
 	},
 	addHeader: function(node) 
 	{
+		Js.debug.log("Js.widget.simpleTab: add header");
 		var that = this;
 		
 		var node = jQuery(node);
 		var title = node.attr("title");
-		var closable = node.hasClass("tab-closable");
+		var closable = node.hasClass(this.setting.closable);
 		
 		var li = jQuery("<li/>").appendTo(this.header);
 		var a = jQuery("<a/>").attr({
@@ -138,7 +141,7 @@ Js.widget.simpleTab.prototype = {
 		this.activeHeader.removeClass(this.setting.panel.currentHeader);
 		this.activeTab.setClass(this.setting.panel.hidden);
 		
-		this.activeHeader = jQuery(obj);
+		this.activeHeader = jQuery(node);
 		var href = this.activeHeader.attr("href");
 		this.activeTab = jQuery(href);
 		
@@ -211,6 +214,8 @@ Js.widget.simpleTab.prototype = {
 					});
 					jQuery(href).remove();
 					jQuery(this.parentNode.parentNode).remove();
+					
+					that.revert();
 				}).css("paddingLeft", "10px").text("x").appendTo(a);
 			}
 			
@@ -230,7 +235,8 @@ Js.widget.simpleTab.prototype = {
 Js.config.widget.simpleTab = {
 	handler: "click",
 	identifier: "simpletab",
-	closable: "tab-closable",
+	closable: "closable",
+	disabled: "disabled",
 	panel: {
 		toolbar: "simpletab-toolbar",
 		toolbarContainer: "simpletab-toolbar-container",

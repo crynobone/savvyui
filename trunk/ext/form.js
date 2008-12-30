@@ -17,8 +17,9 @@ Js.config.ext.form = {
 	custom: {}
 };
 
-Js.setup.ext.form = function(option) {
-	Js.config.ext.form = Js.append(Jrun.pickStrict(option, {}, "object"), Js.config.ext.form);
+Js.setup.ext.form = function(option) 
+{
+	Js.config.ext.form = Js.append(option, Js.config.ext.form);
 };
 
 /**
@@ -37,7 +38,8 @@ Js.lang.ext.form = {
 	}
 };
 
-Js.ext.form = function() {
+Js.ext.form = function() 
+{
 	this.node = null;
 	this.first = null;
 	this.callback = null;
@@ -47,6 +49,10 @@ Js.ext.form = function() {
 };
 
 Js.ext.form.prototype = {
+	setup: function(option) 
+	{
+		this.setting = Js.append(option, this.setting);
+	},
 	validate: function(node, option) 
 	{		
 		// ensure that refer to this
@@ -54,10 +60,12 @@ Js.ext.form.prototype = {
 		
 		this.node = jQuery(node);
 		
-		this.setting = Js.append(Jrun.pickStrict(option, {}, "object"), Js.config.ext.form);
+		this.setup(option);
+		
+		this.setting = Js.append(this.setting, Js.config.ext.form);
 		var setting = this.setting;
 		
-		this.prepErrorNode();
+		this.prepSetting();
 		
 		var beforeStart = Jrun.pick(setting.beforeStart,null);
 		var success = Jrun.pick(setting.success, null);
@@ -299,7 +307,7 @@ Js.ext.form.prototype = {
 			errNode.remove();
 		}
 	},
-	prepErrorNode: function() 
+	prepSetting: function() 
 	{
 		this.setting.errorNode.match(/^([A-Za-z]{1,10})\.(.*)$/i);
 		this.setting.error = {

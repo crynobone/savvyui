@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Js.widget.simpleTab</title>
+		<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../../lib/savvyui.js"></script>
+		<script type="text/javascript" src="../unit-testing.js"></script>
+		<link type="text/css" href="../../css/all.css" rel="stylesheet" media="all" />
+	</head>
+	<body>
+		<h1>Js.widget.simpleTab</h1>
+		<div id="result">
+			<div id="page-1" title="Tab 1" class="simpletab">
+				<h3>Tab 1</h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
+			</div>
+			<div id="page-2" title="Tab 2" class="simpletab x">
+				<h3>Tab 2</h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
+			</div>
+			<div id="page-3" title="Tab 3" class="simpletab closable">
+				<h3>Tab 3</h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
+			</div>
+		</div>
+		<script type="text/javascript">
+		<!--
+		var tab = new Js.widget.simpleTab("#result", {
+			handler: "mouseover"
+		});
+		tab.addTab({
+			id: "hello-world",
+			title: "Hello world",
+			closable: true,
+			content: "Hello world"
+		});
+		-->
+		</script>
+	</body>
+</html>

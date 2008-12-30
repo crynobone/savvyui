@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Js.ext.form</title>
+		<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../../base.js"></script>
+		<script type="text/javascript" src="../../core.js"></script>
+		<script type="text/javascript" src="../../ext/form.js"></script>
+		<style type="text/css">
+		<!--
+		span { display: block; }
+		-->
+		</style>
+	</head>
+	<body>
+		<h1>Js.ext.form</h1>
+		<form id="sample">
+			<div>
+				<input type="text" name="username" class="required" />
+			</div>
+			<div>
+				<input type="text" name="email" class="required email" />
+			</div>
+			<div>
+				<input type="text" name="postcode" class="custom-date" />
+			</div>
+			<input type="submit" value="Submit" />
+		</form>
+		<script type="text/javascript">
+		<!--
+		var form = new Js.ext.form;
+		form.setting.custom = {
+			'date': {
+				error: 'Require valid date format',
+				test: /^\d{2}\-\d{2}\-\d{4}$/g
+			}
+		}
+		jQuery(function() {
+			jQuery("#sample").submit(function() {
+				Js.debug.log("start ext.form");
+				
+				var validate = form.validate(this);
+				if(!!validate) {
+					alert(validate);
+				} else {
+					alert('failed');
+				}
+				
+				return false;
+			});
+		});
+		-->
+		</script>
+	</body>
+</html>

@@ -15,7 +15,8 @@
  * @param {Object} option
  * @return {Object}
  */
-Js.widget.simpleTab = function(node, option) {
+Js.widget.simpleTab = function(node, option) 
+{
 	this.temp = null;
 	this.height = null;
 	this.toolbar = null;
@@ -29,14 +30,16 @@ Js.widget.simpleTab = function(node, option) {
 	this.setting = Js.config.widget.simpleTab;
 	
 	// load the tab module if selector already provided in the arguments
-	if(!!Jrun.isset(node)) {
+	if(!!Jrun.isset(node)) 
+	{
 		this.init(node, option);
 	}
 	
 	return this;
 };
 Js.widget.simpleTab.prototype = {
-	init: function(node, option) {
+	init: function(node, option) 
+	{
 		var that = this;
 		
 		// setting should be available
@@ -52,24 +55,25 @@ Js.widget.simpleTab.prototype = {
 		this.addToolbar();
 		
 		// set the first tab as active
-		this.activeHeader = jQuery("a[href=#" + this.activeTab.attr("id") + "]");
+		this.activeHeader = jQuery("a[href=#" + this.activeTab.attr("id") + "]", this.header);
 		this.activeHeader.addClass(this.setting.panel.currentHeader);
-		this.activeTab.removeClass().addClass(this.setting.panel.active);
+		this.activeTab.setClass(this.setting.panel.active);
 		
 		// tab is activated
 		this.status = "on";
 	},
-	addToolbar: function() {
+	addToolbar: function() 
+	{
 		var that = this;
 		
 		// find all possible tabs
 		var child = jQuery(this.setting.identifier, this.node);
 		
-		child.each(function() {
+		child.each(function(index, data) {
 			// add the tab title
-			that.addHeader(this);
+			that.addHeader(data);
 			// hide the tab
-			jQuery(this).removeClass().addClass(this.setting.panel.hidden);
+			jQuery(data).setClass(that.setting.panel.hidden);
 		});
 		
 		// first tab should be activated
@@ -90,7 +94,8 @@ Js.widget.simpleTab.prototype = {
 		
 		var div2 = jQuery("<div/>").css("display", "block").appendTo(div);
 	},
-	addHeader: function(node) {
+	addHeader: function(node) 
+	{
 		var that = this;
 		
 		var node = jQuery(node);
@@ -110,7 +115,8 @@ Js.widget.simpleTab.prototype = {
 			return false;
 		});
 		
-		if(!!closable) {
+		if(!!closable) 
+		{
 			jQuery("<span/>").css("paddingLeft", "10px").text("x").click(function() {
 				var my = jQuery(this.parentNode).click(function() {
 					return false;
@@ -118,7 +124,7 @@ Js.widget.simpleTab.prototype = {
 				
 				var href = my.attr("href");
 				that.activeHeader.removeClass();
-				that.activeTab.removeClass().addClass(that.setting.panel.hidden);
+				that.activeTab.setClass(that.setting.panel.hidden);
 				jQuery(href).remove();
 				jQuery(this.parentNode.parentNode).remove();
 				
@@ -126,43 +132,52 @@ Js.widget.simpleTab.prototype = {
 			}).appendTo(a);
 		}
 	},
-	activate: function(node) {
+	activate: function(node) 
+	{
 		var that = this;
 		this.activeHeader.removeClass(this.setting.panel.currentHeader);
-		this.activeTab.removeClass().addClass(this.setting.panel.hidden);
+		this.activeTab.setClass(this.setting.panel.hidden);
 		
 		this.activeHeader = jQuery(obj);
 		var href = this.activeHeader.attr("href");
 		this.activeTab = jQuery(href);
 		
 		this.activeHeader.addClass(this.setting.panel.currentHeader);
-		this.activeTab.removeClass().addClass(this.setting.panel.active);
+		this.activeTab.setClass(this.setting.panel.active);
 		
 		return false;
 	},
-	revert: function() {
+	revert: function() 
+	{
 		var active = jQuery("li > a", this.header);
 		
-		if(active.length > 0) {
+		if(active.length > 0) 
+		{
 			this.activate(active.eq(0));
 		}
 	},
-	toggle: function() {
-		if(this.status == "on") {
+	toggle: function() 
+	{
+		if(this.status == "on") 
+		{
 			this.toolbar.hide();
-			jQuery("div.simpletab-hidden", this.object).removeClass("simpletab-hidden").addClass("simpletab-active");
+			jQuery("div." + this.setting.panel.hidden, this.object).setClass(this.setting.panel.active);
 			this.status = "off";
-		} else {
+		} 
+		else 
+		{
 			this.toolbar.show();
-			jQuery("div.simpletab-active", this.object).removeClass("simpletab-active").addClass("simpletab-hidden");
-			this.activeTab.removeClass().addClass("simpletab-active");
+			jQuery("div." + this.setting.panel.active, this.object).setClass(this.setting.panel.hidden);
+			this.activeTab.setClass(this.setting.panel.active);
 			this.status = "on";	
 		}
 	},
-	addTab: function(js) {
+	addTab: function(js) 
+	{
 		var that = this;
 		
-		if(!!js.id && Jrun.typeOf(js.id) === "string") {
+		if(!!js.id && Jrun.typeOf(js.id) === "string") 
+		{
 			var title = Jrun.pick(js.title, "Untitled");
 			var id = js.id;
 			var content = Jrun.pick(js.content, "");
@@ -186,26 +201,27 @@ Js.widget.simpleTab.prototype = {
 				return false;
 			});
 			
-			if (!!closable) {
-				jQuery("<span/>").css("paddingLeft", "10px").text("x").click(function() {
+			if (!!closable) 
+			{
+				jQuery("<span/>").click(function() {
 					var href = jQuery(this.parentNode).attr("href");
 					that.activeHeader.removeClass();
-					that.activeTab.removeClass().addClass("simpletab-hidden").fadeOut("normal", function() {
+					that.activeTab.setClass(that.setting.panel.hidden).fadeOut("normal", function() {
 						jQuery(this).remove();
 					});
 					jQuery(href).remove();
 					jQuery(this.parentNode.parentNode).remove();
-				}).appendTo(a);
+				}).css("paddingLeft", "10px").text("x").appendTo(a);
 			}
 			
-			if(!!set) {
+			if(!!set) 
+			{
 				this.activate(node);
 			}
 		}
 		return this;
 	}
 };
-
 
 /**
  * Js.widget.simpleTab configuration

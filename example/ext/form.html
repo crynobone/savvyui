@@ -50,7 +50,14 @@
 		<!--
 		var form = new Js.ext.form;
 		Js.setup.ext.form({
-			errorNode: "div.error-form"
+			errorNode: "div.error-form",
+			custom: {
+				date: {
+					test: /^(\d{2})\-(\d{2})\-(\d{4})$/,
+					error: "Require date input",
+					required: true
+				}
+			}
 		});
 		jQuery(function() {
 			jQuery("#sample").submit(function() {

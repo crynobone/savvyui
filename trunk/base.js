@@ -1,4 +1,5 @@
 /**
+ * Last-modified: 30-12-2008 12:15pm
  * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
  * @namespace Js
  * @version 1.1.2

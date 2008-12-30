@@ -129,7 +129,7 @@ Js.widget.calendar.prototype =
 			{
 				result = year; 
 			}
-			else if (data.match(/^(+|-)?(\d{1,4})$/)) 
+			else if (data.match(/^(\+|\-)?(\d{1,4})$/)) 
 			{
 				var plus = RegExp.$1;
 				var value = RegExp.$2;
@@ -480,12 +480,14 @@ Js.widget.calendar.prototype =
 		var monthLength = this.dayOfMonth();
 		cal.html("");
 		
-		var wrapper = this.object = jQuery("<div/>").attr({
+		this.object = jQuery("<div/>").attr({
 			"id": [this.element, "calendar"].join("-"), 
 			"class": "calendar-panel"
 		}).css({
 			"display": "block"
 		}).appendTo(cal);
+		
+		var wrapper = this.object;
 		
 		var header = jQuery("<div/>").appendTo(wrapper);
 		var content = jQuery("<div/>").appendTo(wrapper);

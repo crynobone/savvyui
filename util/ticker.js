@@ -6,13 +6,15 @@
  * @license MIT
  */
 
-Js.util.ticker = function(node) {
+Js.util.ticker = function(node) 
+{
 	// Define Object's properties
 	this.element = null;
 	this.node = null;
 	
 	// start __constructor()
-	if (!!node && Jrun.trim(node) !== "") {
+	if (!!node && Jrun.trim(node) !== "") 
+	{
 		this.init(node);
 	}
 	
@@ -24,10 +26,12 @@ Js.util.ticker.prototype = {
 	 * @param {Object} node
 	 * @return {Object}
 	 */
-	init: function(node) {
+	init: function(node) 
+	{
 		this.element = Jrun.pick(node, null);
 		
-		if (Jrun.isset(this.element)) { 
+		if (Jrun.isset(this.element)) 
+		{ 
 			this.node = jQuery(this.element);
 		}
 		
@@ -37,7 +41,8 @@ Js.util.ticker.prototype = {
 	 * checked all checkbox
 	 * @return {void}
 	 */
-	check: function() {
+	check: function() 
+	{
 		// loop all object
 		this.node.each(function(index, value) {
 			// set checked to true
@@ -48,7 +53,8 @@ Js.util.ticker.prototype = {
 	 * uncheck all checkbox
 	 * @return {void}
 	 */
-	uncheck: function() {
+	uncheck: function() 
+	{
 		// loops all object
 		this.node.each(function(index, value) { 
 			// set checked to false
@@ -59,7 +65,8 @@ Js.util.ticker.prototype = {
 	 * invert checkbox selection
 	 * @return {void}
 	 */ 
-	invert: function() {
+	invert: function() 
+	{
 		// loops all object
 		this.node.each(function(index, value) {
 			// reverse checkbox selection

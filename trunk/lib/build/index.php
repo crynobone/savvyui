@@ -3,6 +3,7 @@
 	
 	$files = array(
 		'base',
+		'adapter',
 		'ext/form',
 		'util/dimension',
 		'util/activecontent',

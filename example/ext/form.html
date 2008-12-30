@@ -15,12 +15,6 @@
 	<body>
 		<pre>
 			var form = new Js.ext.form;
-			form.setting.custom = {
-				'date': {
-					error: 'Require valid date format',
-					test: /^\d{2}\-\d{2}\-\d{4}$/g
-				}
-			}
 			jQuery(function() {
 				jQuery("#sample").submit(function() {
 					Js.debug.log("start ext.form");
@@ -55,12 +49,9 @@
 		<script type="text/javascript">
 		<!--
 		var form = new Js.ext.form;
-		form.setting.custom = {
-			'date': {
-				error: 'Require valid date format',
-				test: /^\d{2}\-\d{2}\-\d{4}$/g
-			}
-		}
+		Js.setup.ext.form({
+			errorNode: "div.error-form"
+		});
 		jQuery(function() {
 			jQuery("#sample").submit(function() {
 				Js.debug.log("start ext.form");

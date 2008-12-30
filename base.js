@@ -19,6 +19,15 @@ var Js = {
 		widget: {}
 	},
 	ext: {},
+	configurator: null,
+	setup: {
+		ext: {},
+		util: {},
+		lang: {},
+		parse: {},
+		test: {},
+		widget: {}
+	},
 	util: {},
 	lang: {
 		ext: {},
@@ -317,7 +326,7 @@ var Jrun = {
 	},
 	/**
 	 * Check whether the passed value is a function
-	 * <br>Replace with jQuery.isfunction
+	 * <br>Replace with jQuery.isFunction
 	 * 
 	 * @alias Jrun.isfunction
 	 * @deprecated
@@ -327,8 +336,7 @@ var Jrun = {
 	 */
 	isfunction: function(data) 
 	{
-		return jQuery.isfunction(data);
-		/* (!!data && typeof(data) === "function"); */
+		return (!!data && typeof(data) === "function"); /**/
 	},
 	/**
 	 * Trim left of a string

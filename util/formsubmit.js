@@ -5,7 +5,21 @@
  * @license MIT
  */
 
-Js.util.buttonSubmit = function(js) {
+Js.config.util.buttonSubmit = {
+	method: "POST",
+	beforeStart: null,
+	beforeSend: null,
+	success: null,
+	custom: {}
+};
+
+Js.setup.util.buttonSubmit = function(data)
+{
+	Js.config.util.buttonSubmit = Js.append(Jrun.pickStrict(option, {}), Js.config.util.buttonSubmit);
+};
+
+Js.util.buttonSubmit = function(js) 
+{
 	this.id = Jrun.pick(js.id, null);
 	this.url = Jrun.pick(js.url, null);
 	this.button = Jrun.pick(js.button, null);
@@ -14,33 +28,44 @@ Js.util.buttonSubmit = function(js) {
 	
 	this.setting = Js.config.util.buttonSubmit;
 	
-	if(!!this.id && !!this.url && this.button) {
+	if(!!this.id && !!this.url && this.button) 
+	{
 		this.init();
 	}
 };
 
 Js.util.buttonSubmit.prototype = {
-	init: function() {
+	init: function() 
+	{
 		var that = this;
 		
 		this.setting = Js.append(Js.pick(this.option, {}), this.setting);
 		var method = Jrun.pickGrep(this.setting.method, /^(get|post)$/i);
 		
 		jQuery(that.button).bind("click", function() {
-			if(Jrun.isfunction(that.setting.beforeSend)) {
-				that.setting.beforeSend();
+			if(Jrun.isfunction(that.setting.beforeStart)) 
+			{
+				that.setting.beforeStart();
 			}
 			
 			var form = new Js.ext.form();
 			var params = form.validate(that.id, that.setting.custom);
 			
-			if(!!params) {
+			if(!!params) 
+			{
 			   jQuery.ajax({
 					type: method,
 					url: that.url,
 					data: params,
+					beforeSend: function() {
+						if(Jrun.isfunction(that.setting.beforeSend))
+						{
+							that.setting.beforeSend();
+						}
+					},
 					success: function(reply) {
-						if(Jrun.isfunction(that.setting.success)) {
+						if(Jrun.isfunction(that.setting.success)) 
+						{
 							that.setting.success(reply);
 						}
 						
@@ -48,14 +73,8 @@ Js.util.buttonSubmit.prototype = {
 					}
 				});
 			}
+			
 			return false;
 		});
 	}
 };
-
-Js.config.util.buttonSubmit = {
-	method: "POST",
-	beforeSend: null,
-	success: null,
-	custom: {}
-}

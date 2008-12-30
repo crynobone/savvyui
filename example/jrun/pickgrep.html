@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Jrun.pickGrep</title>
+		<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../../base.js"></script>
+		<script type="text/javascript" src="../unit-testing.js"></script>
+	</head>
+	<body>
+		<h1>Jrun.pickGrep</h1>
+		<pre>
+			Js.debug.enable = true;
+			jQuery(function() {
+				var fail = "wold";
+				var test = "hello";
+				var output = Jrun.pickGrep(fail, test, /^(hello|hye)$/i);
+				
+				Js.util.Assert.isTrue(output, "hello", "output is " + output);			
+			});
+		</pre>
+		<div id="result">
+			<h2>Result</h2>
+		</div>
+		<script type="text/javascript">
+		<!--
+		Js.debug.enable = true;
+		jQuery(function() {
+			var fail = "wold";
+			var test = "hello";
+			var output = Jrun.pickGrep(fail, test, /^(hello|hye)$/i);
+			
+			Js.util.Assert.isTrue(output, "hello", "output found RegExp /^(hello|hye)$/i");			
+		});
+		-->
+		</script>
+		
+	</body>
+</html>

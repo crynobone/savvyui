@@ -1,7 +1,7 @@
 /**
  * Checkbox Ticker for Savvy.UI
- * @extends Js.util
  * @version 0.1.2
+ * @memberOf Js.util
  * @author Mior Muhammad Zaki
  * @license MIT
  */

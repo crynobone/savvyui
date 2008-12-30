@@ -1,5 +1,5 @@
 /**
- * Iconizer widget for Savvy.UI
+ * @projectDescription Iconizer widget for Savvy.UI
  * @version 0.0.2
  * @extends Js.widget
  * @author Mior Muhammad Zaki
@@ -9,22 +9,27 @@
 Js.widget.iconizer = function(option) 
 {
 	this.setting = Js.config.widget.iconizer;
-	this.option = Jrun.pickStrict(option, {}, "object");
+	
+	if(Jrun.isset(option))
+	{
+		this.init(option);
+	}
 	
 	return this;
 };
 Js.widget.iconizer.prototype = {
-	init: function() 
+	init: function(option) 
 	{
 		var that = this;
 		
-		this.setting = Js.append(this.option, this.setting);
+		this.setting = Js.append(Js.append(option, {}), this.setting);
 		
 		jQuery("*[class*=icon]").each(function(index, value) {
 			var node = jQuery(value);
 			
 			var klas = object.attr("className");
 			var klass = klas.split(/ /);
+			
 			for(var i = 0; i < klass.length; i++) 
 			{
 				if(klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) 

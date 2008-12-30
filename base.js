@@ -36,6 +36,7 @@ var Js = {
 
 /**
  * Display Savvy.UI current version
+ * @alias Js.toString
  * @return {String}
  */
 Js.toString = function() 
@@ -45,15 +46,19 @@ Js.toString = function()
 
 /**
  * Return an inheritence of data
+ * @alias Js.nue
  * @param {Object} data
  * @return {Object}
  */
 Js.nue = function(data) 
 {
+	// data have to be an object
 	if (Jrun.typeOf(data) == "object") 
 	{
+		// prepare result object
 		var result = {};
 		
+		// loop data object name
 		for (var method in data) 
 		{
 			if (data.hasOwnProperty(method)) 
@@ -73,6 +78,7 @@ Js.nue = function(data)
 
 /**
  * Append data Object with value's method
+ * @alias Js.append
  * @param {Object} data
  * @param {Object} value
  * @return {Object}
@@ -111,6 +117,7 @@ Js.debug = {
 	},
 	/**
 	 * Log message
+	 * @alias Js.debug.log
 	 * @param {String} text
 	 */
 	log: function(text) 
@@ -119,6 +126,7 @@ Js.debug = {
 	},
 	/**
 	 * Log error
+	 * @alias Js.debug.error
 	 * @param {String} text
 	 */
 	error: function(text) 
@@ -141,11 +149,18 @@ Js.debug = {
 };
 
 var Jrun = {
+	/**
+	 * Camelize given string
+	 * @alias Jrun.camelize
+	 * @param {String} data
+	 * @return {String} string with camelize format
+	 */
 	camelize: function(data) 
 	{
 		var values = data.split(/\-/);
 		
-		if (values.length) 
+		// if array only have one value
+		if (values.length === 1) 
 		{
 			return values[0];
 		}
@@ -160,6 +175,7 @@ var Jrun = {
 	},
 	/**
 	 * Open a webpage/URL using JavaScript
+	 * @alias Jrun.href
 	 * @param {String} [url] set the hyperlink of destination path 
 	 * @param {String} [target] set the target to show the page, if applicable
 	 */
@@ -184,6 +200,7 @@ var Jrun = {
 	},
 	/**
 	 * Encode HTML entities from any given string
+	 * @alias Jrun.htmlEncode
 	 * @param {String} [value] any string with HTML entities
 	 * @return {String}
 	 */
@@ -197,6 +214,7 @@ var Jrun = {
 	},
 	/**
 	 * Decode HTML entities from any given string
+	 * @alias Jrun.htmlDecode
 	 * @param {String} value
 	 * @return {String}
 	 */
@@ -210,9 +228,11 @@ var Jrun = {
 	},
 	/**
 	 * Check whether the value is in an array
+	 * 
+	 * @alias Jrun.inArray 
 	 * @param {String} value
 	 * @param {Array} data
-	 * @return {Number}
+	 * @return {Boolean}
 	 */
 	inArray: function(value, data) 
 	{
@@ -227,6 +247,13 @@ var Jrun = {
 		
 		return false;
 	},
+	/**
+	 * Check whether the value is in an array, unlike Jrun.inArray checking is based on Regular Expression
+	 * 
+	 * @alias Jrun.inArrayGrep
+	 * @param {RegExp} value
+	 * @param {Object} data
+	 */
 	inArrayGrep: function(value, data) 
 	{
 		for(var index = 0; index < data.length && !!data[index]; index++) 
@@ -241,8 +268,10 @@ var Jrun = {
 		return false;
 	},
 	/**
-	 * Get the indexOf based array's value
-	 * @param {String} value
+	 * Get the indexOf based on value in an array
+	 * 
+	 * @alias Jrun.indexOf
+	 * @param {Object} value
 	 * @param {Array} data
 	 * @return {Number}
 	 */
@@ -251,21 +280,34 @@ var Jrun = {
 		for (var index = data.length; index-- && data[index] !== value;);
 		return index;
 	},
+	/**
+	 * Get the indexOf based on value in an array
+	 * 
+	 * @alias Jrun.indexOfGrep
+	 * @param {RegExp} value
+	 * @param {Array} data
+	 * @return {Number}
+	 */
 	'indexOfGrep': function(value, data) 
 	{
 		for (var index = data.length; index-- && !data[index].match(value););
 		return index;
 	},
 	/**
+	 * Check whether argument is not defined
 	 * 
+	 * @alias Jrun.isnull
 	 * @param {Object} data
+	 * @return {Boolean}
 	 */
 	isnull: function(data) 
 	{
 		return (typeof(data) == "undefined" || data == null);
 	},
 	/**
-	 * Check whether passed value is defined
+	 * Check whether argument is defined
+	 * 
+	 * @alias Jrun.isset
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
@@ -275,15 +317,22 @@ var Jrun = {
 	},
 	/**
 	 * Check whether the passed value is a function
+	 * <br>Replace with jQuery.isfunction
+	 * 
+	 * @alias Jrun.isfunction
+	 * @deprecated
+	 * @alias jQuery.isfunction
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
 	isfunction: function(data) 
 	{
-		return (!!data && typeof(data) === "function");
+		return jQuery.isfunction(data);
+		/* (!!data && typeof(data) === "function"); */
 	},
 	/**
 	 * Trim left of a string
+	 * @alias Jrun.ltrim
 	 * @param {String} value
 	 * @return {String}
 	 */
@@ -293,7 +342,9 @@ var Jrun = {
 	},
 	/**
 	 * Pick the first arguments that is defined
+	 * @alias Jrun.pick
 	 * @param {Object} js
+	 * @return {Object}
 	 */
 	pick: function(js) 
 	{
@@ -311,6 +362,12 @@ var Jrun = {
 		
 		return null;
 	},
+	/**
+	 * Pick the first arguments that is defined and typeof match the last arguments
+	 * @alias Jrun.pickStrict
+	 * @param {Object} [js]
+	 * @return {Object}
+	 */
 	pickStrict: function(js) 
 	{
 		var data = jQuery.makeArray(arguments);
@@ -332,6 +389,12 @@ var Jrun = {
 		
 		return null;
 	},
+	/**
+	 * Pick the first arguments that is defined and match Regular Expression passed in the last arguments
+	 * @alias Jrun.pickGrep
+	 * @param {Object} js
+	 * @return {Object}
+	 */
 	pickGrep: function(js) 
 	{
 		var data = jQuery.makeArray(arguments);
@@ -358,6 +421,13 @@ var Jrun = {
 		
 		return null;
 	},
+	/**
+	 * @alias Jrun.prettyList
+	 * @param {Array} data
+	 * @param {String} between
+	 * @param {String} last
+	 * @return {String}
+	 */
 	prettyList: function(data, between, last) 
 	{
 		var length = data.length;
@@ -396,6 +466,7 @@ var Jrun = {
 	},
 	/** 
 	 * Trim right of a string.
+	 * @alias Jrun.rtrim
 	 * @param {String} value
 	 * @return {String}
 	 */
@@ -405,6 +476,7 @@ var Jrun = {
 	},
 	/**
 	 * Striptags work similiar to striptags in PHP, strip any html attribute from a string
+	 * @alias Jrun.stripTags
 	 * @param {String} value
 	 * @return {String}
 	 */
@@ -413,7 +485,10 @@ var Jrun = {
 		return new String(value).replace(/<([^>]+)>/g, "");
 	},
 	/**
-	 * Serialize array or object to querystring 
+	 * Serialize array or object to querystring
+	 * <br>All XHR request will be control directly via jQuery.ajax() 
+	 * @alias Jrun.serialize
+	 * @deprecated
 	 * @param {Object} data
 	 * @return {String}
 	 */
@@ -452,6 +527,7 @@ var Jrun = {
 	},
 	/**
 	 * Parse input string value as Number using parseInt
+	 * @alias Jrun.toNumber
 	 * @param {Object} data
 	 * @return {Number}
 	 */
@@ -462,6 +538,7 @@ var Jrun = {
 	},
 	/**
 	 * Parse input string value as Float using parseFloat
+	 * @alias Jrun.toFloat
 	 * @param {String} data
 	 * @return {Float}
 	 */
@@ -469,6 +546,11 @@ var Jrun = {
 	{
 		return (typeof(data) == "string" ? parseFloat(data, 10) : data);
 	},
+	/**
+	 * @alias Jrun.toProperCase
+	 * @param {String} data
+	 * @return {String}
+	 */
 	toProperCase: function(data) 
 	{
 		var array = data.split(/ /g);
@@ -486,7 +568,8 @@ var Jrun = {
 	},
 	/**
 	 * convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
-	 * <br>This function conflicts with jQuery.makeArray
+	 * <br>This function have been replaced with jQuery.makeArray()
+	 * @alias jQuery.makeArray
 	 * @deprecated
 	 * @param {Object, Array} [data] the source of data to be converted to Array 
 	 * @param {Number} [offset] offset where to start converting to array, if applicable
@@ -520,15 +603,20 @@ var Jrun = {
 	},
 	/**
 	 * Trim both left and right of a string.
+	 * <br>replace with jQuery.trim();
+	 * @alias jQuery.trim
+	 * @deprecated
 	 * @param {String} data
 	 * @return {String}
 	 */
 	trim: function(data) 
 	{
-		return new String(data).replace(/^\s+|\s+$/g, "");
+		return jQuery.trim(data); 
+		/* new String(data).replace(/^\s+|\s+$/g, ""); */
 	},
 	/**
 	 * Return the typeof passed argument, extending JavaScript default typeof
+	 * @alias Jrun.typeOf
 	 * @param {Object} data
 	 * @return {String}
 	 */
@@ -565,6 +653,7 @@ var Jrun = {
 	},
 	/** 
 	 * return only unique value of an array
+	 * @alias Jrun.unique
 	 * @param {Object, Array} [data]
 	 * @param {Boolean} [repeat]
 	 */
@@ -648,7 +737,7 @@ Js.base.create = function(js)
 	Class.prototype.construct = Jrun.pick(js.__construct, null);
 	Class.constructor = Class;
 	
-	// createvar ext = Jrun.pick(js.ext, null); the extends available through our class
+	// create inheritance
 	Class.extend = function(js) 
 	{
 		js.extended = this;	

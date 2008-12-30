@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Js.widget.activity</title>
+		<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../../lib/savvyui.js"></script>
+		<script type="text/javascript" src="../unit-testing.js"></script>
+		<link type="text/css" href="../../css/all.css" rel="stylesheet" media="all" />
+	</head>
+	<body>
+		<h1>Js.widget.activity</h1>
+		<div id="result">
+			<h3>Tab 1</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
+			<h3>Tab 2</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
+			<h3>Tab 3</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
+		</div>
+		<script type="text/javascript">
+		<!--
+		jQuery("<div/>").attr("id", "overlay").appendTo("body");
+		var activity = new Js.widget.activity("#overlay");
+		
+		jQuery("h1").click(function() {
+			activity.activate();
+			setTimeout(function() {
+				activity.deactivate();
+			}, 3000);
+		});
+		-->
+		</script>
+	</body>
+</html>

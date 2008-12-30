@@ -1,9 +1,9 @@
 /**
- * Savvy.UI JavaScript Library for jQuery Framework
+ * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
+ * @namespace Js
  * @version 1.1.2
  * @extends jQuery-1.2.6
- * @author Mior Muhammad Zaki for Codenitive
- * @namespace Js
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  */
 
 var Js = {
@@ -111,15 +111,13 @@ Js.debug = {
 	/**
 	 * Log message
 	 * @param {String} text
-	 * @param {String} level
-	 * @return {String}
 	 */
 	log: function(text) 
 	{
 		this.data.log.push(text);
 	},
 	/**
-	 * Explicitly log an error
+	 * Log error
 	 * @param {String} text
 	 */
 	error: function(text) 
@@ -161,8 +159,8 @@ var Jrun = {
 	},
 	/**
 	 * Open a webpage/URL using JavaScript
-	 * @param {String} url
-	 * @param {String} target
+	 * @param {String} [url] set the hyperlink of destination path 
+	 * @param {String} [target] set the target to show the page, if applicable
 	 */
 	href: function(url, target) 
 	{
@@ -185,7 +183,7 @@ var Jrun = {
 	},
 	/**
 	 * Encode HTML entities from any given string
-	 * @param {String} value
+	 * @param {String} [value] any string with HTML entities
 	 * @return {String}
 	 */
 	htmlEncode: function(value) 
@@ -487,8 +485,10 @@ var Jrun = {
 	},
 	/**
 	 * convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
-	 * @param {Object} data
-	 * @param {Number} offset
+	 * <br>This function conflicts with jQuery.makeArray
+	 * @deprecated
+	 * @param {Object, Array} [data] the source of data to be converted to Array 
+	 * @param {Number} [offset] offset where to start converting to array, if applicable
 	 * @return {Array}
 	 */  
 	toArray: function(data, offset) 
@@ -564,8 +564,8 @@ var Jrun = {
 	},
 	/** 
 	 * return only unique value of an array
-	 * @param {Object} data
-	 * @param {Object} repeat
+	 * @param {Object, Array} [data]
+	 * @param {Boolean} [repeat]
 	 */
 	unique: function(data, repeat) 
 	{

@@ -1,5 +1,4 @@
 /**
- * @last-modified: 
  * @projectDescription Activity Overlay for Savvy.UI
  * @memberOf Js.widget
  * @version 0.0.2
@@ -7,19 +6,25 @@
  * @license MIT
  */
 
+/**
+ * @constructor
+ * @param {String, Object} selector
+ * @param {Object} option
+ */
 Js.widget.activity = function(selector, option) 
 {
 	this.node = null;
 	this.element = null;
 	this.box = null;
 	this.setting = Js.config.widget.activity;
-	this.opacity = 0;
 	this.status = 0;
 	
 	if(Jrun.isset(selector))
 	{
 		this.init(selector, option);
 	}
+	
+	return this;
 };
 Js.widget.activity.prototype = {
 	init: function(selector, option) 
@@ -28,18 +33,19 @@ Js.widget.activity.prototype = {
 		this.setting = Js.append(Jrun.pick(option, {}), this.setting);
 		
 		this.node = jQuery(this.element).css({
-			background: this.setting.css.backgroundColor
-		}).fadeTo("slow", 0.01);
+			background: this.setting.css.backgroundColor,
+			zIndex: this.setting.css.zIndex
+		}).setClass(this.setting.identifier).fadeTo("fast", 0.01);
 	},
 	activate: function() 
 	{
 		if (this.status == 0) 
 		{
-			this.object.css({
-				display: "block"
-			}).fadeTo("normal", this.opacity);
+			this.node.css({
+				"display": "block"
+			}).fadeTo("normal", this.setting.opacity);
 			
-			var t = Js.util.dimension.page.middle(this.boxWidth, this.boxHeight);
+			var t = Js.util.dimension.page.middle(this.setting.box.width, this.setting.box.height);
 			
 			if (Jrun.isset(this.box)) 
 			{
@@ -48,10 +54,6 @@ Js.widget.activity.prototype = {
 					left: t[1] + "px"
 				});
 			}
-			// we the time out for the procession to 20 seconds. Just in case the connection hangs
-			setTimeout(function(){
-				Js.widget.overlay.deactivate();
-			}, 20000);
 		}
 		
 		this.status++;
@@ -69,11 +71,11 @@ Js.widget.activity.prototype = {
 	},
 	deactivate: function() 
 	{
-		if(this.status == 1) 
+		if(this.status > 0) 
 		{
-			this.object.fadeTo("normal", 0, function() {
+			this.node.fadeTo("normal", 0, function() {
 				jQuery(this).css({
-					display: "none"
+					"display": "none"
 				});
 			});
 		}
@@ -83,14 +85,20 @@ Js.widget.activity.prototype = {
 	}
 };
 
+/**
+ * Configuration for Js.widget.activity
+ */
 Js.config.widget.activity = {
 	box: {
 		imagePath: "images/",
 		width: 200,
 		height: 20,
-		zIndex: 5000
+		zIndex: 5001
 	},
+	identifier: "widget-activity",
+	opacity: 0.6,
 	css: {
-		backgroundColor: "#fff"
+		backgroundColor: "#fff",
+		zIndex: 5000
 	}
 };

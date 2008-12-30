@@ -37,7 +37,8 @@ var Js = {
  * Display Savvy.UI current version
  * @return {String}
  */
-Js.toString = function() {
+Js.toString = function() 
+{
 	return ["Savvy.UI", "version", Js.version, "using", Js.adapter].join(" ");	
 };
 
@@ -46,20 +47,24 @@ Js.toString = function() {
  * @param {Object} data
  * @return {Object}
  */
-Js.nue = function(data) {
-	Js.debug.log("Js.nue: started");
-	
-	if (Jrun.typeOf(data) == "object") {
+Js.nue = function(data) 
+{
+	if (Jrun.typeOf(data) == "object") 
+	{
 		var result = {};
 		
-		for (var method in data) {
-			if (data.hasOwnProperty(method)) {
+		for (var method in data) 
+		{
+			if (data.hasOwnProperty(method)) 
+			{
 				result[method] = data[method];
 			}
 		}
+		
 		return result;
 	}
-	else {
+	else 
+	{
 		// data not an object, just return the original data
 		return data;
 	}
@@ -71,27 +76,27 @@ Js.nue = function(data) {
  * @param {Object} value
  * @return {Object}
  */
-Js.append = function(data, value) {
-	Js.debug.log("Js.append: started");
-	
+Js.append = function(data, value) 
+{
 	// check whether both are object
-	if (Jrun.typeOf(data) == "object" && Jrun.typeOf(value) == "object") {
-		Js.debug.log("Js.append started: both arguments are object");
-		
+	if (Jrun.typeOf(data) == "object" && Jrun.typeOf(value) == "object") 
+	{
 		var result = data;
 		
 		// loop value's method
-		for (var method in value) {
+		for (var method in value) 
+		{
 			// if data doesn't have the method add it
-			if (!data.hasOwnProperty(method) && value.hasOwnProperty(method)) {
+			if (!data.hasOwnProperty(method) && value.hasOwnProperty(method)) 
+			{
 				result[method] = value[method];
 			}
 		}
 		
 		return result;
 	}
-	else {
-		Js.debug.log("Js.append failed: first or second arguments not an object");
+	else 
+	{
 		// data isn't an object
 		return data;
 	}
@@ -109,18 +114,21 @@ Js.debug = {
 	 * @param {String} level
 	 * @return {String}
 	 */
-	log: function(text) {
+	log: function(text) 
+	{
 		this.data.log.push(text);
 	},
 	/**
 	 * Explicitly log an error
 	 * @param {String} text
 	 */
-	error: function(text) {
+	error: function(text) 
+	{
 		this.data.error.push(text);
 		
 		// if Js.debug.enable is true, display the error
-		if (!!this.enable) {
+		if (!!this.enable) 
+		{
 			try {
 				// good browser come with console
 				console.log(text);
@@ -134,10 +142,12 @@ Js.debug = {
 };
 
 var Jrun = {
-	camelize: function(data) {
+	camelize: function(data) 
+	{
 		var values = data.split(/\-/);
 		
-		if (values.length) {
+		if (values.length) 
+		{
 			return values[0];
 		}
 		
@@ -154,18 +164,23 @@ var Jrun = {
 	 * @param {String} url
 	 * @param {String} target
 	 */
-	href: function(url, target) {
-		if (this.trim(url) !== "") {
-			if (this.isnull(target)) {
+	href: function(url, target) 
+	{
+		if (this.trim(url) !== "") 
+		{
+			if (this.isnull(target)) 
+			{
 				// when target is not define load the page in the same window
 				window.location.href = url;
 			} 
-			else {
+			else 
+			{
 				window.open(url, target);
 			}
 		} 
-		else {
-			Js.debug.error("Js.href failed to load page: " + url)
+		else 
+		{
+			Js.debug.error("Jrun.href: failed to load page " + url);
 		}
 	},
 	/**
@@ -173,7 +188,8 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	htmlEncode: function(value) {
+	htmlEncode: function(value) 
+	{
 		return value
 			.replace(/&/g, "&amp;")
 			.replace(/</g, "&lt;")
@@ -185,7 +201,8 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	htmlDecode: function(value) {
+	htmlDecode: function(value) 
+	{
 		return value
 			.replace(/&amp;/g, "&")
 			.replace(/&lt;/g, "<")
@@ -198,9 +215,12 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Number}
 	 */
-	inArray: function(value, data) {
-		for(var index = 0; index < data.length && !!data[index]; index++) {
-			if(data[index] === value) {
+	inArray: function(value, data) 
+	{
+		for(var index = 0; index < data.length && !!data[index]; index++) 
+		{
+			if(data[index] === value) 
+			{
 				return true;
 				break;
 			}
@@ -208,9 +228,12 @@ var Jrun = {
 		
 		return false;
 	},
-	inArrayGrep: function(value, data) {
-		for(var index = 0; index < data.length && !!data[index]; index++) {
-			if(data[index].match(value)) {
+	inArrayGrep: function(value, data) 
+	{
+		for(var index = 0; index < data.length && !!data[index]; index++) 
+		{
+			if(data[index].match(value)) 
+			{
 				return true;
 				break;
 			}
@@ -224,11 +247,13 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Number}
 	 */
-	'indexOf': function(value, data) {
+	'indexOf': function(value, data) 
+	{
 		for (var index = data.length; index-- && data[index] !== value;);
 		return index;
 	},
-	'indexOfGrep': function(value, data) {
+	'indexOfGrep': function(value, data) 
+	{
 		for (var index = data.length; index-- && !data[index].match(value););
 		return index;
 	},
@@ -236,7 +261,8 @@ var Jrun = {
 	 * 
 	 * @param {Object} data
 	 */
-	isnull: function(data) {
+	isnull: function(data) 
+	{
 		return (typeof(data) == "undefined" || data == null);
 	},
 	/**
@@ -244,7 +270,8 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isset: function(data) {
+	isset: function(data) 
+	{
 		return !this.isnull(data);
 	},
 	/**
@@ -252,61 +279,79 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isfunction: function(data) {
+	isfunction: function(data) 
+	{
 		return (!!data && typeof(data) === "function");
 	},
-	ltrim: function(value) {
+	/**
+	 * Trim left of a string
+	 * @param {String} value
+	 * @return {String}
+	 */
+	ltrim: function(value) 
+	{
 		return new String(value).replace(/^\s+/g, "");
 	},
 	/**
 	 * Pick the first arguments that is defined
 	 * @param {Object} js
 	 */
-	pick: function(js) {
+	pick: function(js) 
+	{
 		var data = jQuery.makeArray(arguments);
 		
-		for(var index = 0; index < data.length; index++) {
+		for(var index = 0; index < data.length; index++) 
+		{
 			var value = data[index];
             
-            if (Jrun.isset(value)) {
+            if (Jrun.isset(value)) 
+			{
                 return value;
             }
 		};
 		
 		return null;
 	},
-	pickStrict: function(js) {
+	pickStrict: function(js) 
+	{
 		var data = jQuery.makeArray(arguments);
 		var length = data.length;
 		var last = data[(length - 1)];
 		
-		for(var index = 0; index < (length - 1); index++) {
+		for(var index = 0; index < (length - 1); index++) 
+		{
 			var value = data[index];
             
-            if (Jrun.isset(value)) {
-                if (this.typeOf(value) == last) {
+            if (Jrun.isset(value)) 
+			{
+                if (this.typeOf(value) == last) 
+				{
                     return value;
                 }
             }
 		};
 		
-		
 		return null;
 	},
-	pickGrep: function(js) {
+	pickGrep: function(js) 
+	{
 		var data = jQuery.makeArray(arguments);
 		var length = data.length;
 		var last = data[(length - 1)];
 		
-		if (this.typeOf(last) == "string") {
+		if (this.typeOf(last) == "string") 
+		{
 			last = new RegExp(last);
 		}
 		
-		for(var index = 0; index < (length - 1); index++) {
+		for(var index = 0; index < (length - 1); index++) 
+		{
 			var value = data[index];
             
-            if (Jrun.isset(value)) {
-                if (!!value.match(last)) {
+            if (Jrun.isset(value)) 
+			{
+                if (!!value.match(last)) 
+				{
                     return value;
                 }
             }
@@ -314,31 +359,37 @@ var Jrun = {
 		
 		return null;
 	},
-	prettyList: function(data, between, last) {
+	prettyList: function(data, between, last) 
+	{
 		var length = data.length;
 		var result = new String;
 		
-		if (length > 1) {
-			jQuery.each(data, function(index, value){
+		if (length > 1) 
+		{
+			jQuery.each(data, function(index, value) {
 				result = [result, (index == 0 ? "" : (index == (length - 1) ? last : between)), value].join("");
 			});
 		} 
-		else {
+		else 
+		{
 			result = data[0];
 		}
 		
 		return result;
 	},
-	rand: function(js) {
+	rand: function(js) 
+	{
 		var data = arguments;
 		var length = 0;
 		var offset = 0;
 		
-		if (data.length === 2) {
+		if (data.length === 2) 
+		{
 			offset = data[0];
 			length = data[1];
 		} 
-		else if (data.length === 1) {
+		else if (data.length === 1) 
+		{
 			length = data[0];
 		}
 		
@@ -349,7 +400,8 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	rtrim: function(value) {
+	rtrim: function(value) 
+	{
 		return new String(value).replace(/\s$/g, "");
 	},
 	/**
@@ -357,7 +409,8 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	stripTags: function(value) {
+	stripTags: function(value) 
+	{
 		return new String(value).replace(/<([^>]+)>/g, "");
 	},
 	/**
@@ -365,30 +418,36 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {String}
 	 */
-	serialize: function(data) {
+	serialize: function(data) 
+	{
 		var result = [];
 		
-		if (this.typeOf(data) === "array") {
+		if (this.typeOf(data) === "array") 
+		{
 			jQuery.each(data, function(index, val){
-				if (!!Js.parse.html) {
+				if (!!Js.parse.html) 
+				{
 					val.value = Js.parse.html.to(val.value);
 				}
 				result.push(data[index].name + "=" + val.value);
 			});
 		}
-		else 
-			if (this.typeOf(data) == "object") {
-				for (var val in data) {
-					if (!!Js.parse.html) {
-						data[val] = Js.parse.html.to(data[val]);
-					}
-					
-					result.push(val + "=" + data[val]);
+		else if (this.typeOf(data) == "object") 
+		{
+			for (var val in data) 
+			{
+				if (!!Js.parse.html) 
+				{
+					data[val] = Js.parse.html.to(data[val]);
 				}
+					
+				result.push(val + "=" + data[val]);
 			}
-			else {
-				return "";
-			}
+		}
+		else 
+		{
+			return "";
+		}
 		
 		return result.join("&");
 	},
@@ -397,7 +456,8 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Number}
 	 */
-	toNumber: function(data) {
+	toNumber: function(data) 
+	{
 		// return possible integer value of a string, if not a string then return self
 		return (typeof(data) == "string" ? parseInt(data, 10) : data);
 	},
@@ -406,10 +466,12 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {Float}
 	 */
-	toFloat: function(data) {
+	toFloat: function(data) 
+	{
 		return (typeof(data) == "string" ? parseFloat(data, 10) : data);
 	},
-	toProperCase: function(data) {
+	toProperCase: function(data) 
+	{
 		var array = data.split(/ /g);
 		var result = [];
 		
@@ -429,21 +491,25 @@ var Jrun = {
 	 * @param {Number} offset
 	 * @return {Array}
 	 */  
-	toArray: function(data, offset) {
+	toArray: function(data, offset) 
+	{
 		var offset = (this.isnull(offset) || offset < 1 ? 0 : offset);
 		
 		// return empty array
-		if (this.isnull(data)) {
+		if (this.isnull(data)) 
+		{
 			return [];
 		}
-		else {
+		else 
+		{
 			// ensure the offset
 			var offsetLength = (data.length - offset);
 			var dataLength = data.length;
 			var result = [];
 			
 			// loop and prepare r to be return
-			while (offsetLength > 0) {
+			while (offsetLength > 0) 
+			{
 				--offsetLength;
 				--dataLength;
 				result[offsetLength] = data[dataLength];
@@ -456,7 +522,8 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {String}
 	 */
-	trim: function(data) {
+	trim: function(data) 
+	{
 		return new String(data).replace(/^\s+|\s+$/g, "");
 	},
 	/**
@@ -464,26 +531,34 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {String}
 	 */
-	typeOf: function(data) {
-		if (typeof(data) == "object") {
+	typeOf: function(data) 
+	{
+		if (typeof(data) == "object") 
+		{
 			// object doesn't always turn out to be object
-			if (data.length > 0 && data[0].nodeType) {
+			if (data.length > 0 && data[0].nodeType) 
+			{
 				return "element";
 			}
-			else if (data.constructor === Array) {
+			else if (data.constructor === Array) 
+			{
 				return "array";
 			}
-			else if (data.nodeType) {
+			else if (data.nodeType) 
+			{
 				return "element";
 			}
-			else if (data.constructor !== Object) {
+			else if (data.constructor !== Object) 
+			{
 				return "function";
 			}
-			else {
+			else 
+			{
 				return "object";
 			}
 		}
-		else {
+		else 
+		{
 			return typeof(data);
 		}
 	},
@@ -492,24 +567,30 @@ var Jrun = {
 	 * @param {Object} data
 	 * @param {Object} repeat
 	 */
-	unique: function(data, repeat) {
+	unique: function(data, repeat) 
+	{
 		// when option equal true it only reject value which is repeating
 		var repeat = this.pick(repeat, false);
 		var result = [];
 		
 		// loop the array
 		jQuery.each(data, function(index, value) {
-			if (!repeat) {
+			if (!repeat) 
+			{
 				// add only if unique
-				if (!Jrun.inArray(value, result)) {
+				if (!Jrun.inArray(value, result)) 
+				{
 					result.push(value);
 				}
 			} 
-			else {
-				if (index == 0) {
+			else 
+			{
+				if (index == 0) 
+				{
 					result.push(value);
 				} 
-				else if (value !== Jrun.trim(data[index - 1])) {
+				else if (value !== Jrun.trim(data[index - 1])) 
+				{
 					result.push(value);
 				}
 			}
@@ -521,13 +602,16 @@ var Jrun = {
 
 Js.base = function() {};
 Js.base.prototype = {
-	__destruct: function() {
+	__destruct: function() 
+	{
 		// remove all properties and method for this object
-		for (var method in this) {
+		for (var method in this) 
+		{
 			this[method] = null;
 		}
 			
-		for (var method in this.prototype) {
+		for (var method in this.prototype) 
+		{
 			this.prototype[method] = null;
 		}
 		
@@ -543,17 +627,18 @@ Js.base.prototype = {
  * @param {Object} js
  * @return {Object}
  */
-Js.base.create = function(js) {
-	Js.debug.log("Js.base." + (!!Jrun.isset(js.extended) ? "extend" : "create") + ": started");
-	
+Js.base.create = function(js) 
+{
 	var initialize = true;
 	// add prototyping based on Js.base
 	var prototype = new Js.base;
 	initialize = false;
 	
 	// make a dummy class so that this.constructor will return Class
-	function Class() {
-		if (!initialize && !!this.construct) {
+	function Class() 
+	{
+		if (!initialize && !!this.construct) 
+		{
 			this.construct.apply(this, jQuery.makeArray(arguments));
 		}
 	};
@@ -563,9 +648,9 @@ Js.base.create = function(js) {
 	Class.constructor = Class;
 	
 	// createvar ext = Jrun.pick(js.ext, null); the extends available through our class
-	Class.extend = function(js) {
-		js.extended = this;
-		
+	Class.extend = function(js) 
+	{
+		js.extended = this;	
 		return Js.base.create(js);
 	};
 	
@@ -577,14 +662,17 @@ Js.base.create = function(js) {
 		var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
 		
 		// start adding method and properties to this object
-		for (var method in js) {
-			if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
+		for (var method in js) 
+		{
+			if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
+			{
 				this[method] = js[method];
 			}
 		};
 	}).call(prototype, js);
 	
-	if(!!Jrun.isset(extended)) {
+	if(!!Jrun.isset(extended)) 
+	{
 		try {
 			// try to copy parent object.
 			(function(js) {
@@ -592,14 +680,18 @@ Js.base.create = function(js) {
 				
 				// start adding parent method and properties to this object
 				
-				for (var method in js) {
-					if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
+				for (var method in js) 
+				{
+					if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
+					{
 						this[method] = js[method];
 					}
 				}
 				
-				for (var method in js.prototype) {
-					if (js.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
+				for (var method in js.prototype) 
+				{
+					if (js.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
+					{
 						this[method] = js.prototype[method];
 					}
 				}
@@ -620,14 +712,16 @@ Js.base.create = function(js) {
 
 Js.parse = {
 	html: {
-		to: function(data) {
+		to: function(data) 
+		{
 			var data = new String(data);
 			data = Jrun.htmlEncode(data);
 			data = encodeURIComponent(data);
 			
 			return data;
 		},
-		from: function(data) {
+		from: function(data) 
+		{
 			var data = new String(value);
 			data = decodeURIComponent(data);
 			data = Jrun.htmlDecode(data);
@@ -635,7 +729,8 @@ Js.parse = {
 			return data;
 		}
 	},
-	bbml: function(data) {
+	bbml: function(data) 
+	{
 		return new String(data)
 			.replace(/\[lt\]/g, "<")
 			.replace(/\[gt\]/g, ">")
@@ -646,51 +741,66 @@ Js.parse = {
 			.replace(/\[break\]/g, "<br />");
 	},
 	xhr: {
-		init: function(reply) {
+		init: function(reply) 
+		{
 			var data = eval("(" + reply + ")");
 			
-			if (!!data.SUIXHR) {
+			Js.debug.log("XHR: " + data);
+			
+			if (!!data.SUIXHR) 
+			{
 				Js.parse.xhr.notice(data);
 				Js.parse.xhr.href(data);
 				Js.parse.xhr.update(data);
 			}
 		},
-		notice: function(data) {
+		notice: function(data) 
+		{
 			var note = Jrun.pickStrict(data.notice, "string");
 			
-			if (Jrun.isset(note) && note !== "") {
+			if (Jrun.isset(note) && note !== "") 
+			{
 				window.alert(note);
 				
-				if (!!console) {
+				if (!!console) 
+				{
 					console.log(note);
 				}
 			}
 		},
-		href: function(data) {
+		href: function(data) 
+		{
 			var href = Jrun.pickGrep(data.href, /^https?:\/\//g);
 			var xhref = Jrun.pickGrep(data.xhref, /^https?:\/\//g);
 			
-			if (Jrun.isset(xhref) && xhref !== "") {
+			if (Jrun.isset(xhref) && xhref !== "") 
+			{
 				Jrun.href(xhref, "_blank");
 			} 
-			else if (Jrun.isset(href) && href !== "") {
+			else if (Jrun.isset(href) && href !== "") 
+			{
 				Jrun.href(href);
 			}
 		},
-		update: function(data) {
+		update: function(data) 
+		{
 			var args = Jrun.pickStrict(data.text, "string");
 			var id = Jrun.pickStrict(data.id, "string");
 			var selector = Jrun.pickStrict(selector, "string");
 			var object = Jrun.pickStrict(data.exec, data.callback, null);
 			
-			if (!!args) {
-				if(!!selector) {
+			if (!!args) 
+			{
+				if(!!selector) 
+				{
 					jQuery(selector).html(args);
 				} 
-				else if (!!id) {
+				else if (!!id) 
+				{
 					jQuery("#" + id).html(args);
 				} 
-				else if (Jrun.isset(object)) {
+				else if (Jrun.isset(object)) 
+				{
 					// eval the function without making a callback
 					var callback = eval(object);
 					// execute the function
@@ -707,7 +817,8 @@ Js.test = {
 	 * @param {String} data
 	 * @return {String}
 	 */
-	isString: function(data) {
+	isString: function(data) 
+	{
 		return (typeof(data) == "string" && isNaN(data));
 	},
 	/**
@@ -715,7 +826,8 @@ Js.test = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isNumber: function(data) {
+	isNumber: function(data) 
+	{
 		return !isNaN(data);
 	},
 	/**
@@ -723,7 +835,8 @@ Js.test = {
 	 * @param {String} data
 	 * @return {Boolean}
 	 */
-	isEmail: function(data) {
+	isEmail: function(data) 
+	{
 		return (data.match(/^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/));
 	},
 	/**
@@ -732,21 +845,26 @@ Js.test = {
 	 * @param {Object} value
 	 * @return {Boolean}
 	 */
-	isLength: function(regexp, value) {
+	isLength: function(regexp, value) 
+	{
 		var data = regexp.split(/\-/);
 		var length = Jrun.toNumber(data[1]);
 		var result = null;
 		
-		if (data[0] === "max") {
+		if (data[0] === "max") 
+		{
 			result = (value <= length ? true : false);
 		}
-		else if (data[0] === "min") {
+		else if (data[0] === "min") 
+		{
 			result = (value >= length ? true : false);
 		} 
-		else if (data[0] === "exact") {
+		else if (data[0] === "exact") 
+		{
 			result = (value == length ? true : false);
 		} 
-		else {
+		else 
+		{
 			result = true;
 		}
 		
@@ -757,7 +875,8 @@ Js.test = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isURL: function(data) {
+	isURL: function(data) 
+	{
 		return (data.match(/^https?:\/\/([a-z0-9-]+\.)+[a-z0-9]{2,4}.*$/));
 	},
 	/**
@@ -765,7 +884,8 @@ Js.test = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isIpAddress: function(data) {
+	isIpAddress: function(data) 
+	{
 		return (data.match(/^\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\]$/));
 	}
 };

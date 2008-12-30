@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Js.base.create and Js.base.extend</title>
+		<script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../base.js"></script>
+		<script type="text/javascript" src="unit-testing.js"></script>
+	</head>
+	<body>
+		<h1>Js.base.create and Js.base.extend</h1>
+		<pre>
+			var person = Js.base.create({
+				name: "",
+				email: "",
+				getName: function() {
+					return this.name + " (" + this.email + ")";
+				}
+			});
+			
+			var zaki = new person;
+			zaki.name = "Zaki";
+			zaki.email = "crynobone@gmail.com";
+			Js.util.Assert.isTrue(zaki.getName(), "Zaki (crynobone@gmail.com)", "zaki.getName() return " + zaki.getName());
+			
+			var student = person.extend({
+				matric: "",
+				__construct: function(name, email, matric) {
+					this.name = name;
+					this.email = email;
+					this.matric = matric;
+				},
+				getName: function() {
+					return this.name + ' / ' + this.email + ' / ' + this.matric;
+				}
+			});
+			
+			var nor = new student('Norhafiz', 'noriz@codenitive.com', '49070');
+			Js.util.Assert.isTrue(nor.getName(), "Norhafiz / noriz@codenitive.com / 49070", "nor.getName() return " + nor.getName());
+			
+		</pre>
+		<div id="result">
+			<h2>Result</h2>
+		</div>
+		
+		<script type="text/javascript">
+		<!--
+		var person = Js.base.create({
+			name: "",
+			email: "",
+			getName: function() {
+				return this.name + " (" + this.email + ")";
+			}
+		});
+		
+		var zaki = new person;
+		zaki.name = "Zaki";
+		zaki.email = "crynobone@gmail.com";
+		Js.util.Assert.isTrue(zaki.getName(), "Zaki (crynobone@gmail.com)", "zaki.getName() return " + zaki.getName());
+		
+		var student = person.extend({
+			matric: "",
+			__construct: function(name, email, matric) {
+				this.name = name;
+				this.email = email;
+				this.matric = matric;
+			},
+			getName: function() {
+				return this.name + ' / ' + this.email + ' / ' + this.matric;
+			}
+		});
+		
+		var nor = new student('Norhafiz', 'noriz@codenitive.com', '49070');
+		Js.util.Assert.isTrue(nor.getName(), "Norhafiz / noriz@codenitive.com / 49070", "nor.getName() return " + nor.getName());
+		
+		-->
+		</script>
+		
+	</body>
+</html>

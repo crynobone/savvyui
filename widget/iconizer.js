@@ -6,14 +6,16 @@
  * @license MIT
  */
 
-Js.widget.iconizer = function(option) {
+Js.widget.iconizer = function(option) 
+{
 	this.setting = Js.config.widget.iconizer;
 	this.option = Jrun.pickStrict(option, {}, "object");
 	
 	return this;
 };
 Js.widget.iconizer.prototype = {
-	init: function() {
+	init: function() 
+	{
 		var that = this;
 		
 		this.setting = Js.append(this.option, this.setting);
@@ -23,39 +25,52 @@ Js.widget.iconizer.prototype = {
 			
 			var klas = object.attr("className");
 			var klass = klas.split(/ /);
-			for(var i = 0; i < klass.length; i++) {
-				if(klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) {
+			for(var i = 0; i < klass.length; i++) 
+			{
+				if(klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) 
+				{
 					var append = (RegExp.$1 == "-append" ? true : false);
-					var pos = (!Jrun.inArray(RegExp.$2, ["left", "right"]) ? "left" : RegExp.$2);
+					var pos = Jrun.pickGrep(RegExp.$1, "left", /^(left|right)$/i);
 					var icon = RegExp.$3;
+					var bg = that.setting.folder + icon + "." + that.setting.filetype;
 					
-					if(!!append) {
+					if(!!append) 
+					{
 						var obj = jQuery("<span/>").css({
 							"display": "block",
 							"cssFloat": pos,
 							"width": "16px",
 							"height": "16px"
 						}).prependTo(object);
-						if(pos == "left") {
+						
+						if(pos == "left") 
+						{
 							obj.css({
-								"background": "url('" + that.setting.folder + icon + "." + that.setting.filetype + "') no-repeat left",
+								"background": "url('" + bg + "') no-repeat left",
 								"marginRight": "3px"
 							});
-						} else {
+						} 
+						else 
+						{
 							obj.css({
-								"background": "url('" + that.setting.folder + icon + "." + that.setting.filetype + "') no-repeat right",
+								"background": "url('" + bg + "') no-repeat right",
 								"marginLeft": "3px"
 							});
 						}
-					} else {
-						if(pos == "left") {
+					} 
+					else 
+					{
+						if(pos == "left") 
+						{
 							object.css({
-								"background": "url('" + that.setting.folder + icon + "." + that.setting.filetype + "') no-repeat left center",
+								"background": "url('" + bg + "') no-repeat left center",
 								"paddingLeft": "17px"
 							});
-						} else {
+						} 
+						else 
+						{
 							object.css({
-								"background": "url('" + that.setting.folder + icon + "." + that.setting.filetype + "') no-repeat right center",
+								"background": "url('" + bg + "') no-repeat right center",
 								"paddingRight": "17px"
 							});
 						}

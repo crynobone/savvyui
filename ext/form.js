@@ -1,12 +1,15 @@
 /**
- * Form extension for Savvy.UI
- * @author Mior Muhammad Zaki
- * @extends Js.ext
+ * @projectDescription Form extension for Savvy.UI
+ * @memberOf Js.ext
  * @version 0.9.4
- * @constructor
- * @return {Object}
+ * @author Mior Muhammad Zaki crynobone
+ * @license MIT
  */
 
+/**
+ * @constructor
+ * @return {Object} this object
+ */
 Js.ext.form = function() {
 	this.node = null;
 	this.first = null;
@@ -230,6 +233,9 @@ Js.ext.form.prototype = {
 	}
 };
 
+/**
+ * Configuration option for Js.ext.form
+ */
 Js.config.ext.form = {
 	error: {
 		node: "span",
@@ -242,6 +248,9 @@ Js.config.ext.form = {
 	custom: {}
 };
 
+/**
+ * Language option for Js.ext.form
+ */
 Js.lang.ext.form = {
 	string: "Require alphanumeric character input",
 	number: "Require numberic input",

@@ -9,6 +9,18 @@
  * @license MIT
  */
 
+Js.config.widget.calendar = {
+	navigation: true,
+	fieldType: "hidden",
+	onUpdate: null,
+	beforeStart: null
+};
+
+Js.lang.widget.calendar = {
+	selectMonthYear: "",
+	buttonToday: ""
+};
+
 /**
  * @id Js.widget.calendar
  * @constructor
@@ -26,22 +38,19 @@ Js.widget.calendar = function(js)
 	this.field = null;
 	this.value = "";
 	this.lastdate = null;
-	this.fieldtype = "hidden";
 	this.type = null;
-	this.navigation = null;
 	
-	this.object	= null;
+	this.node	= null;
 	this.element = null;
 	this.renderTo = null;
-	this.node = {
+	
+	this.object = {
 		content: null,
 		option: null
 	};
 	
-	this.setting = Js.config.widget.calendar;
-	this.drag = null;
+	this.setting = null;
 	this.range = null;
-	this.onupdate = null;
 	
 	this.mindate = null;
 	this.maxdate = null;
@@ -60,11 +69,17 @@ Js.widget.calendar = function(js)
 	return this;
 };
 
-Js.widget.calendar.prototype = 
-{
+Js.widget.calendar.prototype = {
+	setup: function(option)
+	{
+		this.setting = Js.append(option, this.setting)
+	},
 	init: function(js) 
 	{
 		var that = this;
+		
+		this.setup(js.option);
+		this.setting = Js.append(this.setting, Js.config.widget.calendar);
 		
 		this.element = Jrun.pick(js.element, this.element);
 		this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
@@ -80,8 +95,8 @@ Js.widget.calendar.prototype =
 		
 		//jQuery.facebox(this.renderTo);
 		
-		js.range = Jrun.pick(js.range, this.range, [null, null]);
-		this.field = Jrun.pick(js.field, this.field, "value");
+		js.range = Jrun.pickStrict(js.range, this.range, [null, null], "array");
+		this.field = Jrun.pickStrict(js.field, this.field, "calendar-value", "string");
 		this.type = Jrun.pickGrep(js.type, this.type, "single", /^(single|multiple)$/g);
 		
 		// check if minimum date have been set
@@ -117,7 +132,6 @@ Js.widget.calendar.prototype =
 		this.day = Jrun.pickStrict(js.day, this.day, "number");
 		
 		this.date = [this.year, (this.month + 1), Jrun.pick(this.day, 1)].join("-");
-		this.onupdate = Jrun.pick(js.onUpdate, null);
 		this.navigation = Jrun.pick(js.navigate, true);
 		
 		var _getRange = function(data) 
@@ -167,10 +181,11 @@ Js.widget.calendar.prototype =
 			this.range = [this.maxYear(js.range[0]), this.minYear(js.range[1])];
 		}
 		
-		/*
-		 * this.drag = Jrun.pick(js.draggable, false);
-		 * Require Js.ext.draggable
-		 */
+		if(Jrun.isfunction(this.setting.beforeStart)) 
+		{
+			this.setting.beforeStart();
+		}
+		
 		this.renderTo.html("");
 		this.callback();
 		
@@ -425,7 +440,7 @@ Js.widget.calendar.prototype =
 		{
 			if(!field.hasClass("calendar-day-selected")) 
 			{
-				if (Jrun.isset(this.lastdate) && Jrun.finds(this.element + "_" + this.lastdate)) 
+				if (Jrun.isset(this.lastdate) && jQuery("#" + this.element + "_" + this.lastdate).length > 0) 
 				{
 					var lastdate = jQuery("#" + this.element + "_" + this.lastdate).setClass("calendar-day");
 				}
@@ -464,9 +479,9 @@ Js.widget.calendar.prototype =
 			}
 		}
 		
-		var fn = this.onupdate;
-		if(fn != null && typeof(fn) == "function") {
-			fn(this.value);
+		if(Jrun.isfunction(this.setting.onUpdate))
+		{
+			this.setting.onUpdate();
 		}
 		
 		return this;
@@ -480,14 +495,14 @@ Js.widget.calendar.prototype =
 		var monthLength = this.dayOfMonth();
 		cal.html("");
 		
-		this.object = jQuery("<div/>").attr({
+		this.node = jQuery("<div/>").attr({
 			"id": [this.element, "calendar"].join("-"), 
 			"class": "calendar-panel"
 		}).css({
 			"display": "block"
 		}).appendTo(cal);
 		
-		var wrapper = this.object;
+		var wrapper = this.node;
 		
 		var header = jQuery("<div/>").appendTo(wrapper);
 		var content = jQuery("<div/>").appendTo(wrapper);
@@ -497,10 +512,10 @@ Js.widget.calendar.prototype =
 		var nextbtn = jQuery("<span/>").appendTo(header);
 		var title = jQuery("<span/>").appendTo(header);
 		
-		this.node.content = jQuery("<div/>").addClass("calendar-content").appendTo(content);
-		this.node.option = jQuery("<div/>").addClass("calendar-option").appendTo(content);
+		this.object.content = jQuery("<div/>").addClass("calendar-content").appendTo(content);
+		this.object.option = jQuery("<div/>").addClass("calendar-option").appendTo(content);
 		
-		var table = jQuery("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.node.content);
+		var table = jQuery("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.object.content);
 		var tbody = jQuery("<tbody/>").appendTo(table);
 		
 		var trheader = jQuery("<tr/>").addClass("calendar-header").appendTo(tbody);
@@ -562,7 +577,7 @@ Js.widget.calendar.prototype =
 		}
 		
 		
-		if(this.navigation == true) 
+		if(this.setting.navigation == true) 
 		{
 			prevbtn.html("&laquo;").bind("click", function() {
 				that.prevMonth();					  
@@ -572,11 +587,11 @@ Js.widget.calendar.prototype =
 				that.nextMonth();
 			}).setClass("next-month");
 			
-			jQuery("<p/>").text("Sila pilih bulan dan tahun:").appendTo(this.node.option);
+			jQuery("<p/>").text(Js.lang.widget.calendar.selectMonthYear).appendTo(this.object.option);
 			
 			var selmonth = jQuery("<select name='month'></select>").bind("change", function() {
 				that.customMonth(this.value);
-			}).appendTo(this.node.option);
+			}).appendTo(this.object.option);
 			
 			for(var i = 0; i < 12; i++) 
 			{
@@ -592,7 +607,7 @@ Js.widget.calendar.prototype =
 			
 			var selyear = jQuery("<select name='year'></select>").text(" ").bind("change", function() {
 				that.customYear(this.value);
-			}).appendTo(this.node.option);
+			}).appendTo(this.object.option);
 			
 			for(var i = this.range[0]; i >= this.range[1]; i--) 
 			{
@@ -606,28 +621,28 @@ Js.widget.calendar.prototype =
 				}
 			}
 			
-			jQuery("<input type='button' value='Pilih Hari Ini' name='today' />").bind("click", function() {
+			jQuery("<input type='button' name='today' />").val(Js.lang.widget.calendar.todayButton).bind("click", function() {
 				that.today();													
-			}).addClass("select-today").appendTo(this.node.option);
+			}).addClass("select-today").appendTo(this.object.option);
 			
 			title.setClass("this-month").html(this.months[this.month] + "&nbsp;" + this.year);
-			this.object.data("toggle", 1);
+			this.node.data("toggle", 1);
 			//Js.hash.set(this.element, "toggle", 1);
 			
 			title.css("cursor", "pointer").bind("click", function() {
-				var i = that.object.data("toggle");
+				var i = that.node.data("toggle");
 				
 				if(i === 1) 
 				{
-					that.node.content.hide("normal");
-					that.node.option.show("normal");
-					that.object.data("toggle", 0);
+					that.object.content.hide("normal");
+					that.object.option.show("normal");
+					that.node.data("toggle", 0);
 				} 
 				else 
 				{
-					that.node.option.hide("normal");
-					that.node.content.show("normal");
-					that.object.data("toggle", 1);
+					that.object.option.hide("normal");
+					that.object.content.show("normal");
+					that.node.data("toggle", 1);
 				}
 			});
 		} 
@@ -638,7 +653,7 @@ Js.widget.calendar.prototype =
 		
 		if (Jrun.isset(this.field)) 
 		{
-			var input = jQuery("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.fieldtype + "' />").appendTo(this.node.content);
+			var input = jQuery("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.setting.fieldType + "' />").appendTo(this.object.content);
 			
 			if (Jrun.isset(this.day)) 
 			{

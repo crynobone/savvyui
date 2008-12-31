@@ -5,25 +5,49 @@
  * @license MIT
  */
 
+Js.config.widget.notice = {
+	overlay: "#overlay-notice",
+	cssSuccess: "message-success",
+	cssNote: "message-note",
+	cssError: "message-error",
+	seconds: 5,
+	beforeStart: null,
+	onClose: null
+};
+
+Js.lang.widget.notice = {
+	title: {
+		success: "Congratulation",
+		note: "Note",
+		error: "Error has Occur"
+	},
+	timer: "This message will automatically close in 5 seconds"
+};
+
 Js.widget.notice = {
 	callback: null,
 	node: null,
 	href: "",
-	setting: {},
-	init: function()
+	setting: null,
+	setup: function(option)
 	{
+		this.setting = Js.append(option, this.setting);
+	},
+	init: function(option)
+	{
+		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.notice);
 		
-		this.node = new Js.widget.activity(this.setting.overlay);
+		this.node = new Js.widget.activity(this.setting.overlay, {
+			boxWidth: 550,
+			boxHeight: 0,
+			opacity: 0.9
+		});
 		this.node.init();
 		this.node.box = jQuery("<div/>").css({
 			"position": "absolute",
 			"width": "550px"
-		}).appendTo(this.node);
-		
-		this.node.boxWidth = 550;
-		this.node.boxHeight = 0;
-		this.node.opacity = 0.9;
+		}).appendTo(this.node.node);
 		
 		return this;
 	},
@@ -32,6 +56,7 @@ Js.widget.notice = {
 		if(Jrun.isfunction(this.callback)) 
 		{
 			this.callback();
+			this.callback = null;
 		}
 		
 		Js.widget.notice.node.deactivate();
@@ -44,7 +69,7 @@ Js.widget.notice = {
 		Js.widget.notice.node.box.html("");
 		Js.widget.notice.node.activate();
 		
-		var title = this.setting.title[status];
+		var title = Js.lang.widget.notice.title[status];
 		var message = "";
 		var opt = false;
 		
@@ -56,11 +81,10 @@ Js.widget.notice = {
 		{
 			title = Jrun.pick(note.title, "");
 			message = Jrun.pick(note.message, "");
-			this.href = Jrun.pick(note.href, "");
 			var opt = Jrun.pick(note.sticky, false);
 		}
 		
-		Js.widget.notice.node.box.setClass(this.setting.css[status]);
+		Js.widget.notice.node.box.setClass(this.setting['css' + Jrun.properCase(status)]);
 		jQuery("<h3/>").text(title).appendTo(Js.widget.notice.node.box);
 		
 		if(msg != "") 
@@ -68,7 +92,7 @@ Js.widget.notice = {
 			var p = jQuery("<p/>").html("" + msg).appendTo(Js.widget.notice.node.box);
 		}
 		
-		var span = jQuery("<em/>").text(this.setting.timer.text).appendTo(Js.widget.notice.node.box);
+		var span = jQuery("<em/>").text(Js.lang.widget.notice.timer).appendTo(Js.widget.notice.node.box);
 		
 		setTimeout((function() {
 			Js.widget.notice.node.click(function() {
@@ -79,7 +103,7 @@ Js.widget.notice = {
 		if(opt == false) {
 			setTimeout(function() { 
 				Js.widget.notice.closeNotice();
-			}, (this.setting.timer.seconds * 1000));
+			}, (this.setting.seconds * 1000));
 		}
 	},
 	success: function(note, callback) 
@@ -94,23 +118,5 @@ Js.widget.notice = {
 	error: function(note, callback) {
 		this.callback = Jrun.pick(callback, null);
 		this.domAddNotice(note, 'error');
-	}
-};
-
-Js.config.widget.notice = {
-	overlay: "#overlay-notice",
-	title: {
-		success: "Congratulation",
-		note: "Note",
-		error: "Error has Occur"
-	},
-	css: {
-		success: "message-success",
-		note: "message-note",
-		error: "message-error"
-	},
-	timer: {
-		text: "This message will automatically close in 5 seconds",
-		seconds: 5
 	}
 };

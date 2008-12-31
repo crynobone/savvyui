@@ -9,18 +9,6 @@
 /**
  * Configuration option for Js.ext.form
  */
-Js.config.ext.form = {
-	errorNode: "span.form-error-message",
-	beforeStart: null,
-	success: null,
-	onError: null,
-	custom: {}
-};
-
-Js.setup.ext.form = function(option) 
-{
-	Js.config.ext.form = Js.append(option, Js.config.ext.form);
-};
 
 Js.ext.form = function() 
 {
@@ -37,6 +25,14 @@ Js.ext.form.prototype = {
 	{
 		this.setting = Js.append(option, this.setting);
 	},
+	_prepSetting: function() 
+	{
+		this.setting.errorNode.match(/^([A-Za-z]{1,10})\.(.*)$/i);
+		this.setting.error = {
+			node: RegExp.$1,
+			cssMessage: RegExp.$2
+		};
+	},
 	validate: function(node, option) 
 	{		
 		// ensure that refer to this
@@ -49,13 +45,12 @@ Js.ext.form.prototype = {
 		this.setting = Js.append(this.setting, Js.config.ext.form);
 		var setting = this.setting;
 		
-		this.prepSetting();
+		this._prepSetting();
 		
 		var beforeStart = Jrun.pick(setting.beforeStart,null);
 		var success = Jrun.pick(setting.success, null);
 		var onError = Jrun.pick(setting.onError, null);
 		var data = "";
-		var custom = Jrun.pick(setting.custom, null);
 		
 		this.first = null;
 		
@@ -111,21 +106,19 @@ Js.ext.form.prototype = {
 							var testindex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
 							if (testindex >= 0) 
 							{
-								klass[testindex].match(/^(custom)\-(\w*)$/g);
-								
-								var tester = RegExp.$2;
-								var validate = custom[tester];
-								
+								var tester = Jrun.camelize(klass[testindex])
+								var validate = that.setting[tester];
+									
 								if (Jrun.isset(validate)) 
 								{
 									var required = Jrun.pickStrict(validate.required, false, "boolean");
-									
+										
 									if (required === true && Jrun.trim(this.value) === "") 
 									{
 										error = validate.error || error;
 									}
-									
-									if(Jrun.trim(this.value) !== "") 
+										
+									if (Jrun.trim(this.value) !== "") 
 									{
 										if (Jrun.isfunction(validate.callback) && !validate.callback(this.value)) 
 										{
@@ -290,14 +283,6 @@ Js.ext.form.prototype = {
 		{
 			errNode.remove();
 		}
-	},
-	prepSetting: function() 
-	{
-		this.setting.errorNode.match(/^([A-Za-z]{1,10})\.(.*)$/i);
-		this.setting.error = {
-			node: RegExp.$1,
-			cssMessage: RegExp.$2
-		};
 	},
 	addMessage: function(node, message) 
 	{

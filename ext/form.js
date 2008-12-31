@@ -101,78 +101,75 @@ Js.ext.form.prototype = {
 							}
 						}
 						
-						if(Jrun.isset(custom)) 
+						var testindex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
+						if (testindex >= 0) 
 						{
-							var testindex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
-							if (testindex >= 0) 
+							var tester = Jrun.camelize(klass[testindex])
+							var validate = that.setting[tester];
+								
+							if (Jrun.isset(validate)) 
 							{
-								var tester = Jrun.camelize(klass[testindex])
-								var validate = that.setting[tester];
+								var required = Jrun.pickStrict(validate.required, false, "boolean");
 									
-								if (Jrun.isset(validate)) 
+								if (required === true && Jrun.trim(this.value) === "") 
 								{
-									var required = Jrun.pickStrict(validate.required, false, "boolean");
-										
-									if (required === true && Jrun.trim(this.value) === "") 
+									error = validate.error || error;
+								}
+									
+								if (Jrun.trim(this.value) !== "") 
+								{
+									if (Jrun.isfunction(validate.callback) && !validate.callback(this.value)) 
 									{
 										error = validate.error || error;
 									}
-										
-									if (Jrun.trim(this.value) !== "") 
+									else if (validate.test && !this.value.match(validate.test)) 
 									{
-										if (Jrun.isfunction(validate.callback) && !validate.callback(this.value)) 
-										{
-											error = validate.error || error;
-										}
-										else if (validate.test && !this.value.match(validate.test)) 
-										{
-											error = validate.error || error;
-										}
+										error = validate.error || error;
 									}
 								}
 							}
 						}
-						
-						for(var i = 0; i < klass.length; i++) 
-						{
-							if(klass[i].match(/(max|min|exact)\-(\d*)/) && Jrun.trim(this.value) !== "") 
-							{
-								var type = RegExp.$1;
-								var value = RegExp.$2;
-								
-								if(!Js.test.isLength(klass[i], this.value.length)) 
-								{
-									if(type == "min") 
-									{
-										type = Js.lang.ext.form.lengthOption.minimum;	
-									} 
-									else if(type == "max") 
-									{
-										type = Js.lang.ext.form.lengthOption.maximum;	
-									} 
-									else if(type == "exact") 
-									{
-										type = Js.lang.ext.form.lengthOption.exact;	
-									}
-									
-									var note = Js.lang.ext.form.length;
-									
-									note = note.replace(/{type}/, type);
-									note = note.replace(/{value}/, value);
-									
-									that.error(this, note, true);
-								}
-							}
-						}
-						
-						if(error !== "") 
-						{
-							that.error(this, error);
-						}
-						
-						data += that.invokeQueryString(this);
-						
 					}
+						
+					for(var i = 0; i < klass.length; i++) 
+					{
+						if(klass[i].match(/(max|min|exact)\-(\d*)/) && Jrun.trim(this.value) !== "") 
+						{
+							var type = RegExp.$1;
+							var value = RegExp.$2;
+							
+							if(!Js.test.isLength(klass[i], this.value.length)) 
+							{
+								if(type == "min") 
+								{
+									type = Js.lang.ext.form.lengthOption.minimum;	
+								} 
+								else if(type == "max") 
+								{
+									type = Js.lang.ext.form.lengthOption.maximum;	
+								} 
+								else if(type == "exact") 
+								{
+									type = Js.lang.ext.form.lengthOption.exact;	
+								}
+								
+								var note = Js.lang.ext.form.length;
+								
+								note = note.replace(/{type}/, type);
+								note = note.replace(/{value}/, value);
+								
+								that.error(this, note, true);
+							}
+						}
+					}
+					
+					if(error !== "") 
+					{
+						that.error(this, error);
+					}
+					
+					data += that.invokeQueryString(this);
+					
 				}
 			});
 		}

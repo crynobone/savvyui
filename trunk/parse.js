@@ -1,6 +1,6 @@
 /**
  * @version 1.0.2
- * @author Mior Muhammad Zaki crynobone
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 

@@ -33,7 +33,7 @@ Js.widget.activity = function(selector, option)
 
 Js.widget.activity.prototype = {
 	/**
-	 * Setup local setting for current class
+	 * Setup local setting for this object
 	 * 
 	 * @method
 	 * @param {Object} option

@@ -6,6 +6,11 @@
  * @license MIT
  */
 
+/**
+ * @alias Js.widget.iconizer
+ * @constructor
+ * @param {Object} option
+ */
 Js.widget.iconizer = function(option) 
 {
 	this.setting = null;
@@ -18,10 +23,18 @@ Js.widget.iconizer = function(option)
 	return this;
 };
 Js.widget.iconizer.prototype = {
+	/**
+	 * @method
+	 * @param {Object} option
+	 */
 	setup: function(option)
 	{
 		this.setting = Js.append(option, this.setting);
 	},
+	/**
+	 * @method
+	 * @param {Object} option
+	 */
 	init: function(option) 
 	{
 		var that = this;

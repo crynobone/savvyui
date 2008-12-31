@@ -7,9 +7,10 @@
  */
 
 /**
- * Configuration option for Js.ext.form
+ * @alias Js.ext.form
+ * @constructor
+ * @return {Object} this object
  */
-
 Js.ext.form = function() 
 {
 	this.node = null;
@@ -21,10 +22,17 @@ Js.ext.form = function()
 };
 
 Js.ext.form.prototype = {
+	/**
+	 * @method
+	 * @param {Object} option
+	 */
 	setup: function(option) 
 	{
 		this.setting = Js.append(option, this.setting);
 	},
+	/**
+	 * @method
+	 */
 	_prepSetting: function() 
 	{
 		this.setting.errorNode.match(/^([A-Za-z]{1,10})\.(.*)$/i);
@@ -33,6 +41,11 @@ Js.ext.form.prototype = {
 			cssMessage: RegExp.$2
 		};
 	},
+	/**
+	 * @method
+	 * @param {Object} node
+	 * @param {Object} option
+	 */
 	validate: function(node, option) 
 	{		
 		// ensure that refer to this
@@ -83,41 +96,48 @@ Js.ext.form.prototype = {
 						}
 						
 						// this set of validate only triggered when this.value isn't empty
-						if (Jrun.trim(this.value) != "") {
-							if (!!Jrun.inArray("string", klass) && !Js.test.isString(this.value)) {
+						if (Jrun.trim(this.value) != "") 
+						{
+							if (!!Jrun.inArray("string", klass) && !Js.test.isString(this.value)) 
+							{
 								error = Js.lang.ext.form.string;
 							}
-							else 
-								if ((!!Jrun.inArray("integer", klass) || !!Jrun.inArray("number", klass)) && !Js.test.isNumber(this.value)) {
-									error = Js.lang.ext.form.number;
-								}
-								else 
-									if (!!Jrun.inArray("email", klass) && !Js.test.isEmail(this.value)) {
-										error = Js.lang.ext.form.email;
-									}
+							else if ((!!Jrun.inArray("integer", klass) || !!Jrun.inArray("number", klass)) && !Js.test.isNumber(this.value)) 
+							{
+								error = Js.lang.ext.form.number;
+							}
+							else if (!!Jrun.inArray("email", klass) && !Js.test.isEmail(this.value))
+							{
+								error = Js.lang.ext.form.email;
+							}
 						}
 						
 						var testindex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
 						
-						if (testindex >= 0) {
+						if (testindex >= 0) 
+						{
 							var tester = Jrun.camelize(klass[testindex]);
 							var validate = that.setting[tester];
 							
-							if (Jrun.isset(validate)) {
+							if (Jrun.isset(validate)) 
+							{
 								var required = Jrun.pickStrict(validate.required, false, "boolean");
 								
-								if (required === true && Jrun.trim(this.value) === "") {
+								if (required === true && Jrun.trim(this.value) === "") 
+								{
 									error = validate.error || error;
 								}
 								
-								if (Jrun.trim(this.value) !== "") {
-									if (Jrun.isfunction(validate.callback) && !validate.callback(this.value)) {
+								if (Jrun.trim(this.value) !== "") 
+								{
+									if (Jrun.isfunction(validate.callback) && !validate.callback(this.value)) 
+									{
 										error = validate.error || error;
 									}
-									else 
-										if (validate.test && !this.value.match(validate.test)) {
-											error = validate.error || error;
-										}
+									else if (validate.test && !this.value.match(validate.test)) 
+									{
+										error = validate.error || error;
+									}
 								}
 							}
 						}
@@ -192,6 +212,12 @@ Js.ext.form.prototype = {
 			return data;
 		}
 	},
+	/**
+	 * @method
+	 * @param {Object} field
+	 * @param {Object} text
+	 * @param {Object} data
+	 */
 	_error: function(field, text, data) 
 	{		
 		var that = this;
@@ -238,6 +264,10 @@ Js.ext.form.prototype = {
 			});
 		}
 	},
+	/**
+	 * @method
+	 * @param {Object} node
+	 */
 	_invokeQueryString: function(node) 
 	{
 		var data = "";
@@ -264,6 +294,10 @@ Js.ext.form.prototype = {
 		
 		return data;
 	},
+	/**
+	 * @method
+	 * @param {Object} node
+	 */
 	_messageCleanUp: function(node) 
 	{
 		var errSpan = this.setting.error.node + "." + this.setting.error.cssMessage;
@@ -273,6 +307,11 @@ Js.ext.form.prototype = {
 			errNode.remove();
 		}
 	},
+	/**
+	 * @method
+	 * @param {Object} node
+	 * @param {Object} message
+	 */
 	_messageAdd: function(node, message) 
 	{
 		try {

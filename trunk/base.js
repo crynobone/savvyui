@@ -1,5 +1,4 @@
 /**
- * Last-modified: 30-12-2008 12:15pm
  * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
  * @namespace Js
  * @version 1.1.2
@@ -7,6 +6,10 @@
  * @author Mior Muhammad Zaki crynobone@gmail.com
  */
 
+/**
+ * Global Object for Savvy.UI
+ * @alias Js
+ */
 var Js = {
 	adapter: "jQuery-1.2.6",
 	version: "1.1.2",
@@ -35,6 +38,7 @@ var Js = {
 
 /**
  * Display Savvy.UI current version
+ * 
  * @alias Js.toString
  * @return {String}
  */
@@ -44,7 +48,8 @@ Js.toString = function()
 };
 
 /**
- * Return an inheritence of data
+ * Return new object without adding any reference to the old object
+ * 
  * @alias Js.nue
  * @param {Object} data
  * @return {Object}
@@ -76,7 +81,8 @@ Js.nue = function(data)
 };
 
 /**
- * Append data Object with value's method
+ * Append data object with value method
+ * 
  * @alias Js.append
  * @param {Object} data
  * @param {Object} value
@@ -113,15 +119,27 @@ Js.append = function(data, value)
 	}
 };
 
+/**
+ * Debugging engine for Savvy.UI
+ * 
+ * @alias Js.debug
+ */
 Js.debug = {
+	/* Set to true to display error message in the output
+	 * e.g: Js.debug.enable = true;
+	 */
 	enable: false,
-	// error/log stack
+	/* error/log stack:
+	 * - error[] contain all errors
+	 * - log[] contain all logs 
+	 */
 	data: {
 		error: [],
 		log: []
 	},
 	/**
-	 * Log message
+	 * Log a message
+	 * 
 	 * @alias Js.debug.log
 	 * @param {String} text
 	 */
@@ -131,7 +149,8 @@ Js.debug = {
 		this.data.log.push(text);
 	},
 	/**
-	 * Log error
+	 * Log an error
+	 * 
 	 * @alias Js.debug.error
 	 * @param {String} text
 	 */
@@ -156,15 +175,10 @@ Js.debug = {
 };
 
 var Jrun = {
-	callback: function(data)
-	{
-		if(Jrun.isfunction(data))
-		{
-			data();
-		}
-	},
 	/**
-	 * Camelize given string
+	 * Camelize string input
+	 * <br>e.g: background-color => backgroundColor
+	 * 
 	 * @alias Jrun.camelize
 	 * @param {String} data
 	 * @return {String} string with camelize format
@@ -191,7 +205,8 @@ var Jrun = {
 		return result;
 	},
 	/**
-	 * Open a webpage/URL using JavaScript
+	 * Open a URL using JavaScript
+	 * 
 	 * @alias Jrun.href
 	 * @param {String} [url] set the hyperlink of destination path 
 	 * @param {String} [target] set the target to show the page, if applicable
@@ -202,11 +217,12 @@ var Jrun = {
 		{
 			if (this.isnull(target)) 
 			{
-				// when target is not define load the page in the same window
+				// when target is not define load the url in the same window
 				window.location.href = url;
 			} 
 			else 
 			{
+				// load the url in the specified target
 				window.open(url, target);
 			}
 		} 
@@ -217,6 +233,7 @@ var Jrun = {
 	},
 	/**
 	 * Encode HTML entities from any given string
+	 * 
 	 * @alias Jrun.htmlEncode
 	 * @param {String} [value] any string with HTML entities
 	 * @return {String}
@@ -231,6 +248,7 @@ var Jrun = {
 	},
 	/**
 	 * Decode HTML entities from any given string
+	 * 
 	 * @alias Jrun.htmlDecode
 	 * @param {String} value
 	 * @return {String}
@@ -265,11 +283,12 @@ var Jrun = {
 		return false;
 	},
 	/**
-	 * Check whether the value is in an array, unlike Jrun.inArray checking is based on Regular Expression
+	 * Check whether the value is in an array, check validity based on Regular Expression
 	 * 
 	 * @alias Jrun.inArrayGrep
 	 * @param {RegExp} value
-	 * @param {Object} data
+	 * @param {Array} data
+	 * @return {Boolean}
 	 */
 	inArrayGrep: function(value, data) 
 	{
@@ -311,7 +330,7 @@ var Jrun = {
 		return index;
 	},
 	/**
-	 * Check whether argument is not defined
+	 * Check if data is not defined
 	 * 
 	 * @alias Jrun.isnull
 	 * @param {Object} data
@@ -322,7 +341,7 @@ var Jrun = {
 		return (typeof(data) == "undefined" || data == null);
 	},
 	/**
-	 * Check whether argument is defined
+	 * Check if data is defined
 	 * 
 	 * @alias Jrun.isset
 	 * @param {Object} data
@@ -358,6 +377,7 @@ var Jrun = {
 	},
 	/**
 	 * Pick the first arguments that is defined
+	 * 
 	 * @alias Jrun.pick
 	 * @param {Object} js
 	 * @return {Object}
@@ -380,6 +400,7 @@ var Jrun = {
 	},
 	/**
 	 * Pick the first arguments that is defined and typeof match the last arguments
+	 * 
 	 * @alias Jrun.pickStrict
 	 * @param {Object} [js]
 	 * @return {Object}
@@ -407,6 +428,7 @@ var Jrun = {
 	},
 	/**
 	 * Pick the first arguments that is defined and match Regular Expression passed in the last arguments
+	 * 
 	 * @alias Jrun.pickGrep
 	 * @param {Object} js
 	 * @return {Object}
@@ -482,6 +504,7 @@ var Jrun = {
 	},
 	/** 
 	 * Trim right of a string.
+	 * 
 	 * @alias Jrun.rtrim
 	 * @param {String} value
 	 * @return {String}
@@ -491,7 +514,9 @@ var Jrun = {
 		return new String(value).replace(/\s$/g, "");
 	},
 	/**
-	 * Striptags work similiar to striptags in PHP, strip any html attribute from a string
+	 * Striptags work similiar to strip_tags() in PHP
+	 * <br>strip any html attribute from a string
+	 * 
 	 * @alias Jrun.stripTags
 	 * @param {String} value
 	 * @return {String}
@@ -503,6 +528,7 @@ var Jrun = {
 	/**
 	 * Serialize array or object to querystring
 	 * <br>All XHR request will be control directly via jQuery.ajax() 
+	 * 
 	 * @alias Jrun.serialize
 	 * @deprecated
 	 * @param {Object} data
@@ -543,6 +569,7 @@ var Jrun = {
 	},
 	/**
 	 * Parse input string value as Number using parseInt
+	 * 
 	 * @alias Jrun.toNumber
 	 * @param {Object} data
 	 * @return {Number}
@@ -554,6 +581,7 @@ var Jrun = {
 	},
 	/**
 	 * Parse input string value as Float using parseFloat
+	 * 
 	 * @alias Jrun.toFloat
 	 * @param {String} data
 	 * @return {Float}
@@ -734,6 +762,7 @@ Js.base.prototype = {
 
 /**
  * Create a new Class with some simple Object-Oriented capability
+ * 
  * @param {Object} js
  * @return {Object}
  */
@@ -744,9 +773,12 @@ Js.base.create = function(js)
 	var prototype = new Js.base;
 	initialize = false;
 	
-	// make a dummy class so that this.constructor will return Class
+	/*
+	 * Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
+	 */
 	function Class() 
 	{
+		// initiate the __construct function if construct available
 		if (!initialize && !!this.construct) 
 		{
 			this.construct.apply(this, jQuery.makeArray(arguments));
@@ -757,21 +789,22 @@ Js.base.create = function(js)
 	Class.prototype.construct = Jrun.pick(js.__construct, null);
 	Class.constructor = Class;
 	
-	// create inheritance
+	// create inheritance capability using .extend
 	Class.extend = function(js) 
 	{
 		js.extended = this;	
 		return Js.base.create(js);
 	};
 	
+	// if this function is being called from .extend, prepare parent method inheritant
 	var extended = Jrun.pick(js.extended, null);
 	
-	// add this object user defined properties and methods
+	// assign object with method provided in js
 	(function(js) {
-		// the following object shouldn't be extended
+		// restrict object from looping certain method
 		var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
 		
-		// start adding method and properties to this object
+		// add method to this object
 		for (var method in js) 
 		{
 			if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
@@ -781,14 +814,13 @@ Js.base.create = function(js)
 		};
 	}).call(prototype, js);
 	
+	// object called from .extend, inherit parent method if object does not have it's own method
 	if(!!Jrun.isset(extended)) 
 	{
 		try {
-			// try to copy parent object.
 			(function(js) {
+				// restrict object from looping certain method
 				var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
-				
-				// start adding parent method and properties to this object
 				
 				for (var method in js) 
 				{
@@ -810,11 +842,12 @@ Js.base.create = function(js)
 				this._super = js.prototype;
 			}).call(prototype, extended);
 		} catch(e) {
-			Js.debug.error(e);
+			// incase something goes wrong
+			Js.debug.error("Js.base.create: failed " + e);
 		}
 	}
 	
-	// avoid this.ext to be duplicated in this.prototype 
+	// avoid extended to be duplicated in this.prototype 
 	delete extended;
 	
 	return Class;

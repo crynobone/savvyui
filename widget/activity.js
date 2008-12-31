@@ -26,7 +26,7 @@ Js.config.widget.activity = {
  */
 Js.setup.widget.activity = function(option)
 {
-	Js.config.widget.activity = Js.append(Jrun.pickStrict(option, {}, "object"), Js.config.widget.activity);
+	Js.config.widget.activity = Js.append(option, Js.config.widget.activity);
 };
 
 /**
@@ -50,10 +50,16 @@ Js.widget.activity = function(selector, option)
 	return this;
 };
 Js.widget.activity.prototype = {
+	setup: function(option)
+	{
+		this.setting = Js.append(option, this.setting);
+	},	
 	init: function(selector, option) 
 	{
 		this.element = Jrun.pick(selector, this.element);
-		this.setting = Js.append(Jrun.pickStrict(option, {}, "object"), Js.config.widget.activity);
+		
+		this.setup(option);
+		this.setting = Js.append(this.setting, Js.config.widget.activity);
 		
 		this.node = jQuery(this.element).css({
 			background: this.setting.background,

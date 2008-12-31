@@ -6,9 +6,14 @@
  * @license MIT
  */
 
+Js.config.widget.iconizer = {
+	fileType: "png",
+	folder: "icons/"
+};
+
 Js.widget.iconizer = function(option) 
 {
-	this.setting = Js.config.widget.iconizer;
+	this.setting = null;
 	
 	if(Jrun.isset(option))
 	{
@@ -18,11 +23,16 @@ Js.widget.iconizer = function(option)
 	return this;
 };
 Js.widget.iconizer.prototype = {
+	setup: function(option)
+	{
+		this.setting = Js.append(option, this.setting);
+	},
 	init: function(option) 
 	{
 		var that = this;
 		
-		this.setting = Js.append(Js.append(option, {}), this.setting);
+		this.setup(option);
+		this.setting = Js.append(this.setting, Js.config.widget.iconizer);
 		
 		jQuery("*[class*=icon]").each(function(index, value) {
 			var node = jQuery(value);
@@ -37,7 +47,7 @@ Js.widget.iconizer.prototype = {
 					var append = (RegExp.$1 == "-append" ? true : false);
 					var pos = Jrun.pickGrep(RegExp.$1, "left", /^(left|right)$/i);
 					var icon = RegExp.$3;
-					var bg = that.setting.folder + icon + "." + that.setting.filetype;
+					var bg = that.setting.folder + icon + "." + that.setting.fileType;
 					
 					if(!!append) 
 					{
@@ -84,9 +94,4 @@ Js.widget.iconizer.prototype = {
 			}
 		});
 	}
-};
-
-Js.config.widget.iconizer = {
-	filetype: "png",
-	folder: "icons/"
 };

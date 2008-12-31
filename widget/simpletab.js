@@ -7,6 +7,28 @@
  */
 
 /**
+ * Js.widget.simpleTab configuration
+ * @id Js.config.widget.simpleTab
+ */
+Js.config.widget.simpleTab = {
+	handler: "click",
+	identifier: "simpletab",
+	closable: "closable",
+	disabled: "disabled",
+	toolbar: "simpletab-toolbar",
+	toolbarContainer: "simpletab-toolbar-container",
+	container: "simple-container",
+	hidden: "simpletab-hidden",
+	active: "simpletab-active",
+	currentHeader: "current"
+};
+
+Js.setup.widget.simpleTab = function(option)
+{
+	Js.config.widget.simpleTab = Js.append(option, Js.config.widget.simpleTab);
+}
+
+/**
  * Initialize Js.widget.simpleTab using it constructor:<br>
  * e.g: <b>new Js.widget.simpleTab</b>
  * @id Js.widget.simpleTab
@@ -27,7 +49,7 @@ Js.widget.simpleTab = function(node, option)
 	this.activeHeader = null;
 	this.handler = null;
 	this.status = "off";
-	this.setting = Js.config.widget.simpleTab;
+	this.setting = null;
 	
 	// load the tab module if selector already provided in the arguments
 	if(!!Jrun.isset(node)) 
@@ -38,16 +60,21 @@ Js.widget.simpleTab = function(node, option)
 	return this;
 };
 Js.widget.simpleTab.prototype = {
+	setup: function(option)
+	{
+		this.setting = Js.append(option, this.setting);
+	},
 	init: function(node, option) 
 	{
 		Js.debug.log("Js.widget.simpleTab: started");
 		var that = this;
 		
 		// setting should be available
-		this.setting = Js.append(Jrun.pick(option, {}), this.setting);
+		this.setup(option);
+		this.setting = Js.append(this.setting, Js.config.widget.simpleTab);
 		
 		this.node = jQuery(node);
-		this.node.addClass(this.setting.panel.container);
+		this.node.addClass(this.setting.container);
 		this.element = this.node.eq(0).attr("id");
 		
 		this.handler = Jrun.pickGrep(this.setting.handler, "click", /^(mouseover|click)$/i);
@@ -57,8 +84,8 @@ Js.widget.simpleTab.prototype = {
 		
 		// set the first tab as active
 		this.activeHeader = jQuery("a[href=#" + this.activeTab.attr("id") + "]", this.header);
-		this.activeHeader.addClass(this.setting.panel.currentHeader);
-		this.activeTab.setClass(this.setting.panel.active);
+		this.activeHeader.addClass(this.setting.currentHeader);
+		this.activeTab.setClass(this.setting.active);
 		
 		// tab is activated
 		this.status = "on";
@@ -70,7 +97,7 @@ Js.widget.simpleTab.prototype = {
 		
 		// DOM insert tab toolbar container
 		var div = jQuery("<div/>").attr({
-			className: this.setting.panel.toolbarContainer, 
+			className: this.setting.toolbarContainer, 
 			id: [this.element, "toolbar", "container"].join("-")
 		}).prependTo(this.node);
 		this.toolbar = div;
@@ -78,7 +105,7 @@ Js.widget.simpleTab.prototype = {
 		// DOM insert tab toolbar
 		this.header = jQuery("<ul/>").attr({
 			id: [this.element, "toolbar"].join("-"), 
-			className: this.setting.panel.toolbar
+			className: this.setting.toolbar
 		}).appendTo(this.toolbar);
 		
 		// find all possible tabs
@@ -88,7 +115,7 @@ Js.widget.simpleTab.prototype = {
 			// add the tab title
 			that.addHeader(data);
 			// hide the tab
-			jQuery(data).setClass(that.setting.panel.hidden);
+			jQuery(data).setClass(that.setting.hidden);
 		});
 		
 		// first tab should be activated
@@ -127,7 +154,7 @@ Js.widget.simpleTab.prototype = {
 				
 				var href = my.attr("href");
 				that.activeHeader.removeClass();
-				that.activeTab.setClass(that.setting.panel.hidden);
+				that.activeTab.setClass(that.setting.hidden);
 				jQuery(href).remove();
 				jQuery(this.parentNode.parentNode).remove();
 				
@@ -138,15 +165,15 @@ Js.widget.simpleTab.prototype = {
 	activate: function(node) 
 	{
 		var that = this;
-		this.activeHeader.removeClass(this.setting.panel.currentHeader);
-		this.activeTab.setClass(this.setting.panel.hidden);
+		this.activeHeader.removeClass(this.setting.currentHeader);
+		this.activeTab.setClass(this.setting.hidden);
 		
 		this.activeHeader = jQuery(node);
 		var href = this.activeHeader.attr("href");
 		this.activeTab = jQuery(href);
 		
-		this.activeHeader.addClass(this.setting.panel.currentHeader);
-		this.activeTab.setClass(this.setting.panel.active);
+		this.activeHeader.addClass(this.setting.currentHeader);
+		this.activeTab.setClass(this.setting.active);
 		
 		return false;
 	},
@@ -164,14 +191,14 @@ Js.widget.simpleTab.prototype = {
 		if(this.status == "on") 
 		{
 			this.toolbar.hide();
-			jQuery("div." + this.setting.panel.hidden, this.object).setClass(this.setting.panel.active);
+			jQuery("div." + this.setting.hidden, this.object).setClass(this.setting.active);
 			this.status = "off";
 		} 
 		else 
 		{
 			this.toolbar.show();
-			jQuery("div." + this.setting.panel.active, this.object).setClass(this.setting.panel.hidden);
-			this.activeTab.setClass(this.setting.panel.active);
+			jQuery("div." + this.setting.active, this.object).setClass(this.setting.hidden);
+			this.activeTab.setClass(this.setting.active);
 			this.status = "on";	
 		}
 	},
@@ -189,7 +216,7 @@ Js.widget.simpleTab.prototype = {
 			
 			var node = jQuery('<div/>').attr({
 				id: id, 
-				className: this.setting.panel.hidden
+				className: this.setting.hidden
 			}).html(content).appendTo(this.node);
 			
 			var li = jQuery('<li/>').appendTo(this.header);
@@ -209,7 +236,7 @@ Js.widget.simpleTab.prototype = {
 				jQuery("<span/>").click(function() {
 					var href = jQuery(this.parentNode).attr("href");
 					that.activeHeader.removeClass();
-					that.activeTab.setClass(that.setting.panel.hidden).fadeOut("normal", function() {
+					that.activeTab.setClass(that.setting.hidden).fadeOut("normal", function() {
 						jQuery(this).remove();
 					});
 					jQuery(href).remove();
@@ -225,24 +252,5 @@ Js.widget.simpleTab.prototype = {
 			}
 		}
 		return this;
-	}
-};
-
-/**
- * Js.widget.simpleTab configuration
- * @id Js.config.widget.simpleTab
- */
-Js.config.widget.simpleTab = {
-	handler: "click",
-	identifier: "simpletab",
-	closable: "closable",
-	disabled: "disabled",
-	panel: {
-		toolbar: "simpletab-toolbar",
-		toolbarContainer: "simpletab-toolbar-container",
-		container: "simple-container",
-		hidden: "simpletab-hidden",
-		active: "simpletab-active",
-		currentHeader: "current"
 	}
 };

@@ -53,7 +53,8 @@ Js.util.dimension = {
 				
 				return result;
 			},
-			both: function(){
+			both: function()
+			{
 				return [
 					Js.util.dimension.page.scrolls.x(), 
 					Js.util.dimension.page.scrolls.y()

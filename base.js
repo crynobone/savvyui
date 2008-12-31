@@ -10,37 +10,27 @@
 var Js = {
 	adapter: "jQuery-1.2.6",
 	version: "1.1.2",
+	debug: {},
+	ext: {},
+	util: {},
+	parse: {},
+	test: {},
+	widget: {},
 	config: {
 		ext: {},
 		util: {},
-		lang: {},
-		parse: {},
-		test: {},
 		widget: {}
 	},
-	ext: {},
-	configurator: null,
 	setup: {
 		ext: {},
 		util: {},
-		lang: {},
-		parse: {},
-		test: {},
 		widget: {}
 	},
-	util: {},
 	lang: {
 		ext: {},
 		util: {},
-		lang: {},
-		parse: {},
-		test: {},
 		widget: {}
-	},
-	debug: {},
-	parse: {},
-	test: {},
-	widget: {}
+	}
 };
 
 /**
@@ -94,6 +84,11 @@ Js.nue = function(data)
  */
 Js.append = function(data, value) 
 {
+	if(Jrun.isnull(data) || Jrun.typeOf(data) !== "object")
+	{
+		data = {};
+	}
+	
 	// check whether both are object
 	if (Jrun.typeOf(data) == "object" && Jrun.typeOf(value) == "object") 
 	{
@@ -111,7 +106,7 @@ Js.append = function(data, value)
 		
 		return result;
 	}
-	else 
+	else
 	{
 		// data isn't an object
 		return data;
@@ -630,7 +625,11 @@ var Jrun = {
 	 */
 	typeOf: function(data) 
 	{
-		if (typeof(data) == "object") 
+		if (Jrun.isnull(data))
+		{
+			return "undefined";
+		}
+		else if (typeof(data) == "object") 
 		{
 			// object doesn't always turn out to be object
 			if (data.length > 0 && data[0].nodeType) 

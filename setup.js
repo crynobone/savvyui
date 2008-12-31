@@ -1,7 +1,7 @@
 /**
- * @version 
+ * @version 0.0.1
  * @author Mior Muhammad Zaki crynobone@gmail.com
- * @license
+ * @license MIT
  */
 
 Js.setup = {

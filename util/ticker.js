@@ -1,18 +1,23 @@
 /**
- * Checkbox Ticker for Savvy.UI
- * @version 0.1.2
+ * @projectDescription Checkbox Ticker for Savvy.UI
  * @memberOf Js.util
+ * @version 0.1.2
  * @author Mior Muhammad Zaki
  * @license MIT
  */
 
+/**
+ * Initiate new Js.util.ticker
+ * 
+ * @alias Js.util.ticker
+ * @constructor
+ * @param {Object} node
+ */
 Js.util.ticker = function(node) 
 {
-	// Define Object's properties
 	this.element = null;
 	this.node = null;
 	
-	// start __constructor()
 	if (!!node && Jrun.trim(node) !== "") 
 	{
 		this.init(node);
@@ -23,6 +28,8 @@ Js.util.ticker = function(node)
 Js.util.ticker.prototype = {
 	/**
 	 * Initialize the HTML Element
+	 * 
+	 * @method
 	 * @param {Object} node
 	 * @return {Object}
 	 */
@@ -38,8 +45,9 @@ Js.util.ticker.prototype = {
 		return this;
 	},
 	/**
-	 * checked all checkbox
-	 * @return {void}
+	 * Tick all checkbox
+	 * 
+	 * @method
 	 */
 	check: function() 
 	{
@@ -50,8 +58,9 @@ Js.util.ticker.prototype = {
 		});
 	},
 	/**
-	 * uncheck all checkbox
-	 * @return {void}
+	 * Untick all checkbox
+	 * 
+	 * @method
 	 */
 	uncheck: function() 
 	{
@@ -62,8 +71,9 @@ Js.util.ticker.prototype = {
 		});
 	},
 	/**
-	 * invert checkbox selection
-	 * @return {void}
+	 * Invert checkbox selection
+	 * 
+	 * @method
 	 */ 
 	invert: function() 
 	{

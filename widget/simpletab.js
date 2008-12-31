@@ -9,7 +9,7 @@
 /**
  * Initialize Js.widget.simpleTab using it constructor:<br>
  * e.g: <b>new Js.widget.simpleTab</b>
- * @id Js.widget.simpleTab
+ * @alias Js.widget.simpleTab
  * @constructor
  * @param {Object} node
  * @param {Object} option

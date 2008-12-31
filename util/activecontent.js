@@ -1,11 +1,16 @@
 /**
- * 
+ * @memberOf Js.util
+ * @extends Js.base
  * @version 0.1.2
  * @author Mior Muhammad Zaki
  * @license MIT
- * @extends Js.base
  */
 
+/**
+ * @classDescription Js.util.activeContent is a class
+ * @alias Js.util.activeContent
+ * @see Js.base.create
+ */
 Js.util.activeContent = Js.base.create({
 	last: null,
 	interval: null,

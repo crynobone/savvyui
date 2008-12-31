@@ -1,7 +1,8 @@
 /**
- * @version 
+ * @projectDescription Language configuration for Savvy.UI
+ * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
- * @license
+ * @license MIT
  */
 
 Js.lang = {

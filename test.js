@@ -1,22 +1,25 @@
 /**
- * @version 
+ * @projectDescription Test value for Savvy.UI
+ * @version 1.0.3
  * @author Mior Muhammad Zaki crynobone@gmail.com
- * @license
+ * @license MIT
  */
 
 Js.test = {
 	/**
-	 * Check whether passed argument is a string
-	 * @param {String} data
-	 * @return {String}
+	 * Check if data is a string
+	 * 
+	 * @param {String} [data] data should be a string
+	 * @return {Boolean}
 	 */
 	isString: function(data) 
 	{
 		return (typeof(data) == "string" && isNaN(data));
 	},
 	/**
-	 * Check whether passed argument is a number
-	 * @param {Object} data
+	 * Check if data is a number
+	 * 
+	 * @param {Number} [data] data should be a number
 	 * @return {Boolean}
 	 */
 	isNumber: function(data) 
@@ -25,37 +28,43 @@ Js.test = {
 	},
 	/**
 	 * Compare 'regexp' with provided 'value'
+	 * 
 	 * @param {String} regexp
 	 * @param {Object} value
 	 * @return {Boolean}
 	 */
-	isLength: function(regexp, value) 
+	isLength: function(data, value) 
 	{
-		var data = regexp.split(/\-/);
-		var length = Jrun.toNumber(data[1]);
 		var result = null;
 		
-		if (data[0] === "max") 
+		if(data.match(/^(exact|min|max)\-(\d*)$/i)) 
 		{
-			result = (value <= length ? true : false);
+			var length = Jrun.toNumber(RegExp.$2);
+			
+			switch(RegExp.$1) 
+			{
+				case 'max':
+					result = value <= length;
+					break;
+				case 'min':
+					result = value >= length;
+					break;
+				case 'exact':
+					result = value == length;
+					break;
+				default:
+					result = false;
+			}
 		}
-		else if (data[0] === "min") 
-		{
-			result = (value >= length ? true : false);
-		} 
-		else if (data[0] === "exact") 
-		{
-			result = (value == length ? true : false);
-		} 
 		else 
 		{
-			result = true;
+			result = false;
 		}
 		
 		return result;
 	},
 	/**
-	 * Check if 'data' is an email address
+	 * Check if data is an email address
 	 * @param {String} data
 	 * @return {Boolean}
 	 */
@@ -64,7 +73,7 @@ Js.test = {
 		return (data.match(Js.config.test.email));
 	},
 	/**
-	 * Check if 'data' is a URL
+	 * Check if data is a URL
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
@@ -73,7 +82,7 @@ Js.test = {
 		return (data.match(Js.config.test.url));
 	},
 	/**
-	 * Check if 'data' is an IP Address
+	 * Check if data is an IP Address
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */

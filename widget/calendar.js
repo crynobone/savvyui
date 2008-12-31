@@ -1,19 +1,24 @@
 /**
- * Calendar widget for Savvy.UI
- * <br>History:
- * <br>Calendar object based from The Strange Zen of JavaScript's How to build a simple calendar with JavaScript
- * <br>http://jszen.blogspot.com/2007/03/how-to-build-simple-calendar-with.html
+ * @projectDescription Calendar widget for Savvy.UI
  * @extends Js.widget
  * @version 0.7.1
  * @author Mior Muhammad Zaki
  * @license MIT
  */
 
+/*
+ * History:
+ * <br>Calendar object based from The Strange Zen of JavaScript's How to build a simple calendar with JavaScript
+ * <br>http://jszen.blogspot.com/2007/03/how-to-build-simple-calendar-with.html
+ */
+
 /**
- * @id Js.widget.calendar
+ * Initiate new Js.widget.calendar
+ * 
+ * @alias Js.widget.calendar
  * @constructor
- * @param {Object} js
- * @return {Object}
+ * @param {Object} [js] Contains local configuration for this object
+ * @return {Object} return this object
  */
 Js.widget.calendar = function(js) 
 {
@@ -49,7 +54,8 @@ Js.widget.calendar = function(js)
 	this.month = null;
 	this.year = null;
 	
-	if (js && typeof(js) === "object") 
+	// you can start if the option is available
+	if (Jrun.typeOf(js) === "object") 
 	{
 		this.init(js);
 	}
@@ -58,10 +64,23 @@ Js.widget.calendar = function(js)
 };
 
 Js.widget.calendar.prototype = {
+	/**
+	 * Setup local configuration for this object
+	 * 
+	 * @method
+	 * @param {Object} [option] Contains local configuration for this object
+	 */
 	setup: function(option)
 	{
 		this.setting = Js.append(option, this.setting)
 	},
+	/**
+	 * Initiate internal call, prepare all configuration before loading the calendar
+	 * 
+	 * @method
+	 * @see Js.widget.calendar
+	 * @param {Object} [js] Contains local configuration for this object
+	 */
 	init: function(js) 
 	{
 		var that = this;

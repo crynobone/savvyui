@@ -12,6 +12,7 @@ Js.util.buttonSubmit = function(js)
 	this.button = Jrun.pick(js.button, null);
 	this.option = Jrun.pick(js.option, {});
 	this.setting = null;
+	this.formValidate = null;
 	
 	if(!!this.id && !!this.url && this.button) 
 	{
@@ -24,23 +25,26 @@ Js.util.buttonSubmit.prototype = {
 	{
 		this.setting = Js.append(option, this.setting);
 	},
+	_prepSetting: function()
+	{
+		this.formValidate = Js.nue(this.setting);
+		this.formValidate.beforeStart = null;
+		this.formValidate.success = null;
+		this.formValidate.onError = null;
+	},
 	init: function() 
 	{
 		var that = this;
 		
 		this.setup(this.option);
 		this.setting = Js.append(this.setting, Js.config.util.buttonSubmit);
+		this._prepSetting();
 		
 		var method = Jrun.pickGrep(this.setting.method, /^(get|post)$/i);
 		
 		jQuery(that.button).bind("click", function() {
-			if(Jrun.isfunction(that.setting.beforeStart)) 
-			{
-				that.setting.beforeStart();
-			}
-			
 			var form = new Js.ext.form();
-			var params = form.validate(that.id);
+			var params = form.validate(that.id, that.formValidate);
 			
 			if(!!params) 
 			{

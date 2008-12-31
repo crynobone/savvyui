@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Savvy.UI SVN Googlecode</name>
+	<name>Savvy.UI</name>
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
 	</buildSpec>
 	<natures>
-		<nature>com.aptana.ide.project.nature.web</nature>
 	</natures>
 </projectDescription>

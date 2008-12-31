@@ -71,105 +71,97 @@ Js.ext.form.prototype = {
 				// Double confirm the element is either input, select or textarea
 				if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) 
 				{
-					if(this.name != "") 
-					{
+					if (this.name != "") {
 						// turn the className into array so we can do some testing
 						this.className = (!!this.className ? this.className : "");
 						var klass = this.className.split(/\s/);
 						var error = "";
 						
 						// if the element is required
-						if(!!Jrun.inArray("required", klass) && Jrun.trim(this.value) === "") 
-						{
+						if (!!Jrun.inArray("required", klass) && Jrun.trim(this.value) === "") {
 							error = Js.lang.ext.form.required;
 						}
 						
 						// this set of validate only triggered when this.value isn't empty
-						if (Jrun.trim(this.value) != "") 
-						{
-							if (!!Jrun.inArray("string", klass) && !Js.test.isString(this.value)) 
-							{
+						if (Jrun.trim(this.value) != "") {
+							if (!!Jrun.inArray("string", klass) && !Js.test.isString(this.value)) {
 								error = Js.lang.ext.form.string;
-							} 
-							else if ((!!Jrun.inArray("integer", klass) || !!Jrun.inArray("number", klass)) && !Js.test.isNumber(this.value)) 
-							{
-								error = Js.lang.ext.form.number;
-							} 
-							else if (!!Jrun.inArray("email", klass) && !Js.test.isEmail(this.value)) 
-							{
-								error = Js.lang.ext.form.email;
 							}
+							else 
+								if ((!!Jrun.inArray("integer", klass) || !!Jrun.inArray("number", klass)) && !Js.test.isNumber(this.value)) {
+									error = Js.lang.ext.form.number;
+								}
+								else 
+									if (!!Jrun.inArray("email", klass) && !Js.test.isEmail(this.value)) {
+										error = Js.lang.ext.form.email;
+									}
 						}
 						
 						var testindex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
-						if (testindex >= 0) 
-						{
-							var tester = Jrun.camelize(klass[testindex])
+						
+						if (testindex >= 0) {
+							var tester = Jrun.camelize(klass[testindex]);
 							var validate = that.setting[tester];
-								
-							if (Jrun.isset(validate)) 
-							{
+							
+							if (Jrun.isset(validate)) {
 								var required = Jrun.pickStrict(validate.required, false, "boolean");
-									
-								if (required === true && Jrun.trim(this.value) === "") 
-								{
+								
+								if (required === true && Jrun.trim(this.value) === "") {
 									error = validate.error || error;
 								}
-									
-								if (Jrun.trim(this.value) !== "") 
-								{
-									if (Jrun.isfunction(validate.callback) && !validate.callback(this.value)) 
-									{
+								
+								if (Jrun.trim(this.value) !== "") {
+									if (Jrun.isfunction(validate.callback) && !validate.callback(this.value)) {
 										error = validate.error || error;
 									}
-									else if (validate.test && !this.value.match(validate.test)) 
-									{
-										error = validate.error || error;
-									}
+									else 
+										if (validate.test && !this.value.match(validate.test)) {
+											error = validate.error || error;
+										}
 								}
 							}
 						}
-					}
 						
-					for(var i = 0; i < klass.length; i++) 
-					{
-						if(klass[i].match(/(max|min|exact)\-(\d*)/) && Jrun.trim(this.value) !== "") 
+						
+						for (var i = 0; i < klass.length; i++) 
 						{
-							var type = RegExp.$1;
-							var value = RegExp.$2;
-							
-							if(!Js.test.isLength(klass[i], this.value.length)) 
+							if (klass[i].match(/(max|min|exact)\-(\d*)/) && Jrun.trim(this.value) !== "") 
 							{
-								if(type == "min") 
+								var type = RegExp.$1;
+								var value = RegExp.$2;
+								
+								if (!Js.test.isLength(klass[i], this.value.length)) 
 								{
-									type = Js.lang.ext.form.lengthOption.minimum;	
-								} 
-								else if(type == "max") 
-								{
-									type = Js.lang.ext.form.lengthOption.maximum;	
-								} 
-								else if(type == "exact") 
-								{
-									type = Js.lang.ext.form.lengthOption.exact;	
+									if (type == "min") 
+									{
+										type = Js.lang.ext.form.lengthOption.minimum;
+									}
+									else if (type == "max") 
+									{
+										type = Js.lang.ext.form.lengthOption.maximum;
+									}
+									else if (type == "exact") 
+									{
+										type = Js.lang.ext.form.lengthOption.exact;
+									}
+									
+									var note = Js.lang.ext.form.length;
+									
+									note = note.replace(/{type}/, type);
+									note = note.replace(/{value}/, value);
+									
+									that.error(this, note, true);
 								}
-								
-								var note = Js.lang.ext.form.length;
-								
-								note = note.replace(/{type}/, type);
-								note = note.replace(/{value}/, value);
-								
-								that.error(this, note, true);
 							}
 						}
+						
+						if (error !== "") 
+						{
+							that.error(this, error);
+						}
+						
+						data += that.invokeQueryString(this);
 					}
-					
-					if(error !== "") 
-					{
-						that.error(this, error);
-					}
-					
-					data += that.invokeQueryString(this);
-					
 				}
 			});
 		}

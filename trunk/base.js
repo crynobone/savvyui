@@ -182,7 +182,10 @@ var Jrun = {
 		var result = (data.indexOf('-') == 0 ? values[0].charAt(0).toUpperCase() + values[0].substr(1) : values[0]);
 		
 		jQuery.each(values, function(index, value) {
-			result = result + value.charAt(0).toUpperCase() + value.substr(1);
+			if (index > 0) 
+			{
+				result = result + value.charAt(0).toUpperCase() + value.substr(1);
+			}
 		});
 		
 		return result;

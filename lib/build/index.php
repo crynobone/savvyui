@@ -4,15 +4,22 @@
 	$files = array(
 		'base',
 		'adapter',
+		'config',
+		'setup',
+		'lang',
+		'parse',
+		'test',
 		'ext/form',
-		'util/dimension',
 		'util/activecontent',
+		'util/buttonsubmit',
+		'util/dimension',
+		'util/formsubmit',
+		'util/ticker',
 		'widget/activity',
 		'widget/calendar',
 		'widget/iconizer',
 		'widget/notice',
-		'widget/simpletab',
-		'util/ticker'
+		'widget/simpletab'
 	);
 	
 	$script = '';

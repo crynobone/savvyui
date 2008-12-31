@@ -7,9 +7,13 @@
  */
 
 /**
+ * Initiate Activity layer to prevent user from interfering with running process.
+ * 
  * @constructor
- * @param {String, Object} selector
- * @param {Object} option
+ * @alias Js.widget.activity
+ * @param {String, Object} [selector] Any selector format supported by jQuery CSS Selector Engine
+ * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
+ * @return {Object} return this object
  */
 Js.widget.activity = function(selector, option) 
 {
@@ -26,11 +30,26 @@ Js.widget.activity = function(selector, option)
 	
 	return this;
 };
+
 Js.widget.activity.prototype = {
+	/**
+	 * Setup local setting for current class
+	 * 
+	 * @method
+	 * @param {Object} option
+	 */
 	setup: function(option)
 	{
 		this.setting = Js.append(option, this.setting);
-	},	
+	},
+	/**
+	 * Initiate internal call, assign DOM element as activity layer and this option
+	 * 
+	 * @see Js.widget.activity
+	 * @method
+	 * @param {String, Object} [selector] Any selector format supported by jQuery CSS Selector Engine
+	 * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
+	 */
 	init: function(selector, option) 
 	{
 		this.element = Jrun.pick(selector, this.element);
@@ -43,6 +62,11 @@ Js.widget.activity.prototype = {
 			zIndex: this.setting.zIndex
 		}).setClass(this.setting.identifier).fadeTo("fast", 0.01);
 	},
+	/**
+	 * Activate activity layer
+	 * 
+	 * @method
+	 */
 	activate: function() 
 	{
 		if (this.status == 0) 
@@ -64,6 +88,11 @@ Js.widget.activity.prototype = {
 		
 		this.status++;
 	},
+	/**
+	 * Load activity indicator image
+	 * 
+	 * @method
+	 */
 	loadImage: function() 
 	{
 		this.box = jQuery("<img/>").attr({
@@ -75,6 +104,11 @@ Js.widget.activity.prototype = {
 			zIndex: (this.setting.zIndex + 1)
 		}).appendTo(this.node);
 	},
+	/**
+	 * Deactivate activity layer
+	 * 
+	 * @method
+	 */
 	deactivate: function() 
 	{
 		if(this.status > 0) 

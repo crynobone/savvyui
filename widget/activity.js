@@ -7,29 +7,6 @@
  */
 
 /**
- * Configuration for Js.widget.activity
- */
-Js.config.widget.activity = {
-	imagePath: "images/",
-	boxWidth: 200,
-	boxHeight: 20,
-	identifier: "widget-activity",
-	opacity: 0.6,
-	background: "#fff",
-	zIndex: 5000
-};
-
-/**
- * Setup global configuration for Js.widget.activity
- * @alias Js.setup.widget.activity
- * @param {Object} option
- */
-Js.setup.widget.activity = function(option)
-{
-	Js.config.widget.activity = Js.append(option, Js.config.widget.activity);
-};
-
-/**
  * @constructor
  * @param {String, Object} selector
  * @param {Object} option

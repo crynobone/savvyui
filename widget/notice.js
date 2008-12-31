@@ -5,25 +5,6 @@
  * @license MIT
  */
 
-Js.config.widget.notice = {
-	overlay: "#overlay-notice",
-	cssSuccess: "message-success",
-	cssNote: "message-note",
-	cssError: "message-error",
-	seconds: 5,
-	beforeStart: null,
-	onClose: null
-};
-
-Js.lang.widget.notice = {
-	title: {
-		success: "Congratulation",
-		note: "Note",
-		error: "Error has Occur"
-	},
-	timer: "This message will automatically close in 5 seconds"
-};
-
 Js.widget.notice = {
 	callback: null,
 	node: null,

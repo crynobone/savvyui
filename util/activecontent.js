@@ -24,14 +24,14 @@ Js.util.activeContent = Js.base.create({
 		
 		if(Jrun.isset(this.element)) 
 		{
-			this.selector();
-			this.check();
+			this._selector();
+			this._check();
 		} 
 		else 
 		{
 			var that = this;
 			this.interval = window.setInterval(function() {
-				that.check();
+				that._check();
 			}, 100);
 		}
 	},
@@ -47,7 +47,7 @@ Js.util.activeContent = Js.base.create({
 		this.__destruct();
 		return null;
 	},
-	selector: function() {
+	_selector: function() {
 		var that = this;
 		
 		jQuery(this.element).bind("click", function() 
@@ -84,7 +84,7 @@ Js.util.activeContent = Js.base.create({
 			}
 		});
 	},
-	check: function() 
+	_check: function() 
 	{
 		if (location.hash != this.last && location.hash !== "#") 
 		{

@@ -42,7 +42,7 @@ Js.widget.notice = {
 		
 		Js.widget.notice.node.deactivate();
 	},
-	domAddNotice: function(note, status)
+	_domAddNotice: function(note, status)
 	{
 		var status = Jrun.pickGrep(status, "note", /^(note|success|error)$/i);
 		var that = this;
@@ -90,14 +90,14 @@ Js.widget.notice = {
 	success: function(note, callback) 
 	{
 		this.callback = Jrun.pick(callback, null);
-		this.domAddNotice(note, 'success');
+		this._domAddNotice(note, 'success');
 	},
 	note: function(note, callback) {
 		this.callback = Jrun.pick(callback, null);
-		this.domAddNotice(note, 'note');
+		this._domAddNotice(note, 'note');
 	},
 	error: function(note, callback) {
 		this.callback = Jrun.pick(callback, null);
-		this.domAddNotice(note, 'error');
+		this._domAddNotice(note, 'error');
 	}
 };

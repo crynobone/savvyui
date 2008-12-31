@@ -22,22 +22,6 @@ Js.setup.ext.form = function(option)
 	Js.config.ext.form = Js.append(option, Js.config.ext.form);
 };
 
-/**
- * Language option for Js.ext.form
- */
-Js.lang.ext.form = {
-	string: "Require alphanumeric character input",
-	number: "Require numberic input",
-	email: "Require valid e-mail address input",
-	required: "This input field is required",
-	length: "This input field require {type} {value} character.",
-	lengthOption: {
-		exact: "exactly",
-		minimum: "minimum",
-		maximum: "maximum"
-	}
-};
-
 Js.ext.form = function() 
 {
 	this.node = null;

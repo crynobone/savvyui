@@ -58,7 +58,7 @@ Js.widget.simpleTab.prototype = {
 		this.handler = Jrun.pickGrep(this.setting.handler, "click", /^(mouseover|click)$/i);
 		
 		// add tab toolbar on top
-		this.addToolbar();
+		this._addToolbar();
 		
 		// set the first tab as active
 		this.activeHeader = jQuery("a[href=#" + this.activeTab.attr("id") + "]", this.header);
@@ -68,7 +68,7 @@ Js.widget.simpleTab.prototype = {
 		// tab is activated
 		this.status = "on";
 	},
-	addToolbar: function() 
+	_addToolbar: function() 
 	{
 		var that = this;
 		Js.debug.log("Js.widget.simpleTab: load Toolbar");
@@ -91,7 +91,7 @@ Js.widget.simpleTab.prototype = {
 		
 		child.each(function(index, data) {
 			// add the tab title
-			that.addHeader(data);
+			that._addHeader(data);
 			// hide the tab
 			jQuery(data).setClass(that.setting.hidden);
 		});
@@ -101,7 +101,7 @@ Js.widget.simpleTab.prototype = {
 		
 		var div2 = jQuery("<div/>").css("display", "block").appendTo(div);
 	},
-	addHeader: function(node) 
+	_addHeader: function(node) 
 	{
 		Js.debug.log("Js.widget.simpleTab: add header");
 		var that = this;

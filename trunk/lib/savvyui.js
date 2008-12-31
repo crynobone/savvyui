@@ -1260,7 +1260,7 @@ Js.ext.form.prototype = {
 				var object = jQuery(this);
 				
 				// remove previously loaded error message
-				that.cleanUpMessage(this);
+				that._messageCleanUp(this);
 				
 				// Double confirm the element is either input, select or textarea
 				if(this.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) 
@@ -1351,10 +1351,10 @@ Js.ext.form.prototype = {
 						
 						if (error !== "") 
 						{
-							that.error(this, error);
+							that._error(this, error);
 						}
 						
-						data += that.invokeQueryString(this);
+						data += that._invokeQueryString(this);
 					}
 				}
 			});
@@ -1386,7 +1386,7 @@ Js.ext.form.prototype = {
 			return data;
 		}
 	},
-	error: function(field, text, data) 
+	_error: function(field, text, data) 
 	{		
 		var that = this;
 		
@@ -1402,12 +1402,12 @@ Js.ext.form.prototype = {
 		
 		if (jQuery("#" + fieldErrorId).length == 0) 
 		{
-			this.addMessage(field, text);
+			this._messageAdd(field, text);
 			
 			field.change(function() {
 				if (jQuery(this).val() != "") 
 				{
-					that.cleanUpMessage(this);
+					that._messageCleanUp(this);
 					that.first = null;
 				}
 			});
@@ -1426,13 +1426,13 @@ Js.ext.form.prototype = {
 			field.change(function() {
 				if(jQuery(this).val() != "") 
 				{
-					that.cleanUpMessage(this);
+					that.messageCleanUp(this);
 					that.first = null;
 				}
 			});
 		}
 	},
-	invokeQueryString: function(node) 
+	_invokeQueryString: function(node) 
 	{
 		var data = "";
 		
@@ -1458,7 +1458,7 @@ Js.ext.form.prototype = {
 		
 		return data;
 	},
-	cleanUpMessage: function(node) 
+	_messageCleanUp: function(node) 
 	{
 		var errSpan = this.setting.error.node + "." + this.setting.error.cssMessage;
 		var errNode = jQuery(node).siblings(errSpan).eq(0);
@@ -1467,7 +1467,7 @@ Js.ext.form.prototype = {
 			errNode.remove();
 		}
 	},
-	addMessage: function(node, message) 
+	_messageAdd: function(node, message) 
 	{
 		try {
 			jQuery("<" + this.setting.error.node + "/>")
@@ -1504,14 +1504,14 @@ Js.util.activeContent = Js.base.create({
 		
 		if(Jrun.isset(this.element)) 
 		{
-			this.selector();
-			this.check();
+			this._selector();
+			this._check();
 		} 
 		else 
 		{
 			var that = this;
 			this.interval = window.setInterval(function() {
-				that.check();
+				that._check();
 			}, 100);
 		}
 	},
@@ -1527,7 +1527,7 @@ Js.util.activeContent = Js.base.create({
 		this.__destruct();
 		return null;
 	},
-	selector: function() {
+	_selector: function() {
 		var that = this;
 		
 		jQuery(this.element).bind("click", function() 
@@ -1564,7 +1564,7 @@ Js.util.activeContent = Js.base.create({
 			}
 		});
 	},
-	check: function() 
+	_check: function() 
 	{
 		if (location.hash != this.last && location.hash !== "#") 
 		{
@@ -2815,7 +2815,7 @@ Js.widget.notice = {
 		
 		Js.widget.notice.node.deactivate();
 	},
-	domAddNotice: function(note, status)
+	_domAddNotice: function(note, status)
 	{
 		var status = Jrun.pickGrep(status, "note", /^(note|success|error)$/i);
 		var that = this;
@@ -2863,15 +2863,15 @@ Js.widget.notice = {
 	success: function(note, callback) 
 	{
 		this.callback = Jrun.pick(callback, null);
-		this.domAddNotice(note, 'success');
+		this._domAddNotice(note, 'success');
 	},
 	note: function(note, callback) {
 		this.callback = Jrun.pick(callback, null);
-		this.domAddNotice(note, 'note');
+		this._domAddNotice(note, 'note');
 	},
 	error: function(note, callback) {
 		this.callback = Jrun.pick(callback, null);
-		this.domAddNotice(note, 'error');
+		this._domAddNotice(note, 'error');
 	}
 };/**
  * Tab widget for Savvy.UI
@@ -2933,7 +2933,7 @@ Js.widget.simpleTab.prototype = {
 		this.handler = Jrun.pickGrep(this.setting.handler, "click", /^(mouseover|click)$/i);
 		
 		// add tab toolbar on top
-		this.addToolbar();
+		this._addToolbar();
 		
 		// set the first tab as active
 		this.activeHeader = jQuery("a[href=#" + this.activeTab.attr("id") + "]", this.header);
@@ -2943,7 +2943,7 @@ Js.widget.simpleTab.prototype = {
 		// tab is activated
 		this.status = "on";
 	},
-	addToolbar: function() 
+	_addToolbar: function() 
 	{
 		var that = this;
 		Js.debug.log("Js.widget.simpleTab: load Toolbar");
@@ -2966,7 +2966,7 @@ Js.widget.simpleTab.prototype = {
 		
 		child.each(function(index, data) {
 			// add the tab title
-			that.addHeader(data);
+			that._addHeader(data);
 			// hide the tab
 			jQuery(data).setClass(that.setting.hidden);
 		});
@@ -2976,7 +2976,7 @@ Js.widget.simpleTab.prototype = {
 		
 		var div2 = jQuery("<div/>").css("display", "block").appendTo(div);
 	},
-	addHeader: function(node) 
+	_addHeader: function(node) 
 	{
 		Js.debug.log("Js.widget.simpleTab: add header");
 		var that = this;

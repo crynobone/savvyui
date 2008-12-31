@@ -9,18 +9,6 @@
  * @license MIT
  */
 
-Js.config.widget.calendar = {
-	navigation: true,
-	fieldType: "hidden",
-	onUpdate: null,
-	beforeStart: null
-};
-
-Js.lang.widget.calendar = {
-	selectMonthYear: "",
-	buttonToday: ""
-};
-
 /**
  * @id Js.widget.calendar
  * @constructor

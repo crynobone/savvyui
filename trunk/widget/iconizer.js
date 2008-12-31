@@ -6,11 +6,6 @@
  * @license MIT
  */
 
-Js.config.widget.iconizer = {
-	fileType: "png",
-	folder: "icons/"
-};
-
 Js.widget.iconizer = function(option) 
 {
 	this.setting = null;

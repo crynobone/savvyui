@@ -7,28 +7,6 @@
  */
 
 /**
- * Js.widget.simpleTab configuration
- * @id Js.config.widget.simpleTab
- */
-Js.config.widget.simpleTab = {
-	handler: "click",
-	identifier: "simpletab",
-	closable: "closable",
-	disabled: "disabled",
-	toolbar: "simpletab-toolbar",
-	toolbarContainer: "simpletab-toolbar-container",
-	container: "simple-container",
-	hidden: "simpletab-hidden",
-	active: "simpletab-active",
-	currentHeader: "current"
-};
-
-Js.setup.widget.simpleTab = function(option)
-{
-	Js.config.widget.simpleTab = Js.append(option, Js.config.widget.simpleTab);
-}
-
-/**
  * Initialize Js.widget.simpleTab using it constructor:<br>
  * e.g: <b>new Js.widget.simpleTab</b>
  * @id Js.widget.simpleTab

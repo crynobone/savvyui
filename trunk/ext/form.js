@@ -246,7 +246,6 @@ Js.ext.form.prototype = {
 		} 
 		else if (jQuery("#" + fieldErrorId).length == 1 && !!data) 
 		{
-			field.addClass("extform-error");
 			var errorNode = field.siblings(this.setting.error.node + "." + this.setting.error.cssMessage).eq(0);
 			var html = errorNode.html();
 			
@@ -255,7 +254,7 @@ Js.ext.form.prototype = {
 				errorNode.append(text);
 			}
 			
-			field.change(function() {
+			field.bind("change", function() {
 				if(jQuery(this).val() != "") 
 				{
 					that.messageCleanUp(this);

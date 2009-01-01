@@ -174,6 +174,11 @@ Js.debug = {
 	}
 };
 
+/**
+ * Misc function for Savvy.UI
+ * 
+ * @alias Jrun
+ */
 var Jrun = {
 	/**
 	 * Camelize string input
@@ -484,6 +489,10 @@ var Jrun = {
 		
 		return result;
 	},
+	/**
+	 * @alias Jrun.rand
+	 * @param {Object} js
+	 */
 	rand: function(js) 
 	{
 		var data = arguments;

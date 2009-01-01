@@ -6,6 +6,7 @@
  * @license MIT
  */
 
+
 Js.widget.message = {
 	node: null,
 	add: function(spec) {

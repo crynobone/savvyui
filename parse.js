@@ -4,8 +4,15 @@
  * @license MIT
  */
 
+/**
+ * @alias Js.parse
+ */
 Js.parse = {
 	html: {
+		/**
+		 * @alias Js.parse.html.to
+		 * @param {String} data
+		 */
 		to: function(data) 
 		{
 			var data = new String(data);
@@ -14,6 +21,10 @@ Js.parse = {
 			
 			return data;
 		},
+		/**
+		 * @alias Js.parse.html.from
+		 * @param {String} data
+		 */
 		from: function(data) 
 		{
 			var data = new String(value);
@@ -24,6 +35,7 @@ Js.parse = {
 		}
 	},
 	/**
+	 * @alias Js.parse.bbml
 	 * @deprecated
 	 * @param {String} data
 	 * @return {String}

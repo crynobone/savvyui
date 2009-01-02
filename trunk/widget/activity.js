@@ -54,7 +54,13 @@ Js.widget.activity = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.activity);
 		
-		this.node = jQuery(this.element).css({
+		this.node = jQuery(this.element);
+		if(this.node.length == 0) 
+		{
+			jQuery("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+		}
+		
+		this.node.css({
 			background: this.setting.background,
 			zIndex: this.setting.zIndex,
 			display: "none"

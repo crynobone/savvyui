@@ -42,13 +42,9 @@ Js.setup = {
 		{
 			Js.config.widget.notice = Js.append(option, Js.config.widget.notice);
 		},
-		simpleTab: function(option)
-		{
-			Js.config.widget.simpleTab = Js.append(option, Js.config.widget.simpleTab);
-		},
 		tab: function(option)
 		{
-			Js.config.widget.simpleTab = Js.append(option, Js.config.widget.simpleTab);
+			Js.config.widget.tab = Js.append(option, Js.config.widget.tab);
 		}
 	}
 };

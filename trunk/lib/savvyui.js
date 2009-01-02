@@ -969,18 +969,6 @@ Js.config = {
 			beforeStart: null,
 			onClose: null
 		},
-		simpleTab: {
-			handler: "click",
-			identifier: ".simpletab",
-			closable: "closable",
-			disabled: "disabled",
-			toolbar: "simpletab-toolbar",
-			toolbarContainer: "simpletab-toolbar-container",
-			container: "simple-container",
-			cssHidden: "simpletab-hidden",
-			cssActive: "simpletab-active",
-			cssCurrent: "current"
-		},
 		tab: {
 			handler: "click",
 			identifier: ".tab",
@@ -1039,13 +1027,9 @@ Js.setup = {
 		{
 			Js.config.widget.notice = Js.append(option, Js.config.widget.notice);
 		},
-		simpleTab: function(option)
-		{
-			Js.config.widget.simpleTab = Js.append(option, Js.config.widget.simpleTab);
-		},
 		tab: function(option)
 		{
-			Js.config.widget.simpleTab = Js.append(option, Js.config.widget.simpleTab);
+			Js.config.widget.tab = Js.append(option, Js.config.widget.tab);
 		}
 	}
 };/**
@@ -1833,6 +1817,13 @@ Js.util.buttonSubmit = Js.base.create({
 					}
 				});
 			}
+			else 
+			{
+				if(Jrun.isfunction(that.setting.onError))
+				{
+					that.setting.onError();
+				}
+			}
 			
 			return false;
 		});
@@ -1966,6 +1957,7 @@ Js.util.dimension = {
  * @license MIT
  */
 Js.util.formSubmit = Js.util.buttonSubmit.extend({
+	handler: "submit",
 	__construct: function(js)
 	{
 		this.id = Jrun.pick(js.id, null);
@@ -2123,7 +2115,13 @@ Js.widget.activity = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.activity);
 		
-		this.node = jQuery(this.element).css({
+		this.node = jQuery(this.element);
+		if(this.node.length == 0) 
+		{
+			jQuery("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+		}
+		
+		this.node.css({
 			background: this.setting.background,
 			zIndex: this.setting.zIndex,
 			display: "none"
@@ -2991,7 +2989,6 @@ Js.widget.notice = Js.widget.activity.extend({
 			this.callback();
 			this.callback = null;
 		}
-		
 		this.node.deactivate(function() {
 			that.node.box.html("");
 		});
@@ -3029,11 +3026,9 @@ Js.widget.notice = Js.widget.activity.extend({
 		
 		var span = jQuery("<em/>").text(Js.lang.widget.notice.timer).appendTo(this.node.box);
 		
-		setTimeout((function() {
-			that.node.node.click(function() {
-				that.closeNotice();
-			});
-		}), 1000);
+		this.node.node.one("click", function() {
+			that.closeNotice();
+		});
 		
 		if(opt == false) {
 			setTimeout(function() { 

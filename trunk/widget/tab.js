@@ -1,58 +1,40 @@
 /**
- * Tab widget for Savvy.UI
- * @version 0.9.1
- * @author Mior Muhammad Zaki
- * @extends Js.widget
+ * @version 0.9.2
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
-/**
- * Initialize Js.widget.simpleTab using it constructor:<br>
- * e.g: <b>new Js.widget.simpleTab</b>
- * @alias Js.widget.simpleTab
- * @constructor
- * @param {Object} node
- * @param {Object} option
- * @return {Object}
- */
-
-Js.widget.simpleTab = function(node, option) 
-{
-	this.temp = null;
-	this.height = null;
-	this.toolbar = null;
-	this.node = null;
-	this.header = null;
-	this.element = null;
-	this.activeTab = null;
-	this.activeHeader = null;
-	this.handler = null;
-	this.status = "off";
-	this.setting = null;
-	
-	// load the tab module if selector already provided in the arguments
-	if(!!Jrun.isset(node)) 
+Js.widget.tab = Js.base.create({
+	height: null,
+	toolbar: null,
+	node: null,
+	header: null,
+	element: null,
+	activeTab: null,
+	activeHeader: null,
+	handler: null,
+	statys: "off",
+	setting: null,
+	__construct: function(selector, option)
 	{
-		this.init(node, option);
-	}
-	
-	return this;
-};
-Js.widget.simpleTab.prototype = {
+		if(!!Jrun.isset(selector)) 
+		{
+			this.init(selector, option);
+		}
+	},
 	setup: function(option)
 	{
 		this.setting = Js.append(option, this.setting);
 	},
-	init: function(node, option) 
+	init: function(selector, option)
 	{
-		Js.debug.log("Js.widget.simpleTab: started");
 		var that = this;
 		
 		// setting should be available
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.simpleTab);
+		this.setting = Js.append(this.setting, Js.config.widget.tab);
 		
-		this.node = jQuery(node);
+		this.node = jQuery(selector);
 		this.node.addClass(this.setting.container);
 		this.element = this.node.eq(0).attr("id");
 		
@@ -109,7 +91,9 @@ Js.widget.simpleTab.prototype = {
 		
 		var node = jQuery(node);
 		var title = node.attr("title");
+		
 		var closable = node.hasClass(this.setting.closable);
+		var disabled = node.hasClass(this.setting.disabled);
 		
 		var li = jQuery("<li/>").appendTo(this.header);
 		var a = jQuery("<a/>").attr({
@@ -118,12 +102,8 @@ Js.widget.simpleTab.prototype = {
 		}).appendTo(li);
 		
 		jQuery("<em/>").appendTo(a);
-		
-		a.text(title).bind(this.handler, function() {
-			that.activate(this);
-			return false;
-		});
-		
+		a.text(title);
+				
 		if(!!closable) 
 		{
 			jQuery("<span/>").css("paddingLeft", "10px").text("x").click(function() {
@@ -140,8 +120,50 @@ Js.widget.simpleTab.prototype = {
 				that.revert();
 			}).appendTo(a);
 		}
+		
+		if(!!disabled) 
+		{
+			a.setClass(this.setting.cssDisabled).bind(this.handler, function() {
+				return false;
+			});
+		}
+		else 
+		{
+			a.bind(this.handler, function() {
+				that.activateTab(this);
+				return false;
+			});
+		}
 	},
-	activate: function(node) 
+	enableTab: function(selector)
+	{
+		var that = this;
+		
+		var anchor = jQuery("a[href=" + selector + "]", this.header);
+		anchor.removeClass();
+		anchor.unbind(this.handler);
+		anchor.bind(this.handler, function(){
+			that.activateTab(this);
+			return false;
+		});
+				
+		return false;
+	},
+	disableTab: function(selector)
+	{
+		var that = this;
+		var that = this;
+		
+		var anchor = jQuery("a[href=" + selector + "]", this.header);
+		anchor.setClass(this.setting.cssDisabled);
+		anchor.unbind(this.handler);
+		anchor.bind(this.handler, function(){
+			return false;
+		});
+		
+		return false;
+	},
+	activateTab: function(node) 
 	{
 		var that = this;
 		this.activeHeader.removeClass(this.setting.cssCurrent);
@@ -162,7 +184,7 @@ Js.widget.simpleTab.prototype = {
 		
 		if(active.length > 0) 
 		{
-			this.activate(active.eq(0));
+			this.activateTab(active.eq(0));
 		}
 	},
 	toggle: function() 
@@ -206,7 +228,7 @@ Js.widget.simpleTab.prototype = {
 			
 			jQuery("<em/>").appendTo(a);
 			a.text(title).bind(this.handler, function() {
-				that.activate(this);
+				that.activateTab(this);
 				return false;
 			});
 			
@@ -227,9 +249,9 @@ Js.widget.simpleTab.prototype = {
 			
 			if(!!set) 
 			{
-				this.activate(node);
+				this.activateTab(node);
 			}
 		}
 		return this;
 	}
-};
+});

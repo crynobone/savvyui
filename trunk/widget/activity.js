@@ -15,23 +15,20 @@
  * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
  * @return {Object} return this object
  */
-Js.widget.activity = function(selector, option) 
-{
-	this.node = null;
-	this.element = null;
-	this.box = null;
-	this.setting = null;
-	this.status = 0;
-	
-	if(Jrun.isset(selector))
+Js.widget.activity = Js.base.create({
+	node: null,
+	element: null,
+	box: null,
+	setting: null,
+	status: 0,
+	__construct: function(selector, option)
 	{
-		this.init(selector, option);
-	}
-	
-	return this;
-};
-
-Js.widget.activity.prototype = {
+		if (Jrun.isset(selector)) 
+		{
+			this.init(selector, option);
+		}
+		return this;
+	},
 	/**
 	 * Setup local setting for this object
 	 * 
@@ -123,4 +120,4 @@ Js.widget.activity.prototype = {
 		this.status--;
 		this.status = (this.status < 0 ? 0 : this.status);
 	}
-};
+});

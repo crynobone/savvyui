@@ -39,7 +39,7 @@ Js.config = {
 			imagePath: "images/",
 			boxWidth: 200,
 			boxHeight: 20,
-			identifier: "widget-activity",
+			identifier: ".widget-activity",
 			opacity: 0.6,
 			background: "#fff",
 			zIndex: 5000
@@ -62,7 +62,6 @@ Js.config = {
 			seconds: 5
 		},
 		notice: {
-			identifier: "#overlay-notice",
 			cssSuccess: "notice-success",
 			cssNote: "notice-note",
 			cssError: "notice-error",

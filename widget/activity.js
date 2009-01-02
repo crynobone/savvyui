@@ -56,15 +56,16 @@ Js.widget.activity = Js.base.create({
 		
 		this.node = jQuery(this.element).css({
 			background: this.setting.background,
-			zIndex: this.setting.zIndex
-		}).setClass(this.setting.identifier).fadeTo("fast", 0.01);
+			zIndex: this.setting.zIndex,
+			display: "none"
+		}).setClass(Jrun.prep(this.setting.identifier)).css("opacity", 0.01);
 	},
 	/**
 	 * Activate activity layer
 	 * 
 	 * @method
 	 */
-	activate: function() 
+	activate: function(callback) 
 	{
 		if (this.status == 0) 
 		{
@@ -84,6 +85,11 @@ Js.widget.activity = Js.base.create({
 		}
 		
 		this.status++;
+		
+		if(Jrun.isfunction(callback))
+		{
+			callback();
+		}
 	},
 	/**
 	 * Load activity indicator image
@@ -106,7 +112,7 @@ Js.widget.activity = Js.base.create({
 	 * 
 	 * @method
 	 */
-	deactivate: function() 
+	deactivate: function(callback) 
 	{
 		if(this.status > 0) 
 		{
@@ -114,6 +120,10 @@ Js.widget.activity = Js.base.create({
 				jQuery(this).css({
 					"display": "none"
 				});
+				if(Jrun.isfunction(callback))
+				{
+					callback();
+				}
 			});
 		}
 		

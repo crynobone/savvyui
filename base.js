@@ -747,7 +747,7 @@ var Jrun = {
 	},
 	prep: function(data)
 	{
-		if(data.match(/^(\#|\.)(\w*)$/gi))
+		if(data.match(/^(#|\.)?(.*)$/gi))
 		{
 			return RegExp.$2;
 		}

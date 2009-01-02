@@ -69,18 +69,6 @@ Js.config = {
 			beforeStart: null,
 			onClose: null
 		},
-		simpleTab: {
-			handler: "click",
-			identifier: ".simpletab",
-			closable: "closable",
-			disabled: "disabled",
-			toolbar: "simpletab-toolbar",
-			toolbarContainer: "simpletab-toolbar-container",
-			container: "simple-container",
-			cssHidden: "simpletab-hidden",
-			cssActive: "simpletab-active",
-			cssCurrent: "current"
-		},
 		tab: {
 			handler: "click",
 			identifier: ".tab",

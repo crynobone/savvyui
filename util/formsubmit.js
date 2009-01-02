@@ -5,6 +5,7 @@
  * @license MIT
  */
 Js.util.formSubmit = Js.util.buttonSubmit.extend({
+	handler: "submit",
 	__construct: function(js)
 	{
 		this.id = Jrun.pick(js.id, null);

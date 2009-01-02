@@ -32,7 +32,6 @@ Js.widget.notice = Js.widget.activity.extend({
 			this.callback();
 			this.callback = null;
 		}
-		
 		this.node.deactivate(function() {
 			that.node.box.html("");
 		});
@@ -70,11 +69,9 @@ Js.widget.notice = Js.widget.activity.extend({
 		
 		var span = jQuery("<em/>").text(Js.lang.widget.notice.timer).appendTo(this.node.box);
 		
-		setTimeout((function() {
-			that.node.node.click(function() {
-				that.closeNotice();
-			});
-		}), 1000);
+		this.node.node.one("click", function() {
+			that.closeNotice();
+		});
 		
 		if(opt == false) {
 			setTimeout(function() { 

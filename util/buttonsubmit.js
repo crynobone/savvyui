@@ -89,6 +89,13 @@ Js.util.buttonSubmit = Js.base.create({
 					}
 				});
 			}
+			else 
+			{
+				if(Jrun.isfunction(that.setting.onError))
+				{
+					that.setting.onError();
+				}
+			}
 			
 			return false;
 		});

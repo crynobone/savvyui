@@ -11,23 +11,25 @@
  * @constructor
  * @param {Object} js
  */
-Js.util.buttonSubmit = function(js) 
-{
-	this.id = Jrun.pick(js.id, null);
-	this.url = Jrun.pick(js.url, null);
-	this.button = Jrun.pick(js.button, null);
-	this.option = Jrun.pick(js.option, {});
-	this.setting = null;
-	this.formValidate = null;
-	
-	// if id, url and button have been defined, straight away call this.init()
-	if(!!this.id && !!this.url && this.button) 
+Js.util.buttonSubmit = Js.base.create({
+	id: null,
+	url: null,
+	button: null,
+	setting: null,
+	handler: "click",
+	formValidate: null,
+	__construct: function(js)
 	{
-		this.init();
-	}
-};
-
-Js.util.buttonSubmit.prototype = {
+		this.id = Jrun.pick(js.id, null);
+		this.url = Jrun.pick(js.url, null);
+		this.button = Jrun.pick(js.button, null);
+		
+		// if id, url and button have been defined, straight away call this.init()
+		if(!!this.id && !!this.url && this.button) 
+		{
+			this.init(js.option);
+		}
+	},
 	/**
 	 * @method
 	 * @param {Object} option
@@ -49,18 +51,18 @@ Js.util.buttonSubmit.prototype = {
 	/**
 	 * @method
 	 */
-	init: function() 
+	init: function(option) 
 	{
 		var that = this;
 		
-		this.setup(this.option);
+		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.util.buttonSubmit);
 		this._prepSetting();
 		
 		var method = Jrun.pickGrep(this.setting.method, /^(get|post)$/i);
 		
 		// bind onClick event delegation to the button
-		jQuery(that.button).bind("click", function() {
+		jQuery(that.button).bind(this.handler, function() {
 			// we need to validate the form
 			var form = new Js.ext.form();
 			var params = form.validate(that.id, that.formValidate);
@@ -91,4 +93,5 @@ Js.util.buttonSubmit.prototype = {
 			return false;
 		});
 	}
-};
+	
+});

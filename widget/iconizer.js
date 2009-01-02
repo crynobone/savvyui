@@ -11,18 +11,15 @@
  * @constructor
  * @param {Object} option
  */
-Js.widget.iconizer = function(option) 
-{
-	this.setting = null;
-	
-	if(Jrun.isset(option))
+Js.widget.iconizer = Js.base.create({
+	setting: null,
+	__construct: function(option)
 	{
-		this.init(option);
-	}
-	
-	return this;
-};
-Js.widget.iconizer.prototype = {
+		if(Jrun.isset(option))
+		{
+			this.init(option);
+		}
+	},
 	/**
 	 * @method
 	 * @param {Object} option
@@ -102,4 +99,4 @@ Js.widget.iconizer.prototype = {
 			}
 		});
 	}
-};
+});

@@ -1,20 +1,20 @@
-.simpletab-toolbar-container { 
+.tab-toolbar-container { 
 	margin: 15px 0 0; 
 	border-bottom: 1px solid #D3DAE8; 
 	height: 28px; 
 }
-ul.simpletab-toolbar { 
+ul.tab-toolbar { 
 	list-style: none; 
 	margin: 0;
 	padding: 0; 
 }
-ul.simpletab-toolbar li { 
+ul.tab-toolbar li { 
 	display: block; 
 	float: left; 
 	margin: 0 2px; 
 	padding: 0; 
 }
-ul.simpletab-toolbar li a { 
+ul.tab-toolbar li a { 
 	display: block; 
 	font-weight: 600; 
 	background: #D8DFEA; 
@@ -24,24 +24,40 @@ ul.simpletab-toolbar li a {
 	outline: none; 
 	text-decoration: none; 
 }
-ul.simpletab-toolbar li a.current, ul.simpletab-toolbar li a.current:hover { 
+ul.tab-toolbar li a.disabled { 
+	display: block; 
+	font-weight: 600; 
+	background: #aaa; 
+	color: #fff; 
+	padding: 4px 10px 6px; 
+	border-bottom: 1px solid #aaa; 
+	outline: none; 
+	text-decoration: none; 
+}
+ul.tab-toolbar li a.disabled:hover { 
+	display: block; 
+	background: #aaa; 
+	color: #fff; 
+	border-bottom: 1px solid #aaa; 
+}
+ul.tab-toolbar li a.current, ul.tab-toolbar li a.current:hover { 
 	display: block; 
 	background: #fff; 
 	color: #333; 
 	border: 1px solid #D3DAE8; 
 	border-bottom: 1px solid #fff; 
 }
-ul.simpletab-toolbar li a:hover { 
+ul.tab-toolbar li a:hover { 
 	display: block; 
 	background: #3B5998; 
 	color: #fff; 
-	border-bottom: 1px solid #D8DFEA; 
+	border-bottom: 1px solid #3B5998; 
 }
-.simpletab-hidden { 
+.tab-hidden { 
 	display: none; 
 	padding: 15px 5px 5px; 
 }
-.simpletab-active { 
+.tab-active { 
 	display: block; 
 	padding: 15px 5px 5px; 
 }

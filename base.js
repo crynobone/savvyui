@@ -744,6 +744,17 @@ var Jrun = {
 		});
 		
 		return result;
+	},
+	prep: function(data)
+	{
+		if(data.match(/^(\#|\.)(\w*)$/gi))
+		{
+			return RegExp.$2;
+		}
+		else
+		{
+			return data;
+		}
 	}
 };
 
@@ -827,28 +838,34 @@ Js.base.create = function(js)
 	if(!!Jrun.isset(extended)) 
 	{
 		try {
-			(function(js) {
+			(function(ext) {
 				// restrict object from looping certain method
 				var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
 				
-				for (var method in js) 
+				for (var method in ext) 
 				{
-					if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
+					if (ext.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
 					{
-						this[method] = js[method];
+						this[method] = ext[method];
 					}
 				}
 				
-				for (var method in js.prototype) 
+				for (var method in ext.prototype) 
 				{
-					if (js.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
+					if (ext.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
 					{
-						this[method] = js.prototype[method];
+						this[method] = ext.prototype[method];
 					}
+				}
+				
+				if (ext.prototype.hasOwnProperty('construct')) 
+				{
+					this['_parentConstruct'] = ext.prototype.construct;
+					this['_parentDestruct'] = ext.prototype.__destruct;
 				}
 				
 				// create a linkage to the parent object
-				this._super = js.prototype;
+				this._super = ext.prototype;
 			}).call(prototype, extended);
 		} catch(e) {
 			// incase something goes wrong

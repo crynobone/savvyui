@@ -1,4 +1,5 @@
 /**
+ * @memberOf Js
  * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
@@ -16,7 +17,8 @@ Js.config = {
 	test: {
 		email: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 		url: /^https?:\/\/([a-z0-9-]+\.)+[a-z0-9]{2,4}.*$/,
-		ip: /^\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\]$/
+		ip: /^\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\]$/,
+		postcode: /^\d{5}$/
 	},
 	util: {
 		formSubmit: {
@@ -52,26 +54,46 @@ Js.config = {
 			fileType: "png",
 			folder: "icons/"
 		},
-		notice: {
-			overlay: "#overlay-notice",
+		message: {
+			identifier: "#overlay-message",
 			cssSuccess: "message-success",
 			cssNote: "message-note",
 			cssError: "message-error",
+			seconds: 5
+		},
+		notice: {
+			identifier: "#overlay-notice",
+			cssSuccess: "notice-success",
+			cssNote: "notice-note",
+			cssError: "notice-error",
 			seconds: 5,
 			beforeStart: null,
 			onClose: null
 		},
 		simpleTab: {
 			handler: "click",
-			identifier: "simpletab",
+			identifier: ".simpletab",
 			closable: "closable",
 			disabled: "disabled",
 			toolbar: "simpletab-toolbar",
 			toolbarContainer: "simpletab-toolbar-container",
 			container: "simple-container",
-			hidden: "simpletab-hidden",
-			active: "simpletab-active",
-			currentHeader: "current"
+			cssHidden: "simpletab-hidden",
+			cssActive: "simpletab-active",
+			cssCurrent: "current"
+		},
+		tab: {
+			handler: "click",
+			identifier: ".tab",
+			closable: "closable",
+			disabled: "disabled",
+			toolbar: "tab-toolbar",
+			toolbarContainer: "tab-toolbar-container",
+			container: "tab-container",
+			cssHidden: "tab-hidden",
+			cssActive: "tab-active",
+			cssCurrent: "current",
+			cssDisabled: "disabled"
 		}
 	}
 };

@@ -16,7 +16,7 @@
 		'util/formsubmit',
 		'util/ticker',
 		'widget/activity',
-		'widget/calendar',
+		'widget/datepicker',
 		'widget/iconizer',
 		'widget/notice',
 		'widget/tab'

@@ -4,71 +4,17 @@
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
-
-Js.util.formSubmit = function(js) 
-{
-	this.id = Jrun.pick(js.id, null);
-	this.url = Jrun.pick(js.url, null);
-	this.option = Jrun.pick(js.option, {});
-	this.setting = null;
-	this.formValidate = null;
-	
-	if(!!this.id && !!this.url && this.button) 
+Js.util.formSubmit = Js.util.buttonSubmit.extend({
+	__construct: function(js)
 	{
-		this.init();
+		this.id = Jrun.pick(js.id, null);
+		this.url = Jrun.pick(js.url, null);
+		this.button = this.id;
+		
+		// if id, url and button have been defined, straight away call this.init()
+		if(!!this.id && !!this.url && this.button) 
+		{
+			this.init(js.option);
+		}
 	}
-};
-
-Js.util.formSubmit.prototype = {
-	setup: function(option)
-	{
-		this.setting = Js.append(option, this.setting);
-	},
-	_prepSetting: function()
-	{
-		this.formValidate = Js.nue(this.setting);
-		this.formValidate.beforeStart = null;
-		this.formValidate.success = null;
-		this.formValidate.onError = null;
-	},
-	init: function() 
-	{
-		var that = this;
-		
-		this.setup(this.option);
-		this.setting = Js.append(this.setting, Js.config.util.formSubmit);
-		this._prepSetting();
-		
-		var method = Jrun.pickGrep(this.setting.method, /^(get|post)$/i);
-		
-		jQuery(that.id).submit(function() {
-			var form = new Js.ext.form();
-			var params = form.validate(that.id, that.formValidate);
-			
-			if(!!params) 
-			{
-			   jQuery.ajax({
-					type: method,
-					url: that.url,
-					data: params,
-					beforeSend: function() {
-						if(Jrun.isfunction(that.setting.beforeSend))
-						{
-							that.setting.beforeSend();
-						}
-					},
-					success: function(reply) {
-						if(Jrun.isfunction(that.setting.success)) 
-						{
-							that.setting.success(reply);
-						}
-						
-						Js.parse.xhr.init(reply);
-					}
-				});
-			}
-			
-			return false;
-		});
-	}
-};
+});

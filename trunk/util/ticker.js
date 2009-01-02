@@ -13,19 +13,16 @@
  * @constructor
  * @param {Object} node
  */
-Js.util.ticker = function(node) 
-{
-	this.element = null;
-	this.node = null;
-	
-	if (!!node && Jrun.trim(node) !== "") 
+Js.util.ticker = Js.base.create({
+	element: null,
+	node: null,
+	__construct: function(selector)
 	{
-		this.init(node);
-	}
-	
-	return this;
-};
-Js.util.ticker.prototype = {
+		if(Jrun.isset(selector))
+		{
+			this.init(selector);
+		}
+	},
 	/**
 	 * Initialize the HTML Element
 	 * 
@@ -33,9 +30,9 @@ Js.util.ticker.prototype = {
 	 * @param {Object} node
 	 * @return {Object}
 	 */
-	init: function(node) 
+	init: function(selector) 
 	{
-		this.element = Jrun.pick(node, null);
+		this.element = Jrun.pick(selector, null);
 		
 		if (Jrun.isset(this.element)) 
 		{ 
@@ -90,4 +87,4 @@ Js.util.ticker.prototype = {
 			}
 		});
 	}
-};
+});

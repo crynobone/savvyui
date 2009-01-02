@@ -45,6 +45,10 @@ Js.setup = {
 		simpleTab: function(option)
 		{
 			Js.config.widget.simpleTab = Js.append(option, Js.config.widget.simpleTab);
+		},
+		tab: function(option)
+		{
+			Js.config.widget.simpleTab = Js.append(option, Js.config.widget.simpleTab);
 		}
 	}
 };

@@ -1,9 +1,11 @@
 /**
+ * @projectDescription Parser Engine for Savvy.UI
+ * @memberOf Js
  * @version 1.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
-
+   
 /**
  * @alias Js.parse
  */

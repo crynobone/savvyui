@@ -1,5 +1,5 @@
 /**
- * @projectDescription Test value for Savvy.UI
+ * @projectDescription Input test script for Savvy.UI
  * @version 1.0.3
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
@@ -7,31 +7,31 @@
 
 Js.test = {
 	/**
-	 * Check if data is a string
+	 * Check if argument is a string
 	 * 
-	 * @param {String} [data] data should be a string
-	 * @return {Boolean}
+	 * @param {String} [data] argument to be tested
+	 * @return {Boolean} return true if argument is a string
 	 */
 	isString: function(data) 
 	{
 		return (typeof(data) == "string" && isNaN(data));
 	},
 	/**
-	 * Check if data is a number
+	 * Check if argument is a number
 	 * 
-	 * @param {Number} [data] data should be a number
-	 * @return {Boolean}
+	 * @param {Number} [data] argument to be tested
+	 * @return {Boolean} return true if argument is a number
 	 */
 	isNumber: function(data) 
 	{
 		return !isNaN(data);
 	},
 	/**
-	 * Compare 'regexp' with provided 'value'
+	 * Compare data with value
 	 * 
-	 * @param {String} regexp
-	 * @param {Object} value
-	 * @return {Boolean}
+	 * @param {String} [data] 
+	 * @param {Number} [value]
+	 * @return {Boolean} 
 	 */
 	isLength: function(data, value) 
 	{
@@ -64,7 +64,8 @@ Js.test = {
 		return result;
 	},
 	/**
-	 * Check if data is an email address
+	 * Check if argument is an email address
+	 * 
 	 * @param {String} data
 	 * @return {Boolean}
 	 */
@@ -73,7 +74,8 @@ Js.test = {
 		return (data.match(Js.config.test.email));
 	},
 	/**
-	 * Check if data is a URL
+	 * Check if argument is a URL
+	 * 
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
@@ -82,12 +84,17 @@ Js.test = {
 		return (data.match(Js.config.test.url));
 	},
 	/**
-	 * Check if data is an IP Address
+	 * Check if argument is an IP Address
+	 * 
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
 	isIpAddress: function(data) 
 	{
 		return (data.match(Js.config.test.ip));
+	},
+	isPostcode: function(data)
+	{
+		return (data.match(Js.config.test.postcode));
 	}
 };

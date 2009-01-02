@@ -21,7 +21,20 @@
 		<script type="text/javascript">
 		<!--
 		jQuery("<div/>").attr("id", "overlay").appendTo("body");
-		var activity = new Js.widget.activity("#overlay");
+		
+		Js.widget.activity2 = Js.widget.activity.extend({
+			hello: function()
+			{
+				alert("hello world");
+			},
+			__construct: function(selector, option)
+			{
+				this._parentConstruct(selector, option);
+				this.hello();
+			}
+		});
+		
+		var activity = new Js.widget.activity2("#overlay");
 		
 		jQuery("h1").click(function() {
 			activity.activate();

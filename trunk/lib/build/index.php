@@ -19,7 +19,7 @@
 		'widget/calendar',
 		'widget/iconizer',
 		'widget/notice',
-		'widget/simpletab'
+		'widget/tab'
 	);
 	
 	$script = '';

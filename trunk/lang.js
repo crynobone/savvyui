@@ -21,9 +21,9 @@ Js.lang = {
 		}
 	},
 	widget: {
-		calendar: {
+		datePicker: {
 			selectMonthYear: "",
-			buttonToday: ""
+			todayButton: "Select Today"
 		},
 		notice: {
 			title: {

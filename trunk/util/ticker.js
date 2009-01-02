@@ -80,10 +80,12 @@ Js.util.ticker.prototype = {
 		// loops all object
 		this.node.each(function(index, value) {
 			// reverse checkbox selection
-			if (value.checked == true) {
+			if (value.checked == true) 
+			{
 				value.checked = false; // uncheck
 			} 
-			else { 
+			else 
+			{ 
 				value.checked = true; // checked
 			}
 		});

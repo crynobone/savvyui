@@ -1,5 +1,5 @@
 /**
- * @projectDescription Form extension for Savvy.UI
+ * @projectDescription Form Validation extension for Savvy.UI
  * @memberOf Js.ext
  * @version 0.9.4
  * @author Mior Muhammad Zaki crynobone
@@ -8,7 +8,7 @@
 
 
 /**
- * @alias Js.ext.form
+ * @alias Js.ext.validate
  * @constructor
  * @return {Object} this object
  */
@@ -16,8 +16,13 @@ Js.ext.validate = Js.base.create({
 	node: null,
 	first: null,
 	setting: null,
-	__construct: function()
+	__construct: function(node, option)
 	{
+		if(Jrun.isset(node)) 
+		{
+			this.init(node, option);
+		}
+		
 		return this;
 	},
 	setup: function(option)
@@ -46,7 +51,7 @@ Js.ext.validate = Js.base.create({
 		
 		this.setup(option);
 		
-		this.setting = Js.append(this.setting, Js.config.ext.form);
+		this.setting = Js.append(this.setting, Js.config.ext.validate);
 		this._prepSetting();
 		var setting = this.setting;
 		
@@ -54,6 +59,7 @@ Js.ext.validate = Js.base.create({
 		var fnSuccess = Jrun.pick(setting.success, null);
 		var fnOnError = Jrun.pick(setting.onError, null);
 		var data = "";
+		var lang = Js.lang.ext.validate;
 		
 		this.first = null;
 		
@@ -82,7 +88,7 @@ Js.ext.validate = Js.base.create({
 						
 						// if the element is required
 						if (!!Jrun.inArray("required", klass) && Jrun.trim(node.value) === "") {
-							error = Js.lang.ext.form.required;
+							error = lang.required;
 						}
 						
 						// this set of validate only triggered when this.value isn't empty
@@ -90,23 +96,23 @@ Js.ext.validate = Js.base.create({
 						{
 							if (!!Jrun.inArray("string", klass) && !Js.test.isString(node.value)) 
 							{
-								error = Js.lang.ext.form.string;
+								error = lang.string;
 							}
 							else if ((!!Jrun.inArray("integer", klass) || !!Jrun.inArray("number", klass)) && !Js.test.isNumber(node.value)) 
 							{
-								error = Js.lang.ext.form.number;
+								error = lang.number;
 							}
 							else if (!!Jrun.inArray("email", klass) && !Js.test.isEmail(node.value))
 							{
-								error = Js.lang.ext.form.email;
+								error = lang.email;
 							}
 						}
 						
-						var testindex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
+						var testIndex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
 						
-						if (testindex >= 0) 
+						if (testIndex >= 0) 
 						{
-							var tester = Jrun.camelize(klass[testindex]);
+							var tester = Jrun.camelize(klass[testIndex]);
 							var validate = that.setting[tester];
 							
 							if (Jrun.isset(validate)) 
@@ -115,22 +121,23 @@ Js.ext.validate = Js.base.create({
 								
 								if (required === true && Jrun.trim(node.value) === "") 
 								{
-									error = validate.error || error;
+									error = (validate.error || error);
 								}
 								
 								if (Jrun.trim(node.value) !== "") 
 								{
 									if (Jrun.isfunction(validate.callback) && !validate.callback(node.value)) 
 									{
-										error = validate.error || error;
+										error = (validate.error || error);
 									}
 									else if (validate.test && !node.value.match(validate.test)) 
 									{
-										error = validate.error || error;
+										error = (validate.error || error);
 									}
 								}
 							}
 						}
+						
 						if (error !== "") 
 						{
 							that._error(node, error);
@@ -148,18 +155,18 @@ Js.ext.validate = Js.base.create({
 								{
 									if (type == "min") 
 									{
-										type = Js.lang.ext.form.lengthOption.minimum;
+										type = lang.lengthOption.minimum;
 									}
 									else if (type == "max") 
 									{
-										type = Js.lang.ext.form.lengthOption.maximum;
+										type = lang.lengthOption.maximum;
 									}
 									else if (type == "exact") 
 									{
-										type = Js.lang.ext.form.lengthOption.exact;
+										type = lang.lengthOption.exact;
 									}
 									
-									var note = Js.lang.ext.form.length;
+									var note = lang.length;
 									
 									note = note.replace(/{type}/, type);
 									note = note.replace(/{value}/, value);
@@ -220,7 +227,7 @@ Js.ext.validate = Js.base.create({
 		var fieldName = field.attr("name");
 		
 		var fieldErrorId = [form.attr("id"), fieldName, "error"].join("-");
-		var data = data || false;
+		var data = Jrun.pickStrict(data, false, "boolean");
 		
 		if (jQuery("#" + fieldErrorId).length == 0) 
 		{

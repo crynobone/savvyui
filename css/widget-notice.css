@@ -7,7 +7,6 @@
 	-moz-border-radius: 3px; 
 	padding: 25px 10px;
 	margin: 0 0 5px;
-	padding-left:120px;
 }
 .widget-activity .notice-error em {
 	color:#ff0000
@@ -22,7 +21,7 @@
 	color: #005826; 
 	-moz-border-radius: 3px; 
 	padding: 25px 10px; 
-	margin: 0 0 5px; padding-left:120px;
+	margin: 0 0 5px;
 }
 .widget-activity .notice-success em {
 	color:#339933
@@ -37,7 +36,7 @@
 	color: #7b2e00; 
 	-moz-border-radius: 3px; 
 	padding: 25px 10px; 
-	margin: 0 0 5px; padding-left:120px;
+	margin: 0 0 5px;
 }
 .widget-activity .notice-note em {
 	color:#f4cc37

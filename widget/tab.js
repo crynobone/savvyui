@@ -45,7 +45,7 @@ Js.widget.tab = Js.base.create({
 		
 		// set the first tab as active
 		this.activeHeader = jQuery("a[href=#" + this.activeTab.attr("id") + "]", this.header);
-		this.activeHeader.addClass(this.setting.currentHeader);
+		this.activeHeader.addClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssActive);
 		
 		// tab is activated

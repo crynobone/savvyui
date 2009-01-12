@@ -48,20 +48,19 @@
 		</div>
 		<script type="text/javascript">
 		<!--
-		var form = new Js.ext.form;
+		Js.debug.enable = true;
+		var form = new Js.ext.validate;
 		Js.setup.ext.form({
-			errorNode: "div.error-form",
 			customDate: {
 				test: /^(\d{2})\-(\d{2})\-(\d{4})$/,
 				error: "Require date input",
 				required: true
 			}
 		});
-		jQuery(function() {
+		
+		//jQuery(function() {
 			jQuery("#sample").submit(function() {
-				Js.debug.log("start ext.form");
-				
-				var validate = form.validate(this);
+				var validate = form.init(this);
 				if(!!validate) {
 					Js.util.Assert.isTrue(true, true, "Form has been validated, return following arguments: " + validate)
 				} else {
@@ -70,7 +69,7 @@
 				
 				return false;
 			});
-		});
+		//});
 		-->
 		</script>
 	</body>

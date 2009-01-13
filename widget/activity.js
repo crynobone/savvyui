@@ -32,7 +32,8 @@ Js.widget.activity = Js.base.create({
 	/**
 	 * Setup local setting for this object
 	 * 
-	 * @method
+	 * @methodvar errorNode = field.siblings(this.setting.error.node + "." + this.setting.error.cssMessage).eq(0);
+			
 	 * @param {Object} option
 	 */
 	setup: function(option)

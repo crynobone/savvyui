@@ -49,16 +49,17 @@
 		<script type="text/javascript">
 		<!--
 		Js.debug.enable = true;
+		Js.debug.dev = true;
 		var form = new Js.ext.validate;
-		Js.setup.ext.form({
+		Js.setup.ext.validate({
 			customDate: {
-				test: /^(\d{2})\-(\d{2})\-(\d{4})$/,
+				regex: /^(\d{2})\-(\d{2})\-(\d{4})$/,
 				error: "Require date input",
 				required: true
 			}
 		});
 		
-		//jQuery(function() {
+		jQuery(document).ready(function() {
 			jQuery("#sample").submit(function() {
 				var validate = form.init(this);
 				if(!!validate) {
@@ -69,7 +70,7 @@
 				
 				return false;
 			});
-		//});
+		});
 		-->
 		</script>
 	</body>

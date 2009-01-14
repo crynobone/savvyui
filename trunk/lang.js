@@ -7,7 +7,7 @@
 
 Js.lang = {
 	ext: {
-		form: {
+		validate: {
 			string: "Require alphanumeric character input",
 			number: "Require numberic input",
 			email: "Require valid e-mail address input",

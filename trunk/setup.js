@@ -6,9 +6,9 @@
 
 Js.setup = {
 	ext: {
-		form: function(option)
+		validate: function(option)
 		{
-			Js.config.ext.form = Js.append(option, Js.config.ext.form);
+			Js.config.ext.validate = Js.append(option, Js.config.ext.validate);
 		}
 	},
 	test: function(option)

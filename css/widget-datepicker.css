@@ -1,0 +1,41 @@
+.calendar-panel {
+	border: 4px solid #ddf;
+	display: block; 
+	float: left; 
+	width: 200px;
+	color: #3B5998;
+	background: #fff;
+	padding: 3px 2px;
+	margin: 5px;
+}
+.calendar-panel .this-month {
+	font-size: 13px;
+	font-weight: bold;
+	display: block;
+	text-align: center;
+	cursor: pointer;
+}
+.calendar-panel .prev-month {
+	float: left;
+	cursor: pointer;
+}
+.calendar-panel .next-month {
+	float: right;
+	cursor: pointer;
+}
+.calendar-panel .calendar-body {
+	width: 99%;
+	text-align: center;
+}
+.calendar-panel .calendar-body td {
+	padding: 2px 1px;
+}
+.calendar-panel .calendar-day-selected {
+	background: #336699;
+	color: #fff;
+}
+.calendar-panel .calendar-content, .calendar-panel .calendar-option {
+	border-top: 1px solid #e8e8e8;
+	margin: 5px 0 0;
+	padding: 5px 0 0;
+}

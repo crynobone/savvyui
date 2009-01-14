@@ -44,10 +44,15 @@ Js.config = {
 			background: "#fff",
 			zIndex: 5000
 		},
-		calendar: {
+		datePicker: {
+			days: ["S", "M", "T", "W", "T", "F", "S"],
+			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
+			daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+			dateFormat: /^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/,
+			onUpdate: null,
 			navigation: true,
 			fieldType: "hidden",
-			onUpdate: null,
 			beforeStart: null
 		},
 		iconizer: {

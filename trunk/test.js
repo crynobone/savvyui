@@ -37,12 +37,10 @@ Js.test = {
 	{
 		var result = null;
 		
-		if(data.match(/^(exact|min|max)\-(\d*)$/i)) 
-		{
+		if (data.match(/^(exact|min|max)\-(\d*)$/i)) {
 			var length = Jrun.toNumber(RegExp.$2);
 			
-			switch(RegExp.$1) 
-			{
+			switch(RegExp.$1) {
 				case 'max':
 					result = value <= length;
 					break;
@@ -56,8 +54,7 @@ Js.test = {
 					result = false;
 			}
 		}
-		else 
-		{
+		else {
 			result = false;
 		}
 		

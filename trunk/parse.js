@@ -60,8 +60,7 @@ Js.parse = {
 			
 			Js.debug.log("XHR: " + data);
 			
-			if (!!data.SUIXHR) 
-			{
+			if (!!data.SUIXHR) {
 				Js.parse.xhr.notice(data);
 				Js.parse.xhr.href(data);
 				Js.parse.xhr.update(data);
@@ -71,12 +70,10 @@ Js.parse = {
 		{
 			var note = Jrun.pickStrict(data.notice, "string");
 			
-			if (Jrun.isset(note) && note !== "") 
-			{
+			if (Jrun.isset(note) && note !== "") {
 				window.alert(note);
 				
-				if (!!console) 
-				{
+				if (!!console) {
 					console.log(note);
 				}
 			}
@@ -86,12 +83,10 @@ Js.parse = {
 			var href = Jrun.pickGrep(data.href, /^https?:\/\//g);
 			var xhref = Jrun.pickGrep(data.xhref, /^https?:\/\//g);
 			
-			if (Jrun.isset(xhref) && xhref !== "") 
-			{
+			if (Jrun.isset(xhref) && xhref !== "") {
 				Jrun.href(xhref, "_blank");
 			} 
-			else if (Jrun.isset(href) && href !== "") 
-			{
+			else if (Jrun.isset(href) && href !== "") {
 				Jrun.href(href);
 			}
 		},
@@ -102,18 +97,14 @@ Js.parse = {
 			var selector = Jrun.pickStrict(selector, "string");
 			var object = Jrun.pickStrict(data.exec, data.callback, null);
 			
-			if (!!args) 
-			{
-				if(!!selector) 
-				{
+			if (!!args) {
+				if(!!selector) {
 					jQuery(selector).html(args);
 				} 
-				else if (!!id) 
-				{
+				else if (!!id) {
 					jQuery("#" + id).html(args);
 				} 
-				else if (Jrun.isset(object)) 
-				{
+				else if (Jrun.isset(object)) {
 					// eval the function without making a callback
 					var callback = eval(object);
 					// execute the function

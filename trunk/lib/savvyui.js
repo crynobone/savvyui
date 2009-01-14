@@ -888,10 +888,15 @@ Js.config = {
 			background: "#fff",
 			zIndex: 5000
 		},
-		calendar: {
+		datePicker: {
+			days: ["S", "M", "T", "W", "T", "F", "S"],
+			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
+			daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+			dateFormat: /^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/,
+			onUpdate: null,
 			navigation: true,
 			fieldType: "hidden",
-			onUpdate: null,
 			beforeStart: null
 		},
 		iconizer: {
@@ -959,7 +964,7 @@ Js.setup = {
 		{
 			Js.config.widget.activity = Js.append(option, Js.config.widget.activity);
 		},
-		calendar: function(option)
+		datePicker: function(option)
 		{
 			Js.config.widget.calendar = Js.append(option, Js.config.widget.calendar);
 		},
@@ -1000,7 +1005,7 @@ Js.lang = {
 	},
 	widget: {
 		datePicker: {
-			selectMonthYear: "",
+			selectMonthYear: "Jump to specific month and year",
 			todayButton: "Select Today"
 		},
 		notice: {
@@ -2087,17 +2092,6 @@ Js.widget.activity = Js.base.create({
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
-Js.config.widget.datePicker = {
-	days: ["S", "M", "T", "W", "T", "F", "S"],
-	months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-	shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
-	daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-	dateFormat: /^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/,
-	onUpdate: null,
-	navigation: true,
-	fieldType: "hidden",
-	beforeStart: null
-};
 
 Js.widget.datePicker = Js.base.create({
 	field: null,
@@ -2528,7 +2522,7 @@ Js.widget.datePicker = Js.base.create({
 		
 		var wrapper = this.node;
 		
-		var header = jQuery("<div/>").appendTo(wrapper);
+		var header = jQuery("<div/>").appendTo(wrapper).setClass("calendar-title");
 		var content = jQuery("<div/>").appendTo(wrapper);
 		var footer = jQuery("<div/>").appendTo(wrapper);
 		
@@ -2536,8 +2530,8 @@ Js.widget.datePicker = Js.base.create({
 		var nextbtn = jQuery("<span/>").appendTo(header);
 		var title = jQuery("<span/>").appendTo(header);
 		
-		this.content = jQuery("<div/>").addClass("calendar-content").appendTo(content);
-		this.option = jQuery("<div/>").addClass("calendar-option").appendTo(content);
+		this.content = jQuery("<div/>").addClass("calendar-content").hide().appendTo(content);
+		this.option = jQuery("<div/>").addClass("calendar-option").hide().appendTo(content);
 		
 		var table = jQuery("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.content);
 		var tbody = jQuery("<tbody/>").appendTo(table);
@@ -2642,13 +2636,13 @@ Js.widget.datePicker = Js.base.create({
 				var i = that.node.data("toggle");
 				
 				if (i === 1) {
-					that.content.hide("normal");
-					that.option.show("normal");
+					that.content.slideUp("normal");
+					that.option.slideDown("normal");
 					that.node.data("toggle", 0);
 				}
 				else {
-					that.option.hide("normal");
-					that.content.show("normal");
+					that.option.slideUp("normal");
+					that.content.slideDown("normal");
 					that.node.data("toggle", 1);
 				}
 			};

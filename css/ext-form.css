@@ -1,6 +1,6 @@
 span.form-error-message { 
 	display: block; 
-	width: 50%; 
+	width: auto; 
 	background: #ffc; 
 	border: 1px solid #ff6; 
 	margin: 3px 0px; 

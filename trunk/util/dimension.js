@@ -16,16 +16,13 @@ Js.util.dimension = {
 				var offset = window.pageXOffset;
 				var el = document.documentElement;
 				
-				if (typeof(offset) == "number") 
-				{
+				if (typeof(offset) == "number") {
 					result = offset;
 				}
-				else if (doc && doc.scrollLeft) 
-				{
+				else if (doc && doc.scrollLeft) {
 					result = doc.scrollLeft;
 				}
-				else if (el && el.scrollLeft) 
-				{
+				else if (el && el.scrollLeft) {
 					result = el.scrollLeft;
 				}
 				
@@ -38,16 +35,13 @@ Js.util.dimension = {
 				var offset = window.pageYOffset;
 				var el = document.documentElement;
 				
-				if (typeof(offset) == "number") 
-				{
+				if (typeof(offset) == "number") {
 					result = offset;
 				}
-				else if (doc && doc.scrollTop) 
-				{
+				else if (doc && doc.scrollTop) {
 					result = doc.scrollLeft;
 				}
-				else if (el && el.scrollTop) 
-				{
+				else if (el && el.scrollTop) {
 					result = el.scrollLeft;
 				}
 				
@@ -85,25 +79,20 @@ Js.util.dimension = {
 			var result = [0, 0, 0, 0];
 			var loop = false;
 			
-			if(Jrun.isset(node)) 
-			{
-				if(node.offsetParent) 
-				{
+			if (Jrun.isset(node)) {
+				if (node.offsetParent) {
 					loop = true;
 					rdata[0] = node.offsetWidth;
 					rdata[1] = node.offsetHeight;
 					
-					while(node.offsetParent) 
-					{
+					while (node.offsetParent) {
 						result[2] += node.offsetTop;
 						result[3] += node.offsetLeft;
 						node = node.offsetParent;
 					}
 				} 
-				else 
-				{
-					if(loop == false) 
-					{
+				else {
+					if (loop == false) {
 						result[0] = Jrun.pick(node.scrollWidth, 0);
 						result[1] = Jrun.pick(node.scrollHeight, 0);
 						result[2] = Jrun.pick(node.offsetTop, 0);
@@ -112,8 +101,7 @@ Js.util.dimension = {
 				}
 				return result;
 			} 
-			else 
-			{
+			else {
 				Js.debug.log("Js.util.dimension.node.offset: failed because node does not exist");
 			}
 		}

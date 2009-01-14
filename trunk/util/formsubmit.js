@@ -13,8 +13,7 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
 		this.button = this.id;
 		
 		// if id, url and button have been defined, straight away call this.init()
-		if(!!this.id && !!this.url && this.button) 
-		{
+		if(!!this.id && !!this.url && this.button) {
 			this.init(js.option);
 		}
 	}

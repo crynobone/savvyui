@@ -8,8 +8,7 @@ Js.util.smartInput = Js.base.create({
 	node: null,
 	__construct: function(node) 
 	{
-		if(Jrun.isset(node))
-		{
+		if (Jrun.isset(node)) {
 			this.init(node);
 		}
 	},
@@ -48,5 +47,4 @@ Js.util.smartInput = Js.base.create({
 			}
 		});
 	}
-	
 });

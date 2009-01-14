@@ -23,10 +23,10 @@ Js.widget.activity = Js.base.create({
 	status: 0,
 	__construct: function(selector, option)
 	{
-		if (Jrun.isset(selector)) 
-		{
+		if (Jrun.isset(selector)) {
 			this.init(selector, option);
 		}
+		
 		return this;
 	},
 	/**
@@ -56,8 +56,7 @@ Js.widget.activity = Js.base.create({
 		this.setting = Js.append(this.setting, Js.config.widget.activity);
 		
 		this.node = jQuery(this.element);
-		if(this.node.length == 0) 
-		{
+		if (this.node.length == 0) {
 			jQuery("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
 		}
 		
@@ -74,16 +73,14 @@ Js.widget.activity = Js.base.create({
 	 */
 	activate: function(callback) 
 	{
-		if (this.status == 0) 
-		{
+		if (this.status == 0) {
 			this.node.css({
 				"display": "block"
 			}).fadeTo("normal", this.setting.opacity);
 			
 			var t = Js.util.dimension.page.middle(this.setting.boxWidth, this.setting.boxHeight);
 			
-			if (Jrun.isset(this.box)) 
-			{
+			if (Jrun.isset(this.box)) {
 				this.box.css({
 					top: "130px",
 					left: t[1] + "px"
@@ -93,8 +90,7 @@ Js.widget.activity = Js.base.create({
 		
 		this.status++;
 		
-		if(Jrun.isfunction(callback))
-		{
+		if (Jrun.isfunction(callback)) {
 			callback();
 		}
 	},
@@ -121,14 +117,12 @@ Js.widget.activity = Js.base.create({
 	 */
 	deactivate: function(callback) 
 	{
-		if(this.status > 0) 
-		{
-			this.node.fadeTo("normal", 0, function() {
+		if (this.status > 0) {
+			this.node.fadeTo("normal", 0, function(){
 				jQuery(this).css({
 					"display": "none"
 				});
-				if(Jrun.isfunction(callback))
-				{
+				if (Jrun.isfunction(callback)) {
 					callback();
 				}
 			});

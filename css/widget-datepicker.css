@@ -1,5 +1,4 @@
 .calendar-panel {
-	border: 4px solid #ddf;
 	display: block; 
 	float: left; 
 	width: 200px;
@@ -7,6 +6,11 @@
 	background: #fff;
 	padding: 3px 2px;
 	margin: 5px;
+}
+.calendar-panel .calendar-title {
+	background: #3B5998;
+	color: #fff;
+	padding: 5px;
 }
 .calendar-panel .this-month {
 	font-size: 13px;
@@ -24,7 +28,7 @@
 	cursor: pointer;
 }
 .calendar-panel .calendar-body {
-	width: 99%;
+	width: 100%;
 	text-align: center;
 }
 .calendar-panel .calendar-body td {
@@ -35,7 +39,8 @@
 	color: #fff;
 }
 .calendar-panel .calendar-content, .calendar-panel .calendar-option {
-	border-top: 1px solid #e8e8e8;
-	margin: 5px 0 0;
-	padding: 5px 0 0;
+	padding: 5px 3px 10px;
+	background: #fff;
+	border: 1px solid #D3DAE8;
+	
 }

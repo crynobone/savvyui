@@ -433,7 +433,7 @@ Js.widget.datePicker = Js.base.create({
 		
 		var wrapper = this.node;
 		
-		var header = jQuery("<div/>").appendTo(wrapper);
+		var header = jQuery("<div/>").appendTo(wrapper).setClass("calendar-title");
 		var content = jQuery("<div/>").appendTo(wrapper);
 		var footer = jQuery("<div/>").appendTo(wrapper);
 		
@@ -441,8 +441,8 @@ Js.widget.datePicker = Js.base.create({
 		var nextbtn = jQuery("<span/>").appendTo(header);
 		var title = jQuery("<span/>").appendTo(header);
 		
-		this.content = jQuery("<div/>").addClass("calendar-content").appendTo(content);
-		this.option = jQuery("<div/>").addClass("calendar-option").appendTo(content);
+		this.content = jQuery("<div/>").addClass("calendar-content").hide().appendTo(content);
+		this.option = jQuery("<div/>").addClass("calendar-option").hide().appendTo(content);
 		
 		var table = jQuery("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.content);
 		var tbody = jQuery("<tbody/>").appendTo(table);
@@ -547,13 +547,13 @@ Js.widget.datePicker = Js.base.create({
 				var i = that.node.data("toggle");
 				
 				if (i === 1) {
-					that.content.hide("normal");
-					that.option.show("normal");
+					that.content.slideUp("normal");
+					that.option.slideDown("normal");
 					that.node.data("toggle", 0);
 				}
 				else {
-					that.option.hide("normal");
-					that.content.show("normal");
+					that.option.slideUp("normal");
+					that.content.slideDown("normal");
 					that.node.data("toggle", 1);
 				}
 			};

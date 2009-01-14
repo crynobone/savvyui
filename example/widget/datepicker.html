@@ -11,12 +11,20 @@
 	<body>
 		<h1>Js.widget.activity</h1>
 		<div id="result">
-			<h3>Tab 1</h3>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
-			<h3>Tab 2</h3>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
-			<h3>Tab 3</h3>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nibh commodo purus. Duis dui nisi, egestas vel, dignissim in, aliquam a, massa. Aenean nec purus sit amet lectus pretium molestie. Etiam id lacus quis ante tincidunt pharetra. Nulla facilisi. Donec eros tortor, lobortis in, aliquet at, gravida vel, lectus. Donec lacinia dignissim magna. Mauris ligula augue, vestibulum non, ornare quis, luctus a, nibh. Nam eget justo. Maecenas iaculis ornare arcu. Ut sagittis libero in quam. Nam posuere tincidunt tellus. Cras vehicula, dui a pretium euismod, metus dui vestibulum dui, consectetur egestas nunc nunc a erat. Suspendisse aliquam quam sit amet mi. Pellentesque pede nibh, rhoncus at, auctor suscipit, pulvinar sit amet, arcu. Suspendisse accumsan sapien vitae massa. Suspendisse fermentum, lacus eu volutpat fermentum, risus lectus fermentum eros, sit amet fringilla tellus felis eget justo. Praesent dignissim. Praesent metus lorem, mattis in, ullamcorper sed, convallis in, magna. </p>
+			<pre>
+				var dates = new Js.widget.datePicker({
+				value: "",
+				renderTo: "#datepicker",
+				field:"date_value",
+				element: "#calendar",
+				range: ["+120", "-15"],
+				option: {
+					onUpdate: (function(){
+						alert(this.value);
+					})
+				}
+			});
+			</pre>
 		</div>
 		<div id="datepicker">
 			

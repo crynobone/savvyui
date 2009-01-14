@@ -15,8 +15,7 @@ Js.widget.iconizer = Js.base.create({
 	setting: null,
 	__construct: function(option)
 	{
-		if(Jrun.isset(option))
-		{
+		if (Jrun.isset(option)) {
 			this.init(option);
 		}
 	},
@@ -45,17 +44,14 @@ Js.widget.iconizer = Js.base.create({
 			var klas = object.attr("className");
 			var klass = klas.split(/ /);
 			
-			for(var i = 0; i < klass.length; i++) 
-			{
-				if(klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) 
-				{
+			for (var i = 0; i < klass.length; i++) {
+				if (klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) {
 					var append = (RegExp.$1 == "-append" ? true : false);
 					var pos = Jrun.pickGrep(RegExp.$1, "left", /^(left|right)$/i);
 					var icon = RegExp.$3;
 					var bg = that.setting.folder + icon + "." + that.setting.fileType;
 					
-					if(!!append) 
-					{
+					if (!!append) {
 						var obj = jQuery("<span/>").css({
 							"display": "block",
 							"cssFloat": pos,
@@ -63,32 +59,27 @@ Js.widget.iconizer = Js.base.create({
 							"height": "16px"
 						}).prependTo(object);
 						
-						if(pos == "left") 
-						{
+						if (pos == "left") {
 							obj.css({
 								"background": "url('" + bg + "') no-repeat left",
 								"marginRight": "3px"
 							});
-						} 
-						else 
-						{
+						}
+						else {
 							obj.css({
 								"background": "url('" + bg + "') no-repeat right",
 								"marginLeft": "3px"
 							});
 						}
-					} 
-					else 
-					{
-						if(pos == "left") 
-						{
+					}
+					else {
+						if (pos == "left") {
 							object.css({
 								"background": "url('" + bg + "') no-repeat left center",
 								"paddingLeft": "17px"
 							});
-						} 
-						else 
-						{
+						}
+						else {
 							object.css({
 								"background": "url('" + bg + "') no-repeat right center",
 								"paddingRight": "17px"

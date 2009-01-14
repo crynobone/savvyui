@@ -36,8 +36,7 @@ Js.widget.datePicker = Js.base.create({
 	year: null,
 	__construct: function(js)
 	{
-		if (Jrun.typeOf(js) === "object") 
-		{
+		if (Jrun.typeOf(js) === "object") {
 			this.init(js);
 		}
 	},
@@ -68,12 +67,10 @@ Js.widget.datePicker = Js.base.create({
 		this.element = Jrun.prep(Jrun.pick(js.element, this.element));
 		this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
 		
-		if(!this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType)) 
-		{
+		if(!this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType)) {
 			this.renderTo = jQuery("<div/>").appendTo("body");
 		} 
-		else if(typeof(this.renderTo) === "string" || this.renderTo.nodeType) 
-		{
+		else if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) {
 			this.renderTo = jQuery(this.renderTo).eq(0);
 		}
 		
@@ -82,26 +79,22 @@ Js.widget.datePicker = Js.base.create({
 		this.type = Jrun.pickGrep(js.type, this.type, "single", /^(single|multiple)$/g);
 		
 		// check if minimum date have been set
-		if (!!js.minDate && this.setting.dateFormat.test(js.minDate)) 
-		{
+		if (!!js.minDate && this.setting.dateFormat.test(js.minDate)) {
 			this.minDate = Jrun.pick(js.minDate, null);
 		}
 		
 		// check if maximum date have been set
-		if (!!js.maxDate && this.setting.dateFormat.test(js.maxDate)) 
-		{
+		if (!!js.maxDate && this.setting.dateFormat.test(js.maxDate)) {
 			this.maxDate = Jrun.pick(js.maxDate, null);
 		}
 		
-		if (!!js.value && this.setting.dateFormat.test(js.value)) 
-		{
+		if (!!js.value && this.setting.dateFormat.test(js.value)) {
 			var todayDate = js.value.match(this.setting.dateFormat);
 			js.month = RegExp.$2;
 			js.year = RegExp.$1;
 			js.day = RegExp.$3;
 		} 
-		else if (!!js.value && js.value === "today") 
-		{
+		else if (!!js.value && js.value === "today") {
 			// get today date
 			var tmpdate = new Date();
 			js.month = tmpdate.getMonth();
@@ -121,25 +114,20 @@ Js.widget.datePicker = Js.base.create({
 			var result = null;
 			var year = that.dateObject.getFullYear();
 			
-			if (!data || data.toLowerCase() == "now") 
-			{
+			if (!data || data.toLowerCase() == "now") {
 				result = year; 
 			}
-			else if (data.match(/^(\+|\-)?(\d{1,4})$/)) 
-			{
+			else if (data.match(/^(\+|\-)?(\d{1,4})$/)) {
 				var plus = RegExp.$1;
 				var value = RegExp.$2;
 				
-				if(plus == "+")
-				{
+				if (plus == "+") {
 					result = (year + Jrun.toNumber(value));
 				}
-				else if(plus == "-")
-				{
+				else if (plus == "-") {
 					result = (year - Jrun.toNumber(value));
 				}
-				else 
-				{
+				else {
 					result = value;
 				}
 			}
@@ -147,13 +135,11 @@ Js.widget.datePicker = Js.base.create({
 			return result;
 		};
 		
-		if(this.navigation == true) 
-		{
+		if (this.navigation == true) {
 			js.range[0] = _getRange(js.range[0]);
 			js.range[1] = _getRange(js.range[1]);
 			
-			if(js.range[0] < js.range[1]) 
-			{
+			if (js.range[0] < js.range[1]) {
 				var tmp = js.range[0];
 				js.range[0] = js.range[1];
 				js.range[1] = tmp;
@@ -163,8 +149,7 @@ Js.widget.datePicker = Js.base.create({
 			this.range = [this.maxYear(js.range[0]), this.minYear(js.range[1])];
 		}
 		
-		if(Jrun.isfunction(this.setting.beforeStart)) 
-		{
+		if (Jrun.isfunction(this.setting.beforeStart)) {
 			this.setting.beforeStart();
 		}
 		
@@ -177,13 +162,11 @@ Js.widget.datePicker = Js.base.create({
 	{
 		var data = year;
 		
-		if (this.minDate) 
-		{
+		if (this.minDate) {
 			var minDate = this.minDate.split("-");
 			var newYear = Jrun.toNumber(minDate[0]);
 			
-			if(newYear > data) 
-			{ 
+			if (newYear > data) {
 				data = newYear;
 			}
 		}
@@ -194,13 +177,11 @@ Js.widget.datePicker = Js.base.create({
 	{
 		var data = year;
 		
-		if(this.maxDate) 
-		{
+		if (this.maxDate) {
 			var maxDate = this.maxDate.split("-");
 			var newYear = Jrun.toNumber(maxDate[0]);
 			
-			if(newYear < data) 
-			{
+			if (newYear < data) {
 				data = newYear;
 			}
 		}
@@ -215,13 +196,11 @@ Js.widget.datePicker = Js.base.create({
 		this.year = this.dateObject.getFullYear();
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
-		if(this.validation()) 
-		{
+		if (this.validation()) {
 			this.renderTo.html("");
 			this.callback();
-		} 
-		else 
-		{
+		}
+		else {
 			this.dateObject = new Date(this.year, (this.month + 1));
 			this.month = this.dateObject.getMonth();
 			this.year = this.dateObject.getFullYear();
@@ -238,13 +217,11 @@ Js.widget.datePicker = Js.base.create({
 		this.year = this.dateObject.getFullYear();
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
-		if(this.validation()) 
-		{
+		if (this.validation()) {
 			this.renderTo.html("");
 			this.callback();
-		} 
-		else 
-		{
+		}
+		else {
 			this.dateObject = new Date((this.year + 1), this.month);
 			this.month = this.dateObject.getMonth();
 			this.year = this.dateObject.getFullYear();
@@ -261,13 +238,11 @@ Js.widget.datePicker = Js.base.create({
 		this.year = this.dateObject.getFullYear();
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
-		if(this.validation()) 
-		{
+		if (this.validation()) {
 			this.renderTo.html("");
 			this.callback();
-		} 
-		else 
-		{
+		}
+		else {
 			this.dateObject = new Date(this.year, (this.month - 1));
 			this.month = this.dateObject.getMonth();
 			this.year = this.dateObject.getFullYear();
@@ -284,13 +259,11 @@ Js.widget.datePicker = Js.base.create({
 		this.year = this.dateObject.getFullYear();
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
-		if(this.validation())
-		{
+		if (this.validation()) {
 			this.renderTo.html("");
 			this.callback();
-		} 
-		else 
-		{
+		}
+		else {
 			this.dateObject = new Date((this.year - 1), this.month);
 			this.month = this.dateObject.getMonth();
 			this.year = this.dateObject.getFullYear();
@@ -307,15 +280,13 @@ Js.widget.datePicker = Js.base.create({
 		var tempYear = this.dateObject.getFullYear();
 		this.date = [tempYear, (tempMonth + 1), this.dayOfMonth(tempMonth, tempYear)].join("-");
 		
-		if(this.validation()) 
-		{
+		if (this.validation()) {
 			this.year = tempYear;
 			this.month = tempMonth;
 			this.renderTo.html("");
 			this.callback();
-		} 
-		else 
-		{
+		}
+		else {
 			this.dateObject = new Date(this.year, this.month);
 			this.date = [this.year, (this.month + 1), "1"].join("-");
 			this.renderTo.html("");
@@ -332,15 +303,13 @@ Js.widget.datePicker = Js.base.create({
 		var tempYear = this.dateObject.getFullYear();
 		this.date = [tempYear, (tempMonth + 1), this.dayOfMonth(tempMonth, tempYear)].join("-");
 		
-		if(this.validation()) 
-		{
+		if (this.validation()) {
 			this.year = tempYear;
 			this.month = tempMonth;
 			this.renderTo.html("");
 			this.callback();
-		} 
-		else 
-		{
+		}
+		else {
 			this.dateObject = new Date(this.year, this.month);
 			this.date = [this.year, (this.month + 1), "1"].join("-");
 			this.renderTo.html("");
@@ -366,20 +335,16 @@ Js.widget.datePicker = Js.base.create({
 		var minDate = Jrun.isset(this.minDate);
 		var maxDate = Jrun.isset(this.maxDate);
 		
-		if (minDate && maxDate && this.compare(minDate, this.date) && this.compare(this.date, maxDate)) 
-		{
+		if (minDate && maxDate && this.compare(minDate, this.date) && this.compare(this.date, maxDate)) {
 			data = true;
 		} 
-		else if (minDate && this.compare(minDate, this.date)) 
-		{
+		else if (minDate && this.compare(minDate, this.date)) {
 			data = true;
 		} 
-		else if (maxDate && this.compare(this.date, maxDate)) 
-		{
+		else if (maxDate && this.compare(this.date, maxDate)) {
 			data = true;
 		} 
-		else if (!minDate && !maxDate) 
-		{
+		else if (!minDate && !maxDate) {
 			data = true;
 		}
 		
@@ -390,8 +355,7 @@ Js.widget.datePicker = Js.base.create({
 		var month = Jrun.pick(month, this.month);
 		var year = Jrun.pick(year, this.year);
 		
-		if (month == 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) 
-		{
+		if (month == 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
 			var monthLength = 29;
 		}
 		
@@ -418,12 +382,9 @@ Js.widget.datePicker = Js.base.create({
 		var months = (month < 10 ? "0" + month : month);
 		var days = (day < 10 ? "0" + day : day);
 		
-		if(this.type == "single") 
-		{
-			if(!field.hasClass("calendar-day-selected")) 
-			{
-				if (Jrun.isset(this.lastDate) && jQuery("#" + this.element + "_" + this.lastDate).length > 0) 
-				{
+		if(this.type == "single") {
+			if (!field.hasClass("calendar-day-selected")) {
+				if (Jrun.isset(this.lastDate) && jQuery("#" + this.element + "_" + this.lastDate).length > 0) {
 					var lastdate = jQuery("#" + this.element + "_" + this.lastDate).setClass("calendar-day");
 				}
 				
@@ -432,28 +393,25 @@ Js.widget.datePicker = Js.base.create({
 				
 				calendar.val(this.value);
 				this.lastDate = [year, month, day].join("");
-			} 
-			else 
-			{
+			}
+			else {
 				field.setClass("calendar-day");
 				calendar.val("");
 			}
 		} 
-		else if (this.type == "multiple") 
-		{
+		else if (this.type == "multiple") {
 			var value = calendar.val();
 			var values = value.split("|");
 			
-			if(Jrun.inArray([year, months, days].join("-"), values)){
+			if (Jrun.inArray([year, months, days].join("-"), values)) {
 				values.splice(values.indexOf([year, months, days].join("-")), 1);
 				value = values.join("|");
 				
 				field.setClass("calendar-day");
 				this.value = value;
 				calendar.val(this.value);
-			} 
-			else 
-			{
+			}
+			else {
 				field.setClass("calendar-day-selected");
 				values[values.length] = [year, months, days].join("-");
 				this.value = values.join("|");
@@ -461,8 +419,7 @@ Js.widget.datePicker = Js.base.create({
 			}
 		}
 		
-		if(Jrun.isfunction(this.setting.onUpdate))
-		{
+		if (Jrun.isfunction(this.setting.onUpdate)) {
 			this.setting.onUpdate.call(this);
 		}
 		
@@ -503,126 +460,109 @@ Js.widget.datePicker = Js.base.create({
 		
 		var trheader = jQuery("<tr/>").addClass("calendar-header").appendTo(tbody);
 		
-		for(var i = 0; i <= 6; i++) 
-		{
+		for (var i = 0; i <= 6; i++) {
 			jQuery("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader);
 		}
 		
 		var day = 1;
 		
-		for(var i = 0; i < 6; i++) 
-		{
+		for (var i = 0; i < 6; i++) {
 			var weeks = jQuery("<tr/>").addClass("calendar-week").appendTo(tbody);
 			
-			for(var j = 0; j <= 6; j++) 
-			{
+			for (var j = 0; j <= 6; j++) {
 				this.date = [this.year, (this.month + 1), day].join("-");
 				var days = jQuery("<td/>").addClass("calendar-" + (this.validation() ? "day" : "invalid")).appendTo(weeks);
 				
-				if(day <= monthLength && (i > 0 || j >= start_day)) 
-				{
+				if (day <= monthLength && (i > 0 || j >= start_day)) {
 					days.attr("id", this.element + "_" + this.year + (this.month + 1) + day);
 					var tday;
 					
-					if(this.validation()) 
-					{
-						days.bind("click", function() {
-							
+					if (this.validation()) {
+						days.bind("click", function(){
+						
 							var i = jQuery(this).attr("id").split("_");
 							var count = (i.length - 1);
 							var ym = that.year + "" + that.month;
 							tday = i[count].substr((ym.length), i[count].length);
-							that.updateValue(that.year, (that.month + 1), Jrun.toNumber(tday));  
+							that.updateValue(that.year, (that.month + 1), Jrun.toNumber(tday));
 						});
 					}
 					
-					if(day == this.day) 
-					{
+					if (day == this.day) {
 						days.setClass("calendar-day-selected");
 						this.lastdate = this.year + "" + (this.month + 1) + "" + Jrun.toNumber(this.day);
-					} 
+					}
 					
 					days.css("cursor", "pointer");
 					
 					days.html(day.toString());
 					day++;
-				} 
-				else 
-				{
+				}
+				else {
 					days.html("&nbsp;").setClass("calendar-invalid");
 				}
 			}
 			
-			if(day > monthLength) 
-			{
+			if (day > monthLength) {
 				break;
 			}
 		}
 		
 		
-		if(this.setting.navigation == true) 
-		{
-			prevbtn.html("&laquo;").bind("click", function() {
-				that.prevMonth();					  
+		if (this.setting.navigation == true) {
+			prevbtn.html("&laquo;").bind("click", function(){
+				that.prevMonth();
 			}).setClass("prev-month");
 			
-			nextbtn.html("&raquo;").bind("click", function() {
+			nextbtn.html("&raquo;").bind("click", function(){
 				that.nextMonth();
 			}).setClass("next-month");
 			
 			jQuery("<p/>").text(Js.lang.widget.datePicker.selectMonthYear).appendTo(this.option);
 			
-			var selmonth = jQuery("<select name='month'></select>").bind("change", function() {
+			var selmonth = jQuery("<select name='month'></select>").bind("change", function(){
 				that.customMonth(this.value);
 			}).appendTo(this.option);
 			
-			for(var i = 0; i < 12; i++) 
-			{
-				if(this.month == i) 
-				{
+			for (var i = 0; i < 12; i++) {
+				if (this.month == i) {
 					jQuery("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth);
-				} 
-				else 
-				{
+				}
+				else {
 					jQuery("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth);
 				}
 			}
 			
-			var selyear = jQuery("<select name='year'></select>").text(" ").bind("change", function() {
+			var selyear = jQuery("<select name='year'></select>").text(" ").bind("change", function(){
 				that.customYear(this.value);
 			}).appendTo(this.option);
 			
-			for(var i = this.range[0]; i >= this.range[1]; i--) 
-			{
-				if(this.year == i) 
-				{
+			for (var i = this.range[0]; i >= this.range[1]; i--) {
+				if (this.year == i) {
 					jQuery("<option value='" + i + "' selected='selected'></option>").text(i.toString()).appendTo(selyear);
-				} 
-				else 
-				{ 
+				}
+				else {
 					jQuery("<option value='" + i + "'></option>").text(i.toString()).appendTo(selyear);
 				}
 			}
 			
-			jQuery("<input type='button' name='today' />").val(Js.lang.widget.datePicker.todayButton).bind("click", function() {
-				that.today();													
+			jQuery("<input type='button' name='today' />").val(Js.lang.widget.datePicker.todayButton).bind("click", function(){
+				that.today();
 			}).addClass("select-today").appendTo(this.option);
 			
 			title.setClass("this-month").html(this.setting.months[this.month] + "&nbsp;" + this.year);
 			this.node.data("toggle", 0);
-			//Js.hash.set(this.element, "toggle", 1);
 			
-			var _toggleContent =  function() {
+			var _toggleContent = function()
+			{
 				var i = that.node.data("toggle");
 				
-				if(i === 1) 
-				{
+				if (i === 1) {
 					that.content.hide("normal");
 					that.option.show("normal");
 					that.node.data("toggle", 0);
-				} 
-				else 
-				{
+				}
+				else {
 					that.option.hide("normal");
 					that.content.show("normal");
 					that.node.data("toggle", 1);
@@ -631,18 +571,15 @@ Js.widget.datePicker = Js.base.create({
 			
 			title.css("cursor", "pointer").bind("click", _toggleContent);
 			_toggleContent();
-		} 
-		else 
-		{
+		}
+		else {
 			title.setClass("this-month").html(this.settings.months[this.month] + "&nbsp;" + this.year);
 		}
 		
-		if (Jrun.isset(this.field)) 
-		{
+		if (Jrun.isset(this.field)) {
 			var input = jQuery("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.setting.fieldType + "' />").appendTo(this.content);
 			
-			if (Jrun.isset(this.day)) 
-			{
+			if (Jrun.isset(this.day)) {
 				var m = (this.month + 1);
 				this.value = [this.year, (m < 10 ? "0" + m : m), this.day].join("-");
 				input.val(this.value);

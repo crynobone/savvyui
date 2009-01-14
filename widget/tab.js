@@ -17,8 +17,7 @@ Js.widget.tab = Js.base.create({
 	setting: null,
 	__construct: function(selector, option)
 	{
-		if(!!Jrun.isset(selector)) 
-		{
+		if (!!Jrun.isset(selector)) {
 			this.init(selector, option);
 		}
 	},
@@ -104,10 +103,9 @@ Js.widget.tab = Js.base.create({
 		jQuery("<em/>").appendTo(a);
 		a.text(title);
 				
-		if(!!closable) 
-		{
-			jQuery("<span/>").css("paddingLeft", "10px").text("x").click(function() {
-				var my = jQuery(this.parentNode).click(function() {
+		if (!!closable) {
+			jQuery("<span/>").css("paddingLeft", "10px").text("x").click(function(){
+				var my = jQuery(this.parentNode).click(function(){
 					return false;
 				});
 				
@@ -121,15 +119,13 @@ Js.widget.tab = Js.base.create({
 			}).appendTo(a);
 		}
 		
-		if(!!disabled) 
-		{
-			a.setClass(this.setting.cssDisabled).bind(this.handler, function() {
+		if (!!disabled) {
+			a.setClass(this.setting.cssDisabled).bind(this.handler, function(){
 				return false;
 			});
 		}
-		else 
-		{
-			a.bind(this.handler, function() {
+		else {
+			a.bind(this.handler, function(){
 				that.activateTab(this);
 				return false;
 			});
@@ -182,33 +178,29 @@ Js.widget.tab = Js.base.create({
 	{
 		var active = jQuery("li > a", this.header);
 		
-		if(active.length > 0) 
-		{
+		if (active.length > 0) {
 			this.activateTab(active.eq(0));
 		}
 	},
 	toggle: function() 
 	{
-		if(this.status == "on") 
-		{
+		if (this.status == "on") {
 			this.toolbar.hide();
 			jQuery("div." + this.setting.cssHidden, this.object).setClass(this.setting.cssActive);
 			this.status = "off";
-		} 
-		else 
-		{
+		}
+		else {
 			this.toolbar.show();
 			jQuery("div." + this.setting.cssActive, this.object).setClass(this.setting.cssHidden);
 			this.activeTab.setClass(this.setting.cssActive);
-			this.status = "on";	
+			this.status = "on";
 		}
 	},
 	addTab: function(js) 
 	{
 		var that = this;
 		
-		if(!!js.id && Jrun.typeOf(js.id) === "string") 
-		{
+		if (!!js.id && Jrun.typeOf(js.id) === "string") {
 			var title = Jrun.pick(js.title, "Untitled");
 			var id = js.id;
 			var content = Jrun.pick(js.content, "");
@@ -216,28 +208,27 @@ Js.widget.tab = Js.base.create({
 			var set = Jrun.pick(js.activate, false);
 			
 			var node = jQuery('<div/>').attr({
-				id: id, 
+				id: id,
 				className: this.setting.cssHidden
 			}).html(content).appendTo(this.node);
 			
 			var li = jQuery('<li/>').appendTo(this.header);
 			var a = jQuery('<a/>').attr({
-				href: "#" + id, 
+				href: "#" + id,
 				title: title
 			}).appendTo(li);
 			
 			jQuery("<em/>").appendTo(a);
-			a.text(title).bind(this.handler, function() {
+			a.text(title).bind(this.handler, function(){
 				that.activateTab(this);
 				return false;
 			});
 			
-			if (!!closable) 
-			{
-				jQuery("<span/>").click(function() {
+			if (!!closable) {
+				jQuery("<span/>").click(function(){
 					var href = jQuery(this.parentNode).attr("href");
 					that.activeHeader.removeClass();
-					that.activeTab.setClass(that.setting.hidden).fadeOut("normal", function() {
+					that.activeTab.setClass(that.setting.hidden).fadeOut("normal", function(){
 						jQuery(this).remove();
 					});
 					jQuery(href).remove();
@@ -247,8 +238,7 @@ Js.widget.tab = Js.base.create({
 				}).css("paddingLeft", "10px").text("x").appendTo(a);
 			}
 			
-			if(!!set) 
-			{
+			if (!!set) {
 				this.activateTab(node);
 			}
 		}

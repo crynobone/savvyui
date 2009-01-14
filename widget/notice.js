@@ -27,11 +27,11 @@ Js.widget.notice = Js.widget.activity.extend({
 	closeNotice: function() 
 	{
 		var that = this;
-		if(Jrun.isfunction(this.callback)) 
-		{
+		if (Jrun.isfunction(this.callback)) {
 			this.callback();
 			this.callback = null;
 		}
+		
 		this.node.deactivate(function() {
 			that.node.box.html("");
 		});
@@ -48,12 +48,10 @@ Js.widget.notice = Js.widget.activity.extend({
 		var message = "";
 		var opt = false;
 		
-		if(Jrun.typeOf(note) != "object") 
-		{
+		if (Jrun.typeOf(note) != "object") {
 			title = note;
-		} 
-		else 
-		{
+		}
+		else {
 			title = Jrun.pick(note.title, "");
 			message = Jrun.pick(note.message, "");
 			var opt = Jrun.pick(note.sticky, false);
@@ -62,8 +60,7 @@ Js.widget.notice = Js.widget.activity.extend({
 		this.node.box.setClass(this.setting['css' + Jrun.toProperCase(status)]);
 		jQuery("<h3/>").text(title).appendTo(this.node.box);
 		
-		if(message != "") 
-		{
+		if (message != "") {
 			var p = jQuery("<p/>").html("" + message).appendTo(this.node.box);
 		}
 		
@@ -73,8 +70,8 @@ Js.widget.notice = Js.widget.activity.extend({
 			that.closeNotice();
 		});
 		
-		if(opt == false) {
-			setTimeout(function() { 
+		if (opt == false) {
+			setTimeout(function(){
 				that.closeNotice();
 			}, (this.setting.seconds * 1000));
 		}

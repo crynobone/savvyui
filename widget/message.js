@@ -21,8 +21,7 @@ Js.widget.message = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.message);
 		
-		if(Jrun.isnull(this.node))
-		{
+		if (Jrun.isnull(this.node)) {
 			this.init();
 		}
 	},
@@ -30,8 +29,7 @@ Js.widget.message = Js.base.create({
 	{
 		var that = this;
 		
-		if(Jrun.isnull(this.node)) 
-		{
+		if (Jrun.isnull(this.node)) {
 			this.init();
 		}
 		
@@ -44,8 +42,7 @@ Js.widget.message = Js.base.create({
 				className: "widgetmessage-box"
 			}).css("margin", "2px 0px").appendTo(that.node).hide();
 			
-			if(!!closable) 
-			{
+			if (!!closable) {
 				var span = jQuery("<span/>").attr({
 					className: "widgetmessage-close"
 				}).text("x").appendTo(div);
@@ -60,17 +57,18 @@ Js.widget.message = Js.base.create({
 				});
 			}, (this.setting.seconds * 1000));
 			
-			if(!!closable) {
-				span.bind("click", function() {
+			if (!!closable) {
+				span.bind("click", function(){
 					clearTimeout(t);
 					t = null;
 					
-					div.hide("normal", function() {
+					div.hide("normal", function(){
 						span.remove();
-						p.remove();					  
+						p.remove();
 					});
 				});
 			}
+			
 			div.setClass(type);
 			div.show("slow");
 		})();
@@ -80,8 +78,7 @@ Js.widget.message = Js.base.create({
 		var that = this;
 		
 		this.node = jQuery("#" + this.setting.identifier);
-		if(this.node.length < 1)
-		{
+		if (this.node.length < 1) {
 			this.node = jQuery("<div/>").attr({
 				id: this.setting.identifier
 			}).appendTo("body");

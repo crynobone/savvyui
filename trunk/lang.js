@@ -22,7 +22,7 @@ Js.lang = {
 	},
 	widget: {
 		datePicker: {
-			selectMonthYear: "",
+			selectMonthYear: "Jump to specific month and year",
 			todayButton: "Select Today"
 		},
 		notice: {

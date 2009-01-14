@@ -30,7 +30,7 @@ Js.setup = {
 		{
 			Js.config.widget.activity = Js.append(option, Js.config.widget.activity);
 		},
-		calendar: function(option)
+		datePicker: function(option)
 		{
 			Js.config.widget.calendar = Js.append(option, Js.config.widget.calendar);
 		},

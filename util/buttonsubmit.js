@@ -25,8 +25,7 @@ Js.util.buttonSubmit = Js.base.create({
 		this.button = Jrun.pick(js.button, null);
 		
 		// if id, url and button have been defined, straight away call this.init()
-		if(!!this.id && !!this.url && this.button) 
-		{
+		if (!!this.id && !!this.url && this.button) {
 			this.init(js.option);
 		}
 	},
@@ -64,24 +63,21 @@ Js.util.buttonSubmit = Js.base.create({
 		// bind onClick event delegation to the button
 		jQuery(that.button).bind(this.handler, function() {
 			// we need to validate the form
-			var form = new Js.ext.form();
-			var params = form.validate(that.id, that.formValidate);
+			var form = new Js.ext.validate();
+			var params = form.init(that.id, that.formValidate);
 			
-			if(!!params) 
-			{
+			if(!!params) {
 			   jQuery.ajax({
 					type: method,
 					url: that.url,
 					data: params,
 					beforeSend: function() {
-						if(Jrun.isfunction(that.setting.beforeSend))
-						{
+						if (Jrun.isfunction(that.setting.beforeSend)) {
 							that.setting.beforeSend();
 						}
 					},
 					success: function(reply) {
-						if(Jrun.isfunction(that.setting.success)) 
-						{
+						if (Jrun.isfunction(that.setting.success)) {
 							that.setting.success(reply);
 						}
 						
@@ -91,8 +87,7 @@ Js.util.buttonSubmit = Js.base.create({
 			}
 			else 
 			{
-				if(Jrun.isfunction(that.setting.onError))
-				{
+				if(Jrun.isfunction(that.setting.onError)) {
 					that.setting.onError();
 				}
 			}
@@ -100,5 +95,4 @@ Js.util.buttonSubmit = Js.base.create({
 			return false;
 		});
 	}
-	
 });

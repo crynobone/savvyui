@@ -18,8 +18,8 @@ Js.util.activeContent = Js.base.create({
 	init: null,
 	element: null,
 	option: null,
-	beforeStart: null,
-	success: null,
+	fnbeforeStart: null,
+	fnSuccess: null,
 	__construct: function(js) 
 	{
 		var js = Jrun.pickStrict(js, {}, "object");
@@ -49,7 +49,6 @@ Js.util.activeContent = Js.base.create({
 		}
 		
 		this.element = null;
-		this.__destruct();
 		return null;
 	},
 	_selector: function() {
@@ -60,52 +59,44 @@ Js.util.activeContent = Js.base.create({
 			var href = jQuery(this).attr("href");
 			var anchors = (Jrun.isset(href) ? href : this.href);
 			
-			if(anchors.match(/^\#/)) 
-			{
+			if (anchors.match(/^\#/)) {
 				var ahref = ["", anchors.substr(1)];
 			} 
-			else 
-			{ 
+			else { 
 				var ahref = anchors.split(/\#/);
 			}
 			
-			if(Jrun.isfunction(this.beforeStart)) 
-			{
-				this.beforeStart();
+			if(Jrun.isfunction(that.beforeStart)) {
+				that.beforeStart();
 			}
 			
-			if(Jrun.isset(ahref[1])) 
-			{
+			if(Jrun.isset(ahref[1])) {
 				that.repeat = (ahref[1] === that.last);
 				
 				that.last = ahref[1];
 				var data = ahref[1].split(/\//);
 				that.init(data);
 				
-				if(Jrun.isfunction(this.success)) 
-				{
-					this.success();
+				if(Jrun.isfunction(that.fnSuccess)) {
+					that.fnSuccess();
 				}
 			}
 		});
 	},
 	_check: function() 
 	{
-		if (location.hash != this.last && location.hash !== "#") 
-		{
+		if (location.hash != this.last && location.hash !== "#") {
 			this.last = location.hash;
 			
-			if(Jrun.isfunction(this.beforeStart)) 
-			{
-				this.beforeStart();
+			if (Jrun.isfunction(this.fnBeforeStart)) {
+				this.fnBeforeStart();
 			}
 			
 			var data = location.hash.substr(1).split(/\//);
 			this.init(data);
 			
-			if(Jrun.isfunction(this.success)) 
-			{
-				this.success();
+			if (Jrun.isfunction(this.fnSuccess)) {
+				this.fnSuccess();
 			}
 		}
 	}

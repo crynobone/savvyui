@@ -44,29 +44,37 @@ Js.ext.validate = Js.base.create({
 	 */
 	init: function(node, option) 
 	{		
+		Js.debug.log("Js.ext.validate: Initiated");
+		
 		// ensure that refer to this
 		var that = this;
 		
+		// node should refer to only one object
 		this.node = jQuery(node).eq(0);
 		
+		// setup configuration
 		this.setup(option);
-		
 		this.setting = Js.append(this.setting, Js.config.ext.validate);
 		this._prepSetting();
-		var setting = this.setting;
 		
+		var setting = this.setting;
 		var fnBeforeStart = Jrun.pick(setting.beforeStart,null);
 		var fnSuccess = Jrun.pick(setting.success, null);
 		var fnOnError = Jrun.pick(setting.onError, null);
 		var data = "";
 		var lang = Js.lang.ext.validate;
 		
+		// set this.first to NULL
 		this.first = null;
 		
 		if(Jrun.isfunction(fnBeforeStart)) 
 		{
+			// execute the function and free up the memory
 			fnBeforeStart(node);
+			fnBeforeStart = null;
 		}
+		
+		Js.debug.log("Js.ext.validate: Prepared to start validation");
 		
 		if(this.node.length >= 1) 
 		{
@@ -74,18 +82,24 @@ Js.ext.validate = Js.base.create({
 			jQuery(":input", this.node).each(function(index, node) {
 				//var object = jQuery(node);
 				
-				// remove previously loaded error message
-				that._messageCleanUp(node);
-				
 				// Double confirm the element is either input, select or textarea
 				if(node.tagName.toLowerCase().match(/^(input|select|textarea)$/g)) 
 				{
 					if (node.name != "") {
+						Js.debug.log("Js.ext.validate: use field " + node.name);
+						
+						Js.debug.log("Js.ext.validate: clean up old error");
+						// remove previously loaded error message
+						that._messageCleanUp(node);
+						
+						Js.debug.log("Js.ext.validate: convert className to Array");
+						
 						// turn the className into array so we can do some testing
 						node.className = (!!node.className ? node.className : "");
 						var klass = node.className.split(/\s/);
 						var error = "";
 						
+						Js.debug.log("Js.ext.validate: Run required check");
 						// if the element is required
 						if (!!Jrun.inArray("required", klass) && Jrun.trim(node.value) === "") {
 							error = lang.required;
@@ -94,10 +108,12 @@ Js.ext.validate = Js.base.create({
 						// this set of validate only triggered when this.value isn't empty
 						if (Jrun.trim(node.value) != "") 
 						{
+							Js.debug.log("Js.ext.validate: run string/number/email check");
 							if (!!Jrun.inArray("string", klass) && !Js.test.isString(node.value)) 
 							{
 								error = lang.string;
 							}
+							
 							else if ((!!Jrun.inArray("integer", klass) || !!Jrun.inArray("number", klass)) && !Js.test.isNumber(node.value)) 
 							{
 								error = lang.number;
@@ -108,6 +124,7 @@ Js.ext.validate = Js.base.create({
 							}
 						}
 						
+						Js.debug.log("Js.ext.validate: run custom check");
 						var testIndex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
 						
 						if (testIndex >= 0) 
@@ -121,29 +138,30 @@ Js.ext.validate = Js.base.create({
 								
 								if (required === true && Jrun.trim(node.value) === "") 
 								{
-									error = (validate.error || error);
+									error = Jrun.pickStrict(validate.error, error, "string");
 								}
 								
 								if (Jrun.trim(node.value) !== "") 
 								{
 									if (Jrun.isfunction(validate.callback) && !validate.callback(node.value)) 
 									{
-										error = (validate.error || error);
+										error = Jrun.pickStrict(validate.error, error, "string");
 									}
-									else if (validate.test && !node.value.match(validate.test)) 
+									else if (validate.regex && !node.value.match(validate.regex)) 
 									{
-										error = (validate.error || error);
+										error = Jrun.pickStrict(validate.error, error, "string");
 									}
 								}
 							}
 						}
 						
+						Js.debug.log("Js.ext.validate: add error message (if any)");
 						if (error !== "") 
 						{
 							that._error(node, error);
 						}
 						
-						
+						Js.debug.log("Js.ext.validate: run length check");
 						for (var i = 0; i < klass.length; i++) 
 						{
 							if (klass[i].match(/(max|min|exact)\-(\d*)/) && Jrun.trim(node.value) !== "") 
@@ -171,11 +189,12 @@ Js.ext.validate = Js.base.create({
 									note = note.replace(/{type}/, type);
 									note = note.replace(/{value}/, value);
 									
-									that._error(node, note, true);
+									that._error(node, note);
 								}
 							}
 						}
 						
+						Js.debug.log("Js.ext.validate: populate query string");
 						data += that._invokeQueryString(node);
 					}
 				}
@@ -215,7 +234,7 @@ Js.ext.validate = Js.base.create({
 	 * @param {Object} text
 	 * @param {Object} data
 	 */
-	_error: function(field, text, data) 
+	_error: function(field, text) 
 	{		
 		var that = this;
 		
@@ -223,42 +242,9 @@ Js.ext.validate = Js.base.create({
 		this.first = (Jrun.isnull(this.first) ? field : this.first);
 		
 		var field = jQuery(field);
-		var form = jQuery(this.node);
 		var fieldName = field.attr("name");
 		
-		var fieldErrorId = [form.attr("id"), fieldName, "error"].join("-");
-		var data = Jrun.pickStrict(data, false, "boolean");
-		
-		if (jQuery("#" + fieldErrorId).length == 0) 
-		{
-			this._messageAdd(field, text);
-			
-			field.change(function() {
-				if (jQuery(this).val() != "") 
-				{
-					that._messageCleanUp(this);
-					that.first = null;
-				}
-			});
-		} 
-		else if (jQuery("#" + fieldErrorId).length == 1 && !!data) 
-		{
-			var errorNode = field.siblings(this.setting.error.node + "." + this.setting.error.cssMessage).eq(0);
-			var html = errorNode.html();
-			
-			if(html.match(text) === false && Jrun.trim(html) != "") 
-			{
-				errorNode.append(text);
-			}
-			
-			field.bind("change", function() {
-				if(jQuery(this).val() != "") 
-				{
-					that.messageCleanUp(this);
-					that.first = null;
-				}
-			});
-		}
+		this._messageAdd(field, text);
 	},
 	/**
 	 * @method
@@ -269,21 +255,17 @@ Js.ext.validate = Js.base.create({
 		var data = "";
 		
 		// dump name and value to opt in querystring format ( &name=value )
-		if(node.type.toLowerCase().match(/^(checkbox|radio)$/)) 
-		{
-			if(node.type == "checkbox" && node.checked == true) 
-			{
+		if(node.type.toLowerCase().match(/^(checkbox|radio)$/)) {
+			if(node.type == "checkbox" && node.checked == true) {
 				// only add checked checkbox input
 				data += "&" + node.name + "=" + Js.parse.html.to(node.value);
 			} 
-			else if (node.type == "radio" && node.checked == true) 
-			{
+			else if (node.type == "radio" && node.checked == true) {
 				// only add checked radiobox input
 				data += "&" + node.name + "=" + Js.parse.html.to(node.value);
 			}
 		} 
-		else 
-		{ 
+		else { 
 			// add all input (except radio/checkbox)
 			data += "&" + node.name + "=" + Js.parse.html.to(node.value);
 		}
@@ -298,8 +280,7 @@ Js.ext.validate = Js.base.create({
 	{
 		var errSpan = this.setting.error.node + "." + this.setting.error.cssMessage;
 		var errNode = jQuery(node).siblings(errSpan).eq(0);
-		if (errNode.length == 1) 
-		{
+		if (errNode.length == 1) {
 			errNode.remove();
 		}
 	},
@@ -308,15 +289,28 @@ Js.ext.validate = Js.base.create({
 	 * @param {Object} node
 	 * @param {Object} message
 	 */
-	_messageAdd: function(node, message) 
+	_messageAdd: function(field, message) 
 	{
-		try {
-			jQuery("<" + this.setting.error.node + "/>")
-				.addClass(this.setting.error.cssMessage)
-				.html(message)
-				.appendTo(node.parent());
-		} catch(e) {
-			Js.debug.error(e);
+		var that = this;
+		var errorNode = field.siblings(this.setting.error.node + "." + this.setting.error.cssMessage).eq(0);
+		
+		if (errorNode.length == 0) {
+			try {
+				jQuery("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).appendTo(field.parent());
+			} 
+			catch (e) {
+				Js.debug.error(e);
+			}
+		} 
+		else {
+			errorNode.eq(0).append(message);
 		}
+		
+		field.bind("change", function() {
+			if (jQuery(this).val() != "") {
+				that.messageCleanUp(this);
+				that.first = null;
+			}
+		});
 	}
 });

@@ -57,24 +57,20 @@ Js.toString = function()
 Js.nue = function(data) 
 {
 	// data have to be an object
-	if (Jrun.typeOf(data) == "object") 
-	{
+	if (Jrun.typeOf(data) == "object") {
 		// prepare result object
 		var result = {};
 		
 		// loop data object name
-		for (var method in data) 
-		{
-			if (data.hasOwnProperty(method)) 
-			{
+		for (var method in data) {
+			if (data.hasOwnProperty(method)) {
 				result[method] = data[method];
 			}
 		}
 		
 		return result;
 	}
-	else 
-	{
+	else {
 		// data not an object, just return the original data
 		return data;
 	}
@@ -90,30 +86,25 @@ Js.nue = function(data)
  */
 Js.append = function(data, value) 
 {
-	if(Jrun.typeOf(data) !== "object")
-	{
+	if (Jrun.typeOf(data) !== "object") {
 		data = {};
 	}
 	
 	// check whether both are object
-	if (Jrun.typeOf(data) == "object" && Jrun.typeOf(value) == "object") 
-	{
+	if (Jrun.typeOf(data) == "object" && Jrun.typeOf(value) == "object") {
 		var result = data;
 		
 		// loop value's method
-		for (var method in value) 
-		{
+		for (var method in value) {
 			// if data doesn't have the method add it
-			if (!data.hasOwnProperty(method) && value.hasOwnProperty(method)) 
-			{
+			if (!data.hasOwnProperty(method) && value.hasOwnProperty(method)) {
 				result[method] = value[method];
 			}
 		}
 		
 		return result;
 	}
-	else
-	{
+	else {
 		// data isn't an object
 		return data;
 	}
@@ -152,8 +143,7 @@ Js.debug = {
 		// push log to stack
 		this.data.log.push(text);
 		
-		if (!!this.dev)
-		{
+		if (!!this.dev) {
 			try {
 				console.log(text);
 			}
@@ -174,8 +164,7 @@ Js.debug = {
 		this.data.error.push(text);
 		
 		// if Js.debug.enable is true, display the error
-		if (!!this.enable) 
-		{
+		if (!!this.enable) {
 			try {
 				// good browser come with console
 				console.log(text);
@@ -207,16 +196,14 @@ var Jrun = {
 		var values = data.split(/\-/);
 		
 		// if array only have one value
-		if (values.length === 1) 
-		{
+		if (values.length === 1) {
 			return values[0];
 		}
 		
 		var result = (data.indexOf('-') == 0 ? values[0].charAt(0).toUpperCase() + values[0].substr(1) : values[0]);
 		
 		jQuery.each(values, function(index, value) {
-			if (index > 0) 
-			{
+			if (index > 0) {
 				result = result + value.charAt(0).toUpperCase() + value.substr(1);
 			}
 		});
@@ -232,21 +219,17 @@ var Jrun = {
 	 */
 	href: function(url, target) 
 	{
-		if (this.trim(url) !== "") 
-		{
-			if (this.isnull(target)) 
-			{
+		if (this.trim(url) !== "") {
+			if (this.isnull(target)) {
 				// when target is not define load the url in the same window
 				window.location.href = url;
 			} 
-			else 
-			{
+			else {
 				// load the url in the specified target
 				window.open(url, target);
 			}
 		} 
-		else 
-		{
+		else {
 			Js.debug.error("Jrun.href: failed to load page " + url);
 		}
 	},
@@ -290,10 +273,8 @@ var Jrun = {
 	 */
 	inArray: function(value, data) 
 	{
-		for(var index = 0; index < data.length && !!data[index]; index++) 
-		{
-			if(data[index] === value) 
-			{
+		for(var index = 0; index < data.length && !!data[index]; index++) {
+			if(data[index] === value) {
 				return true;
 				break;
 			}
@@ -404,12 +385,10 @@ var Jrun = {
 	{
 		var data = jQuery.makeArray(arguments);
 		
-		for(var index = 0; index < data.length; index++) 
-		{
+		for(var index = 0; index < data.length; index++) {
 			var value = data[index];
             
-            if (Jrun.isset(value)) 
-			{
+            if (Jrun.isset(value)) {
                 return value;
             }
 		};
@@ -429,14 +408,11 @@ var Jrun = {
 		var length = data.length;
 		var last = data[(length - 1)];
 		
-		for(var index = 0; index < (length - 1); index++) 
-		{
+		for(var index = 0; index < (length - 1); index++) {
 			var value = data[index];
             
-            if (Jrun.isset(value)) 
-			{
-                if (this.typeOf(value) == last) 
-				{
+            if (Jrun.isset(value)) {
+                if (this.typeOf(value) == last) {
                     return value;
                 }
             }
@@ -457,19 +433,15 @@ var Jrun = {
 		var length = data.length;
 		var last = data[(length - 1)];
 		
-		if (this.typeOf(last) == "string") 
-		{
+		if (this.typeOf(last) == "string") {
 			last = new RegExp(last);
 		}
 		
-		for(var index = 0; index < (length - 1); index++) 
-		{
+		for(var index = 0; index < (length - 1); index++) {
 			var value = data[index];
             
-            if (Jrun.isset(value)) 
-			{
-                if (!!value.match(last)) 
-				{
+            if (Jrun.isset(value)) {
+                if (!!value.match(last)) {
                     return value;
                 }
             }
@@ -489,14 +461,12 @@ var Jrun = {
 		var length = data.length;
 		var result = new String;
 		
-		if (length > 1) 
-		{
+		if (length > 1) {
 			jQuery.each(data, function(index, value) {
 				result = [result, (index == 0 ? "" : (index == (length - 1) ? last : between)), value].join("");
 			});
 		} 
-		else 
-		{
+		else {
 			result = data[0];
 		}
 		
@@ -512,13 +482,11 @@ var Jrun = {
 		var length = 0;
 		var offset = 0;
 		
-		if (data.length === 2) 
-		{
+		if (data.length === 2) {
 			offset = data[0];
 			length = data[1];
 		} 
-		else if (data.length === 1) 
-		{
+		else if (data.length === 1) {
 			length = data[0];
 		}
 		
@@ -560,30 +528,24 @@ var Jrun = {
 	{
 		var result = [];
 		
-		if (this.typeOf(data) === "array") 
-		{
-			jQuery.each(data, function(index, val){
-				if (!!Js.parse.html) 
-				{
+		if (this.typeOf(data) === "array") {
+			jQuery.each(data, function(index, val) {
+				if (!!Js.parse.html) {
 					val.value = Js.parse.html.to(val.value);
 				}
 				result.push(data[index].name + "=" + val.value);
 			});
 		}
-		else if (this.typeOf(data) == "object") 
-		{
-			for (var val in data) 
-			{
-				if (!!Js.parse.html) 
-				{
+		else if (this.typeOf(data) == "object") {
+			for (var val in data) {
+				if (!!Js.parse.html) {
 					data[val] = Js.parse.html.to(data[val]);
 				}
 					
 				result.push(val + "=" + data[val]);
 			}
 		}
-		else 
-		{
+		else {
 			return "";
 		}
 		
@@ -644,20 +606,17 @@ var Jrun = {
 		var offset = (this.isnull(offset) || offset < 1 ? 0 : offset);
 		
 		// return empty array
-		if (this.isnull(data)) 
-		{
+		if (this.isnull(data)) {
 			return [];
 		}
-		else 
-		{
+		else {
 			// ensure the offset
 			var offsetLength = (data.length - offset);
 			var dataLength = data.length;
 			var result = [];
 			
 			// loop and prepare r to be return
-			while (offsetLength > 0) 
-			{
+			while (offsetLength > 0) {
 				--offsetLength;
 				--dataLength;
 				result[offsetLength] = data[dataLength];
@@ -686,36 +645,28 @@ var Jrun = {
 	 */
 	typeOf: function(data) 
 	{
-		if (Jrun.isnull(data))
-		{
+		if (Jrun.isnull(data)) {
 			return "undefined";
 		}
-		else if (typeof(data) == "object") 
-		{
+		else if (typeof(data) == "object") {
 			// object doesn't always turn out to be object
-			if (data.length > 0 && data[0].nodeType) 
-			{
+			if (data.length > 0 && data[0].nodeType) {
 				return "element";
 			}
-			else if (data.constructor === Array) 
-			{
+			else if (data.constructor === Array) {
 				return "array";
 			}
-			else if (data.nodeType) 
-			{
+			else if (data.nodeType) {
 				return "element";
 			}
-			else if (data.constructor !== Object) 
-			{
+			else if (data.constructor !== Object) {
 				return "function";
 			}
-			else 
-			{
+			else {
 				return "object";
 			}
 		}
-		else 
-		{
+		else {
 			return typeof(data);
 		}
 	},
@@ -733,22 +684,17 @@ var Jrun = {
 		
 		// loop the array
 		jQuery.each(data, function(index, value) {
-			if (!repeat) 
-			{
+			if (!repeat) {
 				// add only if unique
-				if (!Jrun.inArray(value, result)) 
-				{
+				if (!Jrun.inArray(value, result)) {
 					result.push(value);
 				}
 			} 
-			else 
-			{
-				if (index == 0) 
-				{
+			else {
+				if (index == 0) {
 					result.push(value);
-				} 
-				else if (value !== Jrun.trim(data[index - 1])) 
-				{
+				}
+				else if (value !== Jrun.trim(data[index - 1])) {
 					result.push(value);
 				}
 			}
@@ -758,12 +704,10 @@ var Jrun = {
 	},
 	prep: function(data)
 	{
-		if(data.match(/^(#|\.)?(.*)$/gi))
-		{
+		if (data.match(/^(#|\.)?(.*)$/gi)) {
 			return RegExp.$2;
 		}
-		else
-		{
+		else {
 			return data;
 		}
 	}
@@ -774,13 +718,11 @@ Js.base.prototype = {
 	__destruct: function() 
 	{
 		// remove all properties and method for this object
-		for (var method in this) 
-		{
+		for (var method in this) {
 			this[method] = null;
 		}
 			
-		for (var method in this.prototype) 
-		{
+		for (var method in this.prototype) {
 			this.prototype[method] = null;
 		}
 		
@@ -810,8 +752,7 @@ Js.base.create = function(js)
 	function Class() 
 	{
 		// initiate the __construct function if construct available
-		if (!initialize && !!this.construct) 
-		{
+		if (!initialize && !!this.construct) {
 			this.construct.apply(this, jQuery.makeArray(arguments));
 		}
 	};
@@ -836,41 +777,33 @@ Js.base.create = function(js)
 		var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
 		
 		// add method to this object
-		for (var method in js) 
-		{
-			if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
-			{
+		for (var method in js) {
+			if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
 				this[method] = js[method];
 			}
 		};
 	}).call(prototype, js);
 	
 	// object called from .extend, inherit parent method if object does not have it's own method
-	if(!!Jrun.isset(extended)) 
-	{
+	if(!!Jrun.isset(extended)) {
 		try {
 			(function(ext) {
 				// restrict object from looping certain method
 				var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
 				
-				for (var method in ext) 
-				{
-					if (ext.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
-					{
+				for (var method in ext) {
+					if (ext.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
 						this[method] = ext[method];
 					}
 				}
 				
-				for (var method in ext.prototype) 
-				{
-					if (ext.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) 
-					{
+				for (var method in ext.prototype) {
+					if (ext.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
 						this[method] = ext.prototype[method];
 					}
 				}
 				
-				if (ext.prototype.hasOwnProperty('construct')) 
-				{
+				if (ext.prototype.hasOwnProperty('construct')) {
 					this['_parentConstruct'] = ext.prototype.construct;
 					this['_parentDestruct'] = ext.prototype.__destruct;
 				}

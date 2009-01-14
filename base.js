@@ -648,26 +648,16 @@ var Jrun = {
 		if (Jrun.isnull(data)) {
 			return "undefined";
 		}
-		else if (typeof(data) == "object") {
-			// object doesn't always turn out to be object
-			if (data.length > 0 && data[0].nodeType) {
+		else {
+			var value = Object.prototype.toString.call(data).match(/(\w+)\]/)[1];
+			
+			if (value == "HTMLDocument") {
 				return "element";
-			}
-			else if (data.constructor === Array) {
-				return "array";
-			}
-			else if (data.nodeType) {
-				return "element";
-			}
-			else if (data.constructor !== Object) {
-				return "function";
 			}
 			else {
-				return "object";
+				return value.toLowerCase();
 			}
-		}
-		else {
-			return typeof(data);
+			
 		}
 	},
 	/** 

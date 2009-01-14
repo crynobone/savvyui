@@ -7,7 +7,7 @@
 
 Js.config = {
 	ext: {
-		form: {
+		validate: {
 			errorNode: "span.form-error-message",
 			beforeStart: null,
 			success: null,

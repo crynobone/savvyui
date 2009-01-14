@@ -129,6 +129,10 @@ Js.debug = {
 	 * e.g: Js.debug.enable = true;
 	 */
 	enable: false,
+	/* Set to true to display all log for dev purpose
+	 * 
+	 */
+	dev: false,
 	/* error/log stack:
 	 * - error[] contain all errors
 	 * - log[] contain all logs 
@@ -147,6 +151,16 @@ Js.debug = {
 	{
 		// push log to stack
 		this.data.log.push(text);
+		
+		if (!!this.dev)
+		{
+			try {
+				console.log(text);
+			}
+			catch(e) {
+				alert(text);
+			}
+		}
 	},
 	/**
 	 * Log an error
@@ -329,7 +343,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Number}
 	 */
-	'indexOfGrep': function(value, data) 
+	indexOfGrep: function(value, data) 
 	{
 		for (var index = data.length; index-- && !data[index].match(value););
 		return index;
@@ -368,7 +382,6 @@ var Jrun = {
 	isfunction: function(data) 
 	{
 		return jQuery.isFunction(data);
-		/* return (!!data && typeof(data) === "function"); */
 	},
 	/**
 	 * Trim left of a string
@@ -621,9 +634,7 @@ var Jrun = {
 	},
 	/**
 	 * convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
-	 * <br>This function have been replaced with jQuery.makeArray()
 	 * @alias jQuery.makeArray
-	 * @deprecated
 	 * @param {Object, Array} [data] the source of data to be converted to Array 
 	 * @param {Number} [offset] offset where to start converting to array, if applicable
 	 * @return {Array}

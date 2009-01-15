@@ -1468,10 +1468,10 @@ Js.ext.validate = Js.base.create({
 	 * @method
 	 * @param {Object} field
 	 */
-	_messageCleanUp: function(field) 
+	_messageCleanUp: function(node) 
 	{
 		var errSpan = this.setting.error.node + "." + this.setting.error.cssMessage;
-		var errNode = jQuery(node).siblings(errSpan).eq(0);
+		var errNode = node.siblings(errSpan).eq(0);
 		if (errNode.length > 0) {
 			errNode.remove();
 		}
@@ -1504,7 +1504,7 @@ Js.ext.validate = Js.base.create({
 		
 		node.bind("change", function() {
 			if (jQuery(this).val() != "") {
-				that._messageCleanUp(this);
+				that._messageCleanUp(jQuery(this));
 				that.first = null;
 			}
 		});

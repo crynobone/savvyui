@@ -32,8 +32,7 @@ Js.widget.activity = Js.base.create({
 	/**
 	 * Setup local setting for this object
 	 * 
-	 * @methodvar errorNode = field.siblings(this.setting.error.node + "." + this.setting.error.cssMessage).eq(0);
-			
+	 * @method	
 	 * @param {Object} option
 	 */
 	setup: function(option)
@@ -56,6 +55,7 @@ Js.widget.activity = Js.base.create({
 		this.setting = Js.append(this.setting, Js.config.widget.activity);
 		
 		this.node = jQuery(this.element);
+		
 		if (this.node.length == 0) {
 			jQuery("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
 		}

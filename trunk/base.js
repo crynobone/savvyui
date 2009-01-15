@@ -79,35 +79,42 @@ Js.nue = function(data)
 /**
  * Append data object with value method
  * 
- * @alias Js.append
  * @param {Object} data
  * @param {Object} value
- * @return {Object}
+ * @param {Object} filter
  */
-Js.append = function(data, value) 
+Js.append = function(data, value, filter) 
 {
+	var filter = Jrun.pickStrict(filter, null, "array");
+	
 	if (Jrun.typeOf(data) !== "object") {
 		data = {};
 	}
 	
-	// check whether both are object
-	if (Jrun.typeOf(data) == "object" && Jrun.typeOf(value) == "object") {
-		var result = data;
+	if (Jrun.typeOf(data) !== "object") {
+		data = {};
+	}
+	
+	var result = data;
 		
-		// loop value's method
-		for (var method in value) {
-			// if data doesn't have the method add it
-			if (!data.hasOwnProperty(method) && value.hasOwnProperty(method)) {
-				result[method] = value[method];
-			}
+	// loop value's method
+	for (var method in value) {
+		// if data doesn't have the method add it
+		var valid = (Jrun.isnull(filter) || Jrun.inArray(method, filter));
+		var notDuplicate = (!data.hasOwnProperty(method) && value.hasOwnProperty(method));
+		 
+		if (!!notDuplicate && !!valid) {
+			result[method] = value[method];
 		}
+	}
 		
-		return result;
-	}
-	else {
-		// data isn't an object
-		return data;
-	}
+	return result;
+	
+};
+
+Js.filter = function (data, filter) 
+{
+	return Js.append(data, {}, filter);
 };
 
 /**
@@ -121,7 +128,7 @@ Js.debug = {
 	 */
 	enable: false,
 	/* Set to true to display all log for dev purpose
-	 * 
+	 * e.g: Js.debug.dev = true;
 	 */
 	dev: false,
 	/* error/log stack:

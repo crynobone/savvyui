@@ -18,6 +18,7 @@
 		'widget/activity',
 		'widget/datepicker',
 		'widget/iconizer',
+		'widget/panel',
 		'widget/notice',
 		'widget/tab'
 	);

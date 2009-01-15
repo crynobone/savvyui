@@ -17,7 +17,7 @@
 					renderTo: "#panel-container",
 					title: "Hello world",
 					width: 400,
-					height: 200,
+					height: 350,
 					content: "&lt;p&gt;Some content&lt;/p&gt;&lt;p&gt;Some other content&lt;/p&gt;&lt;pre&gt;some.code.here&lt;/pre&gt;",
 					allowMinimize: true
 				});
@@ -28,15 +28,15 @@
 		</div>
 		<script type="text/javascript">
 		<!--
+		Js.setup.widget.panel({
+			allowClose: false
+		});
 		var panel = new Js.widget.panel({
 			element: "controller",
 			renderTo: "#panel-container",
 			title: "Hello world",
-			width: 400,
-			height: 200,
-			content: "<p>Some content</p><p>Some other content</p><pre>some.code.here</pre>",
-			allowMinimize: true,
-			allowClose: false
+			width: 300,
+			content: "<p>Some content</p><p>Some other content</p><pre>some.code.here</pre>"
 		});
 		-->
 		</script>

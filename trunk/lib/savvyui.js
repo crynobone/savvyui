@@ -918,8 +918,8 @@ Js.config = {
 		},
 		panel: {
 			title: "Untitled",
-			width: 300,
-			height: 300,
+			width: null,
+			height: null,
 			cssLayout: "sui-panel",
 			content: "",
 			onClose: null,
@@ -983,6 +983,10 @@ Js.setup = {
 		notice: function(option)
 		{
 			Js.config.widget.notice = Js.append(option, Js.config.widget.notice);
+		},
+		panel: function(option)
+		{
+			Js.config.widget.panel = Js.append(option, Js.config.widget.panel);
 		},
 		tab: function(option)
 		{
@@ -2742,10 +2746,6 @@ Js.widget.iconizer = Js.base.create({
  * @license MIT
  */
 
-/*
-
- */
-
 Js.widget.panel = Js.base.create({
 	node: null,
 	renderTo: null,
@@ -2803,11 +2803,6 @@ Js.widget.panel = Js.base.create({
 			this.node.css("width", this.setting.width + "px");
 		}
 		
-		// set panel height
-		if (Jrun.isset(this.setting.height)) {
-			this.node.css("height", this.setting.height + "px");
-		}
-		
 		// render header
 		this.header = jQuery("<div/>").addClass("panel-header").appendTo(this.node);
 		// render content
@@ -2817,6 +2812,12 @@ Js.widget.panel = Js.base.create({
 			width: "100%",
 			height: "15px"
 		}).appendTo(this.node);
+		
+		
+		// set panel height
+		if (Jrun.isset(this.setting.height)) {
+			this.container.css("height", this.setting.height + "px");
+		}
 		
 		// render header container for close and minimize button
 		var ext = jQuery("<div/>").attr({

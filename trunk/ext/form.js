@@ -147,14 +147,14 @@ Js.ext.validate = Js.base.create({
 						var values = RegExp.$2;
 						
 						if (!Js.test.isLength(klass[indexLength], value.length)) {
-							if (type == "min") {
-								type = lang.lengthOption.minimum;
+							if (types == "min") {
+								types = lang.lengthOption.minimum;
 							}
-							else if (type == "max") {
-								type = lang.lengthOption.maximum;
+							else if (types == "max") {
+								types = lang.lengthOption.maximum;
 							}
-							else if (type == "exact") {
-								type = lang.lengthOption.exact;
+							else if (types == "exact") {
+								types = lang.lengthOption.exact;
 							}
 								
 							var note = lang.length;
@@ -267,7 +267,7 @@ Js.ext.validate = Js.base.create({
 		} 
 		else {
 			try {
-				errorNode.eq(0).append(message);
+				errorNode.eq(0).append('... ' + message);
 			} catch (e) {
 				Js.debug.error(e);
 			} 

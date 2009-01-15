@@ -75,6 +75,16 @@ Js.config = {
 			beforeStart: null,
 			onClose: null
 		},
+		panel: {
+			title: "Untitled",
+			width: 300,
+			height: 300,
+			cssLayout: "sui-panel",
+			content: "",
+			onClose: null,
+			allowClose: true,
+			allowMinimize: false
+		},
 		tab: {
 			handler: "click",
 			identifier: ".tab",

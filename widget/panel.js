@@ -5,16 +5,7 @@
  */
 
 /*
-panel: {
-			title: "Untitled",
-			width: 300,
-			height: 300,
-			layout: "sui-panel",
-			onClose: null,
-			allowClose: true,
-			allowMinimize: false,
-			allowResize: false	
-		}
+
  */
 
 Js.widget.panel = Js.base.create({
@@ -26,6 +17,7 @@ Js.widget.panel = Js.base.create({
 	container: null,
 	content: null,
 	footer: null,
+	status: "normal",
 	__construct: function(option)
 	{
 		if (Jrun.isset(option)) {
@@ -43,6 +35,8 @@ Js.widget.panel = Js.base.create({
 	},	
 	init: function(option)
 	{
+		var that = this;
+		
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.panel);
 		this._prepSetting();
@@ -58,10 +52,12 @@ Js.widget.panel = Js.base.create({
 	},
 	_load: function()
 	{
+		var that = this;
+		
 		// render panel and hide it
 		this.node = jQuery("<div/>").attr({
 			id: this.element + "_panel",
-			className: "win-panel"
+			className: "widget-panel"
 		}).appendTo(this.renderTo);
 		
 		// set panel width
@@ -77,7 +73,7 @@ Js.widget.panel = Js.base.create({
 		// render header
 		this.header = jQuery("<div/>").addClass("panel-header").appendTo(this.node);
 		// render content
-		this.container = jQuery("<div/>").addClass("panel-content").html("").appendTo(this.node);
+		this.container = jQuery("<div/>").addClass("panel-content-container").html("").appendTo(this.node);
 		// render footer
 		this.footer = jQuery("<div/>").css({
 			width: "100%",
@@ -115,21 +111,17 @@ Js.widget.panel = Js.base.create({
 		
 		// Enable Minimize-Button option
 		if (!!this.setting.allowMinimize) {
-			tmin.addClass(this.layout + "-min").css({
+			tmin.addClass("panel-min").css({
 				"display": "block", 
 				"cursor": "pointer"
 			}).bind("click", function() {
-				that.container.slideToggle();
-				
 				if (that.status == "normal") {
-					that.object.data("offsetHeight", that.object.css("height"));
-					that.object.animate({height: "20px"});
+					
+					that.container.slideUp("normal");
 					that.status = "minimize";
 				} 
 				else {
-					that.object.animate({
-						height: that.object.data("offsetHeight")
-					});
+					that.container.slideDown("normal");
 					that.status = "normal";
 				}
 			});
@@ -138,14 +130,14 @@ Js.widget.panel = Js.base.create({
 		}
 		
 		// Enable Close-Button option
-		if (!!this.allowClose) {
-			tclose.addClass(this.layout + "-close").css({
+		if (!!this.setting.allowClose) {
+			tclose.addClass("panel-close").css({
 				"display": "block",
 				"cursor": "pointer"
 			}).click(function() {
 				that.closePanel();
 			});
-		} else { object
+		} else {
 			tclose.addClass("panel-disabled");
 		}
 		
@@ -154,7 +146,7 @@ Js.widget.panel = Js.base.create({
 		this.content = jQuery("<div/>").attr({
 			id: this.element, 
 			className: "panel-content"
-		}).css("cssText", this.setting.css).appendTo(this.container);
+		}).html(this.setting.content).appendTo(this.container);
 		
 		// set height and scrolling option for content CONTAINER
 		if(Jrun.isset(this.setting.height) && !!this.setting.scrolling) {

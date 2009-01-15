@@ -92,7 +92,7 @@ Js.ext.validate = Js.base.create({
 					if (!!Jrun.inArray("required", klass) && Jrun.trim(value) === "") {
 						error = lang.required;
 					}
-					/*
+					
 					var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
 					if (indexMatch > -1) {
 						var matched = fields.is(":input[name='" + RegExp.$1 + "']");
@@ -100,14 +100,13 @@ Js.ext.validate = Js.base.create({
 							error = lang.matched;
 						}
 					}
-					*/
 					
 					// this set of validate only triggered when this.value isn't empty
 					if (Jrun.trim(value) != "") {
 						if (!!Jrun.inArray("string", klass) && !Js.test.isString(value)) {
 							error = lang.string;
 						}
-						else if ((!!Jrun.inArray("integer", klass) || !!Jrun.inArray("number", klass)) && !Js.test.isNumber(value)) {
+						else if (!!Jrun.inArrayGrep(/^(integer|number)$/, klass) && !Js.test.isNumber(value)) {
 							error = lang.number;
 						}
 						else if (!!Jrun.inArray("email", klass) && !Js.test.isEmail(value)) {
@@ -243,7 +242,7 @@ Js.ext.validate = Js.base.create({
 	_messageCleanUp: function(node) 
 	{
 		var errSpan = this.setting.error.node + "." + this.setting.error.cssMessage;
-		var errNode = node.siblings(errSpan).eq(0);
+		var errNode = node.siblings(errSpan);
 		if (errNode.length > 0) {
 			errNode.remove();
 		}
@@ -275,8 +274,9 @@ Js.ext.validate = Js.base.create({
 		}
 		
 		node.bind("change", function() {
-			if (jQuery(this).val() != "") {
-				that._messageCleanUp(jQuery(this));
+			var jnode = jQuery(this);
+			if (jnode.val() != "") {
+				that._messageCleanUp(jnode);
 				that.first = null;
 			}
 		});

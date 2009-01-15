@@ -146,7 +146,7 @@ Js.widget.panel = Js.base.create({
 		}).html(this.setting.content).appendTo(this.container);
 		
 		// set height and scrolling option for content CONTAINER
-		if(Jrun.isset(this.setting.height) && !!this.setting.scrolling) {
+		if (Jrun.isset(this.setting.height) && !!this.setting.scrolling) {
 			this.content.css({
 				"height": (this.setting.height - (23 + 21)) + "px",
 				"overflow": "auto"
@@ -158,7 +158,8 @@ Js.widget.panel = Js.base.create({
 		
 		return this;
 	},
-	closePanel: function() {
+	closePanel: function() 
+	{
 		var that = this;
 		
 		// callback to close panel
@@ -171,8 +172,9 @@ Js.widget.panel = Js.base.create({
 		});
 		return this;
 	},
-	_fixResize: function() {
-		if(Jrun.isset(this.setting.height) && !!this.setting.scrolling) {
+	_fixResize: function() 
+	{
+		if (Jrun.isset(this.setting.height) && !!this.setting.scrolling) {
 			this.content.css({
 				"height": (this.setting.height - (23 + 21)) + "px", 
 				"overflow": "auto"

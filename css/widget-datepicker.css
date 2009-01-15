@@ -30,6 +30,9 @@
 	width: 100%;
 	text-align: center;
 }
+.calendar-panel .calendar-header-day {
+	font-weight: bold;
+}
 .calendar-panel .calendar-body td {
 	padding: 2px 1px;
 }

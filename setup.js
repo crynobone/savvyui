@@ -42,6 +42,10 @@ Js.setup = {
 		{
 			Js.config.widget.notice = Js.append(option, Js.config.widget.notice);
 		},
+		panel: function(option)
+		{
+			Js.config.widget.panel = Js.append(option, Js.config.widget.panel);
+		},
 		tab: function(option)
 		{
 			Js.config.widget.tab = Js.append(option, Js.config.widget.tab);

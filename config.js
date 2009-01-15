@@ -77,8 +77,8 @@ Js.config = {
 		},
 		panel: {
 			title: "Untitled",
-			width: 300,
-			height: 300,
+			width: null,
+			height: null,
 			cssLayout: "sui-panel",
 			content: "",
 			onClose: null,

@@ -19,6 +19,7 @@
 		'widget/datepicker',
 		'widget/iconizer',
 		'widget/panel',
+		'widget/dialog',
 		'widget/notice',
 		'widget/tab'
 	);

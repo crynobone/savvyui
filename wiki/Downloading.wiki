@@ -1,14 +1,15 @@
 #summary Downloading Savvy.UI
 #labels Featured,Phase-Deploy
 
-==Downloading Savvy.UI Package==
+=Downloading Savvy.UI=
+==Via Package==
 Savvy.UI's latest package (in .zip) can be downloaded from [http://code.google.com/p/savvyui/downloads/list Downloads] tab (latest marked as *featured*). In each package you will get:
  * Development Code
  * Compiled Code
  * Examples
  * Stylesheet
 
-==Export From Savvy.UI Trunk==
+==Via SVN Trunk==
 You can also get a latest copy from our repository via this command:
 {{{ 
 svn export http://savvyui.googlecode.com/svn/trunk/ <your_folder_name> 

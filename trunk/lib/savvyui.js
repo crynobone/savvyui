@@ -839,7 +839,10 @@ jQuery.fn.extend({
 			this.className = value;
 		});
 	}
-});/**
+});
+
+Js.use = jQuery.noConflict();
+/**
  * @memberOf Js
  * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
@@ -1130,10 +1133,10 @@ Js.parse = {
 			
 			if (!!args) {
 				if(!!selector) {
-					jQuery(selector).html(args);
+					Js.use(selector).html(args);
 				} 
 				else if (!!id) {
-					jQuery("#" + id).html(args);
+					Js.use("#" + id).html(args);
 				} 
 				else if (Jrun.isset(object)) {
 					// eval the function without making a callback
@@ -1289,7 +1292,7 @@ Js.ext.validate = Js.base.create({
 		var that = this;
 		
 		// node should refer to only one object
-		this.node = jQuery(node).eq(0);
+		this.node = Js.use(node).eq(0);
 		
 		// setup configuration
 		this.setup(option);
@@ -1314,10 +1317,10 @@ Js.ext.validate = Js.base.create({
 		
 		if (this.node.length >= 1) {
 			// based on the form, select on input type
-			var fields = jQuery(":input", this.node);
+			var fields = Js.use(":input", this.node);
 			
 			fields.each(function(index, field) {
-				var node = jQuery(field);
+				var node = Js.use(field);
 				var value = node.val();
 				// Double confirm the element is either input, select or textarea
 				
@@ -1461,12 +1464,8 @@ Js.ext.validate = Js.base.create({
 		
 		// dump name and value to opt in querystring format ( &name=value )
 		if (node.is(':checkbox, :radio')) {
-			if (node.is(':checkbox, :checked')) {
+			if (node.is(':checked')) {
 				// only add checked checkbox input
-				data += "&" + node.attr('name') + "=" + Js.parse.html.to(node.val());
-			} 
-			else if (node.is(':radio, :checked')) {
-				// only add checked radiobox input
 				data += "&" + node.attr('name') + "=" + Js.parse.html.to(node.val());
 			}
 		} 
@@ -1483,7 +1482,7 @@ Js.ext.validate = Js.base.create({
 	 */
 	_messageCleanUp: function(node) 
 	{
-		var errSpan = this.setting.error.node + "." + this.setting.error.cssMessage;
+		var errSpan = this.setting.errorNode;
 		var errNode = node.siblings(errSpan);
 		if (errNode.length > 0) {
 			errNode.remove();
@@ -1497,11 +1496,11 @@ Js.ext.validate = Js.base.create({
 	_messageAdd: function(node, message) 
 	{
 		var that = this;
-		var errorNode = node.siblings(this.setting.error.node + "." + this.setting.error.cssMessage).eq(0);
+		var errorNode = node.siblings(this.setting.errorNode).eq(0);
 		
-		if (errorNode.length == 0) {
+		if (errorNode.length < 1) {
 			try {
-				jQuery("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node);
+				Js.use("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node);
 			} 
 			catch (e) {
 				Js.debug.error(e);
@@ -1516,7 +1515,7 @@ Js.ext.validate = Js.base.create({
 		}
 		
 		node.bind("change", function() {
-			var jnode = jQuery(this);
+			var jnode = Js.use(this);
 			if (jnode.val() != "") {
 				that._messageCleanUp(jnode);
 				that.first = null;
@@ -1579,9 +1578,9 @@ Js.util.activeContent = Js.base.create({
 	_selector: function() {
 		var that = this;
 		
-		jQuery(this.element).bind("click", function() 
+		Js.use(this.element).bind("click", function() 
 		{
-			var href = jQuery(this).attr("href");
+			var href = Js.use(this).attr("href");
 			var anchors = (Jrun.isset(href) ? href : this.href);
 			
 			if (anchors.match(/^\#/)) {
@@ -1688,7 +1687,7 @@ Js.util.buttonSubmit = Js.base.create({
 		var method = Jrun.pickGrep(this.setting.method, /^(get|post)$/i);
 		
 		// bind onClick event delegation to the button
-		jQuery(that.button).bind(this.handler, function() {
+		Js.use(that.button).bind(this.handler, function() {
 			// we need to validate the form
 			var form = new Js.ext.validate();
 			var params = form.init(that.id, that.formValidate);
@@ -1884,7 +1883,7 @@ Js.util.ticker = Js.base.create({
 		this.element = Jrun.pick(selector, null);
 		
 		if (Jrun.isset(this.element)) {
-			this.node = jQuery(this.element);
+			this.node = Js.use(this.element);
 		}
 		
 		return this;
@@ -1989,10 +1988,10 @@ Js.widget.activity = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.activity);
 		
-		this.node = jQuery(this.element);
+		this.node = Js.use(this.element);
 		
 		if (this.node.length == 0) {
-			jQuery("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+			Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
 		}
 		
 		this.node.css({
@@ -2036,7 +2035,7 @@ Js.widget.activity = Js.base.create({
 	 */
 	loadImage: function() 
 	{
-		this.box = jQuery("<img/>").attr({
+		this.box = Js.use("<img/>").attr({
 			src: this.setting.imagePath
 		}).css({
 			position: "absolute",
@@ -2054,7 +2053,7 @@ Js.widget.activity = Js.base.create({
 	{
 		if (this.status > 0) {
 			this.node.fadeTo("normal", 0, function(){
-				jQuery(this).css({
+				Js.use(this).css({
 					"display": "none"
 				});
 				if (Jrun.isfunction(callback)) {
@@ -2125,10 +2124,10 @@ Js.widget.datePicker = Js.base.create({
 		this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
 		
 		if(!this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType)) {
-			this.renderTo = jQuery("<div/>").appendTo("body");
+			this.renderTo = Js.use("<div/>").appendTo("body");
 		} 
 		else if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) {
-			this.renderTo = jQuery(this.renderTo).eq(0);
+			this.renderTo = Js.use(this.renderTo).eq(0);
 		}
 		
 		js.range = Jrun.pickStrict(js.range, this.range, [null, null], "array");
@@ -2433,16 +2432,16 @@ Js.widget.datePicker = Js.base.create({
 	},
 	updateValue: function(year, month, day) 
 	{
-		var field = jQuery("#" + this.element + "_" + year + month + day).eq(0);
-		var calendar = jQuery("#" + this.element + "-" + this.field).eq(0);
+		var field = Js.use("#" + this.element + "_" + year + month + day).eq(0);
+		var calendar = Js.use("#" + this.element + "-" + this.field).eq(0);
 		
 		var months = (month < 10 ? "0" + month : month);
 		var days = (day < 10 ? "0" + day : day);
 		
 		if(this.type == "single") {
 			if (!field.hasClass("calendar-day-selected")) {
-				if (Jrun.isset(this.lastDate) && jQuery("#" + this.element + "_" + this.lastDate).length > 0) {
-					var lastdate = jQuery("#" + this.element + "_" + this.lastDate).setClass("calendar-day");
+				if (Jrun.isset(this.lastDate) && Js.use("#" + this.element + "_" + this.lastDate).length > 0) {
+					var lastdate = Js.use("#" + this.element + "_" + this.lastDate).setClass("calendar-day");
 				}
 				
 				field.setClass("calendar-day-selected");
@@ -2492,7 +2491,7 @@ Js.widget.datePicker = Js.base.create({
 		var monthLength = this.dayOfMonth();
 		cal.html("");
 		
-		this.node = jQuery("<div/>").attr({
+		this.node = Js.use("<div/>").attr({
 			"id": [this.element, "calendar"].join("-"), 
 			"class": "calendar-panel"
 		}).css({
@@ -2501,34 +2500,34 @@ Js.widget.datePicker = Js.base.create({
 		
 		var wrapper = this.node;
 		
-		var header = jQuery("<div/>").appendTo(wrapper).setClass("calendar-title");
-		var content = jQuery("<div/>").appendTo(wrapper);
-		var footer = jQuery("<div/>").appendTo(wrapper);
+		var header = Js.use("<div/>").appendTo(wrapper).setClass("calendar-title");
+		var content = Js.use("<div/>").appendTo(wrapper);
+		var footer = Js.use("<div/>").appendTo(wrapper);
 		
-		var prevbtn = jQuery("<span/>").appendTo(header);
-		var nextbtn = jQuery("<span/>").appendTo(header);
-		var title = jQuery("<span/>").appendTo(header);
+		var prevbtn = Js.use("<span/>").appendTo(header);
+		var nextbtn = Js.use("<span/>").appendTo(header);
+		var title = Js.use("<span/>").appendTo(header);
 		
-		this.content = jQuery("<div/>").addClass("calendar-content").hide().appendTo(content);
-		this.option = jQuery("<div/>").addClass("calendar-option").hide().appendTo(content);
+		this.content = Js.use("<div/>").addClass("calendar-content").hide().appendTo(content);
+		this.option = Js.use("<div/>").addClass("calendar-option").hide().appendTo(content);
 		
-		var table = jQuery("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.content);
-		var tbody = jQuery("<tbody/>").appendTo(table);
+		var table = Js.use("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.content);
+		var tbody = Js.use("<tbody/>").appendTo(table);
 		
-		var trheader = jQuery("<tr/>").addClass("calendar-header").appendTo(tbody);
+		var trheader = Js.use("<tr/>").addClass("calendar-header").appendTo(tbody);
 		
 		for (var i = 0; i <= 6; i++) {
-			jQuery("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader);
+			Js.use("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader);
 		}
 		
 		var day = 1;
 		
 		for (var i = 0; i < 6; i++) {
-			var weeks = jQuery("<tr/>").addClass("calendar-week").appendTo(tbody);
+			var weeks = Js.use("<tr/>").addClass("calendar-week").appendTo(tbody);
 			
 			for (var j = 0; j <= 6; j++) {
 				this.date = [this.year, (this.month + 1), day].join("-");
-				var days = jQuery("<td/>").addClass("calendar-" + (this.validation() ? "day" : "invalid")).appendTo(weeks);
+				var days = Js.use("<td/>").addClass("calendar-" + (this.validation() ? "day" : "invalid")).appendTo(weeks);
 				
 				if (day <= monthLength && (i > 0 || j >= start_day)) {
 					days.attr("id", this.element + "_" + this.year + (this.month + 1) + day);
@@ -2537,7 +2536,7 @@ Js.widget.datePicker = Js.base.create({
 					if (this.validation()) {
 						days.bind("click", function(){
 						
-							var i = jQuery(this).attr("id").split("_");
+							var i = Js.use(this).attr("id").split("_");
 							var count = (i.length - 1);
 							var ym = that.year + "" + that.month;
 							tday = i[count].substr((ym.length), i[count].length);
@@ -2575,35 +2574,35 @@ Js.widget.datePicker = Js.base.create({
 				that.nextMonth();
 			}).setClass("next-month");
 			
-			jQuery("<p/>").text(Js.lang.widget.datePicker.selectMonthYear).appendTo(this.option);
+			Js.use("<p/>").text(Js.lang.widget.datePicker.selectMonthYear).appendTo(this.option);
 			
-			var selmonth = jQuery("<select name='month'></select>").bind("change", function(){
+			var selmonth = Js.use("<select name='month'></select>").bind("change", function(){
 				that.customMonth(this.value);
 			}).appendTo(this.option);
 			
 			for (var i = 0; i < 12; i++) {
 				if (this.month == i) {
-					jQuery("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth);
+					Js.use("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth);
 				}
 				else {
-					jQuery("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth);
+					Js.use("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth);
 				}
 			}
 			
-			var selyear = jQuery("<select name='year'></select>").text(" ").bind("change", function(){
+			var selyear = Js.use("<select name='year'></select>").text(" ").bind("change", function(){
 				that.customYear(this.value);
 			}).appendTo(this.option);
 			
 			for (var i = this.range[0]; i >= this.range[1]; i--) {
 				if (this.year == i) {
-					jQuery("<option value='" + i + "' selected='selected'></option>").text(i.toString()).appendTo(selyear);
+					Js.use("<option value='" + i + "' selected='selected'></option>").text(i.toString()).appendTo(selyear);
 				}
 				else {
-					jQuery("<option value='" + i + "'></option>").text(i.toString()).appendTo(selyear);
+					Js.use("<option value='" + i + "'></option>").text(i.toString()).appendTo(selyear);
 				}
 			}
 			
-			jQuery("<input type='button' name='today' />").val(Js.lang.widget.datePicker.todayButton).bind("click", function(){
+			Js.use("<input type='button' name='today' />").val(Js.lang.widget.datePicker.todayButton).bind("click", function(){
 				that.today();
 			}).addClass("select-today").appendTo(this.option);
 			
@@ -2634,7 +2633,7 @@ Js.widget.datePicker = Js.base.create({
 		}
 		
 		if (Jrun.isset(this.field)) {
-			var input = jQuery("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.setting.fieldType + "' />").appendTo(this.content);
+			var input = Js.use("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.setting.fieldType + "' />").appendTo(this.content);
 			
 			if (Jrun.isset(this.day)) {
 				var m = (this.month + 1);
@@ -2688,8 +2687,8 @@ Js.widget.iconizer = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.iconizer);
 		
-		jQuery("*[class*=icon]").each(function(index, value) {
-			var node = jQuery(value);
+		Js.use("*[class*=icon]").each(function(index, value) {
+			var node = Js.use(value);
 			
 			var klas = object.attr("className");
 			var klass = klas.split(/ /);
@@ -2702,7 +2701,7 @@ Js.widget.iconizer = Js.base.create({
 					var bg = that.setting.folder + icon + "." + that.setting.fileType;
 					
 					if (!!append) {
-						var obj = jQuery("<span/>").css({
+						var obj = Js.use("<span/>").css({
 							"display": "block",
 							"cssFloat": pos,
 							"width": "16px",
@@ -2781,9 +2780,9 @@ Js.widget.panel = Js.base.create({
 		
 		// set renderTo element
 		if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) { 
-			this.renderTo = jQuery(this.renderTo);
+			this.renderTo = Js.use(this.renderTo);
 		} else if (!this.renderTo || !this.renderTo.nodeType) {
-			this.renderTo = jQuery("body").eq(0);
+			this.renderTo = Js.use("body").eq(0);
 		}
 		
 		this._load();
@@ -2793,7 +2792,7 @@ Js.widget.panel = Js.base.create({
 		var that = this;
 		
 		// render panel and hide it
-		this.node = jQuery("<div/>").attr({
+		this.node = Js.use("<div/>").attr({
 			id: this.element + "_panel",
 			className: "widget-panel"
 		}).appendTo(this.renderTo);
@@ -2804,11 +2803,11 @@ Js.widget.panel = Js.base.create({
 		}
 		
 		// render header
-		this.header = jQuery("<div/>").addClass("panel-header").appendTo(this.node);
+		this.header = Js.use("<div/>").addClass("panel-header").appendTo(this.node);
 		// render content
-		this.container = jQuery("<div/>").addClass("panel-content-container").html("").appendTo(this.node);
+		this.container = Js.use("<div/>").addClass("panel-content-container").html("").appendTo(this.node);
 		// render footer
-		this.footer = jQuery("<div/>").css({
+		this.footer = Js.use("<div/>").css({
 			width: "100%",
 			height: "15px"
 		}).appendTo(this.node);
@@ -2820,7 +2819,7 @@ Js.widget.panel = Js.base.create({
 		}
 		
 		// render header container for close and minimize button
-		var ext = jQuery("<div/>").attr({
+		var ext = Js.use("<div/>").attr({
 			className: "panel-ext"
 		}).css({
 			"cssFloat": "right", 
@@ -2831,19 +2830,19 @@ Js.widget.panel = Js.base.create({
 		}).appendTo(this.header);
 		
 		// render header title
-		var title = jQuery("<div/>").addClass("panel-title").text(this.setting.title).css({
+		var title = Js.use("<div/>").addClass("panel-title").text(this.setting.title).css({
 			"overflow": "hidden", 
 			"height": "20px"
 		}).appendTo(this.header);
 		
 		// render Close-Button 
-		var tclose = jQuery("<span/>").html("x").css({
+		var tclose = Js.use("<span/>").html("x").css({
 			"width": "14px",
 			"display": "none"
 		}).appendTo(ext);
 		
 		// render Minimize-Button
-		var tmin = jQuery("<span/>").html("_").css({
+		var tmin = Js.use("<span/>").html("_").css({
 			"width": "14px",
 			"display": "none"
 		}).appendTo(ext);
@@ -2882,7 +2881,7 @@ Js.widget.panel = Js.base.create({
 		
 		
 		// THIS IS WHERE YOUR CONTENT SHOULD GO
-		this.content = jQuery("<div/>").attr({
+		this.content = Js.use("<div/>").attr({
 			id: this.element, 
 			className: "panel-content"
 		}).html(this.setting.content).appendTo(this.container);
@@ -2943,9 +2942,9 @@ Js.widget.dialog = Js.widget.panel.extend({
 		
 		// set renderTo element
 		if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) { 
-			this.renderTo = jQuery(this.renderTo);
+			this.renderTo = Js.use(this.renderTo);
 		} else if (!this.renderTo || !this.renderTo.nodeType) {
-			this.renderTo = jQuery("body").eq(0);
+			this.renderTo = Js.use("body").eq(0);
 		}
 		
 		this._load();
@@ -2990,7 +2989,7 @@ Js.widget.notice = Js.widget.activity.extend({
 			opacity: 0.9
 		});
 		this.node.init();
-		this.node.box = jQuery("<div/>").css({
+		this.node.box = Js.use("<div/>").css({
 			"position": "absolute",
 			"width": "550px"
 		}).appendTo(this._super.node);
@@ -3029,13 +3028,13 @@ Js.widget.notice = Js.widget.activity.extend({
 		}
 		
 		this.node.box.setClass(this.setting['css' + Jrun.toProperCase(status)]);
-		jQuery("<h3/>").text(title).appendTo(this.node.box);
+		Js.use("<h3/>").text(title).appendTo(this.node.box);
 		
 		if (message != "") {
-			var p = jQuery("<p/>").html("" + message).appendTo(this.node.box);
+			var p = Js.use("<p/>").html("" + message).appendTo(this.node.box);
 		}
 		
-		var span = jQuery("<em/>").text(Js.lang.widget.notice.timer).appendTo(this.node.box);
+		var span = Js.use("<em/>").text(Js.lang.widget.notice.timer).appendTo(this.node.box);
 		
 		this.node.node.one("click", function() {
 			that.closeNotice();
@@ -3095,7 +3094,7 @@ Js.widget.tab = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.tab);
 		
-		this.node = jQuery(selector);
+		this.node = Js.use(selector);
 		this.node.addClass(this.setting.container);
 		this.element = this.node.eq(0).attr("id");
 		
@@ -3105,7 +3104,7 @@ Js.widget.tab = Js.base.create({
 		this._addToolbar();
 		
 		// set the first tab as active
-		this.activeHeader = jQuery("a[href=#" + this.activeTab.attr("id") + "]", this.header);
+		this.activeHeader = Js.use("a[href=#" + this.activeTab.attr("id") + "]", this.header);
 		this.activeHeader.addClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssActive);
 		
@@ -3118,64 +3117,64 @@ Js.widget.tab = Js.base.create({
 		Js.debug.log("Js.widget.simpleTab: load Toolbar");
 		
 		// DOM insert tab toolbar container
-		var div = jQuery("<div/>").attr({
+		var div = Js.use("<div/>").attr({
 			className: this.setting.toolbarContainer, 
 			id: [this.element, "toolbar", "container"].join("-")
 		}).prependTo(this.node);
 		this.toolbar = div;
 		
 		// DOM insert tab toolbar
-		this.header = jQuery("<ul/>").attr({
+		this.header = Js.use("<ul/>").attr({
 			id: [this.element, "toolbar"].join("-"), 
 			className: this.setting.toolbar
 		}).appendTo(this.toolbar);
 		
 		// find all possible tabs
-		var child = jQuery(this.setting.identifier, this.node);
+		var child = Js.use(this.setting.identifier, this.node);
 		
 		child.each(function(index, data) {
 			// add the tab title
 			that._addHeader(data);
 			// hide the tab
-			jQuery(data).setClass(that.setting.cssHidden);
+			Js.use(data).setClass(that.setting.cssHidden);
 		});
 		
 		// first tab should be activated
 		this.activeTab = child.eq(0);
 		
-		var div2 = jQuery("<div/>").css("display", "block").appendTo(div);
+		var div2 = Js.use("<div/>").css("display", "block").appendTo(div);
 	},
 	_addHeader: function(node) 
 	{
 		Js.debug.log("Js.widget.simpleTab: add header");
 		var that = this;
 		
-		var node = jQuery(node);
+		var node = Js.use(node);
 		var title = node.attr("title");
 		
 		var closable = node.hasClass(this.setting.closable);
 		var disabled = node.hasClass(this.setting.disabled);
 		
-		var li = jQuery("<li/>").appendTo(this.header);
-		var a = jQuery("<a/>").attr({
+		var li = Js.use("<li/>").appendTo(this.header);
+		var a = Js.use("<a/>").attr({
 			href: "#" + node.attr("id"), 
 			title: title
 		}).appendTo(li);
 		
-		jQuery("<em/>").appendTo(a);
+		Js.use("<em/>").appendTo(a);
 		a.text(title);
 				
 		if (!!closable) {
-			jQuery("<span/>").css("paddingLeft", "10px").text("x").click(function(){
-				var my = jQuery(this.parentNode).click(function(){
+			Js.use("<span/>").css("paddingLeft", "10px").text("x").click(function(){
+				var my = Js.use(this.parentNode).click(function(){
 					return false;
 				});
 				
 				var href = my.attr("href");
 				that.activeHeader.removeClass();
 				that.activeTab.setClass(that.setting.hidden);
-				jQuery(href).remove();
-				jQuery(this.parentNode.parentNode).remove();
+				Js.use(href).remove();
+				Js.use(this.parentNode.parentNode).remove();
 				
 				that.revert();
 			}).appendTo(a);
@@ -3197,7 +3196,7 @@ Js.widget.tab = Js.base.create({
 	{
 		var that = this;
 		
-		var anchor = jQuery("a[href=" + selector + "]", this.header);
+		var anchor = Js.use("a[href=" + selector + "]", this.header);
 		anchor.removeClass();
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
@@ -3212,7 +3211,7 @@ Js.widget.tab = Js.base.create({
 		var that = this;
 		var that = this;
 		
-		var anchor = jQuery("a[href=" + selector + "]", this.header);
+		var anchor = Js.use("a[href=" + selector + "]", this.header);
 		anchor.setClass(this.setting.cssDisabled);
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
@@ -3227,9 +3226,9 @@ Js.widget.tab = Js.base.create({
 		this.activeHeader.removeClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssHidden);
 		
-		this.activeHeader = jQuery(node);
+		this.activeHeader = Js.use(node);
 		var href = this.activeHeader.attr("href");
-		this.activeTab = jQuery(href);
+		this.activeTab = Js.use(href);
 		
 		this.activeHeader.addClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssActive);
@@ -3238,7 +3237,7 @@ Js.widget.tab = Js.base.create({
 	},
 	revert: function() 
 	{
-		var active = jQuery("li > a", this.header);
+		var active = Js.use("li > a", this.header);
 		
 		if (active.length > 0) {
 			this.activateTab(active.eq(0));
@@ -3248,12 +3247,12 @@ Js.widget.tab = Js.base.create({
 	{
 		if (this.status == "on") {
 			this.toolbar.hide();
-			jQuery("div." + this.setting.cssHidden, this.object).setClass(this.setting.cssActive);
+			Js.use("div." + this.setting.cssHidden, this.object).setClass(this.setting.cssActive);
 			this.status = "off";
 		}
 		else {
 			this.toolbar.show();
-			jQuery("div." + this.setting.cssActive, this.object).setClass(this.setting.cssHidden);
+			Js.use("div." + this.setting.cssActive, this.object).setClass(this.setting.cssHidden);
 			this.activeTab.setClass(this.setting.cssActive);
 			this.status = "on";
 		}
@@ -3269,32 +3268,32 @@ Js.widget.tab = Js.base.create({
 			var closable = Jrun.pick(js.closable, false);
 			var set = Jrun.pick(js.activate, false);
 			
-			var node = jQuery('<div/>').attr({
+			var node = Js.use('<div/>').attr({
 				id: id,
 				className: this.setting.cssHidden
 			}).html(content).appendTo(this.node);
 			
-			var li = jQuery('<li/>').appendTo(this.header);
-			var a = jQuery('<a/>').attr({
+			var li = Js.use('<li/>').appendTo(this.header);
+			var a = Js.use('<a/>').attr({
 				href: "#" + id,
 				title: title
 			}).appendTo(li);
 			
-			jQuery("<em/>").appendTo(a);
+			Js.use("<em/>").appendTo(a);
 			a.text(title).bind(this.handler, function(){
 				that.activateTab(this);
 				return false;
 			});
 			
 			if (!!closable) {
-				jQuery("<span/>").click(function(){
-					var href = jQuery(this.parentNode).attr("href");
+				Js.use("<span/>").click(function(){
+					var href = Js.use(this.parentNode).attr("href");
 					that.activeHeader.removeClass();
 					that.activeTab.setClass(that.setting.hidden).fadeOut("normal", function(){
-						jQuery(this).remove();
+						Js.use(this).remove();
 					});
-					jQuery(href).remove();
-					jQuery(this.parentNode.parentNode).remove();
+					Js.use(href).remove();
+					Js.use(this.parentNode.parentNode).remove();
 					
 					that.revert();
 				}).css("paddingLeft", "10px").text("x").appendTo(a);

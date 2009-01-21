@@ -20,3 +20,5 @@ jQuery.fn.extend({
 		});
 	}
 });
+
+Js.use = jQuery.noConflict();

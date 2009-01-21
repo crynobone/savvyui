@@ -38,17 +38,17 @@ Js.widget.message = Js.base.create({
 		var closable = Jrun.pickStrict(js.closable, true, "boolean");
 		
 		(function() {
-			var div = jQuery("<div/>").attr({
+			var div = Js.use("<div/>").attr({
 				className: "widgetmessage-box"
 			}).css("margin", "2px 0px").appendTo(that.node).hide();
 			
 			if (!!closable) {
-				var span = jQuery("<span/>").attr({
+				var span = Js.use("<span/>").attr({
 					className: "widgetmessage-close"
 				}).text("x").appendTo(div);
 			}
 			
-			var p = jQuery("<p/>").html(text).appendTo(div);
+			var p = Js.use("<p/>").html(text).appendTo(div);
 			
 			var t = setTimeout(function() {
 				div.hide("normal", function() {
@@ -77,9 +77,9 @@ Js.widget.message = Js.base.create({
 	{
 		var that = this;
 		
-		this.node = jQuery("#" + this.setting.identifier);
+		this.node = Js.use("#" + this.setting.identifier);
 		if (this.node.length < 1) {
-			this.node = jQuery("<div/>").attr({
+			this.node = Js.use("<div/>").attr({
 				id: this.setting.identifier
 			}).appendTo("body");
 		}

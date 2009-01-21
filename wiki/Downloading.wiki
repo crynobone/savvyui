@@ -13,7 +13,11 @@ svn export http://savvyui.googlecode.com/svn/trunk/ <your_folder_name>
 }}}
 
 =In The Package=
-For most user, our download package may seem a bit crowded compare to any other JavaScript Framework. However there no need to panic, out of the box you just need to copy */css/* folder and the !JavaScript file;
- * */lib/savvyui.js*<br>Uncompressed with comments
- * */lib/savvyui.min.js*<br>Minified without comments
- * */lib/savvyui.pack.js*<br>Packed using Edward Dean's Packer
+For most user, our download package may seem a bit crowded compare to any other !JavaScript Framework. However there no need to panic, out of the box you need to copy:
+|| Folder || Description || Type ||
+|| `/css/` || Contain all Styling for Savvy.UI Module || Folder ||
+|| `/lib/savvyui.js` || Uncompressed Savvy.UI for development || !JavaScript File ||
+|| `/lib/savvyui.min.js` || Minified Savvy.UI for production || !JavaScript File ||
+|| `/lib/savvyui.pack.js` || Packed Savvy.UI using Edward Dean's Packer || !JavaScript File ||
+
+If you don't have a copy of jQuery, it available from `lib/jquery/` folder in three format (jQuery version 1.2.6).

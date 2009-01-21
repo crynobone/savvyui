@@ -20,4 +20,4 @@ For most user, our download package may seem a bit crowded compare to any other 
 || `/lib/savvyui.min.js` || Minified Savvy.UI for production || !JavaScript File ||
 || `/lib/savvyui.pack.js` || Packed Savvy.UI using Edward Dean's Packer || !JavaScript File ||
 
-If you don't have a copy of jQuery, it available from `lib/jquery/` folder in three format (jQuery version 1.2.6).
+If you don't have a copy of jQuery, it available from `lib/jquery/` folder in three [CompressionFormat Compression Format] (jQuery version 1.2.6).

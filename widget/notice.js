@@ -19,7 +19,7 @@ Js.widget.notice = Js.widget.activity.extend({
 			opacity: 0.9
 		});
 		this.node.init();
-		this.node.box = jQuery("<div/>").css({
+		this.node.box = Js.use("<div/>").css({
 			"position": "absolute",
 			"width": "550px"
 		}).appendTo(this._super.node);
@@ -58,13 +58,13 @@ Js.widget.notice = Js.widget.activity.extend({
 		}
 		
 		this.node.box.setClass(this.setting['css' + Jrun.toProperCase(status)]);
-		jQuery("<h3/>").text(title).appendTo(this.node.box);
+		Js.use("<h3/>").text(title).appendTo(this.node.box);
 		
 		if (message != "") {
-			var p = jQuery("<p/>").html("" + message).appendTo(this.node.box);
+			var p = Js.use("<p/>").html("" + message).appendTo(this.node.box);
 		}
 		
-		var span = jQuery("<em/>").text(Js.lang.widget.notice.timer).appendTo(this.node.box);
+		var span = Js.use("<em/>").text(Js.lang.widget.notice.timer).appendTo(this.node.box);
 		
 		this.node.node.one("click", function() {
 			that.closeNotice();

@@ -15,9 +15,9 @@ Js.widget.dialog = Js.widget.panel.extend({
 		
 		// set renderTo element
 		if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) { 
-			this.renderTo = jQuery(this.renderTo);
+			this.renderTo = Js.use(this.renderTo);
 		} else if (!this.renderTo || !this.renderTo.nodeType) {
-			this.renderTo = jQuery("body").eq(0);
+			this.renderTo = Js.use("body").eq(0);
 		}
 		
 		this._load();

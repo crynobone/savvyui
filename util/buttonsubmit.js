@@ -61,7 +61,7 @@ Js.util.buttonSubmit = Js.base.create({
 		var method = Jrun.pickGrep(this.setting.method, /^(get|post)$/i);
 		
 		// bind onClick event delegation to the button
-		jQuery(that.button).bind(this.handler, function() {
+		Js.use(that.button).bind(this.handler, function() {
 			// we need to validate the form
 			var form = new Js.ext.validate();
 			var params = form.init(that.id, that.formValidate);

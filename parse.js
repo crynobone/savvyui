@@ -99,10 +99,10 @@ Js.parse = {
 			
 			if (!!args) {
 				if(!!selector) {
-					jQuery(selector).html(args);
+					Js.use(selector).html(args);
 				} 
 				else if (!!id) {
-					jQuery("#" + id).html(args);
+					Js.use("#" + id).html(args);
 				} 
 				else if (Jrun.isset(object)) {
 					// eval the function without making a callback

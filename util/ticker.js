@@ -34,7 +34,7 @@ Js.util.ticker = Js.base.create({
 		this.element = Jrun.pick(selector, null);
 		
 		if (Jrun.isset(this.element)) {
-			this.node = jQuery(this.element);
+			this.node = Js.use(this.element);
 		}
 		
 		return this;

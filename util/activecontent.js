@@ -54,9 +54,9 @@ Js.util.activeContent = Js.base.create({
 	_selector: function() {
 		var that = this;
 		
-		jQuery(this.element).bind("click", function() 
+		Js.use(this.element).bind("click", function() 
 		{
-			var href = jQuery(this).attr("href");
+			var href = Js.use(this).attr("href");
 			var anchors = (Jrun.isset(href) ? href : this.href);
 			
 			if (anchors.match(/^\#/)) {

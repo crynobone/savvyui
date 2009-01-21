@@ -33,7 +33,7 @@ Js.widget.tab = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.tab);
 		
-		this.node = jQuery(selector);
+		this.node = Js.use(selector);
 		this.node.addClass(this.setting.container);
 		this.element = this.node.eq(0).attr("id");
 		
@@ -43,7 +43,7 @@ Js.widget.tab = Js.base.create({
 		this._addToolbar();
 		
 		// set the first tab as active
-		this.activeHeader = jQuery("a[href=#" + this.activeTab.attr("id") + "]", this.header);
+		this.activeHeader = Js.use("a[href=#" + this.activeTab.attr("id") + "]", this.header);
 		this.activeHeader.addClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssActive);
 		
@@ -56,64 +56,64 @@ Js.widget.tab = Js.base.create({
 		Js.debug.log("Js.widget.simpleTab: load Toolbar");
 		
 		// DOM insert tab toolbar container
-		var div = jQuery("<div/>").attr({
+		var div = Js.use("<div/>").attr({
 			className: this.setting.toolbarContainer, 
 			id: [this.element, "toolbar", "container"].join("-")
 		}).prependTo(this.node);
 		this.toolbar = div;
 		
 		// DOM insert tab toolbar
-		this.header = jQuery("<ul/>").attr({
+		this.header = Js.use("<ul/>").attr({
 			id: [this.element, "toolbar"].join("-"), 
 			className: this.setting.toolbar
 		}).appendTo(this.toolbar);
 		
 		// find all possible tabs
-		var child = jQuery(this.setting.identifier, this.node);
+		var child = Js.use(this.setting.identifier, this.node);
 		
 		child.each(function(index, data) {
 			// add the tab title
 			that._addHeader(data);
 			// hide the tab
-			jQuery(data).setClass(that.setting.cssHidden);
+			Js.use(data).setClass(that.setting.cssHidden);
 		});
 		
 		// first tab should be activated
 		this.activeTab = child.eq(0);
 		
-		var div2 = jQuery("<div/>").css("display", "block").appendTo(div);
+		var div2 = Js.use("<div/>").css("display", "block").appendTo(div);
 	},
 	_addHeader: function(node) 
 	{
 		Js.debug.log("Js.widget.simpleTab: add header");
 		var that = this;
 		
-		var node = jQuery(node);
+		var node = Js.use(node);
 		var title = node.attr("title");
 		
 		var closable = node.hasClass(this.setting.closable);
 		var disabled = node.hasClass(this.setting.disabled);
 		
-		var li = jQuery("<li/>").appendTo(this.header);
-		var a = jQuery("<a/>").attr({
+		var li = Js.use("<li/>").appendTo(this.header);
+		var a = Js.use("<a/>").attr({
 			href: "#" + node.attr("id"), 
 			title: title
 		}).appendTo(li);
 		
-		jQuery("<em/>").appendTo(a);
+		Js.use("<em/>").appendTo(a);
 		a.text(title);
 				
 		if (!!closable) {
-			jQuery("<span/>").css("paddingLeft", "10px").text("x").click(function(){
-				var my = jQuery(this.parentNode).click(function(){
+			Js.use("<span/>").css("paddingLeft", "10px").text("x").click(function(){
+				var my = Js.use(this.parentNode).click(function(){
 					return false;
 				});
 				
 				var href = my.attr("href");
 				that.activeHeader.removeClass();
 				that.activeTab.setClass(that.setting.hidden);
-				jQuery(href).remove();
-				jQuery(this.parentNode.parentNode).remove();
+				Js.use(href).remove();
+				Js.use(this.parentNode.parentNode).remove();
 				
 				that.revert();
 			}).appendTo(a);
@@ -135,7 +135,7 @@ Js.widget.tab = Js.base.create({
 	{
 		var that = this;
 		
-		var anchor = jQuery("a[href=" + selector + "]", this.header);
+		var anchor = Js.use("a[href=" + selector + "]", this.header);
 		anchor.removeClass();
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
@@ -150,7 +150,7 @@ Js.widget.tab = Js.base.create({
 		var that = this;
 		var that = this;
 		
-		var anchor = jQuery("a[href=" + selector + "]", this.header);
+		var anchor = Js.use("a[href=" + selector + "]", this.header);
 		anchor.setClass(this.setting.cssDisabled);
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
@@ -165,9 +165,9 @@ Js.widget.tab = Js.base.create({
 		this.activeHeader.removeClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssHidden);
 		
-		this.activeHeader = jQuery(node);
+		this.activeHeader = Js.use(node);
 		var href = this.activeHeader.attr("href");
-		this.activeTab = jQuery(href);
+		this.activeTab = Js.use(href);
 		
 		this.activeHeader.addClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssActive);
@@ -176,7 +176,7 @@ Js.widget.tab = Js.base.create({
 	},
 	revert: function() 
 	{
-		var active = jQuery("li > a", this.header);
+		var active = Js.use("li > a", this.header);
 		
 		if (active.length > 0) {
 			this.activateTab(active.eq(0));
@@ -186,12 +186,12 @@ Js.widget.tab = Js.base.create({
 	{
 		if (this.status == "on") {
 			this.toolbar.hide();
-			jQuery("div." + this.setting.cssHidden, this.object).setClass(this.setting.cssActive);
+			Js.use("div." + this.setting.cssHidden, this.object).setClass(this.setting.cssActive);
 			this.status = "off";
 		}
 		else {
 			this.toolbar.show();
-			jQuery("div." + this.setting.cssActive, this.object).setClass(this.setting.cssHidden);
+			Js.use("div." + this.setting.cssActive, this.object).setClass(this.setting.cssHidden);
 			this.activeTab.setClass(this.setting.cssActive);
 			this.status = "on";
 		}
@@ -207,32 +207,32 @@ Js.widget.tab = Js.base.create({
 			var closable = Jrun.pick(js.closable, false);
 			var set = Jrun.pick(js.activate, false);
 			
-			var node = jQuery('<div/>').attr({
+			var node = Js.use('<div/>').attr({
 				id: id,
 				className: this.setting.cssHidden
 			}).html(content).appendTo(this.node);
 			
-			var li = jQuery('<li/>').appendTo(this.header);
-			var a = jQuery('<a/>').attr({
+			var li = Js.use('<li/>').appendTo(this.header);
+			var a = Js.use('<a/>').attr({
 				href: "#" + id,
 				title: title
 			}).appendTo(li);
 			
-			jQuery("<em/>").appendTo(a);
+			Js.use("<em/>").appendTo(a);
 			a.text(title).bind(this.handler, function(){
 				that.activateTab(this);
 				return false;
 			});
 			
 			if (!!closable) {
-				jQuery("<span/>").click(function(){
-					var href = jQuery(this.parentNode).attr("href");
+				Js.use("<span/>").click(function(){
+					var href = Js.use(this.parentNode).attr("href");
 					that.activeHeader.removeClass();
 					that.activeTab.setClass(that.setting.hidden).fadeOut("normal", function(){
-						jQuery(this).remove();
+						Js.use(this).remove();
 					});
-					jQuery(href).remove();
-					jQuery(this.parentNode.parentNode).remove();
+					Js.use(href).remove();
+					Js.use(this.parentNode.parentNode).remove();
 					
 					that.revert();
 				}).css("paddingLeft", "10px").text("x").appendTo(a);

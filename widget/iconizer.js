@@ -38,8 +38,8 @@ Js.widget.iconizer = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.iconizer);
 		
-		jQuery("*[class*=icon]").each(function(index, value) {
-			var node = jQuery(value);
+		Js.use("*[class*=icon]").each(function(index, value) {
+			var node = Js.use(value);
 			
 			var klas = object.attr("className");
 			var klass = klas.split(/ /);
@@ -52,7 +52,7 @@ Js.widget.iconizer = Js.base.create({
 					var bg = that.setting.folder + icon + "." + that.setting.fileType;
 					
 					if (!!append) {
-						var obj = jQuery("<span/>").css({
+						var obj = Js.use("<span/>").css({
 							"display": "block",
 							"cssFloat": pos,
 							"width": "16px",

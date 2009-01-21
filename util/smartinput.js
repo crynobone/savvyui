@@ -15,19 +15,19 @@ Js.util.smartInput = Js.base.create({
 	init: function(node)
 	{
 		var node = Jrun.pick(node, this.node);
-		this.node = jQuery(node);
+		this.node = Js.use(node);
 		
 		this.activate();
 	},
 	activate: function() 
 	{	
 		this.node.bind("blur", function() {
-			var node = jQuery(this);
+			var node = Js.use(this);
 			if (Jrun.trim(node.val()) === "") {
 				node.val(node.attr("title").toString());
 			}
 		}).bind("focus", function() {
-			var node = jQuery(this);
+			var node = Js.use(this);
 			if (node.attr("title") == node.val()) {
 				node.val("");
 			}
@@ -36,12 +36,12 @@ Js.util.smartInput = Js.base.create({
 	deactivate: function()
 	{
 		this.node.unbind("blur", function() {
-			var node = jQuery(this);
+			var node = Js.use(this);
 			if (Jrun.trim(node.val()) === "") {
 				node.val(node.attr("title").toString());
 			}
 		}).unbind("focus", function() {
-			var node = jQuery(this);
+			var node = Js.use(this);
 			if (node.attr("title") == node.val()) {
 				node.val("");
 			}

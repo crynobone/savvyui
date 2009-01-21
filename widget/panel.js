@@ -39,9 +39,9 @@ Js.widget.panel = Js.base.create({
 		
 		// set renderTo element
 		if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) { 
-			this.renderTo = jQuery(this.renderTo);
+			this.renderTo = Js.use(this.renderTo);
 		} else if (!this.renderTo || !this.renderTo.nodeType) {
-			this.renderTo = jQuery("body").eq(0);
+			this.renderTo = Js.use("body").eq(0);
 		}
 		
 		this._load();
@@ -51,7 +51,7 @@ Js.widget.panel = Js.base.create({
 		var that = this;
 		
 		// render panel and hide it
-		this.node = jQuery("<div/>").attr({
+		this.node = Js.use("<div/>").attr({
 			id: this.element + "_panel",
 			className: "widget-panel"
 		}).appendTo(this.renderTo);
@@ -62,11 +62,11 @@ Js.widget.panel = Js.base.create({
 		}
 		
 		// render header
-		this.header = jQuery("<div/>").addClass("panel-header").appendTo(this.node);
+		this.header = Js.use("<div/>").addClass("panel-header").appendTo(this.node);
 		// render content
-		this.container = jQuery("<div/>").addClass("panel-content-container").html("").appendTo(this.node);
+		this.container = Js.use("<div/>").addClass("panel-content-container").html("").appendTo(this.node);
 		// render footer
-		this.footer = jQuery("<div/>").css({
+		this.footer = Js.use("<div/>").css({
 			width: "100%",
 			height: "15px"
 		}).appendTo(this.node);
@@ -78,7 +78,7 @@ Js.widget.panel = Js.base.create({
 		}
 		
 		// render header container for close and minimize button
-		var ext = jQuery("<div/>").attr({
+		var ext = Js.use("<div/>").attr({
 			className: "panel-ext"
 		}).css({
 			"cssFloat": "right", 
@@ -89,19 +89,19 @@ Js.widget.panel = Js.base.create({
 		}).appendTo(this.header);
 		
 		// render header title
-		var title = jQuery("<div/>").addClass("panel-title").text(this.setting.title).css({
+		var title = Js.use("<div/>").addClass("panel-title").text(this.setting.title).css({
 			"overflow": "hidden", 
 			"height": "20px"
 		}).appendTo(this.header);
 		
 		// render Close-Button 
-		var tclose = jQuery("<span/>").html("x").css({
+		var tclose = Js.use("<span/>").html("x").css({
 			"width": "14px",
 			"display": "none"
 		}).appendTo(ext);
 		
 		// render Minimize-Button
-		var tmin = jQuery("<span/>").html("_").css({
+		var tmin = Js.use("<span/>").html("_").css({
 			"width": "14px",
 			"display": "none"
 		}).appendTo(ext);
@@ -140,7 +140,7 @@ Js.widget.panel = Js.base.create({
 		
 		
 		// THIS IS WHERE YOUR CONTENT SHOULD GO
-		this.content = jQuery("<div/>").attr({
+		this.content = Js.use("<div/>").attr({
 			id: this.element, 
 			className: "panel-content"
 		}).html(this.setting.content).appendTo(this.container);

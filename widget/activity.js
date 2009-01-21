@@ -54,10 +54,10 @@ Js.widget.activity = Js.base.create({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.activity);
 		
-		this.node = jQuery(this.element);
+		this.node = Js.use(this.element);
 		
 		if (this.node.length == 0) {
-			jQuery("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+			Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
 		}
 		
 		this.node.css({
@@ -101,7 +101,7 @@ Js.widget.activity = Js.base.create({
 	 */
 	loadImage: function() 
 	{
-		this.box = jQuery("<img/>").attr({
+		this.box = Js.use("<img/>").attr({
 			src: this.setting.imagePath
 		}).css({
 			position: "absolute",
@@ -119,7 +119,7 @@ Js.widget.activity = Js.base.create({
 	{
 		if (this.status > 0) {
 			this.node.fadeTo("normal", 0, function(){
-				jQuery(this).css({
+				Js.use(this).css({
 					"display": "none"
 				});
 				if (Jrun.isfunction(callback)) {

@@ -57,10 +57,10 @@ Js.widget.datePicker = Js.base.create({
 		this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
 		
 		if(!this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType)) {
-			this.renderTo = jQuery("<div/>").appendTo("body");
+			this.renderTo = Js.use("<div/>").appendTo("body");
 		} 
 		else if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) {
-			this.renderTo = jQuery(this.renderTo).eq(0);
+			this.renderTo = Js.use(this.renderTo).eq(0);
 		}
 		
 		js.range = Jrun.pickStrict(js.range, this.range, [null, null], "array");
@@ -365,16 +365,16 @@ Js.widget.datePicker = Js.base.create({
 	},
 	updateValue: function(year, month, day) 
 	{
-		var field = jQuery("#" + this.element + "_" + year + month + day).eq(0);
-		var calendar = jQuery("#" + this.element + "-" + this.field).eq(0);
+		var field = Js.use("#" + this.element + "_" + year + month + day).eq(0);
+		var calendar = Js.use("#" + this.element + "-" + this.field).eq(0);
 		
 		var months = (month < 10 ? "0" + month : month);
 		var days = (day < 10 ? "0" + day : day);
 		
 		if(this.type == "single") {
 			if (!field.hasClass("calendar-day-selected")) {
-				if (Jrun.isset(this.lastDate) && jQuery("#" + this.element + "_" + this.lastDate).length > 0) {
-					var lastdate = jQuery("#" + this.element + "_" + this.lastDate).setClass("calendar-day");
+				if (Jrun.isset(this.lastDate) && Js.use("#" + this.element + "_" + this.lastDate).length > 0) {
+					var lastdate = Js.use("#" + this.element + "_" + this.lastDate).setClass("calendar-day");
 				}
 				
 				field.setClass("calendar-day-selected");
@@ -424,7 +424,7 @@ Js.widget.datePicker = Js.base.create({
 		var monthLength = this.dayOfMonth();
 		cal.html("");
 		
-		this.node = jQuery("<div/>").attr({
+		this.node = Js.use("<div/>").attr({
 			"id": [this.element, "calendar"].join("-"), 
 			"class": "calendar-panel"
 		}).css({
@@ -433,34 +433,34 @@ Js.widget.datePicker = Js.base.create({
 		
 		var wrapper = this.node;
 		
-		var header = jQuery("<div/>").appendTo(wrapper).setClass("calendar-title");
-		var content = jQuery("<div/>").appendTo(wrapper);
-		var footer = jQuery("<div/>").appendTo(wrapper);
+		var header = Js.use("<div/>").appendTo(wrapper).setClass("calendar-title");
+		var content = Js.use("<div/>").appendTo(wrapper);
+		var footer = Js.use("<div/>").appendTo(wrapper);
 		
-		var prevbtn = jQuery("<span/>").appendTo(header);
-		var nextbtn = jQuery("<span/>").appendTo(header);
-		var title = jQuery("<span/>").appendTo(header);
+		var prevbtn = Js.use("<span/>").appendTo(header);
+		var nextbtn = Js.use("<span/>").appendTo(header);
+		var title = Js.use("<span/>").appendTo(header);
 		
-		this.content = jQuery("<div/>").addClass("calendar-content").hide().appendTo(content);
-		this.option = jQuery("<div/>").addClass("calendar-option").hide().appendTo(content);
+		this.content = Js.use("<div/>").addClass("calendar-content").hide().appendTo(content);
+		this.option = Js.use("<div/>").addClass("calendar-option").hide().appendTo(content);
 		
-		var table = jQuery("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.content);
-		var tbody = jQuery("<tbody/>").appendTo(table);
+		var table = Js.use("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.content);
+		var tbody = Js.use("<tbody/>").appendTo(table);
 		
-		var trheader = jQuery("<tr/>").addClass("calendar-header").appendTo(tbody);
+		var trheader = Js.use("<tr/>").addClass("calendar-header").appendTo(tbody);
 		
 		for (var i = 0; i <= 6; i++) {
-			jQuery("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader);
+			Js.use("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader);
 		}
 		
 		var day = 1;
 		
 		for (var i = 0; i < 6; i++) {
-			var weeks = jQuery("<tr/>").addClass("calendar-week").appendTo(tbody);
+			var weeks = Js.use("<tr/>").addClass("calendar-week").appendTo(tbody);
 			
 			for (var j = 0; j <= 6; j++) {
 				this.date = [this.year, (this.month + 1), day].join("-");
-				var days = jQuery("<td/>").addClass("calendar-" + (this.validation() ? "day" : "invalid")).appendTo(weeks);
+				var days = Js.use("<td/>").addClass("calendar-" + (this.validation() ? "day" : "invalid")).appendTo(weeks);
 				
 				if (day <= monthLength && (i > 0 || j >= start_day)) {
 					days.attr("id", this.element + "_" + this.year + (this.month + 1) + day);
@@ -469,7 +469,7 @@ Js.widget.datePicker = Js.base.create({
 					if (this.validation()) {
 						days.bind("click", function(){
 						
-							var i = jQuery(this).attr("id").split("_");
+							var i = Js.use(this).attr("id").split("_");
 							var count = (i.length - 1);
 							var ym = that.year + "" + that.month;
 							tday = i[count].substr((ym.length), i[count].length);
@@ -507,35 +507,35 @@ Js.widget.datePicker = Js.base.create({
 				that.nextMonth();
 			}).setClass("next-month");
 			
-			jQuery("<p/>").text(Js.lang.widget.datePicker.selectMonthYear).appendTo(this.option);
+			Js.use("<p/>").text(Js.lang.widget.datePicker.selectMonthYear).appendTo(this.option);
 			
-			var selmonth = jQuery("<select name='month'></select>").bind("change", function(){
+			var selmonth = Js.use("<select name='month'></select>").bind("change", function(){
 				that.customMonth(this.value);
 			}).appendTo(this.option);
 			
 			for (var i = 0; i < 12; i++) {
 				if (this.month == i) {
-					jQuery("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth);
+					Js.use("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth);
 				}
 				else {
-					jQuery("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth);
+					Js.use("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth);
 				}
 			}
 			
-			var selyear = jQuery("<select name='year'></select>").text(" ").bind("change", function(){
+			var selyear = Js.use("<select name='year'></select>").text(" ").bind("change", function(){
 				that.customYear(this.value);
 			}).appendTo(this.option);
 			
 			for (var i = this.range[0]; i >= this.range[1]; i--) {
 				if (this.year == i) {
-					jQuery("<option value='" + i + "' selected='selected'></option>").text(i.toString()).appendTo(selyear);
+					Js.use("<option value='" + i + "' selected='selected'></option>").text(i.toString()).appendTo(selyear);
 				}
 				else {
-					jQuery("<option value='" + i + "'></option>").text(i.toString()).appendTo(selyear);
+					Js.use("<option value='" + i + "'></option>").text(i.toString()).appendTo(selyear);
 				}
 			}
 			
-			jQuery("<input type='button' name='today' />").val(Js.lang.widget.datePicker.todayButton).bind("click", function(){
+			Js.use("<input type='button' name='today' />").val(Js.lang.widget.datePicker.todayButton).bind("click", function(){
 				that.today();
 			}).addClass("select-today").appendTo(this.option);
 			
@@ -566,7 +566,7 @@ Js.widget.datePicker = Js.base.create({
 		}
 		
 		if (Jrun.isset(this.field)) {
-			var input = jQuery("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.setting.fieldType + "' />").appendTo(this.content);
+			var input = Js.use("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.setting.fieldType + "' />").appendTo(this.content);
 			
 			if (Jrun.isset(this.day)) {
 				var m = (this.month + 1);

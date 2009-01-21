@@ -47,7 +47,7 @@ Js.ext.validate = Js.base.create({
 		var that = this;
 		
 		// node should refer to only one object
-		this.node = jQuery(node).eq(0);
+		this.node = Js.use(node).eq(0);
 		
 		// setup configuration
 		this.setup(option);
@@ -72,10 +72,10 @@ Js.ext.validate = Js.base.create({
 		
 		if (this.node.length >= 1) {
 			// based on the form, select on input type
-			var fields = jQuery(":input", this.node);
+			var fields = Js.use(":input", this.node);
 			
 			fields.each(function(index, field) {
-				var node = jQuery(field);
+				var node = Js.use(field);
 				var value = node.val();
 				// Double confirm the element is either input, select or textarea
 				
@@ -255,7 +255,7 @@ Js.ext.validate = Js.base.create({
 		
 		if (errorNode.length < 1) {
 			try {
-				jQuery("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node);
+				Js.use("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node);
 			} 
 			catch (e) {
 				Js.debug.error(e);
@@ -270,7 +270,7 @@ Js.ext.validate = Js.base.create({
 		}
 		
 		node.bind("change", function() {
-			var jnode = jQuery(this);
+			var jnode = Js.use(this);
 			if (jnode.val() != "") {
 				that._messageCleanUp(jnode);
 				that.first = null;

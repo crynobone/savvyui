@@ -14,3 +14,7 @@ It much easier to include `/css/all.css` rather than including individual Cascad
 {{{
 <link type="text/css" rel="stylesheet" media="all" href="/path/to/css/all.css" />
 }}}
+Alternatively, you can just include what you need using this following code:
+{{{
+<link type="text/css" rel="stylesheet" media="all" href="/path/to/css/widget-tab.css" />
+}}}

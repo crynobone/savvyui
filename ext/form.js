@@ -219,12 +219,8 @@ Js.ext.validate = Js.base.create({
 		
 		// dump name and value to opt in querystring format ( &name=value )
 		if (node.is(':checkbox, :radio')) {
-			if (node.is(':checkbox, :checked')) {
+			if (node.is(':checked')) {
 				// only add checked checkbox input
-				data += "&" + node.attr('name') + "=" + Js.parse.html.to(node.val());
-			} 
-			else if (node.is(':radio, :checked')) {
-				// only add checked radiobox input
 				data += "&" + node.attr('name') + "=" + Js.parse.html.to(node.val());
 			}
 		} 
@@ -241,7 +237,7 @@ Js.ext.validate = Js.base.create({
 	 */
 	_messageCleanUp: function(node) 
 	{
-		var errSpan = this.setting.error.node + "." + this.setting.error.cssMessage;
+		var errSpan = this.setting.errorNode;
 		var errNode = node.siblings(errSpan);
 		if (errNode.length > 0) {
 			errNode.remove();
@@ -255,9 +251,9 @@ Js.ext.validate = Js.base.create({
 	_messageAdd: function(node, message) 
 	{
 		var that = this;
-		var errorNode = node.siblings(this.setting.error.node + "." + this.setting.error.cssMessage).eq(0);
+		var errorNode = node.siblings(this.setting.errorNode).eq(0);
 		
-		if (errorNode.length == 0) {
+		if (errorNode.length < 1) {
 			try {
 				jQuery("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node);
 			} 

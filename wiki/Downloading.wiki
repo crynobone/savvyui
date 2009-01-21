@@ -14,6 +14,6 @@ svn export http://savvyui.googlecode.com/svn/trunk/ <your_folder_name>
 
 =In The Package=
 For most user, our download package may seem a bit crowded compare to any other JavaScript Framework. However there no need to panic, out of the box you just need to copy *css* folder and the !JavaScript file;
- * savvyui.js<br>Uncompressed with comments
- * savvyui.min.js<br>Minified without comments
- * savvyui.pack.js<br>Packed using Edward Dean's Packer
+ * *savvyui.js*<br>Uncompressed with comments
+ * *savvyui.min.js*<br>Minified without comments
+ * *savvyui.pack.js*<br>Packed using Edward Dean's Packer

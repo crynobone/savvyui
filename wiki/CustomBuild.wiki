@@ -1,3 +1,12 @@
 #summary Custom Build Your Savvy.UI
 = Introduction =
-With Savvy.UI, we gave you the freedom to choose what your feel necessary to be in your set of code.  
+With Savvy.UI, we gave you the freedom to choose what your feel necessary to be in your set of code, or throw out any module which you wouldn't be using for the build.
+
+==Requirement==
+With a little knowledge on PHP programming and PHP CLI you are ready to rebuild Savvy.UI at any point of time, and make sure you have either PHP using Web Server or PHP CLI running in your machine.
+
+==Rebuilding Savvy.UI==
+To rebuild Savvy.UI all you need to do is execute this following code in Terminal:
+{{{
+php /path/to/lib/build/index.php
+}}}

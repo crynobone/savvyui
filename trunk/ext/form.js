@@ -59,7 +59,7 @@ Js.ext.validate = Js.base.create({
 		var fnSuccess = Jrun.pick(setting.success, null);
 		var fnOnError = Jrun.pick(setting.onError, null);
 		var data = "";
-		var lang = Js.lang.ext.validate;
+		var lang = Js.language.ext.validate;
 		
 		// set this.first to NULL
 		this.first = null;

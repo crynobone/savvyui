@@ -29,7 +29,7 @@ var Js = {
 		util: {},
 		widget: {}
 	},
-	lang: {
+	language: {
 		ext: {},
 		util: {},
 		widget: {}

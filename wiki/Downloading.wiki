@@ -1,4 +1,5 @@
 #summary Downloading Savvy.UI
+#labels Featured,Phase-Deploy
 
 ==Downloading Savvy.UI Package==
 Savvy.UI's latest package (in .zip) can be downloaded from [http://code.google.com/p/savvyui/downloads/list Downloads] tab (latest marked as *featured*). In each package you will get:

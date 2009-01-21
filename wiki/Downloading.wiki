@@ -2,12 +2,9 @@
 #labels Featured,Phase-Deploy
 
 =Downloading Savvy.UI=
+Our download package not only allow you to use Savvy.UI but at the same time give you the permission to modify the core of Savvy.UI where you set fit which you can compiled into single Full, Minified and Packed version using a PHP script from `/lib/build/index.php`.
 ==Via Package==
-Savvy.UI's latest package (in .zip) can be downloaded from [http://code.google.com/p/savvyui/downloads/list Downloads] tab (latest marked as *featured*). In each package you will get:
- * Development Code
- * Compiled Code
- * Examples
- * Stylesheet
+Savvy.UI's latest package (in .zip) can be downloaded from [http://code.google.com/p/savvyui/downloads/list Downloads] tab (latest marked as *featured*).
 
 ==Via SVN Trunk==
 You can also get a latest copy from our repository via this command:

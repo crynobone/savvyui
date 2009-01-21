@@ -1,8 +1,9 @@
 #summary Getting Started with Savvy.UI
 
 =The Basic=
-First and foremost, you need to include jQuery !JavaScript Library, e.g:
+First and foremost, you need to include jQuery and Savvy.UI !JavaScript Library, e.g:
 {{{
 <script src="/path/to/jquery.js" type="text/javascript"></script>
+<script src="/path/to/savvyui.js" type="text/javascript"></script>
 }}}
-Details on using jQuery can be found from http://docs.jquery.com/
+Remember to include jQuery before including Savvy.UI. If you wish to get more detail on using jQuery, please visit [http://docs.jquery.com/ jQuery Documentation Wiki].

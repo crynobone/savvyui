@@ -1,3 +1,8 @@
-#summary Js.widget.tab
+#summary Js.widget.tab Documentation
 
 = Introduction =
+{{{
+// new Js.widget.tab(<selector>, <configuration>);
+// here an example
+new Js.widget.tab("#content", {handler:"mouseover"});
+}}}

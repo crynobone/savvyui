@@ -21,4 +21,4 @@ jQuery.fn.extend({
 	}
 });
 
-Js.use = jQuery.noConflict();
+Js.use = window.jQuery;

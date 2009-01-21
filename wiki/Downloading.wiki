@@ -6,3 +6,9 @@ Savvy.UI's latest package (in .zip) can be downloaded from [http://code.google.c
  * Compile Source
  * Examples
  * Stylesheet
+
+==Export From Savvy.UI Trunk==
+You can also get a latest copy from our repository via this command:
+{{{ 
+svn export http://savvyui.googlecode.com/svn/trunk/ <your_folder_name> 
+}}}

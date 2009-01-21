@@ -31,13 +31,17 @@
 		Js.setup.widget.panel({
 			allowClose: false
 		});
-		var panel = new Js.widget.panel({
-			element: "controller",
-			renderTo: "#panel-container",
-			title: "Hello world",
-			width: 300,
-			content: "<p>Some content</p><p>Some other content</p><pre>some.code.here</pre>"
-		});
+		try {
+			var panel = new Js.widget.panel({
+				element: "controller",
+				renderTo: "#panel-container",
+				title: "Hello world",
+				width: 300,
+				content: "<p>Some content</p><p>Some other content</p><pre>some.code.here</pre>"
+			});
+		} catch(e) {
+			alert(e);
+		}
 		-->
 		</script>
 	</body>

@@ -429,7 +429,7 @@ Js.widget.datePicker = Js.base.create({
 			"class": "calendar-panel"
 		}).css({
 			"display": "block"
-		}).appendTo(cal);
+		}).appendTo(cal[0]);
 		
 		var wrapper = this.node;
 		

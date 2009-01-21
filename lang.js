@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-Js.lang = {
+Js.language = {
 	ext: {
 		validate: {
 			string: "Require alphanumeric character input",

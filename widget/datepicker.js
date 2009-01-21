@@ -507,7 +507,7 @@ Js.widget.datePicker = Js.base.create({
 				that.nextMonth();
 			}).setClass("next-month");
 			
-			Js.use("<p/>").text(Js.lang.widget.datePicker.selectMonthYear).appendTo(this.option);
+			Js.use("<p/>").text(Js.language.widget.datePicker.selectMonthYear).appendTo(this.option);
 			
 			var selmonth = Js.use("<select name='month'></select>").bind("change", function(){
 				that.customMonth(this.value);
@@ -535,7 +535,7 @@ Js.widget.datePicker = Js.base.create({
 				}
 			}
 			
-			Js.use("<input type='button' name='today' />").val(Js.lang.widget.datePicker.todayButton).bind("click", function(){
+			Js.use("<input type='button' name='today' />").val(Js.language.widget.datePicker.todayButton).bind("click", function(){
 				that.today();
 			}).addClass("select-today").appendTo(this.option);
 			

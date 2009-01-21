@@ -44,7 +44,7 @@ Js.widget.notice = Js.widget.activity.extend({
 		this.node.box.html("");
 		this.node.activate();
 		
-		var title = Js.lang.widget.notice.title[status];
+		var title = Js.language.widget.notice.title[status];
 		var message = "";
 		var opt = false;
 		
@@ -64,7 +64,7 @@ Js.widget.notice = Js.widget.activity.extend({
 			var p = Js.use("<p/>").html("" + message).appendTo(this.node.box);
 		}
 		
-		var span = Js.use("<em/>").text(Js.lang.widget.notice.timer).appendTo(this.node.box);
+		var span = Js.use("<em/>").text(Js.language.widget.notice.timer).appendTo(this.node.box);
 		
 		this.node.node.one("click", function() {
 			that.closeNotice();

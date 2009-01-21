@@ -1,4 +1,8 @@
 #summary Downloading Savvy.UI
 
-=Download Savvy.UI=
-Savvy.UI's latest version can be downloaded from [http://code.google.com/p/savvyui/downloads/list Downloads] tab, unlike jQuery download at GoogleCode everything is package under one download.
+==Downloading Savvy.UI Package==
+Savvy.UI's latest package (in .zip) can be downloaded from [http://code.google.com/p/savvyui/downloads/list Downloads] tab (latest marked as *featured*). In each package you will get:
+ * Development Sources
+ * Compile Source
+ * Examples
+ * Stylesheet

@@ -2,7 +2,7 @@
 #labels Featured,Phase-Deploy
 
 =Downloading Savvy.UI=
-Our download package not only allow you to use Savvy.UI but at the same time give you the permission to modify the core of Savvy.UI. We at Savvy.UI Development Team allow you to modify any of the script found in Savvy.UI where you see fit. Our package come with a PHP script from `lib/build/index.php` (require PHP CLI) which can compiled the changes into single Full, Minified and Packed version.
+Our download package not only allow you to use Savvy.UI but at the same time give you the permission to modify the core of Savvy.UI. We at Savvy.UI Development Team allow you to modify any of the script found in Savvy.UI where you see fit. Our package come with a PHP script from `/lib/build/index.php` (require PHP CLI) which can compiled the changes into single Full, Minified and Packed version.
 ==Download Via Package==
 Savvy.UI's latest package (in .zip) can be downloaded from [http://code.google.com/p/savvyui/downloads/list Downloads] tab (latest marked as *featured*).
 
@@ -13,7 +13,7 @@ svn export http://savvyui.googlecode.com/svn/trunk/ <your_folder_name>
 }}}
 
 =In The Package=
-For most user, our download package may seem a bit crowded compare to any other JavaScript Framework. However there no need to panic, out of the box you just need to copy *css* folder and the !JavaScript file;
- * *savvyui.js*<br>Uncompressed with comments
- * *savvyui.min.js*<br>Minified without comments
- * *savvyui.pack.js*<br>Packed using Edward Dean's Packer
+For most user, our download package may seem a bit crowded compare to any other JavaScript Framework. However there no need to panic, out of the box you just need to copy */css/* folder and the !JavaScript file;
+ * */lib/savvyui.js*<br>Uncompressed with comments
+ * */lib/savvyui.min.js*<br>Minified without comments
+ * */lib/savvyui.pack.js*<br>Packed using Edward Dean's Packer

@@ -841,7 +841,7 @@ jQuery.fn.extend({
 	}
 });
 
-Js.use = jQuery.noConflict();
+Js.use = window.jQuery;
 /**
  * @memberOf Js
  * @version 0.0.2

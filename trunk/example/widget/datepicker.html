@@ -31,18 +31,22 @@
 		</div>
 		<script type="text/javascript">
 		<!--
-		var dates = new Js.widget.datePicker({
-			value: "",
-			renderTo: "#datepicker",
-			field:"date_value",
-			element: "#calendar",
-			range: ["+120", "-15"],
-			option: {
-				onUpdate: (function(){
-					alert(this.value);
-				})
-			}
-		});
+		try {
+			var dates = new Js.widget.datePicker({
+				value: "",
+				renderTo: "#datepicker",
+				field: "date_value",
+				element: "#calendar",
+				range: ["+120", "-15"],
+				option: {
+					onUpdate: (function(){
+						alert(this.value);
+					})
+				}
+			});
+		} catch(e) {
+			alert(e);
+		}
 		-->
 		</script>
 	</body>

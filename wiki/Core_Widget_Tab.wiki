@@ -1,5 +1,5 @@
 #summary Js.widget.tab Documentation
-
+<wiki:toc max_depth="2" />
 = Introduction =
 `Js.widget.tab` allow you to dynamically create tab interface using Savvy.UI, below is a sample of code to initiate a tab. 
 

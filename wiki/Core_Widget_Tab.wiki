@@ -31,7 +31,15 @@ var tab1 = new Js.widget.tab("#content-tab", {
 
 = Customization to the Tab =
 == Adding New Tab ==
-Adding new tab is as easy as initiating it, assume 
+Adding new tab is as easy as initiating it, assume we still using `tab1`
+{{{
+tab1.addTab({
+	id: "hello-world",
+	title: "Hello world",
+	closable: true,
+	content: "<p>Hello world</p>"
+});
+}}}
 
 = Example =
 http://crynobone.com/script/example/widget/tab.html

@@ -1,8 +1,14 @@
 #summary Js.widget.tab Documentation
 
 = Introduction =
+`Js.widget.tab` allow you to dynamically create tab interface using Savvy.UI. 
 {{{
-// new Js.widget.tab(<selector>, <configuration>);
-// here an example
-new Js.widget.tab("#content", {handler:"mouseover"});
+new Js.widget.tab("#content", {
+handler:"mouseover",
+identifier:".simpletab"
+});
 }}}
+== Configuration ==
+|| Name || Description || Default Value || Value Type ||
+|| handler || Determine event handler for tab to be activated || click || String ||
+|| identifier || Allow the code to detect whether this container should be included in the tab, preferable type is based on className || .tab || String ||

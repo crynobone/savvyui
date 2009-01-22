@@ -1,7 +1,7 @@
 #summary Savvy.UI Core
 #labels Phase-Implementation
 <wiki:toc max_depth="2" />
-= Js =
+= Global Namespace: Js =
 `Js` is our primary global namespace for Savvy.UI.
 
 == Js.toString() ==

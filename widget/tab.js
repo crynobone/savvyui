@@ -59,14 +59,14 @@ Js.widget.tab = Js.base.create({
 		var div = Js.use("<div/>").attr({
 			className: this.setting.toolbarContainer, 
 			id: [this.element, "toolbar", "container"].join("-")
-		}).prependTo(this.node);
+		}).prependTo(this.node[0]);
 		this.toolbar = div;
 		
 		// DOM insert tab toolbar
 		this.header = Js.use("<ul/>").attr({
 			id: [this.element, "toolbar"].join("-"), 
 			className: this.setting.toolbar
-		}).appendTo(this.toolbar);
+		}).appendTo(this.toolbar[0]);
 		
 		// find all possible tabs
 		var child = Js.use(this.setting.identifier, this.node);
@@ -81,7 +81,7 @@ Js.widget.tab = Js.base.create({
 		// first tab should be activated
 		this.activeTab = child.eq(0);
 		
-		var div2 = Js.use("<div/>").css("display", "block").appendTo(div);
+		var div2 = Js.use("<div/>").css("display", "block").appendTo(div[0]);
 	},
 	_addHeader: function(node) 
 	{
@@ -94,13 +94,13 @@ Js.widget.tab = Js.base.create({
 		var closable = node.hasClass(this.setting.closable);
 		var disabled = node.hasClass(this.setting.disabled);
 		
-		var li = Js.use("<li/>").appendTo(this.header);
+		var li = Js.use("<li/>").appendTo(this.header[0]);
 		var a = Js.use("<a/>").attr({
 			href: "#" + node.attr("id"), 
 			title: title
-		}).appendTo(li);
+		}).appendTo(li[0]);
 		
-		Js.use("<em/>").appendTo(a);
+		Js.use("<em/>").appendTo(a[0]);
 		a.text(title);
 				
 		if (!!closable) {
@@ -116,7 +116,7 @@ Js.widget.tab = Js.base.create({
 				Js.use(this.parentNode.parentNode).remove();
 				
 				that.revert();
-			}).appendTo(a);
+			}).appendTo(a[0]);
 		}
 		
 		if (!!disabled) {
@@ -150,7 +150,7 @@ Js.widget.tab = Js.base.create({
 		var that = this;
 		var that = this;
 		
-		var anchor = Js.use("a[href=" + selector + "]", this.header);
+		var anchor = Js.use("a[href=" + selector + "]", this.header[0]);
 		anchor.setClass(this.setting.cssDisabled);
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
@@ -165,7 +165,7 @@ Js.widget.tab = Js.base.create({
 		this.activeHeader.removeClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssHidden);
 		
-		this.activeHeader = Js.use(node);
+		this.activeHeader = Js.use(node[0]);
 		var href = this.activeHeader.attr("href");
 		this.activeTab = Js.use(href);
 		
@@ -176,7 +176,7 @@ Js.widget.tab = Js.base.create({
 	},
 	revert: function() 
 	{
-		var active = Js.use("li > a", this.header);
+		var active = Js.use("li > a", this.header[0]);
 		
 		if (active.length > 0) {
 			this.activateTab(active.eq(0));
@@ -210,15 +210,15 @@ Js.widget.tab = Js.base.create({
 			var node = Js.use('<div/>').attr({
 				id: id,
 				className: this.setting.cssHidden
-			}).html(content).appendTo(this.node);
+			}).html(content).appendTo(this.node[0]);
 			
-			var li = Js.use('<li/>').appendTo(this.header);
+			var li = Js.use('<li/>').appendTo(this.header[0]);
 			var a = Js.use('<a/>').attr({
 				href: "#" + id,
 				title: title
-			}).appendTo(li);
+			}).appendTo(li[0]);
 			
-			Js.use("<em/>").appendTo(a);
+			Js.use("<em/>").appendTo(a[0]);
 			a.text(title).bind(this.handler, function(){
 				that.activateTab(this);
 				return false;
@@ -235,7 +235,7 @@ Js.widget.tab = Js.base.create({
 					Js.use(this.parentNode.parentNode).remove();
 					
 					that.revert();
-				}).css("paddingLeft", "10px").text("x").appendTo(a);
+				}).css("paddingLeft", "10px").text("x").appendTo(a[0]);
 			}
 			
 			if (!!set) {

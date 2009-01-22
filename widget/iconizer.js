@@ -41,7 +41,7 @@ Js.widget.iconizer = Js.base.create({
 		Js.use("*[class*=icon]").each(function(index, value) {
 			var node = Js.use(value);
 			
-			var klas = object.attr("className");
+			var klas = node.attr("className");
 			var klass = klas.split(/ /);
 			
 			for (var i = 0; i < klass.length; i++) {
@@ -57,7 +57,7 @@ Js.widget.iconizer = Js.base.create({
 							"cssFloat": pos,
 							"width": "16px",
 							"height": "16px"
-						}).prependTo(object);
+						}).prependTo(node[0]);
 						
 						if (pos == "left") {
 							obj.css({

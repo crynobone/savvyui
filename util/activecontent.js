@@ -18,14 +18,14 @@ Js.util.activeContent = Js.base.create({
 	init: null,
 	element: null,
 	option: null,
-	fnbeforeStart: null,
+	fnBeforeStart: null,
 	fnSuccess: null,
 	__construct: function(js) 
 	{
 		var js = Jrun.pickStrict(js, {}, "object");
 		this.element = Jrun.pick(js.element, null);
-		this.beforeStart = Jrun.pick(js.beforeStart, this.beforeStart);
-		this.success = Jrun.pick(js.success, this.success);
+		this.fnBeforeStart = Jrun.pick(js.beforeStart, this.fnBeforeStart);
+		this.fbSuccess = Jrun.pick(js.success, this.fnSuccess);
 		
 		if(Jrun.isset(this.element)) 
 		{
@@ -66,8 +66,8 @@ Js.util.activeContent = Js.base.create({
 				var ahref = anchors.split(/\#/);
 			}
 			
-			if(Jrun.isfunction(that.beforeStart)) {
-				that.beforeStart();
+			if(Jrun.isfunction(that.fnBeforeStart)) {
+				that.fnBeforeStart();
 			}
 			
 			if(Jrun.isset(ahref[1])) {

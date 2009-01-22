@@ -8,7 +8,7 @@
 Js.test = {
 	/**
 	 * Check if argument is a string
-	 * 
+	 * @alias Js.test.isString
 	 * @param {String} [data] argument to be tested
 	 * @return {Boolean} return true if argument is a string
 	 */
@@ -18,7 +18,7 @@ Js.test = {
 	},
 	/**
 	 * Check if argument is a number
-	 * 
+	 * @alias Js.test.isNumber
 	 * @param {Number} [data] argument to be tested
 	 * @return {Boolean} return true if argument is a number
 	 */
@@ -28,7 +28,7 @@ Js.test = {
 	},
 	/**
 	 * Compare data with value
-	 * 
+	 * @alias Js.test.isLength
 	 * @param {String} [data] 
 	 * @param {Number} [value]
 	 * @return {Boolean} 
@@ -62,7 +62,7 @@ Js.test = {
 	},
 	/**
 	 * Check if argument is an email address
-	 * 
+	 * @alias Js.test.isEmail
 	 * @param {String} data
 	 * @return {Boolean}
 	 */
@@ -72,7 +72,7 @@ Js.test = {
 	},
 	/**
 	 * Check if argument is a URL
-	 * 
+	 * @alias Js.test.isURL
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
@@ -82,7 +82,7 @@ Js.test = {
 	},
 	/**
 	 * Check if argument is an IP Address
-	 * 
+	 * @alias Js.test.isIpAddress
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */

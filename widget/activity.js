@@ -108,7 +108,7 @@ Js.widget.activity = Js.base.create({
 			width: this.setting.boxWidth + "px",
 			height: this.setting.boxHeight + "px",
 			zIndex: (this.setting.zIndex + 1)
-		}).appendTo(this.node);
+		}).appendTo(this.node[0]);
 	},
 	/**
 	 * Deactivate activity layer

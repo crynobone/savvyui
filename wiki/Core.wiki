@@ -1,4 +1,4 @@
-#summary Savvy.UI Core
+#summary Core Documentation
 #labels Phase-Implementation
 <wiki:toc max_depth="2" />
 = Global Namespace: Js =

@@ -20,6 +20,6 @@ tab.disableTab("#tab-2");
 
 // do some other programming...
 
-/* What if I need to reactivate #tab-2?
+/* What if I need to reactivate #tab-2? */
 tab.enableTab("#tab-2");
 }}}

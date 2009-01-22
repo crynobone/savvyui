@@ -47,6 +47,14 @@ Toggle tab interface using one simple callback
 {{{
 tab1.toggle();
 }}}
-===
+==Enabling/Disabling a Tab==
+Savvy.UI provide `.enableTab()` and `.disableTab()` for this purpose.
+{{{
+// Disable #tab-2
+tab1.disableTab("#tab-2");
+
+// Re-enable #tab-2
+tab1.enableTab("#tab-2");
+}}}
 = Example =
 http://crynobone.com/script/example/widget/tab.html

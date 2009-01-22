@@ -1,0 +1,12 @@
+#summary Savvy.UI Core
+#labels Phase-Implementation
+<wiki:toc max_depth="2" />
+= Js =
+`Js` is our primary global namespace for Savvy.UI.
+
+== Js.toString() ==
+Return String describing current working Savvy.UI
+{{{
+alert(Js.toString());
+// Alert: Savvy.UI version 1.1.3b using jQuery 1.2.6
+}}}

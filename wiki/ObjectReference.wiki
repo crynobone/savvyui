@@ -17,4 +17,9 @@ To solve the scenario brought up above, here what we can actually do.
 {{{
 var tab = new Js.widget.tab("#some-container");
 tab.disableTab("#tab-2");
+
+// do some other programming...
+
+/* What if I need to reactivate #tab-2?
+tab.enableTab("#tab-2");
 }}}

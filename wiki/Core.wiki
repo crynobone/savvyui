@@ -10,3 +10,18 @@ Return String describing current working Savvy.UI
 alert(Js.toString());
 // Alert: Savvy.UI version 1.1.3b using jQuery 1.2.6
 }}}
+
+== Js.nue() ==
+Copy Object method/properties without adding reference to the original Object (which is the default behaviour of !JavaScript).
+{{{
+var person = {
+	firstName: "Mior Muhammad Zaki",
+	lastName: "Mior Khairuddin"
+};
+			
+var student = Js.nue(person);
+student.matric = "49070";
+
+alert(person.matric);
+// Alert: null or undefined
+}}}

@@ -4,6 +4,13 @@
  * @license MIT
  */
 
+/**
+ * @alias Js.widget.tab
+ * @constructor
+ * @param {String} selector 
+ * @param {Object} option
+ * @return {Object}
+ */
 Js.widget.tab = Js.base.create({
 	height: null,
 	toolbar: null,

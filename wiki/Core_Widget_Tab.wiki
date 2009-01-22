@@ -4,15 +4,25 @@
 `Js.widget.tab` allow you to dynamically create tab interface using Savvy.UI, below is a sample of code to initiate a tab. 
 == Initiate Js.widget.tab ==
 {{{
-var tab1 = new Js.widget.tab("#content", {
-handler:"mouseover",
-identifier:".simpletab"
+var tab1 = new Js.widget.tab("#content-tab", {
+	handler:"mouseover",
+	identifier:".simpletab"
 });
 }}}
 `tab1` have become our [ObjectReference Object Reference] to `Js.widget.tab`, allow us to further manipulate that particular tab in the future (See below for more information).
 
 == HTML ==
-
+{{{
+<div id="content-tab">
+	<div id="tab-1" title="Title for Tab 1" class="simpletab">
+		Some content of this tab
+	</div>
+	<div id="tab-2" title="Title for Tab 2" class="simpletab">
+		Some other content of this tab
+	</div>
+	<div>What ever, this wouldn't be included in the tab.</div>
+</div>
+}}}
 
 = Configuration =
 || Name || Description || Default Value || Value Type ||

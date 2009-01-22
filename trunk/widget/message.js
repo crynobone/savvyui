@@ -40,15 +40,15 @@ Js.widget.message = Js.base.create({
 		(function() {
 			var div = Js.use("<div/>").attr({
 				className: "widgetmessage-box"
-			}).css("margin", "2px 0px").appendTo(that.node).hide();
+			}).css("margin", "2px 0px").appendTo(that.node[0]).hide();
 			
 			if (!!closable) {
 				var span = Js.use("<span/>").attr({
 					className: "widgetmessage-close"
-				}).text("x").appendTo(div);
+				}).text("x").appendTo(div[0]);
 			}
 			
-			var p = Js.use("<p/>").html(text).appendTo(div);
+			var p = Js.use("<p/>").html(text).appendTo(div[0]);
 			
 			var t = setTimeout(function() {
 				div.hide("normal", function() {

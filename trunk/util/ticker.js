@@ -8,7 +8,6 @@
 
 /**
  * Initiate new Js.util.ticker
- * 
  * @alias Js.util.ticker
  * @constructor
  * @param {Object} node

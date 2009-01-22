@@ -54,7 +54,7 @@ Js.widget.panel = Js.base.create({
 		this.node = Js.use("<div/>").attr({
 			id: this.element + "_panel",
 			className: "widget-panel"
-		}).appendTo(this.renderTo);
+		}).appendTo(this.renderTo[0]);
 		
 		// set panel width
 		if (Jrun.isset(this.setting.width)) {

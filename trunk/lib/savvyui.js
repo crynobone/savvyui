@@ -1,7 +1,7 @@
 /**
  * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
  * @namespace Js
- * @version 1.1.3
+ * @version 1.1.4
  * @extends jQuery-1.2.6
  * @author Mior Muhammad Zaki crynobone@gmail.com
  */
@@ -12,7 +12,8 @@
  */
 var Js = {
 	adapter: "jQuery-1.2.6",
-	version: "1.1.3",
+	version: "1.1.4",
+	use: null,
 	debug: {},
 	ext: {},
 	util: {},
@@ -397,6 +398,7 @@ var Jrun = {
             
             if (Jrun.isset(value)) {
                 return value;
+				break;
             }
 		};
 		
@@ -421,6 +423,7 @@ var Jrun = {
             if (Jrun.isset(value)) {
                 if (this.typeOf(value) == last) {
                     return value;
+					break;
                 }
             }
 		};
@@ -450,6 +453,7 @@ var Jrun = {
             if (Jrun.isset(value)) {
                 if (!!value.match(last)) {
                     return value;
+					break;
                 }
             }
 		};
@@ -1157,7 +1161,7 @@ Js.parse = {
 Js.test = {
 	/**
 	 * Check if argument is a string
-	 * 
+	 * @alias Js.test.isString
 	 * @param {String} [data] argument to be tested
 	 * @return {Boolean} return true if argument is a string
 	 */
@@ -1167,7 +1171,7 @@ Js.test = {
 	},
 	/**
 	 * Check if argument is a number
-	 * 
+	 * @alias Js.test.isNumber
 	 * @param {Number} [data] argument to be tested
 	 * @return {Boolean} return true if argument is a number
 	 */
@@ -1177,7 +1181,7 @@ Js.test = {
 	},
 	/**
 	 * Compare data with value
-	 * 
+	 * @alias Js.test.isLength
 	 * @param {String} [data] 
 	 * @param {Number} [value]
 	 * @return {Boolean} 
@@ -1211,7 +1215,7 @@ Js.test = {
 	},
 	/**
 	 * Check if argument is an email address
-	 * 
+	 * @alias Js.test.isEmail
 	 * @param {String} data
 	 * @return {Boolean}
 	 */
@@ -1221,7 +1225,7 @@ Js.test = {
 	},
 	/**
 	 * Check if argument is a URL
-	 * 
+	 * @alias Js.test.isURL
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
@@ -1231,7 +1235,7 @@ Js.test = {
 	},
 	/**
 	 * Check if argument is an IP Address
-	 * 
+	 * @alias Js.test.isIpAddress
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
@@ -1360,6 +1364,7 @@ Js.ext.validate = Js.base.create({
 					}
 					
 					var testIndex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
+					
 					if (testIndex > -1) {
 						var tester = Jrun.camelize(klass[testIndex]);
 						var validate = that.setting[tester];
@@ -1500,7 +1505,7 @@ Js.ext.validate = Js.base.create({
 		
 		if (errorNode.length < 1) {
 			try {
-				Js.use("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node);
+				Js.use("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node[0]);
 			} 
 			catch (e) {
 				Js.debug.error(e);
@@ -1511,7 +1516,7 @@ Js.ext.validate = Js.base.create({
 				errorNode.eq(0).append('... ' + message);
 			} catch (e) {
 				Js.debug.error(e);
-			} 
+			}
 		}
 		
 		node.bind("change", function() {
@@ -1542,14 +1547,14 @@ Js.util.activeContent = Js.base.create({
 	init: null,
 	element: null,
 	option: null,
-	fnbeforeStart: null,
+	fnBeforeStart: null,
 	fnSuccess: null,
 	__construct: function(js) 
 	{
 		var js = Jrun.pickStrict(js, {}, "object");
 		this.element = Jrun.pick(js.element, null);
-		this.beforeStart = Jrun.pick(js.beforeStart, this.beforeStart);
-		this.success = Jrun.pick(js.success, this.success);
+		this.fnBeforeStart = Jrun.pick(js.beforeStart, this.fnBeforeStart);
+		this.fbSuccess = Jrun.pick(js.success, this.fnSuccess);
 		
 		if(Jrun.isset(this.element)) 
 		{
@@ -1590,8 +1595,8 @@ Js.util.activeContent = Js.base.create({
 				var ahref = anchors.split(/\#/);
 			}
 			
-			if(Jrun.isfunction(that.beforeStart)) {
-				that.beforeStart();
+			if(Jrun.isfunction(that.fnBeforeStart)) {
+				that.fnBeforeStart();
 			}
 			
 			if(Jrun.isset(ahref[1])) {
@@ -1857,7 +1862,6 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
 
 /**
  * Initiate new Js.util.ticker
- * 
  * @alias Js.util.ticker
  * @constructor
  * @param {Object} node
@@ -2042,7 +2046,7 @@ Js.widget.activity = Js.base.create({
 			width: this.setting.boxWidth + "px",
 			height: this.setting.boxHeight + "px",
 			zIndex: (this.setting.zIndex + 1)
-		}).appendTo(this.node);
+		}).appendTo(this.node[0]);
 	},
 	/**
 	 * Deactivate activity layer
@@ -2500,34 +2504,34 @@ Js.widget.datePicker = Js.base.create({
 		
 		var wrapper = this.node;
 		
-		var header = Js.use("<div/>").appendTo(wrapper).setClass("calendar-title");
-		var content = Js.use("<div/>").appendTo(wrapper);
-		var footer = Js.use("<div/>").appendTo(wrapper);
+		var header = Js.use("<div/>").appendTo(wrapper[0]).setClass("calendar-title");
+		var content = Js.use("<div/>").appendTo(wrapper[0]);
+		var footer = Js.use("<div/>").appendTo(wrapper[0]);
 		
-		var prevbtn = Js.use("<span/>").appendTo(header);
-		var nextbtn = Js.use("<span/>").appendTo(header);
-		var title = Js.use("<span/>").appendTo(header);
+		var prevbtn = Js.use("<span/>").appendTo(header[0]);
+		var nextbtn = Js.use("<span/>").appendTo(header[0]);
+		var title = Js.use("<span/>").appendTo(header[0]);
 		
-		this.content = Js.use("<div/>").addClass("calendar-content").hide().appendTo(content);
-		this.option = Js.use("<div/>").addClass("calendar-option").hide().appendTo(content);
+		this.content = Js.use("<div/>").addClass("calendar-content").hide().appendTo(content[0]);
+		this.option = Js.use("<div/>").addClass("calendar-option").hide().appendTo(content[0]);
 		
-		var table = Js.use("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.content);
-		var tbody = Js.use("<tbody/>").appendTo(table);
+		var table = Js.use("<table cellpadding='0' cellspacing='0'></table>").addClass("calendar-body").appendTo(this.content[0]);
+		var tbody = Js.use("<tbody/>").appendTo(table[0]);
 		
-		var trheader = Js.use("<tr/>").addClass("calendar-header").appendTo(tbody);
+		var trheader = Js.use("<tr/>").addClass("calendar-header").appendTo(tbody[0]);
 		
 		for (var i = 0; i <= 6; i++) {
-			Js.use("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader);
+			Js.use("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader[0]);
 		}
 		
 		var day = 1;
 		
 		for (var i = 0; i < 6; i++) {
-			var weeks = Js.use("<tr/>").addClass("calendar-week").appendTo(tbody);
+			var weeks = Js.use("<tr/>").addClass("calendar-week").appendTo(tbody[0]);
 			
 			for (var j = 0; j <= 6; j++) {
 				this.date = [this.year, (this.month + 1), day].join("-");
-				var days = Js.use("<td/>").addClass("calendar-" + (this.validation() ? "day" : "invalid")).appendTo(weeks);
+				var days = Js.use("<td/>").addClass("calendar-" + (this.validation() ? "day" : "invalid")).appendTo(weeks[0]);
 				
 				if (day <= monthLength && (i > 0 || j >= start_day)) {
 					days.attr("id", this.element + "_" + this.year + (this.month + 1) + day);
@@ -2574,28 +2578,28 @@ Js.widget.datePicker = Js.base.create({
 				that.nextMonth();
 			}).setClass("next-month");
 			
-			Js.use("<p/>").text(Js.language.widget.datePicker.selectMonthYear).appendTo(this.option);
+			Js.use("<p/>").text(Js.language.widget.datePicker.selectMonthYear).appendTo(this.option[0]);
 			
 			var selmonth = Js.use("<select name='month'></select>").bind("change", function(){
 				that.customMonth(this.value);
-			}).appendTo(this.option);
+			}).appendTo(this.option[0]);
 			
 			for (var i = 0; i < 12; i++) {
 				if (this.month == i) {
-					Js.use("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth);
+					Js.use("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth[0]);
 				}
 				else {
-					Js.use("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth);
+					Js.use("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth[0]);
 				}
 			}
 			
-			var selyear = Js.use("<select name='year'></select>").text(" ").bind("change", function(){
+			var selyear = Js.use("<select name='year'></select>").text(" ").bind("change", function() {
 				that.customYear(this.value);
-			}).appendTo(this.option);
+			}).appendTo(this.option[0]);
 			
 			for (var i = this.range[0]; i >= this.range[1]; i--) {
 				if (this.year == i) {
-					Js.use("<option value='" + i + "' selected='selected'></option>").text(i.toString()).appendTo(selyear);
+					Js.use("<option value='" + i + "' selected='selected'></option>").text(i.toString()).appendTo(selyear[0]);
 				}
 				else {
 					Js.use("<option value='" + i + "'></option>").text(i.toString()).appendTo(selyear);
@@ -2604,7 +2608,7 @@ Js.widget.datePicker = Js.base.create({
 			
 			Js.use("<input type='button' name='today' />").val(Js.language.widget.datePicker.todayButton).bind("click", function(){
 				that.today();
-			}).addClass("select-today").appendTo(this.option);
+			}).addClass("select-today").appendTo(this.option[0]);
 			
 			title.setClass("this-month").html(this.setting.months[this.month] + "&nbsp;" + this.year);
 			this.node.data("toggle", 0);
@@ -2633,7 +2637,7 @@ Js.widget.datePicker = Js.base.create({
 		}
 		
 		if (Jrun.isset(this.field)) {
-			var input = Js.use("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.setting.fieldType + "' />").appendTo(this.content);
+			var input = Js.use("<input id='" + [this.element, this.field].join("-") + "' name='" + this.field + "' type='" + this.setting.fieldType + "' />").appendTo(this.content[0]);
 			
 			if (Jrun.isset(this.day)) {
 				var m = (this.month + 1);
@@ -2690,7 +2694,7 @@ Js.widget.iconizer = Js.base.create({
 		Js.use("*[class*=icon]").each(function(index, value) {
 			var node = Js.use(value);
 			
-			var klas = object.attr("className");
+			var klas = node.attr("className");
 			var klass = klas.split(/ /);
 			
 			for (var i = 0; i < klass.length; i++) {
@@ -2706,7 +2710,7 @@ Js.widget.iconizer = Js.base.create({
 							"cssFloat": pos,
 							"width": "16px",
 							"height": "16px"
-						}).prependTo(object);
+						}).prependTo(node[0]);
 						
 						if (pos == "left") {
 							obj.css({
@@ -2795,7 +2799,7 @@ Js.widget.panel = Js.base.create({
 		this.node = Js.use("<div/>").attr({
 			id: this.element + "_panel",
 			className: "widget-panel"
-		}).appendTo(this.renderTo);
+		}).appendTo(this.renderTo[0]);
 		
 		// set panel width
 		if (Jrun.isset(this.setting.width)) {
@@ -2988,11 +2992,12 @@ Js.widget.notice = Js.widget.activity.extend({
 			boxHeight: 0,
 			opacity: 0.9
 		});
+		
 		this.node.init();
 		this.node.box = Js.use("<div/>").css({
 			"position": "absolute",
 			"width": "550px"
-		}).appendTo(this._super.node);
+		}).appendTo(this._super.node[0]);
 	},
 	closeNotice: function() 
 	{
@@ -3028,13 +3033,13 @@ Js.widget.notice = Js.widget.activity.extend({
 		}
 		
 		this.node.box.setClass(this.setting['css' + Jrun.toProperCase(status)]);
-		Js.use("<h3/>").text(title).appendTo(this.node.box);
+		Js.use("<h3/>").text(title).appendTo(this.node.box[0]);
 		
 		if (message != "") {
-			var p = Js.use("<p/>").html("" + message).appendTo(this.node.box);
+			var p = Js.use("<p/>").html("" + message).appendTo(this.node.box[0]);
 		}
 		
-		var span = Js.use("<em/>").text(Js.language.widget.notice.timer).appendTo(this.node.box);
+		var span = Js.use("<em/>").text(Js.language.widget.notice.timer).appendTo(this.node.box[0]);
 		
 		this.node.node.one("click", function() {
 			that.closeNotice();
@@ -3120,14 +3125,14 @@ Js.widget.tab = Js.base.create({
 		var div = Js.use("<div/>").attr({
 			className: this.setting.toolbarContainer, 
 			id: [this.element, "toolbar", "container"].join("-")
-		}).prependTo(this.node);
+		}).prependTo(this.node[0]);
 		this.toolbar = div;
 		
 		// DOM insert tab toolbar
 		this.header = Js.use("<ul/>").attr({
 			id: [this.element, "toolbar"].join("-"), 
 			className: this.setting.toolbar
-		}).appendTo(this.toolbar);
+		}).appendTo(this.toolbar[0]);
 		
 		// find all possible tabs
 		var child = Js.use(this.setting.identifier, this.node);
@@ -3142,7 +3147,7 @@ Js.widget.tab = Js.base.create({
 		// first tab should be activated
 		this.activeTab = child.eq(0);
 		
-		var div2 = Js.use("<div/>").css("display", "block").appendTo(div);
+		var div2 = Js.use("<div/>").css("display", "block").appendTo(div[0]);
 	},
 	_addHeader: function(node) 
 	{
@@ -3155,13 +3160,13 @@ Js.widget.tab = Js.base.create({
 		var closable = node.hasClass(this.setting.closable);
 		var disabled = node.hasClass(this.setting.disabled);
 		
-		var li = Js.use("<li/>").appendTo(this.header);
+		var li = Js.use("<li/>").appendTo(this.header[0]);
 		var a = Js.use("<a/>").attr({
 			href: "#" + node.attr("id"), 
 			title: title
-		}).appendTo(li);
+		}).appendTo(li[0]);
 		
-		Js.use("<em/>").appendTo(a);
+		Js.use("<em/>").appendTo(a[0]);
 		a.text(title);
 				
 		if (!!closable) {
@@ -3177,7 +3182,7 @@ Js.widget.tab = Js.base.create({
 				Js.use(this.parentNode.parentNode).remove();
 				
 				that.revert();
-			}).appendTo(a);
+			}).appendTo(a[0]);
 		}
 		
 		if (!!disabled) {
@@ -3211,7 +3216,7 @@ Js.widget.tab = Js.base.create({
 		var that = this;
 		var that = this;
 		
-		var anchor = Js.use("a[href=" + selector + "]", this.header);
+		var anchor = Js.use("a[href=" + selector + "]", this.header[0]);
 		anchor.setClass(this.setting.cssDisabled);
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
@@ -3226,7 +3231,7 @@ Js.widget.tab = Js.base.create({
 		this.activeHeader.removeClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssHidden);
 		
-		this.activeHeader = Js.use(node);
+		this.activeHeader = Js.use(node[0]);
 		var href = this.activeHeader.attr("href");
 		this.activeTab = Js.use(href);
 		
@@ -3237,7 +3242,7 @@ Js.widget.tab = Js.base.create({
 	},
 	revert: function() 
 	{
-		var active = Js.use("li > a", this.header);
+		var active = Js.use("li > a", this.header[0]);
 		
 		if (active.length > 0) {
 			this.activateTab(active.eq(0));
@@ -3271,15 +3276,15 @@ Js.widget.tab = Js.base.create({
 			var node = Js.use('<div/>').attr({
 				id: id,
 				className: this.setting.cssHidden
-			}).html(content).appendTo(this.node);
+			}).html(content).appendTo(this.node[0]);
 			
-			var li = Js.use('<li/>').appendTo(this.header);
+			var li = Js.use('<li/>').appendTo(this.header[0]);
 			var a = Js.use('<a/>').attr({
 				href: "#" + id,
 				title: title
-			}).appendTo(li);
+			}).appendTo(li[0]);
 			
-			Js.use("<em/>").appendTo(a);
+			Js.use("<em/>").appendTo(a[0]);
 			a.text(title).bind(this.handler, function(){
 				that.activateTab(this);
 				return false;
@@ -3296,7 +3301,7 @@ Js.widget.tab = Js.base.create({
 					Js.use(this.parentNode.parentNode).remove();
 					
 					that.revert();
-				}).css("paddingLeft", "10px").text("x").appendTo(a);
+				}).css("paddingLeft", "10px").text("x").appendTo(a[0]);
 			}
 			
 			if (!!set) {

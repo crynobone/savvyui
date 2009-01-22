@@ -1,7 +1,7 @@
 /**
  * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
  * @namespace Js
- * @version 1.1.3
+ * @version 1.1.4
  * @extends jQuery-1.2.6
  * @author Mior Muhammad Zaki crynobone@gmail.com
  */
@@ -12,7 +12,8 @@
  */
 var Js = {
 	adapter: "jQuery-1.2.6",
-	version: "1.1.3",
+	version: "1.1.4",
+	use: null,
 	debug: {},
 	ext: {},
 	util: {},
@@ -397,6 +398,7 @@ var Jrun = {
             
             if (Jrun.isset(value)) {
                 return value;
+				break;
             }
 		};
 		
@@ -421,6 +423,7 @@ var Jrun = {
             if (Jrun.isset(value)) {
                 if (this.typeOf(value) == last) {
                     return value;
+					break;
                 }
             }
 		};
@@ -450,6 +453,7 @@ var Jrun = {
             if (Jrun.isset(value)) {
                 if (!!value.match(last)) {
                     return value;
+					break;
                 }
             }
 		};

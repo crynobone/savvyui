@@ -115,6 +115,7 @@ Js.ext.validate = Js.base.create({
 					}
 					
 					var testIndex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
+					
 					if (testIndex > -1) {
 						var tester = Jrun.camelize(klass[testIndex]);
 						var validate = that.setting[tester];
@@ -255,7 +256,7 @@ Js.ext.validate = Js.base.create({
 		
 		if (errorNode.length < 1) {
 			try {
-				Js.use("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node);
+				Js.use("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node[0]);
 			} 
 			catch (e) {
 				Js.debug.error(e);
@@ -266,7 +267,7 @@ Js.ext.validate = Js.base.create({
 				errorNode.eq(0).append('... ' + message);
 			} catch (e) {
 				Js.debug.error(e);
-			} 
+			}
 		}
 		
 		node.bind("change", function() {

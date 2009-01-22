@@ -22,3 +22,6 @@ identifier:".simpletab"
 = Customization to the Tab =
 == Adding New Tab ==
 Adding new tab is as easy as initiating it, assume 
+
+= Example =
+http://crynobone.com/script/example/widget/tab.html

@@ -57,7 +57,7 @@ Js.widget.activity = Js.base.create({
 		this.node = Js.use(this.element);
 		
 		if (this.node.length == 0) {
-			Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+			this.node = Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
 		}
 		
 		this.node.css({

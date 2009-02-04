@@ -3205,7 +3205,7 @@ Js.widget.notice = Js.widget.activity.extend({
 		this.node.box.html("");
 		this.node.activate();
 		
-		var title = Js.language.widget.notice.title[status];
+		var title = this.language[Jrun.camelize("title-" + status)];
 		var message = "";
 		var opt = false;
 		

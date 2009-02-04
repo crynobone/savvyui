@@ -9,7 +9,6 @@ Js.util.editable = Js.base.create({
 	setting: null,
 	value: null,
 	input: null,
-	options: null,
 	lastSelected: null,
 	__construct: function(element, option) {
 		if(!!Jrun.isset(element)) {
@@ -29,36 +28,36 @@ Js.util.editable = Js.base.create({
 		this.setting = Js.append(this.setting, Js.config.util.editable);
 		this.node = Js.use(this.element);
 		
-		this.options = [];
-		this.node.children("option").each(function(index, value) {
-			that.options.push(Js.use(value).val());
-		});
-		
 		this.node.change(function() {
 			var node = Js.use(this);
 			
 			if (node.val() == that.setting.identifier) {
-				that.getModalBox();
+				that.getModalBox(this);
 			}
 		});
 		
-		if (this.node.val() == this.setting.identifier) {
-			this.getModalBox();
-		}
+		this.node.each(function() {
+			if(Js.use(this).val() == that.setting.identifier) {
+				this.options[0].selected = true;
+			}
+		});
 	},
-	onModalBoxClose: function()
+	onModalBoxClose: function(field)
 	{
+		var opt = [];
+		Js.use(field).children("option").each(function(index, value) {
+			opt.push(Js.use(value).val());
+		});
 		var value = this.input.val();
-		if(Jrun.isset(value) && Jrun.trim(value) != "" && !Jrun.inArray(value, this.options)) {
-			Js.use('<option selected="selected" value="' + value + '">' + value + '</option>').appendTo(this.node[0]);
-			this.options.push(value);
+		if(Jrun.isset(value) && Jrun.trim(value) != "" && !Jrun.inArray(value, opt)) {
+			Js.use('<option selected="selected" value="' + value + '">' + value + '</option>').appendTo(field);
 			this.value = value;
 		} 
 		else {
-			this.node[0].options[0].selected = true;
+			field.options[0].selected = true;
 		}
 	},
-	getModalBox: function()
+	getModalBox: function(field)
 	{
 		var that = this;
 		var content = Js.use("<div/>");
@@ -70,7 +69,7 @@ Js.util.editable = Js.base.create({
 			width: 300,
 			height: 100,
 			onClose: function() {
-				that.onModalBoxClose();
+				that.onModalBoxClose(field);
 			},
 			overlay: true
 		});

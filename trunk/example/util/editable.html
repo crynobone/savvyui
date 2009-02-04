@@ -26,7 +26,14 @@
 		<script type="text/javascript">
 		<!--
 		Js.debug.dev = true;
-		var editable = new Js.util.editable(".editable", {prefix: "Test"});
+		Js.setup.util.editable({
+			lang: {
+				title: "hello"
+			}
+		});
+		var editable = new Js.util.editable(".editable", {
+			prefix: "Test"
+		});
 		Js.use("<option value='Add'>Add</option>").appendTo("#editable");
 		-->
 		</script>

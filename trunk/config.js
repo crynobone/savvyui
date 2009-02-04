@@ -36,9 +36,7 @@ Js.config = {
 		},
 		editable: {
 			identifier: "Other",
-			message: "Please enter a new option value...",
-			prefix: "",
-			title: "Editable Widget"
+			prefix: ""
 		}
 	},
 	widget: {
@@ -52,9 +50,6 @@ Js.config = {
 			zIndex: 5000
 		},
 		datePicker: {
-			days: ["S", "M", "T", "W", "T", "F", "S"],
-			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
 			daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 			dateFormat: /^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/,
 			onUpdate: null,

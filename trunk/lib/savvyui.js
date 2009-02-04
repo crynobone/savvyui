@@ -84,9 +84,10 @@ Js.nue = function(data)
  * @param {Object} value
  * @param {Object} filter
  */
-Js.append = function(data, value, filter) 
+Js.append = function(data, value, filter, invert) 
 {
 	var filter = Jrun.pickStrict(filter, null, "array");
+	var invert = Jrun.pickStrict(invert, false, "boolean");
 	
 	if (Jrun.typeOf(data) !== "object") {
 		data = {};
@@ -103,6 +104,7 @@ Js.append = function(data, value, filter)
 		// if data doesn't have the method add it
 		var valid = (Jrun.isnull(filter) || Jrun.inArray(method, filter));
 		var notDuplicate = (!data.hasOwnProperty(method) && value.hasOwnProperty(method));
+		var valid = (!!invert ? !valid : valid);
 		 
 		if (!!notDuplicate && !!valid) {
 			result[method] = value[method];
@@ -884,9 +886,7 @@ Js.config = {
 		},
 		editable: {
 			identifier: "Other",
-			message: "Please enter a new option value...",
-			prefix: "",
-			title: "Editable Widget"
+			prefix: ""
 		}
 	},
 	widget: {
@@ -900,9 +900,6 @@ Js.config = {
 			zIndex: 5000
 		},
 		datePicker: {
-			days: ["S", "M", "T", "W", "T", "F", "S"],
-			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
 			daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 			dateFormat: /^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/,
 			onUpdate: null,
@@ -963,8 +960,11 @@ Js.setup = {
 	ext: {
 		validate: function(option)
 		{
-			Js.config.ext.validate = Js.append(option, Js.config.ext.validate);
-		}
+			Js.config.ext.validate = Js.append(option, Js.config.ext.validate, ["lang"], true);
+			if(Jrun.isset(option.lang)) {
+				Js.language.ext.validate = Js.append(option.lang, Js.language.ext.validate);
+			}
+		},
 	},
 	test: function(option)
 	{
@@ -981,7 +981,10 @@ Js.setup = {
 		},
 		editable: function(option)
 		{
-			Js.config.util.editable = Js.append(option, Js.config.util.editable);
+			Js.config.util.editable = Js.append(option, Js.config.util.editable, ["lang"], true);
+			if(Jrun.isset(option.lang)) {
+				Js.language.util.editable = Js.append(option.lang, Js.language.util.editable);
+			}
 		}
 	},
 	widget: {
@@ -991,7 +994,10 @@ Js.setup = {
 		},
 		datePicker: function(option)
 		{
-			Js.config.widget.calendar = Js.append(option, Js.config.widget.calendar);
+			Js.config.widget.datePicker = Js.append(option, Js.config.widget.datePicker, ["lang"], true);
+			if(Jrun.isset(option.lang)) {
+				Js.language.widget.datePicker = Js.append(option.lang, Js.language.widget.datePicker);
+			}
 		},
 		iconizer: function(option)
 		{
@@ -999,7 +1005,10 @@ Js.setup = {
 		},
 		notice: function(option)
 		{
-			Js.config.widget.notice = Js.append(option, Js.config.widget.notice);
+			Js.config.widget.notice = Js.append(option, Js.config.widget.notice, ["lang"], true);
+			if(Jrun.isset(option.lang)) {
+				Js.language.widget.notice = Js.append(option.lang, Js.language.widget.notice);
+			}
 		},
 		panel: function(option)
 		{
@@ -1025,24 +1034,29 @@ Js.language = {
 			email: "Require valid e-mail address input",
 			required: "This input field is required",
 			length: "This input field require {type} {value} character.",
-			lengthOption: {
-				exact: "exactly",
-				minimum: "minimum",
-				maximum: "maximum"
-			}
+			lengthExact: "exactly",
+			lengthMinimum: "minimum",
+			lengthMaximum: "maximum"
+		}
+	},
+	util: {
+		editable: {
+			message: "Please enter a new option value...",
+			title: "Editable Widget"
 		}
 	},
 	widget: {
 		datePicker: {
 			selectMonthYear: "Jump to specific month and year",
-			todayButton: "Select Today"
+			todayButton: "Select Today",
+			days: ["S", "M", "T", "W", "T", "F", "S"],
+			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 		},
 		notice: {
-			title: {
-				success: "Congratulation",
-				note: "Note",
-				error: "Error has Occur"
-			},
+			titleSuccess: "Congratulation",
+			titleNote: "Note",
+			titleError: "Error has Occur",
 			timer: "This message will automatically close in 5 seconds"
 		}
 	}
@@ -1275,6 +1289,7 @@ Js.ext.validate = Js.base.create({
 	node: null,
 	first: null,
 	setting: null,
+	language: null,
 	__construct: function(node, option)
 	{
 		if (Jrun.isset(node)) {
@@ -1285,7 +1300,12 @@ Js.ext.validate = Js.base.create({
 	},
 	setup: function(option)
 	{
-		this.setting = Js.append(option, this.setting);
+		var option = Jrun.pickStrict(option, {}, "object");
+		this.setting = Js.append(option, this.setting, ["lang"], true);
+		if(Jrun.isset(option.lang)) {
+			this.language = Js.append(option.lang, this.setting);	
+		}
+		
 	},
 	_prepSetting: function()
 	{
@@ -1311,6 +1331,7 @@ Js.ext.validate = Js.base.create({
 		// setup configuration
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.ext.validate);
+		this.language = Js.append(this.language, Js.language.ext.validate)
 		this._prepSetting();
 		
 		var setting = this.setting;
@@ -1318,7 +1339,7 @@ Js.ext.validate = Js.base.create({
 		var fnSuccess = Jrun.pick(setting.success, null);
 		var fnOnError = Jrun.pick(setting.onError, null);
 		var data = "";
-		var lang = Js.language.ext.validate;
+		var lang = this.language;
 		
 		// set this.first to NULL
 		this.first = null;
@@ -1351,7 +1372,7 @@ Js.ext.validate = Js.base.create({
 					if (!!Jrun.inArray("required", klass) && Jrun.trim(value) === "") {
 						error = lang.required;
 					}
-					
+					/*
 					var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
 					if (indexMatch > -1) {
 						var matched = fields.is(":input[name='" + RegExp.$1 + "']");
@@ -1359,6 +1380,7 @@ Js.ext.validate = Js.base.create({
 							error = lang.matched;
 						}
 					}
+					*/
 					
 					// this set of validate only triggered when this.value isn't empty
 					if (Jrun.trim(value) != "") {
@@ -1408,13 +1430,13 @@ Js.ext.validate = Js.base.create({
 						
 						if (!Js.test.isLength(klass[indexLength], value.length)) {
 							if (types == "min") {
-								types = lang.lengthOption.minimum;
+								types = lang.lengthMinimum;
 							}
 							else if (types == "max") {
-								types = lang.lengthOption.maximum;
+								types = lang.lengthMaximum;
 							}
 							else if (types == "exact") {
-								types = lang.lengthOption.exact;
+								types = lang.lengthExact;
 							}
 								
 							var note = lang.length;
@@ -1676,6 +1698,7 @@ Js.util.buttonSubmit = Js.base.create({
 	 */
 	setup: function(option)
 	{
+		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
 	/**
@@ -1795,12 +1818,13 @@ Js.util.dimension = {
 		middle: function(width, height) 
 		{
 			var doc = document.body;
-			var offset = [Jrun.toNumber(doc.offsetWidth), Jrun.toNumber(doc.offsetHeight)];
+			var offset = [Js.use(window).width(), Js.use(window).height()];
 			var axis = Js.util.dimension.page.scrolls.both();
 			var result = [];
 					
 			result[0] = Math.round(((offset[0] - width) / 2) + axis[0]);
-			result[1] = Math.round((((screen.height - 200) - height) / 2) + axis[1]);
+			result[1] = Math.round(((offset[1] - height) / 2) + axis[1]); 
+			//Math.round((((screen.height - 200) - height) / 2) + axis[1]);
 			result[0] = (result[0] < 0 ? 0 : result[0]);
 			result[1] = (result[1] < 0 ? 0 : result[1]);	
 			result.reverse();
@@ -1955,6 +1979,7 @@ Js.util.editable = Js.base.create({
 	element: null,
 	box: null,
 	setting: null,
+	language: null,
 	value: null,
 	input: null,
 	lastSelected: null,
@@ -1966,7 +1991,11 @@ Js.util.editable = Js.base.create({
 	},
 	setup: function(option) 
 	{
-		this.setting = Js.append(option, this.setting);
+		var option = Jrun.pickStrict(option, {}, "object");
+		this.setting = Js.append(option, this.setting, ["lang"], true);
+		if(Jrun.isset(option.lang)) {
+			this.language = Js.append(option.lang, this.language);
+		}
 	},
 	init: function(selector, option) {
 		var that = this;
@@ -1974,6 +2003,7 @@ Js.util.editable = Js.base.create({
 		this.element = Jrun.pick(this.element, selector);
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.util.editable);
+		this.language = Js.append(this.language, Js.language.util.editable);
 		this.node = Js.use(this.element);
 		
 		this.node.change(function() {
@@ -2010,10 +2040,9 @@ Js.util.editable = Js.base.create({
 		var that = this;
 		var content = Js.use("<div/>");
 		
-		
 		this.box = new Js.widget.dialog({
 			element: "editable_edit_box_" + Jrun.prep(this.element),
-			title: this.setting.title,
+			title: this.language.title,
 			width: 300,
 			height: 100,
 			onClose: function() {
@@ -2022,10 +2051,10 @@ Js.util.editable = Js.base.create({
 			overlay: true
 		});
 		
-		var p = Js.use("<p/>").html("" + this.setting.message).appendTo(this.box.content[0]);
+		var p = Js.use("<p/>").html("" + this.language.message).appendTo(this.box.content[0]);
 		this.input = Js.use('<input type="text" name="util_editable_' + Jrun.prep(this.element) + '" value="' + this.setting.prefix + '"/>').appendTo(this.box.content[0]);
-		var submitBtn = jQuery('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(this.box.content[0]);
-		var cancelBtn = jQuery('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(this.box.content[0]);
+		var submitBtn = Js.use('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(this.box.content[0]);
+		var cancelBtn = Js.use('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(this.box.content[0]);
 		var box = this.box;
 		
 		box.overlay.node.click(function() {
@@ -2068,6 +2097,7 @@ Js.widget.activity = Js.base.create({
 	element: null,
 	box: null,
 	setting: null,
+	language: null,
 	status: 0,
 	__construct: function(selector, option)
 	{
@@ -2085,7 +2115,11 @@ Js.widget.activity = Js.base.create({
 	 */
 	setup: function(option)
 	{
-		this.setting = Js.append(option, this.setting);
+		var option = Jrun.pickStrict(option, {}, "object");
+		this.setting = Js.append(option, this.setting, ["lang"], true);
+		if(Jrun.isset(option.lang)) {
+			this.language = Js.append(option.lang, this.language);
+		}
 	},
 	/**
 	 * Initiate internal call, assign DOM element as activity layer and this option
@@ -2196,6 +2230,7 @@ Js.widget.datePicker = Js.base.create({
 	content: null,
 	option: null,
 	setting: null,
+	language: null,
 	range: null,
 	minDate: null,
 	maxDate: null,
@@ -2218,7 +2253,10 @@ Js.widget.datePicker = Js.base.create({
 	 */
 	setup: function(option)
 	{
-		this.setting = Js.append(option, this.setting)
+		this.setting = Js.append(option, this.setting, ["lang"], true);
+		if(Jrun.isset(option.lang)) {
+			this.language = Js.append(option.lang, this.language);
+		}
 	},
 	/**
 	 * Initiate internal call, prepare all configuration before loading the calendar
@@ -2233,6 +2271,7 @@ Js.widget.datePicker = Js.base.create({
 		
 		this.setup(js.option);
 		this.setting = Js.append(this.setting, Js.config.widget.datePicker);
+		this.language = Js.append(this.language, Js.language.widget.datePicker);
 		
 		this.element = Jrun.prep(Jrun.pick(js.element, this.element));
 		this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
@@ -2631,7 +2670,7 @@ Js.widget.datePicker = Js.base.create({
 		var trheader = Js.use("<tr/>").addClass("calendar-header").appendTo(tbody[0]);
 		
 		for (var i = 0; i <= 6; i++) {
-			Js.use("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader[0]);
+			Js.use("<td/>").addClass("calendar-header-day").text(this.language.days[i]).appendTo(trheader[0]);
 		}
 		
 		var day = 1;
@@ -2688,7 +2727,7 @@ Js.widget.datePicker = Js.base.create({
 				that.nextMonth();
 			}).setClass("next-month");
 			
-			Js.use("<p/>").text(Js.language.widget.datePicker.selectMonthYear).appendTo(this.option[0]);
+			Js.use("<p/>").text(this.language.selectMonthYear).appendTo(this.option[0]);
 			
 			var selmonth = Js.use("<select name='month'></select>").bind("change", function(){
 				that.customMonth(this.value);
@@ -2696,10 +2735,10 @@ Js.widget.datePicker = Js.base.create({
 			
 			for (var i = 0; i < 12; i++) {
 				if (this.month == i) {
-					Js.use("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth[0]);
+					Js.use("<option value='" + i + "' selected='selected'></option>").text(this.language.months[i]).appendTo(selmonth[0]);
 				}
 				else {
-					Js.use("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth[0]);
+					Js.use("<option value='" + i + "'></option>").text(this.language.months[i]).appendTo(selmonth[0]);
 				}
 			}
 			
@@ -2716,7 +2755,7 @@ Js.widget.datePicker = Js.base.create({
 				}
 			}
 			
-			Js.use("<input type='button' name='today' />").val(Js.language.widget.datePicker.todayButton).bind("click", function(){
+			Js.use("<input type='button' name='today' />").val(this.language.todayButton).bind("click", function(){
 				that.today();
 			}).addClass("select-today").appendTo(this.option[0]);
 			
@@ -2743,7 +2782,7 @@ Js.widget.datePicker = Js.base.create({
 			_toggleContent();
 		}
 		else {
-			title.setClass("this-month").html(this.settings.months[this.month] + "&nbsp;" + this.year);
+			title.setClass("this-month").html(this.language.months[this.month] + "&nbsp;" + this.year);
 		}
 		
 		if (Jrun.isset(this.field)) {
@@ -2788,6 +2827,7 @@ Js.widget.iconizer = Js.base.create({
 	 */
 	setup: function(option)
 	{
+		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
 	/**
@@ -2879,6 +2919,7 @@ Js.widget.panel = Js.base.create({
 	},
 	setup: function(option)
 	{
+		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
 	_prepSetting: function()
@@ -3126,10 +3167,12 @@ Js.widget.notice = Js.widget.activity.extend({
 	callback: null,
 	node: null,
 	setting: null,
+	language: null,
 	__construct: function(selector, option)
 	{
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.notice);
+		this.language = Js.append(this.language, Js.language.widget.notice);
 		this.node = this._super.construct(selector, {
 			boxWidth: 550,
 			boxHeight: 0,
@@ -3239,6 +3282,7 @@ Js.widget.tab = Js.base.create({
 	},
 	setup: function(option)
 	{
+		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
 	init: function(selector, option)

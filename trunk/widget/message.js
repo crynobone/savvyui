@@ -101,6 +101,7 @@ Js.widget.message = Js.base.create({
 	},
 	setup: function(option)
 	{
+		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	}
 });

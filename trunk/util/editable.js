@@ -7,6 +7,7 @@ Js.util.editable = Js.base.create({
 	element: null,
 	box: null,
 	setting: null,
+	language: null,
 	value: null,
 	input: null,
 	lastSelected: null,
@@ -18,7 +19,11 @@ Js.util.editable = Js.base.create({
 	},
 	setup: function(option) 
 	{
-		this.setting = Js.append(option, this.setting);
+		var option = Jrun.pickStrict(option, {}, "object");
+		this.setting = Js.append(option, this.setting, ["lang"], true);
+		if(Jrun.isset(option.lang)) {
+			this.language = Js.append(option.lang, this.language);
+		}
 	},
 	init: function(selector, option) {
 		var that = this;
@@ -26,6 +31,7 @@ Js.util.editable = Js.base.create({
 		this.element = Jrun.pick(this.element, selector);
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.util.editable);
+		this.language = Js.append(this.language, Js.language.util.editable);
 		this.node = Js.use(this.element);
 		
 		this.node.change(function() {
@@ -62,10 +68,9 @@ Js.util.editable = Js.base.create({
 		var that = this;
 		var content = Js.use("<div/>");
 		
-		
 		this.box = new Js.widget.dialog({
 			element: "editable_edit_box_" + Jrun.prep(this.element),
-			title: this.setting.title,
+			title: this.language.title,
 			width: 300,
 			height: 100,
 			onClose: function() {
@@ -74,10 +79,10 @@ Js.util.editable = Js.base.create({
 			overlay: true
 		});
 		
-		var p = Js.use("<p/>").html("" + this.setting.message).appendTo(this.box.content[0]);
+		var p = Js.use("<p/>").html("" + this.language.message).appendTo(this.box.content[0]);
 		this.input = Js.use('<input type="text" name="util_editable_' + Jrun.prep(this.element) + '" value="' + this.setting.prefix + '"/>').appendTo(this.box.content[0]);
-		var submitBtn = jQuery('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(this.box.content[0]);
-		var cancelBtn = jQuery('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(this.box.content[0]);
+		var submitBtn = Js.use('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(this.box.content[0]);
+		var cancelBtn = Js.use('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(this.box.content[0]);
 		var box = this.box;
 		
 		box.overlay.node.click(function() {

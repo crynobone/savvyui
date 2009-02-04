@@ -16,6 +16,7 @@ Js.ext.validate = Js.base.create({
 	node: null,
 	first: null,
 	setting: null,
+	language: null,
 	__construct: function(node, option)
 	{
 		if (Jrun.isset(node)) {
@@ -26,7 +27,12 @@ Js.ext.validate = Js.base.create({
 	},
 	setup: function(option)
 	{
-		this.setting = Js.append(option, this.setting);
+		var option = Jrun.pickStrict(option, {}, "object");
+		this.setting = Js.append(option, this.setting, ["lang"], true);
+		if(Jrun.isset(option.lang)) {
+			this.language = Js.append(option.lang, this.setting);	
+		}
+		
 	},
 	_prepSetting: function()
 	{
@@ -52,6 +58,7 @@ Js.ext.validate = Js.base.create({
 		// setup configuration
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.ext.validate);
+		this.language = Js.append(this.language, Js.language.ext.validate)
 		this._prepSetting();
 		
 		var setting = this.setting;
@@ -59,7 +66,7 @@ Js.ext.validate = Js.base.create({
 		var fnSuccess = Jrun.pick(setting.success, null);
 		var fnOnError = Jrun.pick(setting.onError, null);
 		var data = "";
-		var lang = Js.language.ext.validate;
+		var lang = this.language;
 		
 		// set this.first to NULL
 		this.first = null;
@@ -92,7 +99,7 @@ Js.ext.validate = Js.base.create({
 					if (!!Jrun.inArray("required", klass) && Jrun.trim(value) === "") {
 						error = lang.required;
 					}
-					
+					/*
 					var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
 					if (indexMatch > -1) {
 						var matched = fields.is(":input[name='" + RegExp.$1 + "']");
@@ -100,6 +107,7 @@ Js.ext.validate = Js.base.create({
 							error = lang.matched;
 						}
 					}
+					*/
 					
 					// this set of validate only triggered when this.value isn't empty
 					if (Jrun.trim(value) != "") {
@@ -149,13 +157,13 @@ Js.ext.validate = Js.base.create({
 						
 						if (!Js.test.isLength(klass[indexLength], value.length)) {
 							if (types == "min") {
-								types = lang.lengthOption.minimum;
+								types = lang.lengthMinimum;
 							}
 							else if (types == "max") {
-								types = lang.lengthOption.maximum;
+								types = lang.lengthMaximum;
 							}
 							else if (types == "exact") {
-								types = lang.lengthOption.exact;
+								types = lang.lengthExact;
 							}
 								
 							var note = lang.length;

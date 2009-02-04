@@ -20,6 +20,7 @@ Js.widget.activity = Js.base.create({
 	element: null,
 	box: null,
 	setting: null,
+	language: null,
 	status: 0,
 	__construct: function(selector, option)
 	{
@@ -37,7 +38,11 @@ Js.widget.activity = Js.base.create({
 	 */
 	setup: function(option)
 	{
-		this.setting = Js.append(option, this.setting);
+		var option = Jrun.pickStrict(option, {}, "object");
+		this.setting = Js.append(option, this.setting, ["lang"], true);
+		if(Jrun.isset(option.lang)) {
+			this.language = Js.append(option.lang, this.language);
+		}
 	},
 	/**
 	 * Initiate internal call, assign DOM element as activity layer and this option

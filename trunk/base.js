@@ -84,9 +84,10 @@ Js.nue = function(data)
  * @param {Object} value
  * @param {Object} filter
  */
-Js.append = function(data, value, filter) 
+Js.append = function(data, value, filter, invert) 
 {
 	var filter = Jrun.pickStrict(filter, null, "array");
+	var invert = Jrun.pickStrict(invert, false, "boolean");
 	
 	if (Jrun.typeOf(data) !== "object") {
 		data = {};
@@ -103,6 +104,7 @@ Js.append = function(data, value, filter)
 		// if data doesn't have the method add it
 		var valid = (Jrun.isnull(filter) || Jrun.inArray(method, filter));
 		var notDuplicate = (!data.hasOwnProperty(method) && value.hasOwnProperty(method));
+		var valid = (!!invert ? !valid : valid);
 		 
 		if (!!notDuplicate && !!valid) {
 			result[method] = value[method];

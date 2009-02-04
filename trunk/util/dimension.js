@@ -58,12 +58,13 @@ Js.util.dimension = {
 		middle: function(width, height) 
 		{
 			var doc = document.body;
-			var offset = [Jrun.toNumber(doc.offsetWidth), Jrun.toNumber(doc.offsetHeight)];
+			var offset = [Js.use(window).width(), Js.use(window).height()];
 			var axis = Js.util.dimension.page.scrolls.both();
 			var result = [];
 					
 			result[0] = Math.round(((offset[0] - width) / 2) + axis[0]);
-			result[1] = Math.round((((screen.height - 200) - height) / 2) + axis[1]);
+			result[1] = Math.round(((offset[1] - height) / 2) + axis[1]); 
+			//Math.round((((screen.height - 200) - height) / 2) + axis[1]);
 			result[0] = (result[0] < 0 ? 0 : result[0]);
 			result[1] = (result[1] < 0 ? 0 : result[1]);	
 			result.reverse();

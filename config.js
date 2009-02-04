@@ -37,7 +37,8 @@ Js.config = {
 		editable: {
 			identifier: "Other",
 			message: "Please enter a new option value...",
-			prefix: ""
+			prefix: "",
+			title: "Editable Widget"
 		}
 	},
 	widget: {

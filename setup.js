@@ -23,6 +23,10 @@ Js.setup = {
 		formSubmit: function(option)
 		{
 			Js.config.widget.formSubmit = Js.append(option, Js.config.widget.formSubmit);
+		},
+		editable: function(option)
+		{
+			Js.config.widget.editable = Js.append(option, Js.config.widget.editable);
 		}
 	},
 	widget: {

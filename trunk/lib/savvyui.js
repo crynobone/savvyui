@@ -973,15 +973,15 @@ Js.setup = {
 	util: {
 		buttonSubmit: function(option)
 		{
-			Js.config.widget.buttonSubmit = Js.append(option, Js.config.widget.buttonSubmit);
+			Js.config.util.buttonSubmit = Js.append(option, Js.config.util.buttonSubmit);
 		},
 		formSubmit: function(option)
 		{
-			Js.config.widget.formSubmit = Js.append(option, Js.config.widget.formSubmit);
+			Js.config.util.formSubmit = Js.append(option, Js.config.util.formSubmit);
 		},
 		editable: function(option)
 		{
-			Js.config.widget.editable = Js.append(option, Js.config.widget.editable);
+			Js.config.util.editable = Js.append(option, Js.config.util.editable);
 		}
 	},
 	widget: {

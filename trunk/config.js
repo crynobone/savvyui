@@ -33,6 +33,11 @@ Js.config = {
 			beforeStart: null,
 			beforeSend: null,
 			success: null
+		},
+		editable: {
+			identifier: "Other",
+			message: "Please enter a new option value...",
+			prefix: ""
 		}
 	},
 	widget: {

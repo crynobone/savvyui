@@ -15,6 +15,7 @@
 		'util/dimension',
 		'util/formsubmit',
 		'util/ticker',
+		'util/editable',
 		'widget/activity',
 		'widget/datepicker',
 		'widget/iconizer',

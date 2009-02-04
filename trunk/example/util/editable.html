@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Js.util.editable</title>
+		<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../../lib/savvyui.js"></script>
+		<script type="text/javascript" src="../unit-testing.js"></script>
+		<link type="text/css" href="../../css/all.css" rel="stylesheet" media="all" />
+	</head>
+	<body>
+		<h1>Js.util.editable</h1>
+		<div id="result">
+			<select name="editable" id="editable">
+				<option value="Kuala Lumpur">Kuala Lumpur</option>
+				<option value="Kedah">Kedah</option>
+				<option value="Other">Lain-lain</option>
+			</select>
+		</div>
+		<script type="text/javascript">
+		<!--
+		Js.debug.dev = true;
+		var editable = new Js.util.editable("#editable", {prefix: "Test"});
+		Js.use("<option value='Add'>Add</option>").appendTo("#editable");
+		-->
+		</script>
+	</body>
+</html>

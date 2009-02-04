@@ -11,6 +11,8 @@ Js.widget.panel = Js.base.create({
 	setting: null,
 	header: null,
 	container: null,
+	closeButton: null,
+	minimizeButton: null,
 	content: null,
 	footer: null,
 	status: "normal",
@@ -122,9 +124,11 @@ Js.widget.panel = Js.base.create({
 					that.status = "normal";
 				}
 			});
+			
 		} else {
 			tmin.addClass("panel-disabled");
 		}
+		this.minimizeButton = tmin;
 		
 		// Enable Close-Button option
 		if (!!this.setting.allowClose) {
@@ -137,7 +141,7 @@ Js.widget.panel = Js.base.create({
 		} else {
 			tclose.addClass("panel-disabled");
 		}
-		
+		this.closeButton = tclose;
 		
 		// THIS IS WHERE YOUR CONTENT SHOULD GO
 		this.content = Js.use("<div/>").attr({

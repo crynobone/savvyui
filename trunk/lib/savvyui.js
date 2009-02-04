@@ -2011,10 +2011,11 @@ Js.util.editable = Js.base.create({
 			element: "editable_edit_box_" + Jrun.prep(this.element),
 			title: "Editable Widget",
 			width: 300,
-			height: 150,
+			height: 100,
 			onClose: function() {
 				that.onModalBoxClose();
-			}
+			},
+			overlay: true
 		});
 		
 		var p = Js.use("<p/>").html("" + this.setting.message).appendTo(this.box.content[0]);
@@ -2022,6 +2023,16 @@ Js.util.editable = Js.base.create({
 		var submitBtn = jQuery('<input type="button"/>').val("Ok").appendTo(this.box.content[0]);
 		var cancelBtn = jQuery('<input type="button"/>').val("Cancel").appendTo(this.box.content[0]);
 		var box = this.box;
+		
+		box.overlay.node.click(function() {
+			that.input.val("");
+			box.closePanel();
+		});
+		
+		box.closeButton.click(function() {
+			that.input.val("");
+			box.closePanel();
+		});
 		
 		submitBtn.click(function() {
 			box.closePanel();
@@ -2090,7 +2101,7 @@ Js.widget.activity = Js.base.create({
 		this.node = Js.use(this.element);
 		
 		if (this.node.length == 0) {
-			Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+			this.node = Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
 		}
 		
 		this.node.css({
@@ -2851,6 +2862,8 @@ Js.widget.panel = Js.base.create({
 	setting: null,
 	header: null,
 	container: null,
+	closeButton: null,
+	minimizeButton: null,
 	content: null,
 	footer: null,
 	status: "normal",
@@ -2962,9 +2975,11 @@ Js.widget.panel = Js.base.create({
 					that.status = "normal";
 				}
 			});
+			
 		} else {
 			tmin.addClass("panel-disabled");
 		}
+		this.minimizeButton = tmin;
 		
 		// Enable Close-Button option
 		if (!!this.setting.allowClose) {
@@ -2977,7 +2992,7 @@ Js.widget.panel = Js.base.create({
 		} else {
 			tclose.addClass("panel-disabled");
 		}
-		
+		this.closeButton = tclose;
 		
 		// THIS IS WHERE YOUR CONTENT SHOULD GO
 		this.content = Js.use("<div/>").attr({
@@ -3031,6 +3046,14 @@ Js.widget.panel = Js.base.create({
  */
 
 Js.widget.dialog = Js.widget.panel.extend({
+	overlay: null,
+	allowOverlay: false,
+	_prepSetting: function()
+	{
+		this.renderTo = Jrun.pick(this.setting.renderTo, "body:eq(0)");
+		this.element = this.setting.element;
+		this.allowOverlay = Jrun.pickStrict(this.setting.overlay, this.allowOverlay, "boolean");
+	},
 	init: function(option)
 	{
 		var that = this;
@@ -3046,8 +3069,28 @@ Js.widget.dialog = Js.widget.panel.extend({
 			this.renderTo = Js.use("body").eq(0);
 		}
 		
+		if (this.allowOverlay == true) {
+			this.overlay = new Js.widget.activity("#overlay-panel");	
+		}
+		
 		this._load();
+		this.overlay.activate();
 		this._dimension();
+	},
+	closePanel: function() 
+	{
+		var that = this;
+		this.overlay.deactivate();
+		
+		// callback to close panel
+		this.node.fadeOut("slow", function() {
+			if (Jrun.isfunction(that.setting.onClose)) {
+				that.setting.onClose();
+			}
+			
+			that.node.remove();
+		});
+		return this;
 	},
 	_dimension: function()
 	{
@@ -3064,7 +3107,8 @@ Js.widget.dialog = Js.widget.panel.extend({
 		this.node.css({
 			"position": "absolute", 
 			"top": top + "px", 
-			"left": left + "px"
+			"left": left + "px",
+			"zIndex": 6000
 		});
 	}
 });/**

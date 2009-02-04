@@ -27,3 +27,6 @@
 	background: #fff;
 	border: 1px solid #D3DAE8;
 }
+.widget-panel input {
+	margin: 3px 2px;
+}

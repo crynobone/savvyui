@@ -5,6 +5,14 @@
  */
 
 Js.widget.dialog = Js.widget.panel.extend({
+	overlay: null,
+	allowOverlay: false,
+	_prepSetting: function()
+	{
+		this.renderTo = Jrun.pick(this.setting.renderTo, "body:eq(0)");
+		this.element = this.setting.element;
+		this.allowOverlay = Jrun.pickStrict(this.setting.overlay, this.allowOverlay, "boolean");
+	},
 	init: function(option)
 	{
 		var that = this;
@@ -20,8 +28,28 @@ Js.widget.dialog = Js.widget.panel.extend({
 			this.renderTo = Js.use("body").eq(0);
 		}
 		
+		if (this.allowOverlay == true) {
+			this.overlay = new Js.widget.activity("#overlay-panel");	
+		}
+		
 		this._load();
+		this.overlay.activate();
 		this._dimension();
+	},
+	closePanel: function() 
+	{
+		var that = this;
+		this.overlay.deactivate();
+		
+		// callback to close panel
+		this.node.fadeOut("slow", function() {
+			if (Jrun.isfunction(that.setting.onClose)) {
+				that.setting.onClose();
+			}
+			
+			that.node.remove();
+		});
+		return this;
 	},
 	_dimension: function()
 	{
@@ -38,7 +66,8 @@ Js.widget.dialog = Js.widget.panel.extend({
 		this.node.css({
 			"position": "absolute", 
 			"top": top + "px", 
-			"left": left + "px"
+			"left": left + "px",
+			"zIndex": 6000
 		});
 	}
 });

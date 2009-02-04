@@ -68,10 +68,11 @@ Js.util.editable = Js.base.create({
 			element: "editable_edit_box_" + Jrun.prep(this.element),
 			title: "Editable Widget",
 			width: 300,
-			height: 150,
+			height: 100,
 			onClose: function() {
 				that.onModalBoxClose();
-			}
+			},
+			overlay: true
 		});
 		
 		var p = Js.use("<p/>").html("" + this.setting.message).appendTo(this.box.content[0]);
@@ -79,6 +80,16 @@ Js.util.editable = Js.base.create({
 		var submitBtn = jQuery('<input type="button"/>').val("Ok").appendTo(this.box.content[0]);
 		var cancelBtn = jQuery('<input type="button"/>').val("Cancel").appendTo(this.box.content[0]);
 		var box = this.box;
+		
+		box.overlay.node.click(function() {
+			that.input.val("");
+			box.closePanel();
+		});
+		
+		box.closeButton.click(function() {
+			that.input.val("");
+			box.closePanel();
+		});
 		
 		submitBtn.click(function() {
 			box.closePanel();

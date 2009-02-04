@@ -172,7 +172,7 @@ Js.widget.tab = Js.base.create({
 		this.activeHeader.removeClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssHidden);
 		
-		this.activeHeader = Js.use(node[0]);
+		this.activeHeader = Js.use(node);
 		var href = this.activeHeader.attr("href");
 		this.activeTab = Js.use(href);
 		

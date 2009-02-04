@@ -26,7 +26,7 @@ Js.widget.panel = Js.base.create({
 	},
 	_prepSetting: function()
 	{
-		this.renderTo = this.setting.renderTo;
+		this.renderTo = Jrun.pick(this.setting.renderTo, "body:eq(0)");
 		this.element = this.setting.element;	
 	},	
 	init: function(option)

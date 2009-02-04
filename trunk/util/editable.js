@@ -66,7 +66,7 @@ Js.util.editable = Js.base.create({
 		
 		this.box = new Js.widget.dialog({
 			element: "editable_edit_box_" + Jrun.prep(this.element),
-			title: "Editable Widget",
+			title: this.setting.title,
 			width: 300,
 			height: 100,
 			onClose: function() {
@@ -77,8 +77,8 @@ Js.util.editable = Js.base.create({
 		
 		var p = Js.use("<p/>").html("" + this.setting.message).appendTo(this.box.content[0]);
 		this.input = Js.use('<input type="text" name="util_editable_' + Jrun.prep(this.element) + '" value="' + this.setting.prefix + '"/>').appendTo(this.box.content[0]);
-		var submitBtn = jQuery('<input type="button"/>').val("Ok").appendTo(this.box.content[0]);
-		var cancelBtn = jQuery('<input type="button"/>').val("Cancel").appendTo(this.box.content[0]);
+		var submitBtn = jQuery('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(this.box.content[0]);
+		var cancelBtn = jQuery('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(this.box.content[0]);
 		var box = this.box;
 		
 		box.overlay.node.click(function() {

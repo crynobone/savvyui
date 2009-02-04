@@ -95,7 +95,7 @@ Js.parse = {
 			var args = Jrun.pickStrict(data.text, "string");
 			var id = Jrun.pickStrict(data.id, "string");
 			var selector = Jrun.pickStrict(selector, "string");
-			var object = Jrun.pickStrict(data.exec, data.callback, null);
+			var object = Jrun.pickStrict(data.exec, data.callback, null, "string");
 			
 			if (!!args) {
 				if(!!selector) {

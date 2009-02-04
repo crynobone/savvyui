@@ -11,7 +11,13 @@
 	<body>
 		<h1>Js.util.editable</h1>
 		<div id="result">
-			<select name="editable" id="editable">
+			<select name="editable" class="editable">
+				<option value="Kuala Lumpur">Kuala Lumpur</option>
+				<option value="Kedah">Kedah</option>
+				<option value="Other">Lain-lain</option>
+			</select>
+			
+			<select name="editable2" class="editable">
 				<option value="Kuala Lumpur">Kuala Lumpur</option>
 				<option value="Kedah">Kedah</option>
 				<option value="Other">Lain-lain</option>
@@ -20,7 +26,7 @@
 		<script type="text/javascript">
 		<!--
 		Js.debug.dev = true;
-		var editable = new Js.util.editable("#editable", {prefix: "Test"});
+		var editable = new Js.util.editable(".editable", {prefix: "Test"});
 		Js.use("<option value='Add'>Add</option>").appendTo("#editable");
 		-->
 		</script>

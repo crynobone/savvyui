@@ -15,6 +15,7 @@ Js.widget.datePicker = Js.base.create({
 	content: null,
 	option: null,
 	setting: null,
+	language: null,
 	range: null,
 	minDate: null,
 	maxDate: null,
@@ -37,7 +38,10 @@ Js.widget.datePicker = Js.base.create({
 	 */
 	setup: function(option)
 	{
-		this.setting = Js.append(option, this.setting)
+		this.setting = Js.append(option, this.setting, ["lang"], true);
+		if(Jrun.isset(option.lang)) {
+			this.language = Js.append(option.lang, this.language);
+		}
 	},
 	/**
 	 * Initiate internal call, prepare all configuration before loading the calendar
@@ -52,6 +56,7 @@ Js.widget.datePicker = Js.base.create({
 		
 		this.setup(js.option);
 		this.setting = Js.append(this.setting, Js.config.widget.datePicker);
+		this.language = Js.append(this.language, Js.language.widget.datePicker);
 		
 		this.element = Jrun.prep(Jrun.pick(js.element, this.element));
 		this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
@@ -450,7 +455,7 @@ Js.widget.datePicker = Js.base.create({
 		var trheader = Js.use("<tr/>").addClass("calendar-header").appendTo(tbody[0]);
 		
 		for (var i = 0; i <= 6; i++) {
-			Js.use("<td/>").addClass("calendar-header-day").text(this.setting.days[i]).appendTo(trheader[0]);
+			Js.use("<td/>").addClass("calendar-header-day").text(this.language.days[i]).appendTo(trheader[0]);
 		}
 		
 		var day = 1;
@@ -507,7 +512,7 @@ Js.widget.datePicker = Js.base.create({
 				that.nextMonth();
 			}).setClass("next-month");
 			
-			Js.use("<p/>").text(Js.language.widget.datePicker.selectMonthYear).appendTo(this.option[0]);
+			Js.use("<p/>").text(this.language.selectMonthYear).appendTo(this.option[0]);
 			
 			var selmonth = Js.use("<select name='month'></select>").bind("change", function(){
 				that.customMonth(this.value);
@@ -515,10 +520,10 @@ Js.widget.datePicker = Js.base.create({
 			
 			for (var i = 0; i < 12; i++) {
 				if (this.month == i) {
-					Js.use("<option value='" + i + "' selected='selected'></option>").text(this.setting.months[i]).appendTo(selmonth[0]);
+					Js.use("<option value='" + i + "' selected='selected'></option>").text(this.language.months[i]).appendTo(selmonth[0]);
 				}
 				else {
-					Js.use("<option value='" + i + "'></option>").text(this.setting.months[i]).appendTo(selmonth[0]);
+					Js.use("<option value='" + i + "'></option>").text(this.language.months[i]).appendTo(selmonth[0]);
 				}
 			}
 			
@@ -535,7 +540,7 @@ Js.widget.datePicker = Js.base.create({
 				}
 			}
 			
-			Js.use("<input type='button' name='today' />").val(Js.language.widget.datePicker.todayButton).bind("click", function(){
+			Js.use("<input type='button' name='today' />").val(this.language.todayButton).bind("click", function(){
 				that.today();
 			}).addClass("select-today").appendTo(this.option[0]);
 			
@@ -562,7 +567,7 @@ Js.widget.datePicker = Js.base.create({
 			_toggleContent();
 		}
 		else {
-			title.setClass("this-month").html(this.settings.months[this.month] + "&nbsp;" + this.year);
+			title.setClass("this-month").html(this.language.months[this.month] + "&nbsp;" + this.year);
 		}
 		
 		if (Jrun.isset(this.field)) {

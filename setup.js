@@ -8,8 +8,11 @@ Js.setup = {
 	ext: {
 		validate: function(option)
 		{
-			Js.config.ext.validate = Js.append(option, Js.config.ext.validate);
-		}
+			Js.config.ext.validate = Js.append(option, Js.config.ext.validate, ["lang"], true);
+			if(Jrun.isset(option.lang)) {
+				Js.language.ext.validate = Js.append(option.lang, Js.language.ext.validate);
+			}
+		},
 	},
 	test: function(option)
 	{
@@ -26,7 +29,10 @@ Js.setup = {
 		},
 		editable: function(option)
 		{
-			Js.config.util.editable = Js.append(option, Js.config.util.editable);
+			Js.config.util.editable = Js.append(option, Js.config.util.editable, ["lang"], true);
+			if(Jrun.isset(option.lang)) {
+				Js.language.util.editable = Js.append(option.lang, Js.language.util.editable);
+			}
 		}
 	},
 	widget: {
@@ -36,7 +42,10 @@ Js.setup = {
 		},
 		datePicker: function(option)
 		{
-			Js.config.widget.calendar = Js.append(option, Js.config.widget.calendar);
+			Js.config.widget.datePicker = Js.append(option, Js.config.widget.datePicker, ["lang"], true);
+			if(Jrun.isset(option.lang)) {
+				Js.language.widget.datePicker = Js.append(option.lang, Js.language.widget.datePicker);
+			}
 		},
 		iconizer: function(option)
 		{
@@ -44,7 +53,10 @@ Js.setup = {
 		},
 		notice: function(option)
 		{
-			Js.config.widget.notice = Js.append(option, Js.config.widget.notice);
+			Js.config.widget.notice = Js.append(option, Js.config.widget.notice, ["lang"], true);
+			if(Jrun.isset(option.lang)) {
+				Js.language.widget.notice = Js.append(option.lang, Js.language.widget.notice);
+			}
 		},
 		panel: function(option)
 		{

@@ -58,7 +58,8 @@ Js.ext.validate = Js.base.create({
 		// setup configuration
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.ext.validate);
-		this.language = Js.append(this.language, Js.language.ext.validate)
+		this.language = Js.append(this.language, Js.language.ext.validate);
+		
 		this._prepSetting();
 		
 		var setting = this.setting;

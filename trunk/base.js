@@ -15,6 +15,7 @@ var Js = {
 	version: "1.1.4",
 	use: null,
 	debug: {},
+	data: {},
 	ext: {},
 	util: {},
 	parse: {},
@@ -383,6 +384,24 @@ var Jrun = {
 	ltrim: function(value) 
 	{
 		return new String(value).replace(/^\s+/g, "");
+	},
+	parameter: function(data, length, values) {
+		var data = jQuery.makeArray(data);
+		var values = Jrun.pickStrict(values, [], "array");
+		
+		if (data.length === length) {
+			var result = true;
+			jQuery.each(data, function(index, value) {
+				if (values[index] !== true && Jrun.typeOf(value) !== values[index]) {
+					result = false;
+				}
+			});
+			
+			return result;
+		} 
+		else {
+			return false;
+		}
 	},
 	/**
 	 * Pick the first arguments that is defined

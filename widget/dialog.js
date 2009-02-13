@@ -33,13 +33,17 @@ Js.widget.dialog = Js.widget.panel.extend({
 		}
 		
 		this._load();
-		this.overlay.activate();
+		if (this.allowOverlay == true) {
+			this.overlay.activate();
+		}
 		this._dimension();
 	},
 	closePanel: function() 
 	{
 		var that = this;
-		this.overlay.deactivate();
+		if (this.allowOverlay == true) {
+			this.overlay.deactivate();
+		}
 		
 		// callback to close panel
 		this.node.fadeOut("slow", function() {

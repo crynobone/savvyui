@@ -79,7 +79,7 @@ Js.util.editable = Js.base.create({
 			overlay: true
 		});
 		
-		var p = Js.use("<p/>").html("" + this.language.message).appendTo(this.box.content[0]);
+		var p = Js.use("<p/>").plainHtml("" + this.language.message).appendTo(this.box.content[0]);
 		this.input = Js.use('<input type="text" name="util_editable_' + Jrun.prep(this.element) + '" value="' + this.setting.prefix + '"/>').appendTo(this.box.content[0]);
 		var submitBtn = Js.use('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(this.box.content[0]);
 		var cancelBtn = Js.use('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(this.box.content[0]);

@@ -265,7 +265,7 @@ Js.ext.validate = Js.base.create({
 		
 		if (errorNode.length < 1) {
 			try {
-				Js.use("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).html(message).insertAfter(node[0]);
+				Js.use("<" + this.setting.error.node + "/>").addClass(this.setting.error.cssMessage).text(message).insertAfter(node[0]);
 			} 
 			catch (e) {
 				Js.debug.error(e);

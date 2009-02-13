@@ -48,7 +48,7 @@ Js.widget.message = Js.base.create({
 				}).text("x").appendTo(div[0]);
 			}
 			
-			var p = Js.use("<p/>").html(text).appendTo(div[0]);
+			var p = Js.use("<p/>").plainHtml(text).appendTo(div[0]);
 			
 			var t = setTimeout(function() {
 				div.hide("normal", function() {

@@ -12,7 +12,7 @@ Js.setup = {
 			if(Jrun.isset(option.lang)) {
 				Js.language.ext.validate = Js.append(option.lang, Js.language.ext.validate);
 			}
-		},
+		}
 	},
 	test: function(option)
 	{

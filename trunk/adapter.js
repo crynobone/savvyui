@@ -21,10 +21,13 @@ jQuery.fn.extend({
 	},
 	plainHtml: function(value) {
 		if (value == undefined) {
-			return this[0] ? this[0].innerHTML : null;
+			return (this[0] ? this[0].innerHTML : null);
 		}
 		else if(this[0]) {
-			this[0].innerHTML = value;
+			try {
+				this[0].innerHTML = value;
+			} catch(e) {}
+			return this;
 		}
 	} 
 });

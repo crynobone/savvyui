@@ -28,10 +28,12 @@
 		</div>
 		<script type="text/javascript">
 		<!--
-		Js.setup.widget.panel({
-			allowClose: false
-		});
-		try {
+		
+		jQuery(function() {
+			Js.debug.enable = true;
+			Js.setup.widget.panel({
+				allowClose: false
+			});
 			var panel = new Js.widget.panel({
 				element: "controller",
 				renderTo: "#panel-container",
@@ -39,9 +41,7 @@
 				width: 300,
 				content: "<p>Some content</p><p>Some other content</p><pre>some.code.here</pre>"
 			});
-		} catch(e) {
-			alert(e);
-		}
+		});
 		-->
 		</script>
 	</body>

@@ -544,7 +544,7 @@ Js.widget.datePicker = Js.base.create({
 				that.today();
 			}).addClass("select-today").appendTo(this.option[0]);
 			
-			title.setClass("this-month").text(this.language.months[this.month] + "&nbsp;" + this.year);
+			title.setClass("this-month").plainHtml(this.language.months[this.month] + "&nbsp;" + this.year);
 			this.node.data("toggle", 0);
 			
 			var _toggleContent = function()

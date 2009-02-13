@@ -67,7 +67,7 @@ Js.widget.panel = Js.base.create({
 		// render header
 		this.header = Js.use("<div/>").addClass("panel-header").appendTo(this.node[0]);
 		// render content
-		this.container = Js.use("<div/>").addClass("panel-content-container").html("").appendTo(this.node[0]);
+		this.container = Js.use("<div/>").addClass("panel-content-container").appendTo(this.node[0]);
 		// render footer
 		this.footer = Js.use("<div/>").css({
 			width: "100%",
@@ -98,13 +98,13 @@ Js.widget.panel = Js.base.create({
 		}).appendTo(this.header[0]);
 		
 		// render Close-Button 
-		var tclose = Js.use("<span/>").html("x").css({
+		var tclose = Js.use("<span/>").text("x").css({
 			"width": "14px",
 			"display": "none"
 		}).appendTo(ext[0]);
 		
 		// render Minimize-Button
-		var tmin = Js.use("<span/>").html("_").css({
+		var tmin = Js.use("<span/>").text("_").css({
 			"width": "14px",
 			"display": "none"
 		}).appendTo(ext[0]);
@@ -148,7 +148,7 @@ Js.widget.panel = Js.base.create({
 		this.content = Js.use("<div/>").attr({
 			id: this.element, 
 			className: "panel-content"
-		}).html(this.setting.content).appendTo(this.container[0]);
+		}).plainHtml(this.setting.content).appendTo(this.container[0]);
 		
 		// set height and scrolling option for content CONTAINER
 		if (Jrun.isset(this.setting.height) && !!this.setting.scrolling) {

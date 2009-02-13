@@ -147,7 +147,7 @@ Js.widget.datePicker = Js.base.create({
 			this.setting.beforeStart();
 		}
 		
-		this.renderTo.html("");
+		this.renderTo.text("");
 		this.callback();
 		
 		return this;
@@ -191,7 +191,7 @@ Js.widget.datePicker = Js.base.create({
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
 		if (this.validation()) {
-			this.renderTo.html("");
+			this.renderTo.text("");
 			this.callback();
 		}
 		else {
@@ -212,7 +212,7 @@ Js.widget.datePicker = Js.base.create({
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
 		if (this.validation()) {
-			this.renderTo.html("");
+			this.renderTo.text("");
 			this.callback();
 		}
 		else {
@@ -233,7 +233,7 @@ Js.widget.datePicker = Js.base.create({
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
 		if (this.validation()) {
-			this.renderTo.html("");
+			this.renderTo.text("");
 			this.callback();
 		}
 		else {
@@ -254,7 +254,7 @@ Js.widget.datePicker = Js.base.create({
 		this.date = [this.year, (this.month + 1), this.dayOfMonth()].join("-");
 		
 		if (this.validation()) {
-			this.renderTo.html("");
+			this.renderTo.text("");
 			this.callback();
 		}
 		else {
@@ -277,13 +277,13 @@ Js.widget.datePicker = Js.base.create({
 		if (this.validation()) {
 			this.year = tempYear;
 			this.month = tempMonth;
-			this.renderTo.html("");
+			this.renderTo.text("");
 			this.callback();
 		}
 		else {
 			this.dateObject = new Date(this.year, this.month);
 			this.date = [this.year, (this.month + 1), "1"].join("-");
-			this.renderTo.html("");
+			this.renderTo.text("");
 			this.callback();
 		}
 		
@@ -300,13 +300,13 @@ Js.widget.datePicker = Js.base.create({
 		if (this.validation()) {
 			this.year = tempYear;
 			this.month = tempMonth;
-			this.renderTo.html("");
+			this.renderTo.text("");
 			this.callback();
 		}
 		else {
 			this.dateObject = new Date(this.year, this.month);
 			this.date = [this.year, (this.month + 1), "1"].join("-");
-			this.renderTo.html("");
+			this.renderTo.text("");
 			this.callback();
 		}
 		
@@ -427,7 +427,7 @@ Js.widget.datePicker = Js.base.create({
 		var start_day = first_day.getDay();
 		var html = "";
 		var monthLength = this.dayOfMonth();
-		cal.html("");
+		cal.text("");
 		
 		this.node = Js.use("<div/>").attr({
 			"id": [this.element, "calendar"].join("-"), 
@@ -489,11 +489,11 @@ Js.widget.datePicker = Js.base.create({
 					
 					days.css("cursor", "pointer");
 					
-					days.html(day.toString());
+					days.text(day.toString());
 					day++;
 				}
 				else {
-					days.html("&nbsp;").setClass("calendar-invalid");
+					days.plainHtml("&nbsp;").setClass("calendar-invalid");
 				}
 			}
 			
@@ -504,11 +504,11 @@ Js.widget.datePicker = Js.base.create({
 		
 		
 		if (this.setting.navigation == true) {
-			prevbtn.html("&laquo;").bind("click", function(){
+			prevbtn.plainHtml("&laquo;").bind("click", function(){
 				that.prevMonth();
 			}).setClass("prev-month");
 			
-			nextbtn.html("&raquo;").bind("click", function(){
+			nextbtn.plainHtml("&raquo;").bind("click", function(){
 				that.nextMonth();
 			}).setClass("next-month");
 			
@@ -544,7 +544,7 @@ Js.widget.datePicker = Js.base.create({
 				that.today();
 			}).addClass("select-today").appendTo(this.option[0]);
 			
-			title.setClass("this-month").html(this.language.months[this.month] + "&nbsp;" + this.year);
+			title.setClass("this-month").text(this.language.months[this.month] + "&nbsp;" + this.year);
 			this.node.data("toggle", 0);
 			
 			var _toggleContent = function()
@@ -567,7 +567,7 @@ Js.widget.datePicker = Js.base.create({
 			_toggleContent();
 		}
 		else {
-			title.setClass("this-month").html(this.language.months[this.month] + "&nbsp;" + this.year);
+			title.setClass("this-month").text(this.language.months[this.month] + "&nbsp;" + this.year);
 		}
 		
 		if (Jrun.isset(this.field)) {

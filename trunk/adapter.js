@@ -18,7 +18,14 @@ jQuery.fn.extend({
 		return this.each(function() {
 			this.className = value;
 		});
-	}
+	},
+	plainHtml: function(value) {
+		if (value == undefined) {
+			return this[0] ? this[0].innerHTML : null;
+		}
+		else if(this[0]) {
+			this[0].innerHTML = value;
+		}
+	} 
 });
-
 Js.use = window.jQuery;

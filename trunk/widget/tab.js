@@ -218,7 +218,7 @@ Js.widget.tab = Js.base.create({
 			var node = Js.use('<div/>').attr({
 				id: id,
 				className: this.setting.cssHidden
-			}).html(content).appendTo(this.node[0]);
+			}).plainHtml(content).appendTo(this.node[0]);
 			
 			var li = Js.use('<li/>').appendTo(this.header[0]);
 			var a = Js.use('<a/>').attr({

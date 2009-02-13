@@ -148,7 +148,13 @@ Js.widget.panel = Js.base.create({
 		this.content = Js.use("<div/>").attr({
 			id: this.element, 
 			className: "panel-content"
-		}).plainHtml(this.setting.content).appendTo(this.container[0]);
+		}).appendTo(this.container[0]);
+		
+		try {
+			this.content.html(this.setting.content);
+		} catch(e) {
+			this.content.plainHtml(this.setting.content);
+		}
 		
 		// set height and scrolling option for content CONTAINER
 		if (Jrun.isset(this.setting.height) && !!this.setting.scrolling) {

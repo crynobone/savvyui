@@ -1322,7 +1322,7 @@ Js.ext.validate = Js.base.create({
 	__construct: function(node, option)
 	{
 		if (Jrun.isset(node)) {
-			this.init(node, option);
+			return this.init(node, option);
 		}
 		
 		return this;

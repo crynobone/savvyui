@@ -62,7 +62,7 @@
 				// initiate the Form Validation for #contact-me form
 				var validation = new Js.ext.validate(this);
 		 
-				if(!!validation) {
+				if(!!validation.result) {
 					// if all input field validated
 					alert("Your done, continue form submission");
 					return true;

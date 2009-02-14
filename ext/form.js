@@ -17,6 +17,7 @@ Js.ext.validate = Js.base.create({
 	first: null,
 	setting: null,
 	language: null,
+	result: null,
 	__construct: function(node, option)
 	{
 		if (Jrun.isset(node)) {
@@ -193,6 +194,7 @@ Js.ext.validate = Js.base.create({
 				fnOnError(this.first);
 			}
 			// stop form processing
+			this.result = false;
 			return false;
 		}
 		else {
@@ -200,7 +202,7 @@ Js.ext.validate = Js.base.create({
 			if (Jrun.isfunction(fnSuccess)) {
 				fnSuccess(data);
 			}
-			
+			this.result = data;
 			return data;
 		}
 	},

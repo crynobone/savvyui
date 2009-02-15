@@ -21,11 +21,11 @@
 			</div>
 			<div>
 				<label>Subject</label>
-				<input type="text" name="subject" class="required min-100" />
+				<input type="text" name="subject" class="required min-5" />
 			</div>
 			<div>
 				<label>Date</label>
-				<input type="text" name="date" class="customDate" />
+				<input type="text" name="date" class="custom-date" />
 			</div>
 			<div>
 				<input type="submit" id="contact-me-submit" value="Submit Form" />
@@ -48,8 +48,8 @@
 		*/
 		Js.setup.ext.validate({
 			customDate: {
-				regex: /^(\d{2})\-(\d{2})\-(\d{4})$/,
-				error: "Require date input",
+				regex: /^(\d{2})(\-|\/)(\d{2})(\-|\/)(\d{4})$/,
+				error: "Require date input DD-MM-YYYY",
 				required: true
 			}
 		});
@@ -62,16 +62,17 @@
 				// initiate the Form Validation for #contact-me form
 				var validation = new Js.ext.validate(this);
 		 
-				if(!!validation.result) {
+				if(!!validation.result()) {
 					// if all input field validated
-					alert("Your done, continue form submission");
-					return true;
+					alert("Your done, querystring: " + validation.cacheResult);
 				}
 				else {
 					// if any of the field not validated
 					alert("You got an error, please fix it");
-					return false;
 				}
+				
+				// prevent form to actually submit anything
+				return false;
 			});
 		});
 		-->

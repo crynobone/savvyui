@@ -1319,14 +1319,15 @@ Js.ext.validate = Js.base.create({
 	first: null,
 	setting: null,
 	language: null,
-	result: null,
-	__construct: function(node, option)
+	cacheResult: null,
+	__construct: function(node, option, runValidation)
 	{
 		if (Jrun.isset(node)) {
-			return this.init(node, option);
+			return this.init(node, option, runValidation);
 		}
-		
-		return this;
+		else {
+			return this;
+		}
 	},
 	setup: function(option)
 	{
@@ -1350,7 +1351,7 @@ Js.ext.validate = Js.base.create({
 	 * @param {Object} node
 	 * @param {Object} option
 	 */
-	init: function(node, option) 
+	init: function(node, option, runValidation) 
 	{
 		// ensure that refer to this
 		var that = this;
@@ -1364,6 +1365,16 @@ Js.ext.validate = Js.base.create({
 		this.language = Js.append(this.language, Js.language.ext.validate);
 		
 		this._prepSetting();
+		
+		if (Jrun.isset(runValidation) && runValidation === true) {
+			return this.result();
+		}
+		else {
+			return this;
+		}
+	},
+	result: function() {
+		var that = this;
 		
 		var setting = this.setting;
 		var fnBeforeStart = Jrun.pick(setting.beforeStart,null);
@@ -1496,7 +1507,7 @@ Js.ext.validate = Js.base.create({
 				fnOnError(this.first);
 			}
 			// stop form processing
-			this.result = false;
+			this.cacheResult = false;
 			return false;
 		}
 		else {
@@ -1504,7 +1515,7 @@ Js.ext.validate = Js.base.create({
 			if (Jrun.isfunction(fnSuccess)) {
 				fnSuccess(data);
 			}
-			this.result = data;
+			this.cacheResult = data;
 			return data;
 		}
 	},

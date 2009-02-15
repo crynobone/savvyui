@@ -11,7 +11,8 @@ Js.config = {
 			errorNode: "span.form-error-message",
 			beforeStart: null,
 			success: null,
-			onError: null
+			onError: null,
+			autoExecute: true
 		}
 	},
 	test: {

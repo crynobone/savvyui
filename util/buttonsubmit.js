@@ -64,8 +64,8 @@ Js.util.buttonSubmit = Js.base.create({
 		// bind onClick event delegation to the button
 		Js.use(that.button).bind(this.handler, function() {
 			// we need to validate the form
-			var form = new Js.ext.validate();
-			var params = form.init(that.id, that.formValidate);
+			var form = new Js.ext.validate(that.id, that.formValidate);
+			var params = form.cacheResult;
 			
 			if(!!params) {
 			   jQuery.ajax({

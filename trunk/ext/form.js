@@ -18,10 +18,10 @@ Js.ext.validate = Js.base.create({
 	setting: null,
 	language: null,
 	cacheResult: null,
-	__construct: function(node, option, runValidation)
+	__construct: function(node, option)
 	{
 		if (Jrun.isset(node)) {
-			return this.init(node, option, runValidation);
+			return this.init(node, option);
 		}
 		else {
 			return this;
@@ -49,7 +49,7 @@ Js.ext.validate = Js.base.create({
 	 * @param {Object} node
 	 * @param {Object} option
 	 */
-	init: function(node, option, runValidation) 
+	init: function(node, option) 
 	{
 		// ensure that refer to this
 		var that = this;
@@ -64,12 +64,11 @@ Js.ext.validate = Js.base.create({
 		
 		this._prepSetting();
 		
-		if (Jrun.isset(runValidation) && runValidation === true) {
-			return this.result();
+		if (Jrun.isset(this.setting.autoExecute) && this.setting.autoExecute === true) {
+			this.result();
 		}
-		else {
-			return this;
-		}
+		
+		return this;
 	},
 	result: function() {
 		var that = this;

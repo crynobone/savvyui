@@ -48,8 +48,8 @@ Js.widget.iconizer = Js.base.create({
 			for (var i = 0; i < klass.length; i++) {
 				if (klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) {
 					var append = (RegExp.$1 == "-append" ? true : false);
-					var pos = Jrun.pickGrep(RegExp.$1, "left", /^(left|right)$/i);
 					var icon = RegExp.$3;
+					var pos = Jrun.pickGrep(RegExp.$2, "left", /^(left|right)$/i);
 					var bg = that.setting.folder + icon + "." + that.setting.fileType;
 					
 					if (!!append) {
@@ -74,14 +74,15 @@ Js.widget.iconizer = Js.base.create({
 						}
 					}
 					else {
+						var obj = node;
 						if (pos == "left") {
-							object.css({
+							obj.css({
 								"background": "url('" + bg + "') no-repeat left center",
 								"paddingLeft": "17px"
 							});
 						}
 						else {
-							object.css({
+							obj.css({
 								"background": "url('" + bg + "') no-repeat right center",
 								"paddingRight": "17px"
 							});

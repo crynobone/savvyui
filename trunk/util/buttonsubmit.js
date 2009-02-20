@@ -78,11 +78,15 @@ Js.util.buttonSubmit = Js.base.create({
 						}
 					},
 					success: function(reply) {
+						var runDefault = true;
+						
 						if (Jrun.isfunction(that.setting.success)) {
-							that.setting.success(reply);
+							runDefault = that.setting.success(reply);
 						}
 						
-						Js.parse.xhr.init(reply);
+						if (runDefault == true) {
+							Js.parse.xhr.init(reply);	
+						}
 					}
 				});
 			}

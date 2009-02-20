@@ -58,12 +58,14 @@ Js.parse = {
 		{
 			var data = eval("(" + reply + ")");
 			
-			Js.debug.log("XHR: " + data);
+			Js.debug.log("XHR: " + reply);
 			
-			if (!!data.SUIXHR) {
-				Js.parse.xhr.notice(data);
-				Js.parse.xhr.href(data);
-				Js.parse.xhr.update(data);
+			if (Jrun.typeOf(data) == "object") {
+				if (!!data.SUIXHR) {
+					Js.parse.xhr.notice(data);
+					Js.parse.xhr.href(data);
+					Js.parse.xhr.update(data);
+				}
 			}
 		},
 		notice: function(data) 

@@ -17,6 +17,7 @@ Js.ext.validate = Js.base.create({
 	first: null,
 	setting: null,
 	language: null,
+	data: "",
 	cacheResult: null,
 	__construct: function(node, option)
 	{
@@ -108,8 +109,36 @@ Js.ext.validate = Js.base.create({
 					var error = "";
 						
 					// if the element is required
-					if (!!Jrun.inArray("required", klass) && Jrun.trim(value) === "") {
-						error = lang.required;
+					if (!!Jrun.inArray("required", klass)) {
+						if (Jrun.trim(value) === "") {
+							error = lang.required;
+						} else {
+							var indexLength = Jrun.indexOfGrep(/^(max|min|exact)\-(\d*)$/i, klass);
+							
+							if (indexLength > -1) {
+								var types = RegExp.$1;
+								var values = RegExp.$2;
+								
+								if (!Js.test.isLength(klass[indexLength], value.length)) {
+									if (types == "min") {
+										types = lang.lengthMinimum;
+									}
+									else if (types == "max") {
+										types = lang.lengthMaximum;
+									}
+									else if (types == "exact") {
+										types = lang.lengthExact;
+									}
+										
+									var note = lang.length;
+									note = note.replace(/{type}/, types);
+									note = note.replace(/{value}/, values);
+										
+									that._error(node, note);
+								}
+							}
+							
+						}
 					}
 					/*
 					var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
@@ -162,34 +191,13 @@ Js.ext.validate = Js.base.create({
 						that._error(node, error);
 					}
 					
-					var indexLength = Jrun.indexOfGrep(/^(max|min|exact)\-(\d*)$/i, klass);
-					if (indexLength > -1) {
-						var types = RegExp.$1;
-						var values = RegExp.$2;
-						
-						if (!Js.test.isLength(klass[indexLength], value.length)) {
-							if (types == "min") {
-								types = lang.lengthMinimum;
-							}
-							else if (types == "max") {
-								types = lang.lengthMaximum;
-							}
-							else if (types == "exact") {
-								types = lang.lengthExact;
-							}
-								
-							var note = lang.length;
-							note = note.replace(/{type}/, types);
-							note = note.replace(/{value}/, values);
-								
-							that._error(node, note);
-						}
-					}
 					
 					data += that._invokeQueryString(node);
 				}
 			});
 		}
+		
+		this.data = data;
 		
 		if (Jrun.isset(this.first)) {
 			// there an error, set focus to first invalid field

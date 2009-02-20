@@ -108,7 +108,10 @@ Js.parse = {
 					// eval the function without making a callback
 					var callback = eval(object);
 					// execute the function
-					callback(args);
+					if(Jrun.isfunction(callback)) {
+						callback(args);	
+					}
+					
 				}
 			}
 		}

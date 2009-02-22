@@ -13,7 +13,7 @@
  * @alias Js.widget.message
  */
 
-Js.widget.message = Js.base.create({
+Js.widget.message = Js.create({
 	node: null,
 	setting: null,
 	__construct: function(option)

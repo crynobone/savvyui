@@ -11,7 +11,7 @@
  * @constructor
  * @param {Object} js
  */
-Js.util.buttonSubmit = Js.base.create({
+Js.util.buttonSubmit = Js.create({
 	id: null,
 	url: null,
 	button: null,
@@ -84,7 +84,7 @@ Js.util.buttonSubmit = Js.base.create({
 							runDefault = that.setting.success(reply);
 						}
 						
-						if (runDefault == true) {
+						if (runDefault != false) {
 							Js.parse.xhr.init(reply);	
 						}
 					}

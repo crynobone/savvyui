@@ -4,7 +4,7 @@
  * @license MIT
  */
 
-Js.widget.panel = Js.base.create({
+Js.widget.panel = Js.create({
 	node: null,
 	renderTo: null,
 	element: null,

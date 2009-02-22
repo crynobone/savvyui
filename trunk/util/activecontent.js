@@ -11,7 +11,7 @@
  * @alias Js.util.activeContent
  * @see Js.base.create
  */
-Js.util.activeContent = Js.base.create({
+Js.util.activeContent = Js.create({
 	last: null,
 	interval: null,
 	repeat: false,

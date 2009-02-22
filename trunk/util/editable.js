@@ -2,7 +2,7 @@
  * @author crynobone
  */
 
-Js.util.editable = Js.base.create({
+Js.util.editable = Js.create({
 	node: null,
 	element: null,
 	box: null,

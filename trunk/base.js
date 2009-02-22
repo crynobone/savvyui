@@ -44,8 +44,7 @@ var Js = {
  * @alias Js.toString
  * @return {String}
  */
-Js.toString = function() 
-{
+Js.toString = function() {
 	return ["Savvy.UI", "version", Js.version, "using", Js.adapter].join(" ");	
 };
 
@@ -56,8 +55,7 @@ Js.toString = function()
  * @param {Object} data
  * @return {Object}
  */
-Js.nue = function(data) 
-{
+Js.nue = function(data) {
 	// data have to be an object
 	if (Jrun.typeOf(data) == "object") {
 		// prepare result object
@@ -85,8 +83,7 @@ Js.nue = function(data)
  * @param {Object} value
  * @param {Object} filter
  */
-Js.append = function(data, value, filter, invert) 
-{
+Js.append = function(data, value, filter, invert) {
 	var filter = Jrun.pickStrict(filter, null, "array");
 	var invert = Jrun.pickStrict(invert, false, "boolean");
 	
@@ -116,8 +113,7 @@ Js.append = function(data, value, filter, invert)
 	
 };
 
-Js.filter = function (data, filter) 
-{
+Js.filter = function (data, filter) {
 	return Js.append(data, {}, filter);
 };
 
@@ -202,8 +198,7 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {String} string with camelize format
 	 */
-	camelize: function(data) 
-	{
+	camelize: function(data) {
 		var values = data.split(/\-/);
 		
 		// if array only have one value
@@ -228,8 +223,7 @@ var Jrun = {
 	 * @param {String} [url] set the hyperlink of destination path 
 	 * @param {String} [target] set the target to show the page, if applicable
 	 */
-	href: function(url, target) 
-	{
+	href: function(url, target) {
 		if (this.trim(url) !== "") {
 			if (this.isnull(target)) {
 				// when target is not define load the url in the same window
@@ -251,8 +245,7 @@ var Jrun = {
 	 * @param {String} [value] any string with HTML entities
 	 * @return {String}
 	 */
-	htmlEncode: function(value) 
-	{
+	htmlEncode: function(value) {
 		return value
 			.replace(/&/g, "&amp;")
 			.replace(/</g, "&lt;")
@@ -266,8 +259,7 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	htmlDecode: function(value) 
-	{
+	htmlDecode: function(value) {
 		return value
 			.replace(/&amp;/g, "&")
 			.replace(/&lt;/g, "<")
@@ -282,8 +274,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Boolean}
 	 */
-	inArray: function(value, data) 
-	{
+	inArray: function(value, data) {
 		for(var index = 0; index < data.length && !!data[index]; index++) {
 			if(data[index] === value) {
 				return true;
@@ -301,8 +292,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Boolean}
 	 */
-	inArrayGrep: function(value, data) 
-	{
+	inArrayGrep: function(value, data) {
 		for(var index = 0; index < data.length && !!data[index]; index++) 
 		{
 			if(data[index].match(value)) 
@@ -322,8 +312,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Number}
 	 */
-	'indexOf': function(value, data) 
-	{
+	'indexOf': function(value, data) {
 		for (var index = data.length; index-- && data[index] !== value;);
 		return index;
 	},
@@ -335,8 +324,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Number}
 	 */
-	indexOfGrep: function(value, data) 
-	{
+	indexOfGrep: function(value, data) {
 		for (var index = data.length; index-- && !data[index].match(value););
 		return index;
 	},
@@ -347,8 +335,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isnull: function(data) 
-	{
+	isnull: function(data) {
 		return (typeof(data) == "undefined" || data == null);
 	},
 	/**
@@ -358,8 +345,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isset: function(data) 
-	{
+	isset: function(data) {
 		return !this.isnull(data);
 	},
 	/**
@@ -371,8 +357,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isfunction: function(data) 
-	{
+	isfunction: function(data) {
 		return jQuery.isFunction(data);
 	},
 	/**
@@ -381,8 +366,7 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	ltrim: function(value) 
-	{
+	ltrim: function(value) {
 		return new String(value).replace(/^\s+/g, "");
 	},
 	parameter: function(data, length, values) {
@@ -410,8 +394,7 @@ var Jrun = {
 	 * @param {Object} js
 	 * @return {Object}
 	 */
-	pick: function(js) 
-	{
+	pick: function(js) {
 		var data = jQuery.makeArray(arguments);
 		
 		for(var index = 0; index < data.length; index++) {
@@ -432,8 +415,7 @@ var Jrun = {
 	 * @param {Object} [js]
 	 * @return {Object}
 	 */
-	pickStrict: function(js) 
-	{
+	pickStrict: function(js) {
 		var data = jQuery.makeArray(arguments);
 		var length = data.length;
 		var last = data[(length - 1)];
@@ -458,8 +440,7 @@ var Jrun = {
 	 * @param {Object} js
 	 * @return {Object}
 	 */
-	pickGrep: function(js) 
-	{
+	pickGrep: function(js) {
 		var data = jQuery.makeArray(arguments);
 		var length = data.length;
 		var last = data[(length - 1)];
@@ -488,8 +469,7 @@ var Jrun = {
 	 * @param {String} last
 	 * @return {String}
 	 */
-	prettyList: function(data, between, last) 
-	{
+	prettyList: function(data, between, last) {
 		var length = data.length;
 		var result = new String;
 		
@@ -508,8 +488,7 @@ var Jrun = {
 	 * @alias Jrun.rand
 	 * @param {Object} js
 	 */
-	rand: function(js) 
-	{
+	rand: function(js) {
 		var data = arguments;
 		var length = 0;
 		var offset = 0;
@@ -531,8 +510,7 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	rtrim: function(value) 
-	{
+	rtrim: function(value) {
 		return new String(value).replace(/\s$/g, "");
 	},
 	/**
@@ -543,45 +521,8 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	stripTags: function(value) 
-	{
+	stripTags: function(value) {
 		return new String(value).replace(/<([^>]+)>/g, "");
-	},
-	/**
-	 * Serialize array or object to querystring
-	 * <br>All XHR request will be control directly via jQuery.ajax() 
-	 * 
-	 * @alias Jrun.serialize
-	 * @deprecated
-	 * @param {Object} data
-	 * @return {String}
-	 */
-	serialize: function(data) 
-	{
-		var result = [];
-		
-		if (this.typeOf(data) === "array") {
-			jQuery.each(data, function(index, val) {
-				if (!!Js.parse.html) {
-					val.value = Js.parse.html.to(val.value);
-				}
-				result.push(data[index].name + "=" + val.value);
-			});
-		}
-		else if (this.typeOf(data) == "object") {
-			for (var val in data) {
-				if (!!Js.parse.html) {
-					data[val] = Js.parse.html.to(data[val]);
-				}
-					
-				result.push(val + "=" + data[val]);
-			}
-		}
-		else {
-			return "";
-		}
-		
-		return result.join("&");
 	},
 	/**
 	 * Parse input string value as Number using parseInt
@@ -590,8 +531,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Number}
 	 */
-	toNumber: function(data) 
-	{
+	toNumber: function(data) {
 		// return possible integer value of a string, if not a string then return self
 		return (typeof(data) == "string" ? parseInt(data, 10) : data);
 	},
@@ -602,8 +542,7 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {Float}
 	 */
-	toFloat: function(data) 
-	{
+	toFloat: function(data) {
 		return (typeof(data) == "string" ? parseFloat(data, 10) : data);
 	},
 	/**
@@ -611,8 +550,7 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {String}
 	 */
-	toProperCase: function(data) 
-	{
+	toProperCase: function(data) {
 		var array = data.split(/ /g);
 		var result = [];
 		
@@ -633,8 +571,7 @@ var Jrun = {
 	 * @param {Number} [offset] offset where to start converting to array, if applicable
 	 * @return {Array}
 	 */  
-	toArray: function(data, offset) 
-	{
+	toArray: function(data, offset) {
 		var offset = (this.isnull(offset) || offset < 1 ? 0 : offset);
 		
 		// return empty array
@@ -664,8 +601,7 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {String}
 	 */
-	trim: function(data) 
-	{
+	trim: function(data) {
 		return jQuery.trim(data); 
 		/* new String(data).replace(/^\s+|\s+$/g, ""); */
 	},
@@ -675,8 +611,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {String}
 	 */
-	typeOf: function(data) 
-	{
+	typeOf: function(data) {
 		if (Jrun.isnull(data)) {
 			return "undefined";
 		}
@@ -698,8 +633,7 @@ var Jrun = {
 	 * @param {Object, Array} [data]
 	 * @param {Boolean} [repeat]
 	 */
-	unique: function(data, repeat) 
-	{
+	unique: function(data, repeat) {
 		// when option equal true it only reject value which is repeating
 		var repeat = this.pick(repeat, false);
 		var result = [];
@@ -724,8 +658,7 @@ var Jrun = {
 		
 		return result;
 	},
-	prep: function(data)
-	{
+	prep: function(data) {
 		if (data.match(/^(#|\.)?(.*)$/gi)) {
 			return RegExp.$2;
 		}
@@ -737,8 +670,7 @@ var Jrun = {
 
 Js.base = function() {};
 Js.base.prototype = {
-	__destruct: function() 
-	{
+	__destruct: function() {
 		// remove all properties and method for this object
 		for (var method in this) {
 			this[method] = null;
@@ -761,18 +693,33 @@ Js.base.prototype = {
  * @param {Object} js
  * @return {Object}
  */
-Js.base.create = function(js) 
-{
+Js.create = function(js) {
+	var base = function() {};
+	base.prototype = {
+		__destruct: function() {
+			// remove all properties and method for this object
+			for (var method in this) {
+				this[method] = null;
+			}
+				
+			for (var method in this.prototype) {
+				this.prototype[method] = null;
+			}
+			
+			// delete this (which doesn't actually totally delete it
+			delete this;
+			
+			return null;
+		}
+	};
+	
 	var initialize = true;
 	// add prototyping based on Js.base
-	var prototype = new Js.base;
+	var prototype = new base;
 	initialize = false;
 	
-	/*
-	 * Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
-	 */
-	function Class() 
-	{
+	// Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
+	function Class() {
 		// initiate the __construct function if construct available
 		if (!initialize && !!this.construct) {
 			this.construct.apply(this, jQuery.makeArray(arguments));
@@ -784,19 +731,23 @@ Js.base.create = function(js)
 	Class.constructor = Class;
 	
 	// create inheritance capability using .extend
-	Class.extend = function(js) 
+	Class.extend = function(js) {
+		js.Extend = this;	
+		return Js.create(js);
+	};
+	
+	Class.$parent = function(method)
 	{
-		js.extended = this;	
-		return Js.base.create(js);
+		return method.call(this);
 	};
 	
 	// if this function is being called from .extend, prepare parent method inheritant
-	var extended = Jrun.pick(js.extended, null);
+	var Extend = Jrun.pick(js.Extend, null);
 	
 	// assign object with method provided in js
 	(function(js) {
 		// restrict object from looping certain method
-		var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
+		var disallow = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 		
 		// add method to this object
 		for (var method in js) {
@@ -807,11 +758,11 @@ Js.base.create = function(js)
 	}).call(prototype, js);
 	
 	// object called from .extend, inherit parent method if object does not have it's own method
-	if(!!Jrun.isset(extended)) {
+	if(!!Jrun.isset(Extend)) {
 		try {
 			(function(ext) {
 				// restrict object from looping certain method
-				var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
+				var disallow = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 				
 				for (var method in ext) {
 					if (ext.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
@@ -825,22 +776,19 @@ Js.base.create = function(js)
 					}
 				}
 				
-				if (ext.prototype.hasOwnProperty('construct')) {
-					this['_parentConstruct'] = ext.prototype.construct;
-					this['_parentDestruct'] = ext.prototype.__destruct;
-				}
-				
 				// create a linkage to the parent object
-				this._super = ext.prototype;
-			}).call(prototype, extended);
+				this.$super = ext.prototype;
+				
+			}).call(prototype, Extend);
 		} catch(e) {
 			// incase something goes wrong
 			Js.debug.error("Js.base.create: failed " + e);
 		}
 	}
 	
-	// avoid extended to be duplicated in this.prototype 
-	delete extended;
+	// avoid Extend to be duplicated in this.prototype 
+	delete Extend;
 	
 	return Class;
 };
+

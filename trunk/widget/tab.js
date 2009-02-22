@@ -11,7 +11,7 @@
  * @param {Object} option
  * @return {Object}
  */
-Js.widget.tab = Js.base.create({
+Js.widget.tab = Js.create({
 	height: null,
 	toolbar: null,
 	node: null,

@@ -4,7 +4,7 @@
  * @license MIT
  */
 
-Js.util.smartInput = Js.base.create({
+Js.util.smartInput = Js.create({
 	node: null,
 	__construct: function(node) 
 	{

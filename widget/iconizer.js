@@ -11,7 +11,7 @@
  * @constructor
  * @param {Object} option
  */
-Js.widget.iconizer = Js.base.create({
+Js.widget.iconizer = Js.create({
 	setting: null,
 	__construct: function(option)
 	{

@@ -4,7 +4,7 @@
  * @license MIT
  */
 
-Js.widget.datePicker = Js.base.create({
+Js.widget.datePicker = Js.create({
 	field: null,
 	value: "",
 	lastDate: null,

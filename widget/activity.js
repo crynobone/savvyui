@@ -15,7 +15,7 @@
  * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
  * @return {Object} return this object
  */
-Js.widget.activity = Js.base.create({
+Js.widget.activity = Js.create({
 	node: null,
 	element: null,
 	box: null,

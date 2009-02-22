@@ -12,7 +12,7 @@
  * @constructor
  * @return {Object} this object
  */
-Js.ext.validate = Js.base.create({
+Js.ext.validate = Js.create({
 	node: null,
 	first: null,
 	setting: null,

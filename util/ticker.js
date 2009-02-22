@@ -12,7 +12,7 @@
  * @constructor
  * @param {Object} node
  */
-Js.util.ticker = Js.base.create({
+Js.util.ticker = Js.create({
 	element: null,
 	node: null,
 	__construct: function(selector)

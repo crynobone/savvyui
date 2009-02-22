@@ -15,7 +15,7 @@ Js.widget.notice = Js.widget.activity.extend({
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.notice);
 		this.language = Js.append(this.language, Js.language.widget.notice);
-		this.node = this._super.construct(selector, {
+		this.node = this.$super.construct(selector, {
 			boxWidth: 550,
 			boxHeight: 0,
 			opacity: 0.9
@@ -25,7 +25,7 @@ Js.widget.notice = Js.widget.activity.extend({
 		this.node.box = Js.use("<div/>").css({
 			"position": "absolute",
 			"width": "550px"
-		}).appendTo(this._super.node[0]);
+		}).appendTo(this.$super.node[0]);
 	},
 	closeNotice: function() 
 	{

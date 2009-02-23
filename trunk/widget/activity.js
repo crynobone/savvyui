@@ -22,7 +22,7 @@ Js.widget.activity = Js.create({
 	setting: null,
 	language: null,
 	status: 0,
-	__construct: function(selector, option)
+	initiate: function(selector, option)
 	{
 		if (Jrun.isset(selector)) {
 			this.init(selector, option);

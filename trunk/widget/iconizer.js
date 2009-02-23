@@ -13,7 +13,7 @@
  */
 Js.widget.iconizer = Js.create({
 	setting: null,
-	__construct: function(option)
+	initiate: function(option)
 	{
 		if (Jrun.isset(option)) {
 			this.init(option);

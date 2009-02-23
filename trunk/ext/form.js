@@ -19,7 +19,7 @@ Js.ext.validate = Js.create({
 	language: null,
 	data: "",
 	cacheResult: null,
-	__construct: function(node, option)
+	initiate: function(node, option)
 	{
 		if (Jrun.isset(node)) {
 			return this.init(node, option);

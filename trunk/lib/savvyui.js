@@ -1,7 +1,7 @@
 /**
  * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
  * @namespace Js
- * @version 1.1.4
+ * @version 1.1.5
  * @extends jQuery-1.2.6
  * @author Mior Muhammad Zaki crynobone@gmail.com
  */
@@ -12,7 +12,7 @@
  */
 var Js = {
 	adapter: "jQuery-1.2.6",
-	version: "1.1.4",
+	version: "1.1.5",
 	use: null,
 	debug: {},
 	data: {},
@@ -44,8 +44,7 @@ var Js = {
  * @alias Js.toString
  * @return {String}
  */
-Js.toString = function() 
-{
+Js.toString = function() {
 	return ["Savvy.UI", "version", Js.version, "using", Js.adapter].join(" ");	
 };
 
@@ -56,8 +55,7 @@ Js.toString = function()
  * @param {Object} data
  * @return {Object}
  */
-Js.nue = function(data) 
-{
+Js.nue = function(data) {
 	// data have to be an object
 	if (Jrun.typeOf(data) == "object") {
 		// prepare result object
@@ -85,8 +83,7 @@ Js.nue = function(data)
  * @param {Object} value
  * @param {Object} filter
  */
-Js.append = function(data, value, filter, invert) 
-{
+Js.append = function(data, value, filter, invert) {
 	var filter = Jrun.pickStrict(filter, null, "array");
 	var invert = Jrun.pickStrict(invert, false, "boolean");
 	
@@ -116,8 +113,7 @@ Js.append = function(data, value, filter, invert)
 	
 };
 
-Js.filter = function (data, filter) 
-{
+Js.filter = function (data, filter) {
 	return Js.append(data, {}, filter);
 };
 
@@ -202,8 +198,7 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {String} string with camelize format
 	 */
-	camelize: function(data) 
-	{
+	camelize: function(data) {
 		var values = data.split(/\-/);
 		
 		// if array only have one value
@@ -228,8 +223,7 @@ var Jrun = {
 	 * @param {String} [url] set the hyperlink of destination path 
 	 * @param {String} [target] set the target to show the page, if applicable
 	 */
-	href: function(url, target) 
-	{
+	href: function(url, target) {
 		if (this.trim(url) !== "") {
 			if (this.isnull(target)) {
 				// when target is not define load the url in the same window
@@ -251,8 +245,7 @@ var Jrun = {
 	 * @param {String} [value] any string with HTML entities
 	 * @return {String}
 	 */
-	htmlEncode: function(value) 
-	{
+	htmlEncode: function(value) {
 		return value
 			.replace(/&/g, "&amp;")
 			.replace(/</g, "&lt;")
@@ -266,8 +259,7 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	htmlDecode: function(value) 
-	{
+	htmlDecode: function(value) {
 		return value
 			.replace(/&amp;/g, "&")
 			.replace(/&lt;/g, "<")
@@ -282,8 +274,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Boolean}
 	 */
-	inArray: function(value, data) 
-	{
+	inArray: function(value, data) {
 		for(var index = 0; index < data.length && !!data[index]; index++) {
 			if(data[index] === value) {
 				return true;
@@ -301,8 +292,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Boolean}
 	 */
-	inArrayGrep: function(value, data) 
-	{
+	inArrayGrep: function(value, data) {
 		for(var index = 0; index < data.length && !!data[index]; index++) 
 		{
 			if(data[index].match(value)) 
@@ -322,8 +312,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Number}
 	 */
-	'indexOf': function(value, data) 
-	{
+	'indexOf': function(value, data) {
 		for (var index = data.length; index-- && data[index] !== value;);
 		return index;
 	},
@@ -335,8 +324,7 @@ var Jrun = {
 	 * @param {Array} data
 	 * @return {Number}
 	 */
-	indexOfGrep: function(value, data) 
-	{
+	indexOfGrep: function(value, data) {
 		for (var index = data.length; index-- && !data[index].match(value););
 		return index;
 	},
@@ -347,8 +335,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isnull: function(data) 
-	{
+	isnull: function(data) {
 		return (typeof(data) == "undefined" || data == null);
 	},
 	/**
@@ -358,8 +345,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isset: function(data) 
-	{
+	isset: function(data) {
 		return !this.isnull(data);
 	},
 	/**
@@ -371,8 +357,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Boolean}
 	 */
-	isfunction: function(data) 
-	{
+	isfunction: function(data) {
 		return jQuery.isFunction(data);
 	},
 	/**
@@ -381,8 +366,7 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	ltrim: function(value) 
-	{
+	ltrim: function(value) {
 		return new String(value).replace(/^\s+/g, "");
 	},
 	parameter: function(data, length, values) {
@@ -410,8 +394,7 @@ var Jrun = {
 	 * @param {Object} js
 	 * @return {Object}
 	 */
-	pick: function(js) 
-	{
+	pick: function(js) {
 		var data = jQuery.makeArray(arguments);
 		
 		for(var index = 0; index < data.length; index++) {
@@ -432,8 +415,7 @@ var Jrun = {
 	 * @param {Object} [js]
 	 * @return {Object}
 	 */
-	pickStrict: function(js) 
-	{
+	pickStrict: function(js) {
 		var data = jQuery.makeArray(arguments);
 		var length = data.length;
 		var last = data[(length - 1)];
@@ -458,8 +440,7 @@ var Jrun = {
 	 * @param {Object} js
 	 * @return {Object}
 	 */
-	pickGrep: function(js) 
-	{
+	pickGrep: function(js) {
 		var data = jQuery.makeArray(arguments);
 		var length = data.length;
 		var last = data[(length - 1)];
@@ -488,8 +469,7 @@ var Jrun = {
 	 * @param {String} last
 	 * @return {String}
 	 */
-	prettyList: function(data, between, last) 
-	{
+	prettyList: function(data, between, last) {
 		var length = data.length;
 		var result = new String;
 		
@@ -508,8 +488,7 @@ var Jrun = {
 	 * @alias Jrun.rand
 	 * @param {Object} js
 	 */
-	rand: function(js) 
-	{
+	rand: function(js) {
 		var data = arguments;
 		var length = 0;
 		var offset = 0;
@@ -531,8 +510,7 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	rtrim: function(value) 
-	{
+	rtrim: function(value) {
 		return new String(value).replace(/\s$/g, "");
 	},
 	/**
@@ -543,45 +521,8 @@ var Jrun = {
 	 * @param {String} value
 	 * @return {String}
 	 */
-	stripTags: function(value) 
-	{
+	stripTags: function(value) {
 		return new String(value).replace(/<([^>]+)>/g, "");
-	},
-	/**
-	 * Serialize array or object to querystring
-	 * <br>All XHR request will be control directly via jQuery.ajax() 
-	 * 
-	 * @alias Jrun.serialize
-	 * @deprecated
-	 * @param {Object} data
-	 * @return {String}
-	 */
-	serialize: function(data) 
-	{
-		var result = [];
-		
-		if (this.typeOf(data) === "array") {
-			jQuery.each(data, function(index, val) {
-				if (!!Js.parse.html) {
-					val.value = Js.parse.html.to(val.value);
-				}
-				result.push(data[index].name + "=" + val.value);
-			});
-		}
-		else if (this.typeOf(data) == "object") {
-			for (var val in data) {
-				if (!!Js.parse.html) {
-					data[val] = Js.parse.html.to(data[val]);
-				}
-					
-				result.push(val + "=" + data[val]);
-			}
-		}
-		else {
-			return "";
-		}
-		
-		return result.join("&");
 	},
 	/**
 	 * Parse input string value as Number using parseInt
@@ -590,8 +531,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {Number}
 	 */
-	toNumber: function(data) 
-	{
+	toNumber: function(data) {
 		// return possible integer value of a string, if not a string then return self
 		return (typeof(data) == "string" ? parseInt(data, 10) : data);
 	},
@@ -602,8 +542,7 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {Float}
 	 */
-	toFloat: function(data) 
-	{
+	toFloat: function(data) {
 		return (typeof(data) == "string" ? parseFloat(data, 10) : data);
 	},
 	/**
@@ -611,8 +550,7 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {String}
 	 */
-	toProperCase: function(data) 
-	{
+	toProperCase: function(data) {
 		var array = data.split(/ /g);
 		var result = [];
 		
@@ -633,8 +571,7 @@ var Jrun = {
 	 * @param {Number} [offset] offset where to start converting to array, if applicable
 	 * @return {Array}
 	 */  
-	toArray: function(data, offset) 
-	{
+	toArray: function(data, offset) {
 		var offset = (this.isnull(offset) || offset < 1 ? 0 : offset);
 		
 		// return empty array
@@ -664,8 +601,7 @@ var Jrun = {
 	 * @param {String} data
 	 * @return {String}
 	 */
-	trim: function(data) 
-	{
+	trim: function(data) {
 		return jQuery.trim(data); 
 		/* new String(data).replace(/^\s+|\s+$/g, ""); */
 	},
@@ -675,8 +611,7 @@ var Jrun = {
 	 * @param {Object} data
 	 * @return {String}
 	 */
-	typeOf: function(data) 
-	{
+	typeOf: function(data) {
 		if (Jrun.isnull(data)) {
 			return "undefined";
 		}
@@ -698,8 +633,7 @@ var Jrun = {
 	 * @param {Object, Array} [data]
 	 * @param {Boolean} [repeat]
 	 */
-	unique: function(data, repeat) 
-	{
+	unique: function(data, repeat) {
 		// when option equal true it only reject value which is repeating
 		var repeat = this.pick(repeat, false);
 		var result = [];
@@ -724,8 +658,7 @@ var Jrun = {
 		
 		return result;
 	},
-	prep: function(data)
-	{
+	prep: function(data) {
 		if (data.match(/^(#|\.)?(.*)$/gi)) {
 			return RegExp.$2;
 		}
@@ -735,83 +668,108 @@ var Jrun = {
 	}
 };
 
-Js.base = function() {};
-Js.base.prototype = {
-	__destruct: function() 
-	{
-		// remove all properties and method for this object
-		for (var method in this) {
-			this[method] = null;
-		}
-			
-		for (var method in this.prototype) {
-			this.prototype[method] = null;
-		}
-		
-		// delete this (which doesn't actually totally delete it
-		delete this;
-		
-		return null;
-	}
-};
-
 /**
- * Create a new Class with some simple Object-Oriented capability
- * 
+ * Create a new Class with some simple Object-Oriented capability<br>
+ * Based from Simple JavaScript Inheritance by John Resig http://ejohn.org/blog/simple-javascript-inheritance/ 
  * @param {Object} js
  * @return {Object}
  */
-Js.base.create = function(js) 
-{
-	var initialize = true;
-	// add prototyping based on Js.base
-	var prototype = new Js.base;
-	initialize = false;
+
+Js.create = function(js) {
+	var base = function(js) {
+		var $private = Js.nue(js.Private);
+		return (function() {})();
+	};
+	base.prototype = {
+		destroy: function() {
+			// remove all properties and method for this object
+			for (var method in this) {
+				this[method] = null;
+			}
+				
+			for (var method in this.prototype) {
+				this.prototype[method] = null;
+			}
+			
+			// delete this (which doesn't actually totally delete it
+			delete this;
+			
+			return null;
+		},
+		toString: function() {
+			return this._toString();
+		},
+		toLocaleString: function() {
+			return this._toLocaleString();
+		}
+	};
 	
-	/*
-	 * Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
-	 */
-	function Class() 
-	{
+	
+	var initialized = true;
+	// add prototyping based on Js.base
+	var prototype = new base(js);
+	initialized = false;
+	
+	// Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
+	function Class() {
+		
 		// initiate the __construct function if construct available
-		if (!initialize && !!this.construct) {
-			this.construct.apply(this, jQuery.makeArray(arguments));
+		if (!initialized && !!this.initiate) {
+			this.initiate.apply(this, jQuery.makeArray(arguments));
 		}
 	};
 	
 	Class.prototype = prototype;
-	Class.prototype.construct = Jrun.pick(js.__construct, null);
+	Class.prototype.initiate = Jrun.pick(js.initiate, js.__construct, null);
 	Class.constructor = Class;
 	
 	// create inheritance capability using .extend
-	Class.extend = function(js) 
+	Class.extend = function(js) {
+		js.Extend = this;	
+		return Js.create(js);
+	};
+	Class.$parent = function(method, args)
 	{
-		js.extended = this;	
-		return Js.base.create(js);
+		return this.$super[method].call(this, args);
 	};
 	
 	// if this function is being called from .extend, prepare parent method inheritant
-	var extended = Jrun.pick(js.extended, null);
+	var Extend = Jrun.pick(js.Extend, null);
+	Class.prototype.$private = (function(js) {
+		var $private = Js.nue(js.Private);
+		var that = this;
+		delete js.Private;
+		return (function(method, args) {
+			return $private[method].call(this, args);
+		});
+	})(js);
+	delete js.Private;
+	
 	
 	// assign object with method provided in js
 	(function(js) {
 		// restrict object from looping certain method
-		var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
+		var disallow = ["Extend", "__construct", "__destruct", "$super", "prototype"];
+		var toStr = ["toString", "toLocaleString"];
+		
 		
 		// add method to this object
 		for (var method in js) {
 			if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
 				this[method] = js[method];
 			}
+			else if (Jrun.inArray(method, toStr)) {
+				this["_" + method] = js[method];
+			}
 		};
+		
 	}).call(prototype, js);
-	
 	// object called from .extend, inherit parent method if object does not have it's own method
-	if(!!Jrun.isset(extended)) {
+	if(!!Jrun.isset(Extend)) {
 		try {
 			(function(ext) {
 				// restrict object from looping certain method
-				var disallow = ["extended", "__construct", "__destruct", "_super", "prototype"];
+				var disallow = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 				
 				for (var method in ext) {
 					if (ext.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
@@ -822,28 +780,35 @@ Js.base.create = function(js)
 				for (var method in ext.prototype) {
 					if (ext.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
 						this[method] = ext.prototype[method];
+						
 					}
 				}
 				
-				if (ext.prototype.hasOwnProperty('construct')) {
-					this['_parentConstruct'] = ext.prototype.construct;
-					this['_parentDestruct'] = ext.prototype.__destruct;
+				if (Jrun.isnull(this._toString)) {
+					this._toString = ext.toString;
+				}
+				
+				if (Jrun.isnull(this._toLocaleString)) {
+					this._toLocaleString = ext.toLocaleString;
 				}
 				
 				// create a linkage to the parent object
-				this._super = ext.prototype;
-			}).call(prototype, extended);
+				this.$super = ext.prototype;
+			}).call(prototype, Extend);
 		} catch(e) {
 			// incase something goes wrong
-			Js.debug.error("Js.base.create: failed " + e);
+			Js.debug.error("Js.create: failed " + e);
 		}
 	}
 	
-	// avoid extended to be duplicated in this.prototype 
-	delete extended;
+	
+	// avoid Extend to be duplicated in this.prototype 
+	delete Extend;
 	
 	return Class;
-};/**
+};
+
+/**
  * @projectDescription Adapter for Savvy.UI and jQuery Framework
  * @version 0.0.1
  * @extends jQuery-1.2.6
@@ -1150,12 +1115,14 @@ Js.parse = {
 		{
 			var data = eval("(" + reply + ")");
 			
-			Js.debug.log("XHR: " + data);
+			Js.debug.log("XHR: " + reply);
 			
-			if (!!data.SUIXHR) {
-				Js.parse.xhr.notice(data);
-				Js.parse.xhr.href(data);
-				Js.parse.xhr.update(data);
+			if (Jrun.typeOf(data) == "object") {
+				if (!!data.SUIXHR) {
+					Js.parse.xhr.notice(data);
+					Js.parse.xhr.href(data);
+					Js.parse.xhr.update(data);
+				}
 			}
 		},
 		notice: function(data) 
@@ -1200,7 +1167,10 @@ Js.parse = {
 					// eval the function without making a callback
 					var callback = eval(object);
 					// execute the function
-					callback(args);
+					if(Jrun.isfunction(callback)) {
+						callback(args);	
+					}
+					
 				}
 			}
 		}
@@ -1315,13 +1285,14 @@ Js.test = {
  * @constructor
  * @return {Object} this object
  */
-Js.ext.validate = Js.base.create({
+Js.ext.validate = Js.create({
 	node: null,
 	first: null,
 	setting: null,
 	language: null,
+	data: "",
 	cacheResult: null,
-	__construct: function(node, option)
+	initiate: function(node, option)
 	{
 		if (Jrun.isset(node)) {
 			return this.init(node, option);
@@ -1411,8 +1382,36 @@ Js.ext.validate = Js.base.create({
 					var error = "";
 						
 					// if the element is required
-					if (!!Jrun.inArray("required", klass) && Jrun.trim(value) === "") {
-						error = lang.required;
+					if (!!Jrun.inArray("required", klass)) {
+						if (Jrun.trim(value) === "") {
+							error = lang.required;
+						} else {
+							var indexLength = Jrun.indexOfGrep(/^(max|min|exact)\-(\d*)$/i, klass);
+							
+							if (indexLength > -1) {
+								var types = RegExp.$1;
+								var values = RegExp.$2;
+								
+								if (!Js.test.isLength(klass[indexLength], value.length)) {
+									if (types == "min") {
+										types = lang.lengthMinimum;
+									}
+									else if (types == "max") {
+										types = lang.lengthMaximum;
+									}
+									else if (types == "exact") {
+										types = lang.lengthExact;
+									}
+										
+									var note = lang.length;
+									note = note.replace(/{type}/, types);
+									note = note.replace(/{value}/, values);
+										
+									that._error(node, note);
+								}
+							}
+							
+						}
 					}
 					/*
 					var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
@@ -1465,34 +1464,13 @@ Js.ext.validate = Js.base.create({
 						that._error(node, error);
 					}
 					
-					var indexLength = Jrun.indexOfGrep(/^(max|min|exact)\-(\d*)$/i, klass);
-					if (indexLength > -1) {
-						var types = RegExp.$1;
-						var values = RegExp.$2;
-						
-						if (!Js.test.isLength(klass[indexLength], value.length)) {
-							if (types == "min") {
-								types = lang.lengthMinimum;
-							}
-							else if (types == "max") {
-								types = lang.lengthMaximum;
-							}
-							else if (types == "exact") {
-								types = lang.lengthExact;
-							}
-								
-							var note = lang.length;
-							note = note.replace(/{type}/, types);
-							note = note.replace(/{value}/, values);
-								
-							that._error(node, note);
-						}
-					}
 					
 					data += that._invokeQueryString(node);
 				}
 			});
 		}
+		
+		this.data = data;
 		
 		if (Jrun.isset(this.first)) {
 			// there an error, set focus to first invalid field
@@ -1615,7 +1593,7 @@ Js.ext.validate = Js.base.create({
  * @alias Js.util.activeContent
  * @see Js.base.create
  */
-Js.util.activeContent = Js.base.create({
+Js.util.activeContent = Js.create({
 	last: null,
 	interval: null,
 	repeat: false,
@@ -1624,7 +1602,7 @@ Js.util.activeContent = Js.base.create({
 	option: null,
 	fnBeforeStart: null,
 	fnSuccess: null,
-	__construct: function(js) 
+	initiate: function(js) 
 	{
 		var js = Jrun.pickStrict(js, {}, "object");
 		this.element = Jrun.pick(js.element, null);
@@ -1644,7 +1622,7 @@ Js.util.activeContent = Js.base.create({
 			}, 100);
 		}
 	},
-	__destruct: function() 
+	destroy: function() 
 	{
 		if(Jrun.isset(this.interval)) 
 		{
@@ -1717,14 +1695,14 @@ Js.util.activeContent = Js.base.create({
  * @constructor
  * @param {Object} js
  */
-Js.util.buttonSubmit = Js.base.create({
+Js.util.buttonSubmit = Js.create({
 	id: null,
 	url: null,
 	button: null,
 	setting: null,
 	handler: "click",
 	formValidate: null,
-	__construct: function(js)
+	initiate: function(js)
 	{
 		this.id = Jrun.pick(js.id, null);
 		this.url = Jrun.pick(js.url, null);
@@ -1784,11 +1762,15 @@ Js.util.buttonSubmit = Js.base.create({
 						}
 					},
 					success: function(reply) {
+						var runDefault = true;
+						
 						if (Jrun.isfunction(that.setting.success)) {
-							that.setting.success(reply);
+							runDefault = that.setting.success(reply);
 						}
 						
-						Js.parse.xhr.init(reply);
+						if (runDefault != false) {
+							Js.parse.xhr.init(reply);	
+						}
 					}
 				});
 			}
@@ -1918,7 +1900,7 @@ Js.util.dimension = {
  */
 Js.util.formSubmit = Js.util.buttonSubmit.extend({
 	handler: "submit",
-	__construct: function(js)
+	initiate: function(js)
 	{
 		if (Jrun.parameter(arguments, 1, ["object"])) {
 			this.id = Jrun.pick(js.id, null);
@@ -1952,10 +1934,10 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
  * @constructor
  * @param {Object} node
  */
-Js.util.ticker = Js.base.create({
+Js.util.ticker = Js.create({
 	element: null,
 	node: null,
-	__construct: function(selector)
+	initiate: function(selector)
 	{
 		if (Jrun.isset(selector)) {
 			this.init(selector);
@@ -2026,7 +2008,7 @@ Js.util.ticker = Js.base.create({
  * @author crynobone
  */
 
-Js.util.editable = Js.base.create({
+Js.util.editable = Js.create({
 	node: null,
 	element: null,
 	box: null,
@@ -2035,7 +2017,7 @@ Js.util.editable = Js.base.create({
 	value: null,
 	input: null,
 	lastSelected: null,
-	__construct: function(element, option) {
+	initiate: function(element, option) {
 		if(!!Jrun.isset(element)) {
 			this.init(element, option);
 		}
@@ -2133,9 +2115,9 @@ Js.util.editable = Js.base.create({
  * @license MIT
  */
 
-Js.util.smartInput = Js.base.create({
+Js.util.smartInput = Js.create({
 	node: null,
-	__construct: function(node) 
+	initiate: function(node) 
 	{
 		if (Jrun.isset(node)) {
 			this.init(node);
@@ -2193,14 +2175,14 @@ Js.util.smartInput = Js.base.create({
  * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
  * @return {Object} return this object
  */
-Js.widget.activity = Js.base.create({
+Js.widget.activity = Js.create({
 	node: null,
 	element: null,
 	box: null,
 	setting: null,
 	language: null,
 	status: 0,
-	__construct: function(selector, option)
+	initiate: function(selector, option)
 	{
 		if (Jrun.isset(selector)) {
 			this.init(selector, option);
@@ -2320,7 +2302,7 @@ Js.widget.activity = Js.base.create({
  * @license MIT
  */
 
-Js.widget.datePicker = Js.base.create({
+Js.widget.datePicker = Js.create({
 	field: null,
 	value: "",
 	lastDate: null,
@@ -2340,7 +2322,7 @@ Js.widget.datePicker = Js.base.create({
 	day: null,
 	month: null,
 	year: null,
-	__construct: function(js)
+	initiate: function(js)
 	{
 		if (Jrun.typeOf(js) === "object") {
 			this.init(js);
@@ -2914,9 +2896,9 @@ Js.widget.datePicker = Js.base.create({
  * @constructor
  * @param {Object} option
  */
-Js.widget.iconizer = Js.base.create({
+Js.widget.iconizer = Js.create({
 	setting: null,
-	__construct: function(option)
+	initiate: function(option)
 	{
 		if (Jrun.isset(option)) {
 			this.init(option);
@@ -2951,8 +2933,8 @@ Js.widget.iconizer = Js.base.create({
 			for (var i = 0; i < klass.length; i++) {
 				if (klass[i].match(/^icon(\-append)?\-(left|right)\:(\w*)/g)) {
 					var append = (RegExp.$1 == "-append" ? true : false);
-					var pos = Jrun.pickGrep(RegExp.$1, "left", /^(left|right)$/i);
 					var icon = RegExp.$3;
+					var pos = Jrun.pickGrep(RegExp.$2, "left", /^(left|right)$/i);
 					var bg = that.setting.folder + icon + "." + that.setting.fileType;
 					
 					if (!!append) {
@@ -2977,14 +2959,15 @@ Js.widget.iconizer = Js.base.create({
 						}
 					}
 					else {
+						var obj = node;
 						if (pos == "left") {
-							object.css({
+							obj.css({
 								"background": "url('" + bg + "') no-repeat left center",
 								"paddingLeft": "17px"
 							});
 						}
 						else {
-							object.css({
+							obj.css({
 								"background": "url('" + bg + "') no-repeat right center",
 								"paddingRight": "17px"
 							});
@@ -3000,7 +2983,7 @@ Js.widget.iconizer = Js.base.create({
  * @license MIT
  */
 
-Js.widget.panel = Js.base.create({
+Js.widget.panel = Js.create({
 	node: null,
 	renderTo: null,
 	element: null,
@@ -3012,7 +2995,7 @@ Js.widget.panel = Js.base.create({
 	content: null,
 	footer: null,
 	status: "normal",
-	__construct: function(option)
+	initiate: function(option)
 	{
 		if (Jrun.isset(option)) {
 			this.init(option);
@@ -3279,12 +3262,12 @@ Js.widget.notice = Js.widget.activity.extend({
 	node: null,
 	setting: null,
 	language: null,
-	__construct: function(selector, option)
+	initiate: function(selector, option)
 	{
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.notice);
 		this.language = Js.append(this.language, Js.language.widget.notice);
-		this.node = this._super.construct(selector, {
+		this.node = this.$super.initiate(selector, {
 			boxWidth: 550,
 			boxHeight: 0,
 			opacity: 0.9
@@ -3294,7 +3277,7 @@ Js.widget.notice = Js.widget.activity.extend({
 		this.node.box = Js.use("<div/>").css({
 			"position": "absolute",
 			"width": "550px"
-		}).appendTo(this._super.node[0]);
+		}).appendTo(this.$super.node[0]);
 	},
 	closeNotice: function() 
 	{
@@ -3374,7 +3357,7 @@ Js.widget.notice = Js.widget.activity.extend({
  * @param {Object} option
  * @return {Object}
  */
-Js.widget.tab = Js.base.create({
+Js.widget.tab = Js.create({
 	height: null,
 	toolbar: null,
 	node: null,
@@ -3385,7 +3368,7 @@ Js.widget.tab = Js.base.create({
 	handler: null,
 	statys: "off",
 	setting: null,
-	__construct: function(selector, option)
+	initiate: function(selector, option)
 	{
 		if (!!Jrun.isset(selector)) {
 			this.init(selector, option);

@@ -3,7 +3,7 @@
  */
 
 Js.util.smartDropDown = Js.create({
-	__construct: function(option) {
+	initiate: function(option) {
 		if (Jrun.isset(option)) {
 			this.init(option);
 		}

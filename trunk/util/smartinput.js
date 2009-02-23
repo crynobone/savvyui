@@ -6,7 +6,7 @@
 
 Js.util.smartInput = Js.create({
 	node: null,
-	__construct: function(node) 
+	initiate: function(node) 
 	{
 		if (Jrun.isset(node)) {
 			this.init(node);

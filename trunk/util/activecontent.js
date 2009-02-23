@@ -20,7 +20,7 @@ Js.util.activeContent = Js.create({
 	option: null,
 	fnBeforeStart: null,
 	fnSuccess: null,
-	__construct: function(js) 
+	initiate: function(js) 
 	{
 		var js = Jrun.pickStrict(js, {}, "object");
 		this.element = Jrun.pick(js.element, null);
@@ -40,7 +40,7 @@ Js.util.activeContent = Js.create({
 			}, 100);
 		}
 	},
-	__destruct: function() 
+	destroy: function() 
 	{
 		if(Jrun.isset(this.interval)) 
 		{

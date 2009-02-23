@@ -11,7 +11,7 @@ Js.util.editable = Js.create({
 	value: null,
 	input: null,
 	lastSelected: null,
-	__construct: function(element, option) {
+	initiate: function(element, option) {
 		if(!!Jrun.isset(element)) {
 			this.init(element, option);
 		}

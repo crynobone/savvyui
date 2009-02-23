@@ -16,7 +16,7 @@ Js.widget.panel = Js.create({
 	content: null,
 	footer: null,
 	status: "normal",
-	__construct: function(option)
+	initiate: function(option)
 	{
 		if (Jrun.isset(option)) {
 			this.init(option);

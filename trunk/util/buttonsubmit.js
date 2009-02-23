@@ -18,7 +18,7 @@ Js.util.buttonSubmit = Js.create({
 	setting: null,
 	handler: "click",
 	formValidate: null,
-	__construct: function(js)
+	initiate: function(js)
 	{
 		this.id = Jrun.pick(js.id, null);
 		this.url = Jrun.pick(js.url, null);

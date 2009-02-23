@@ -692,32 +692,52 @@ Js.create = function(js) {
 			delete this;
 			
 			return null;
-		},
-		toString: function() {
-			return this._toString();
-		},
-		toLocaleString: function() {
-			return this._toLocaleString();
 		}
 	};
-	
 	
 	var initialized = true;
 	// add prototyping based on Js.base
 	var prototype = new base;
 	initialized = false;
 	
+	var $private = null;
+	
+	if (Jrun.isset(js.Private)) {
+		var $private = (function(js){
+			var $private = Js.nue(js.Private);
+			return (function(method, args) {
+				if (arguments.callee.caller !== null) {
+					if (Jrun.isfunction($private[method])) {
+						return $private[method].call(this, args);
+					}
+					else {
+						if (Jrun.isnull(args)) {
+							return $private[method];
+						}
+						else {
+							$private[method] = args;
+						}
+						
+					}
+				}
+			});
+		})(js);
+		
+		delete js.Private;
+	}
+	
 	// Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
 	function Class() {
-		
 		// initiate the __construct function if construct available
 		if (!initialized && !!this.initiate) {
 			this.initiate.apply(this, jQuery.makeArray(arguments));
+			
 		}
 	};
 	
 	Class.prototype = prototype;
 	Class.prototype.initiate = Jrun.pick(js.initiate, js.__construct, null);
+	Class.prototype.$private = $private;
 	Class.constructor = Class;
 	
 	// create inheritance capability using .extend
@@ -729,34 +749,15 @@ Js.create = function(js) {
 	// if this function is being called from .extend, prepare parent method inheritant
 	var Extend = Jrun.pick(js.Extend, null);
 	
-	if (Jrun.isset(js.Private)) {
-		Class.prototype.$private = (function(js){
-			var $private = Js.nue(js.Private);
-			var that = this;
-			delete js.Private;
-			return (function(method, args){
-				return $private[method].call(this, args);
-			});
-		})(js);
-		
-		delete js.Private;
-	}
-	
 	
 	// assign object with method provided in js
 	(function(js) {
 		// restrict object from looping certain method
 		var disallow = ["Extend", "__construct", "__destruct", "$super", "prototype"];
-		var toStr = ["toString", "toLocaleString"];
-		
-		
 		// add method to this object
 		for (var method in js) {
 			if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
 				this[method] = js[method];
-			}
-			else if (Jrun.inArray(method, toStr)) {
-				this["_" + method] = js[method];
 			}
 		};
 		
@@ -781,16 +782,6 @@ Js.create = function(js) {
 					}
 				}
 				
-				if (Jrun.isnull(this._toString)) {
-					this._toString = function() {
-						return '[object Object]';
-					};
-				}
-				
-				if (Jrun.isnull(this._toLocaleString)) {
-					this._toLocaleString = this._toString;
-				}
-				
 				// create a linkage to the parent object
 				this.$super = ext.prototype;
 			}).call(prototype, Extend);
@@ -807,6 +798,7 @@ Js.create = function(js) {
 	
 	// avoid Extend to be duplicated in this.prototype 
 	delete Extend;
+	delete js;
 	
 	return Class;
 };

@@ -15,7 +15,7 @@
 Js.util.ticker = Js.create({
 	element: null,
 	node: null,
-	__construct: function(selector)
+	initiate: function(selector)
 	{
 		if (Jrun.isset(selector)) {
 			this.init(selector);

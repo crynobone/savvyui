@@ -15,32 +15,37 @@
 		
 		<script type="text/javascript">
 		<!--
-		var Person = Js.create({
-			name: "",
-			__construct: function() {
-				this.setName("Mior Muhammad Zaki");	
-			},
-			setName: function(name) {
+		
+		var AdHocClass = Js.create({
+			name: null,
+			initiate: function(name) {
 				this.name = name;
+			},
+			toString: function() {
+				return this.name;
+			},
+			toLocaleString: function(){
+			    return "locale: " + this.toString();
+			}
+		});
+		var AdHocSub = AdHocClass.extend({
+			Private: {
+				setName: function(name) {
+					this.name = name;
+				}
+			},
+			initiate: function(name, age) {
+				this.$private('setName', name);
+				this.age = age;
+			},
+			toString: function() {
+				return this.name + ": " + this.age;
 			}
 		});
 		
-		var Student = Person.extend({
-			getName: function() {
-				return this.name;	
-			},
-			__construct: function() {
-				this.$parent(this.$super.construct);
-				this.name += " bin Mior Khairuddin";
-			},
-			setName: function(name) {
-				this.name = 'My name: ' + name;
-			}
-		});
-		
-		var zaki = new Student;
-		alert(zaki.getName());
-		
+		var me = new AdHocSub("Andrea", 30);
+		alert(me);  // Andrea: 30
+		alert(me.toLocaleString());
 		-->
 		</script>
 		

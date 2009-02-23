@@ -16,7 +16,7 @@
 Js.widget.message = Js.create({
 	node: null,
 	setting: null,
-	__construct: function(option)
+	initiate: function(option)
 	{
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.message);

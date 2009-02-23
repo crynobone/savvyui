@@ -6,7 +6,7 @@
  */
 Js.util.formSubmit = Js.util.buttonSubmit.extend({
 	handler: "submit",
-	__construct: function(js)
+	initiate: function(js)
 	{
 		if (Jrun.parameter(arguments, 1, ["object"])) {
 			this.id = Jrun.pick(js.id, null);

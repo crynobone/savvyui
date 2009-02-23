@@ -10,12 +10,12 @@ Js.widget.notice = Js.widget.activity.extend({
 	node: null,
 	setting: null,
 	language: null,
-	__construct: function(selector, option)
+	initiate: function(selector, option)
 	{
 		this.setup(option);
 		this.setting = Js.append(this.setting, Js.config.widget.notice);
 		this.language = Js.append(this.language, Js.language.widget.notice);
-		this.node = this.$super.construct(selector, {
+		this.node = this.$super.initiate(selector, {
 			boxWidth: 550,
 			boxHeight: 0,
 			opacity: 0.9

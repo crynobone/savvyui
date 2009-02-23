@@ -24,7 +24,7 @@ Js.widget.datePicker = Js.create({
 	day: null,
 	month: null,
 	year: null,
-	__construct: function(js)
+	initiate: function(js)
 	{
 		if (Jrun.typeOf(js) === "object") {
 			this.init(js);

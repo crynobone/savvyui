@@ -22,7 +22,7 @@ Js.widget.tab = Js.create({
 	handler: null,
 	statys: "off",
 	setting: null,
-	__construct: function(selector, option)
+	initiate: function(selector, option)
 	{
 		if (!!Jrun.isset(selector)) {
 			this.init(selector, option);

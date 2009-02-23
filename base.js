@@ -676,10 +676,7 @@ var Jrun = {
  */
 
 Js.create = function(js) {
-	var base = function(js) {
-		var $private = Js.nue(js.Private);
-		return (function() {})();
-	};
+	var base = function() {};
 	base.prototype = {
 		destroy: function() {
 			// remove all properties and method for this object
@@ -707,7 +704,7 @@ Js.create = function(js) {
 	
 	var initialized = true;
 	// add prototyping based on Js.base
-	var prototype = new base(js);
+	var prototype = new base;
 	initialized = false;
 	
 	// Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
@@ -728,22 +725,22 @@ Js.create = function(js) {
 		js.Extend = this;	
 		return Js.create(js);
 	};
-	Class.$parent = function(method, args)
-	{
-		return this.$super[method].call(this, args);
-	};
 	
 	// if this function is being called from .extend, prepare parent method inheritant
 	var Extend = Jrun.pick(js.Extend, null);
-	Class.prototype.$private = (function(js) {
-		var $private = Js.nue(js.Private);
-		var that = this;
+	
+	if (Jrun.isset(js.Private)) {
+		Class.prototype.$private = (function(js){
+			var $private = Js.nue(js.Private);
+			var that = this;
+			delete js.Private;
+			return (function(method, args){
+				return $private[method].call(this, args);
+			});
+		})(js);
+		
 		delete js.Private;
-		return (function(method, args) {
-			return $private[method].call(this, args);
-		});
-	})(js);
-	delete js.Private;
+	}
 	
 	
 	// assign object with method provided in js
@@ -785,11 +782,13 @@ Js.create = function(js) {
 				}
 				
 				if (Jrun.isnull(this._toString)) {
-					this._toString = ext.toString;
+					this._toString = function() {
+						return '[object Object]';
+					};
 				}
 				
 				if (Jrun.isnull(this._toLocaleString)) {
-					this._toLocaleString = ext.toLocaleString;
+					this._toLocaleString = this._toString;
 				}
 				
 				// create a linkage to the parent object
@@ -799,6 +798,10 @@ Js.create = function(js) {
 			// incase something goes wrong
 			Js.debug.error("Js.create: failed " + e);
 		}
+		
+		Class.prototype.$parent = function(method, args) {
+			return this.$super[method].call(this, args);
+		};
 	}
 	
 	

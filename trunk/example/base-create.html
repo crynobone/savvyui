@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Js.base.create and Js.base.extend</title>
 		<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
-		<script type="text/javascript" src="../base.js"></script>
+		<script type="text/javascript" src="../lib/savvyui.js"></script>
 	</head>
 	<body>
 		<h1>Js.base.create and Js.base.extend</h1>
@@ -22,26 +22,43 @@
 			}
 		});
 		var Student = Person.extend({
-			Private: {
-				setName: function(name) {
-					this.name = name;
-				}
-			},
-			prev: null,
 			initiate: function(name, age) {
-				this.$private('setName', name);
-				this.getName();
+				var setName = function(name) {
+					this.name = name;
+				};
+				
+				setName.call(this, name);
+				
 				this.age = age;
-			},
-			getName: function() {
-				return this.name + ": " + this.age;
+				
+				this.getName = function() {
+					return this.name + ": " + this.age;
+				};
 			}
 		});
-		
 		var me = new Student("Andrea", 30);
 		alert(me.getName());
-		me.$private('setName', 'Zaki');
-		alert(me.getName());
+		
+		var Icon = Js.create({
+			_value: 0,
+			initiate: function() {
+				var _value = 5;
+				this.print = function() {
+					console.log("private _value", _value);
+	   				console.log("public _value", this._value);
+				};
+			}
+			
+		});
+		
+		var icon = new Icon;
+		icon.print();
+		icon._value=13;
+		icon.print();
+		icon.$inject(function() {
+			this._value = 25;
+		});
+		icon.print();
 		-->
 		</script>
 		

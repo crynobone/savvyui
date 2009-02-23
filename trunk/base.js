@@ -566,7 +566,7 @@ var Jrun = {
 	},
 	/**
 	 * convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
-	 * @alias jQuery.makeArray
+	 * @alias Jrun.toArray
 	 * @param {Object, Array} [data] the source of data to be converted to Array 
 	 * @param {Number} [offset] offset where to start converting to array, if applicable
 	 * @return {Array}
@@ -700,45 +700,42 @@ Js.create = function(js) {
 	var prototype = new base;
 	initialized = false;
 	
-	var $private = null;
-	
-	if (Jrun.isset(js.Private)) {
-		var $private = (function(js){
-			var $private = Js.nue(js.Private);
-			return (function(method, args) {
-				if (arguments.callee.caller !== null) {
-					if (Jrun.isfunction($private[method])) {
-						return $private[method].call(this, args);
-					}
-					else {
-						if (Jrun.isnull(args)) {
-							return $private[method];
-						}
-						else {
-							$private[method] = args;
-						}
-						
-					}
-				}
-			});
-		})(js);
-		
-		delete js.Private;
-	}
-	
 	// Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
 	function Class() {
 		// initiate the __construct function if construct available
 		if (!initialized && !!this.initiate) {
-			this.initiate.apply(this, jQuery.makeArray(arguments));
+			this.initiate.apply(this, Jrun.toArray(arguments));
 			
 		}
 	};
 	
 	Class.prototype = prototype;
 	Class.prototype.initiate = Jrun.pick(js.initiate, js.__construct, null);
-	Class.prototype.$private = $private;
 	Class.constructor = Class;
+	
+	
+	Class.prototype.$inject = function(method, args) {
+		if (Jrun.isfunction(method)) {
+			return method.apply(this, Jrun.toArray(arguments, 1));
+		}
+	};
+	Class.prototype.$const = (function(js) {
+		var $const = {};
+		if(Jrun.typeOf(js.Const) == "object") {
+			var $const = Js.nue(js.Const);
+			delete js.Const;
+		}
+		
+		return (function(method, args) {
+			if (Jrun.typeOf(method) == "string") {
+				if (Jrun.isfunction($const[method])) {
+					return $const[method].apply(this, Jrun.toArray(arguments, 1));
+				} else {
+					return $const[method];
+				}
+			}
+		});
+	})(js);
 	
 	// create inheritance capability using .extend
 	Class.extend = function(js) {

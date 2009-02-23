@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Js.base.create and Js.base.extend</title>
 		<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
-		<script type="text/javascript" src="../lib/savvyui.js"></script>
+		<script type="text/javascript" src="../base.js"></script>
 	</head>
 	<body>
 		<h1>Js.base.create and Js.base.extend</h1>
@@ -15,39 +15,33 @@
 		<script type="text/javascript">
 		<!--
 		
-		var AdHocClass = Js.create({
+		var Person = Js.create({
 			name: null,
 			initiate: function(name) {
 				this.name = name;
-			},
-			toString: function() {
-				return this.name;
-			},
-			toLocaleString: function(){
-			    return "locale: " + this.toString();
 			}
 		});
-		var AdHocSub = AdHocClass.extend({
+		var Student = Person.extend({
 			Private: {
-				nickName: "",
-				setNickName: function(name) {
-					this.$private('nickName', name);
+				setName: function(name) {
+					this.name = name;
 				}
 			},
+			prev: null,
 			initiate: function(name, age) {
-				this.$private('setNickName', name);
-				this.name = name;
+				this.$private('setName', name);
+				this.getName();
 				this.age = age;
 			},
-			toString: function() {
-				alert(this.$private('nickName'));
+			getName: function() {
 				return this.name + ": " + this.age;
 			}
 		});
 		
-		var me = new AdHocSub("Andrea", 30);
-		alert(me);  // Andrea: 30
-		alert(me.toLocaleString());
+		var me = new Student("Andrea", 30);
+		alert(me.getName());
+		me.$private('setName', 'Zaki');
+		alert(me.getName());
 		-->
 		</script>
 		

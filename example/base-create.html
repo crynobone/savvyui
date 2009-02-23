@@ -29,15 +29,18 @@
 		});
 		var AdHocSub = AdHocClass.extend({
 			Private: {
-				setName: function(name) {
-					this.name = name;
+				nickName: "",
+				setNickName: function(name) {
+					this.$private('nickName', name);
 				}
 			},
 			initiate: function(name, age) {
-				this.$private('setName', name);
+				this.$private('setNickName', name);
+				this.name = name;
 				this.age = age;
 			},
 			toString: function() {
+				alert(this.$private('nickName'));
 				return this.name + ": " + this.age;
 			}
 		});

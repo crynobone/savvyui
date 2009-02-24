@@ -96,7 +96,7 @@ Js.append = function(data, value, filter, invert) {
 	}
 	
 	var result = data;
-		
+	
 	// loop value's method
 	for (var method in value) {
 		// if data doesn't have the method add it
@@ -145,8 +145,7 @@ Js.debug = {
 	 * @alias Js.debug.log
 	 * @param {String} text
 	 */
-	log: function(text) 
-	{
+	log: function(text) {
 		// push log to stack
 		this.data.log.push(text);
 		
@@ -603,7 +602,6 @@ var Jrun = {
 	 */
 	trim: function(data) {
 		return jQuery.trim(data); 
-		/* new String(data).replace(/^\s+|\s+$/g, ""); */
 	},
 	/**
 	 * Return the typeof passed argument, extending JavaScript default typeof
@@ -674,28 +672,26 @@ var Jrun = {
  * @param {Object} js
  * @return {Object}
  */
-
 Js.create = function(js) {
 	var base = function() {};
-	base.prototype = {
-		destroy: function() {
-			// remove all properties and method for this object
-			for (var method in this) {
-				this[method] = null;
-			}
-				
-			for (var method in this.prototype) {
-				this.prototype[method] = null;
-			}
-			
-			// delete this (which doesn't actually totally delete it
-			delete this;
-			
-			return null;
+	base.prototype.destroy = function() {
+		// remove all properties and method for this object
+		for (var method in this) {
+			this[method] = null;
 		}
+				
+		for (var method in this.prototype) {
+			this.prototype[method] = null;
+		}
+			
+		// delete this (which doesn't actually totally delete it
+		delete this;
+		
+		return null;
 	};
 	
 	var initialized = true;
+	
 	// add prototyping based on Js.base
 	var prototype = new base;
 	initialized = false;
@@ -713,12 +709,12 @@ Js.create = function(js) {
 	Class.prototype.initiate = Jrun.pick(js.initiate, js.__construct, null);
 	Class.constructor = Class;
 	
-	
 	Class.prototype.$inject = function(method, args) {
 		if (Jrun.isfunction(method)) {
 			return method.apply(this, Jrun.toArray(arguments, 1));
 		}
 	};
+	
 	Class.prototype.$const = (function(js) {
 		var $const = {};
 		if(Jrun.typeOf(js.Const) == "object") {
@@ -759,6 +755,7 @@ Js.create = function(js) {
 		};
 		
 	}).call(prototype, js);
+	
 	// object called from .extend, inherit parent method if object does not have it's own method
 	if(!!Jrun.isset(Extend)) {
 		try {
@@ -788,10 +785,9 @@ Js.create = function(js) {
 		}
 		
 		Class.prototype.$parent = function(method, args) {
-			return this.$super[method].call(this, args);
+			return this.$super[method].apply(this, Jrun.toArray(arguments, 1));
 		};
 	}
-	
 	
 	// avoid Extend to be duplicated in this.prototype 
 	delete Extend;
@@ -799,4 +795,3 @@ Js.create = function(js) {
 	
 	return Class;
 };
-

@@ -14,19 +14,22 @@
  */
 
 Js.widget.message = Js.create({
+	appName: "message",
 	node: null,
 	setting: null,
-	initiate: function(option)
-	{
+	initiate: function(option) {
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.message);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		
 		if (Jrun.isnull(this.node)) {
 			this.init();
 		}
 	},
-	add: function(js)
-	{
+	setup: function(option) {
+		var option = Jrun.pickStrict(option, {}, "object");
+		this.setting = Js.append(option, this.setting);
+	},
+	add: function(js) {
 		var that = this;
 		
 		if (Jrun.isnull(this.node)) {
@@ -73,8 +76,7 @@ Js.widget.message = Js.create({
 			div.show("slow");
 		})();
 	},
-	init: function()
-	{
+	init: function() {
 		var that = this;
 		
 		this.node = Js.use("#" + this.setting.identifier);
@@ -98,10 +100,5 @@ Js.widget.message = Js.create({
 			_whenScroll();	
 		};
 		_whenScroll();
-	},
-	setup: function(option)
-	{
-		var option = Jrun.pickStrict(option, {}, "object");
-		this.setting = Js.append(option, this.setting);
 	}
 });

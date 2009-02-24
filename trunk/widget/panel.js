@@ -5,6 +5,7 @@
  */
 
 Js.widget.panel = Js.create({
+	appName: "panel",
 	node: null,
 	renderTo: null,
 	element: null,
@@ -16,28 +17,24 @@ Js.widget.panel = Js.create({
 	content: null,
 	footer: null,
 	status: "normal",
-	initiate: function(option)
-	{
+	initiate: function(option) {
 		if (Jrun.isset(option)) {
 			this.init(option);
 		}
 	},
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
-	_prepSetting: function()
-	{
+	_prepSetting: function() {
 		this.renderTo = Jrun.pick(this.setting.renderTo, "body:eq(0)");
 		this.element = this.setting.element;	
 	},	
-	init: function(option)
-	{
+	init: function(option) {
 		var that = this;
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.panel);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		this._prepSetting();
 		
 		// set renderTo element
@@ -49,8 +46,7 @@ Js.widget.panel = Js.create({
 		
 		this._load();
 	},
-	_load: function()
-	{
+	_load: function() {
 		var that = this;
 		
 		// render panel and hide it
@@ -169,8 +165,7 @@ Js.widget.panel = Js.create({
 		
 		return this;
 	},
-	closePanel: function() 
-	{
+	closePanel: function() {
 		var that = this;
 		
 		// callback to close panel
@@ -183,8 +178,7 @@ Js.widget.panel = Js.create({
 		});
 		return this;
 	},
-	_fixResize: function() 
-	{
+	_fixResize: function() {
 		if (Jrun.isset(this.setting.height) && !!this.setting.scrolling) {
 			this.content.css({
 				"height": (this.setting.height - (23 + 21)) + "px", 

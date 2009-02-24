@@ -7,18 +7,16 @@
 Js.widget.dialog = Js.widget.panel.extend({
 	overlay: null,
 	allowOverlay: false,
-	_prepSetting: function()
-	{
+	_prepSetting: function() {
 		this.renderTo = Jrun.pick(this.setting.renderTo, "body:eq(0)");
 		this.element = this.setting.element;
 		this.allowOverlay = Jrun.pickStrict(this.setting.overlay, this.allowOverlay, "boolean");
 	},
-	init: function(option)
-	{
+	init: function(option) {
 		var that = this;
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.panel);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		this._prepSetting();
 		
 		// set renderTo element
@@ -38,8 +36,7 @@ Js.widget.dialog = Js.widget.panel.extend({
 		}
 		this._dimension();
 	},
-	closePanel: function() 
-	{
+	closePanel: function() {
 		var that = this;
 		if (this.allowOverlay == true) {
 			this.overlay.deactivate();
@@ -55,8 +52,7 @@ Js.widget.dialog = Js.widget.panel.extend({
 		});
 		return this;
 	},
-	_dimension: function()
-	{
+	_dimension: function() {
 		var offset = [
 			this.node.width(),
 			this.node.height()

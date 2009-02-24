@@ -16,14 +16,14 @@
  * @return {Object} return this object
  */
 Js.widget.activity = Js.create({
+	appName: "activity",
 	node: null,
 	element: null,
 	box: null,
 	setting: null,
 	language: null,
 	status: 0,
-	initiate: function(selector, option)
-	{
+	initiate: function(selector, option) {
 		if (Jrun.isset(selector)) {
 			this.init(selector, option);
 		}
@@ -36,10 +36,10 @@ Js.widget.activity = Js.create({
 	 * @method	
 	 * @param {Object} option
 	 */
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting, ["lang"], true);
+		
 		if(Jrun.isset(option.lang)) {
 			this.language = Js.append(option.lang, this.language);
 		}
@@ -52,12 +52,11 @@ Js.widget.activity = Js.create({
 	 * @param {String, Object} [selector] Any selector format supported by jQuery CSS Selector Engine
 	 * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
 	 */
-	init: function(selector, option) 
-	{
+	init: function(selector, option) {
 		this.element = Jrun.pick(selector, this.element);
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.activity);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		
 		this.node = Js.use(this.element);
 		
@@ -76,8 +75,7 @@ Js.widget.activity = Js.create({
 	 * 
 	 * @method
 	 */
-	activate: function(callback) 
-	{
+	activate: function(callback) {
 		if (this.status == 0) {
 			this.node.css({
 				"display": "block"
@@ -104,8 +102,7 @@ Js.widget.activity = Js.create({
 	 * 
 	 * @method
 	 */
-	loadImage: function() 
-	{
+	loadImage: function() {
 		this.box = Js.use("<img/>").attr({
 			src: this.setting.imagePath
 		}).css({
@@ -120,8 +117,7 @@ Js.widget.activity = Js.create({
 	 * 
 	 * @method
 	 */
-	deactivate: function(callback) 
-	{
+	deactivate: function(callback) {
 		if (this.status > 0) {
 			this.node.fadeTo("normal", 0, function(){
 				Js.use(this).css({

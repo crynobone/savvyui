@@ -6,21 +6,18 @@
 
 Js.util.smartInput = Js.create({
 	node: null,
-	initiate: function(node) 
-	{
+	initiate: function(node) {
 		if (Jrun.isset(node)) {
 			this.init(node);
 		}
 	},
-	init: function(node)
-	{
+	init: function(node) {
 		var node = Jrun.pick(node, this.node);
 		this.node = Js.use(node);
 		
 		this.activate();
 	},
-	activate: function() 
-	{	
+	activate: function() {	
 		this.node.bind("blur", function() {
 			var node = Js.use(this);
 			if (Jrun.trim(node.val()) === "") {
@@ -33,8 +30,7 @@ Js.util.smartInput = Js.create({
 			}
 		}).val(this.node.attr("title").toString());
 	},
-	deactivate: function()
-	{
+	deactivate: function() {
 		this.node.unbind("blur", function() {
 			var node = Js.use(this);
 			if (Jrun.trim(node.val()) === "") {

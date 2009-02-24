@@ -96,7 +96,7 @@ Js.append = function(data, value, filter, invert) {
 	}
 	
 	var result = data;
-		
+	
 	// loop value's method
 	for (var method in value) {
 		// if data doesn't have the method add it
@@ -145,8 +145,7 @@ Js.debug = {
 	 * @alias Js.debug.log
 	 * @param {String} text
 	 */
-	log: function(text) 
-	{
+	log: function(text) {
 		// push log to stack
 		this.data.log.push(text);
 		
@@ -603,7 +602,6 @@ var Jrun = {
 	 */
 	trim: function(data) {
 		return jQuery.trim(data); 
-		/* new String(data).replace(/^\s+|\s+$/g, ""); */
 	},
 	/**
 	 * Return the typeof passed argument, extending JavaScript default typeof
@@ -674,28 +672,26 @@ var Jrun = {
  * @param {Object} js
  * @return {Object}
  */
-
 Js.create = function(js) {
 	var base = function() {};
-	base.prototype = {
-		destroy: function() {
-			// remove all properties and method for this object
-			for (var method in this) {
-				this[method] = null;
-			}
-				
-			for (var method in this.prototype) {
-				this.prototype[method] = null;
-			}
-			
-			// delete this (which doesn't actually totally delete it
-			delete this;
-			
-			return null;
+	base.prototype.destroy = function() {
+		// remove all properties and method for this object
+		for (var method in this) {
+			this[method] = null;
 		}
+				
+		for (var method in this.prototype) {
+			this.prototype[method] = null;
+		}
+			
+		// delete this (which doesn't actually totally delete it
+		delete this;
+		
+		return null;
 	};
 	
 	var initialized = true;
+	
 	// add prototyping based on Js.base
 	var prototype = new base;
 	initialized = false;
@@ -713,12 +709,12 @@ Js.create = function(js) {
 	Class.prototype.initiate = Jrun.pick(js.initiate, js.__construct, null);
 	Class.constructor = Class;
 	
-	
 	Class.prototype.$inject = function(method, args) {
 		if (Jrun.isfunction(method)) {
 			return method.apply(this, Jrun.toArray(arguments, 1));
 		}
 	};
+	
 	Class.prototype.$const = (function(js) {
 		var $const = {};
 		if(Jrun.typeOf(js.Const) == "object") {
@@ -759,6 +755,7 @@ Js.create = function(js) {
 		};
 		
 	}).call(prototype, js);
+	
 	// object called from .extend, inherit parent method if object does not have it's own method
 	if(!!Jrun.isset(Extend)) {
 		try {
@@ -788,10 +785,9 @@ Js.create = function(js) {
 		}
 		
 		Class.prototype.$parent = function(method, args) {
-			return this.$super[method].call(this, args);
+			return this.$super[method].apply(this, Jrun.toArray(arguments, 1));
 		};
 	}
-	
 	
 	// avoid Extend to be duplicated in this.prototype 
 	delete Extend;
@@ -799,7 +795,6 @@ Js.create = function(js) {
 	
 	return Class;
 };
-
 /**
  * @projectDescription Adapter for Savvy.UI and jQuery Framework
  * @version 0.0.1
@@ -863,13 +858,15 @@ Js.config = {
 			method: "POST",
 			beforeStart: null,
 			beforeSend: null,
-			success: null
+			success: null,
+			onError: null
 		},
 		buttonSubmit: {
 			method: "POST",
 			beforeStart: null,
 			beforeSend: null,
-			success: null
+			success: null,
+			onError: null
 		},
 		editable: {
 			identifier: "Other",
@@ -1266,11 +1263,10 @@ Js.test = {
 };/**
  * @projectDescription Form Validation extension for Savvy.UI
  * @memberOf Js.ext
- * @version 0.9.4
- * @author Mior Muhammad Zaki crynobone
+ * @version 0.9.5
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
-
 
 /**
  * @alias Js.ext.validate
@@ -1278,14 +1274,14 @@ Js.test = {
  * @return {Object} this object
  */
 Js.ext.validate = Js.create({
+	appName: "validate",
 	node: null,
 	first: null,
 	setting: null,
 	language: null,
 	data: "",
 	cacheResult: null,
-	initiate: function(node, option)
-	{
+	initiate: function(node, option) {
 		if (Jrun.isset(node)) {
 			return this.init(node, option);
 		}
@@ -1293,17 +1289,15 @@ Js.ext.validate = Js.create({
 			return this;
 		}
 	},
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting, ["lang"], true);
+		
 		if(Jrun.isset(option.lang)) {
 			this.language = Js.append(option.lang, this.setting);	
 		}
-		
 	},
-	_prepSetting: function()
-	{
+	_prepSetting: function() {
 		this.setting.errorNode.match(/^(span|div|p|em|label|strong|b|i)\.(.*)$/i);
 		this.setting.error = {
 			node: RegExp.$1,
@@ -1315,8 +1309,7 @@ Js.ext.validate = Js.create({
 	 * @param {Object} node
 	 * @param {Object} option
 	 */
-	init: function(node, option) 
-	{
+	init: function(node, option) {
 		// ensure that refer to this
 		var that = this;
 		
@@ -1325,8 +1318,8 @@ Js.ext.validate = Js.create({
 		
 		// setup configuration
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.ext.validate);
-		this.language = Js.append(this.language, Js.language.ext.validate);
+		this.setting = Js.append(this.setting, Js.config.ext[this.appName]);
+		this.language = Js.append(this.language, Js.language.ext[this.appName]);
 		
 		this._prepSetting();
 		
@@ -1345,14 +1338,19 @@ Js.ext.validate = Js.create({
 		var fnOnError = Jrun.pick(setting.onError, null);
 		var data = "";
 		var lang = this.language;
+		var contRun = true;
 		
 		// set this.first to NULL
 		this.first = null;
 		
 		if (Jrun.isfunction(fnBeforeStart)) {
 			// execute the function and free up the memory
-			fnBeforeStart(node);
+			contRun = fnBeforeStart(node);
 			fnBeforeStart = null;
+		}
+		
+		if (contRun === false) {
+			return false;
 		}
 		
 		if (this.node.length >= 1) {
@@ -1405,7 +1403,7 @@ Js.ext.validate = Js.create({
 							
 						}
 					}
-					/*
+					
 					var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
 					if (indexMatch > -1) {
 						var matched = fields.is(":input[name='" + RegExp.$1 + "']");
@@ -1413,7 +1411,6 @@ Js.ext.validate = Js.create({
 							error = lang.matched;
 						}
 					}
-					*/
 					
 					// this set of validate only triggered when this.value isn't empty
 					if (Jrun.trim(value) != "") {
@@ -1456,7 +1453,6 @@ Js.ext.validate = Js.create({
 						that._error(node, error);
 					}
 					
-					
 					data += that._invokeQueryString(node);
 				}
 			});
@@ -1476,6 +1472,7 @@ Js.ext.validate = Js.create({
 			if (Jrun.isfunction(fnOnError)) {
 				fnOnError(this.first);
 			}
+			
 			// stop form processing
 			this.cacheResult = false;
 			return false;
@@ -1495,8 +1492,7 @@ Js.ext.validate = Js.create({
 	 * @param {Object} text
 	 * @param {Object} data
 	 */
-	_error: function(node, text) 
-	{		
+	_error: function(node, text) {		
 		var that = this;
 		
 		// Mark first error occured!
@@ -1558,7 +1554,7 @@ Js.ext.validate = Js.create({
 		} 
 		else {
 			try {
-				errorNode.eq(0).append('... ' + message);
+				errorNode.eq(0).append('<br />' + message);
 			} catch (e) {
 				Js.debug.error(e);
 			}
@@ -1586,6 +1582,7 @@ Js.ext.validate = Js.create({
  * @see Js.base.create
  */
 Js.util.activeContent = Js.create({
+	appName: "activeContent",
 	last: null,
 	interval: null,
 	repeat: false,
@@ -1594,20 +1591,17 @@ Js.util.activeContent = Js.create({
 	option: null,
 	fnBeforeStart: null,
 	fnSuccess: null,
-	initiate: function(js) 
-	{
+	initiate: function(js) {
 		var js = Jrun.pickStrict(js, {}, "object");
 		this.element = Jrun.pick(js.element, null);
 		this.fnBeforeStart = Jrun.pick(js.beforeStart, this.fnBeforeStart);
 		this.fbSuccess = Jrun.pick(js.success, this.fnSuccess);
 		
-		if(Jrun.isset(this.element)) 
-		{
+		if(Jrun.isset(this.element)) {
 			this._selector();
 			this._check();
 		} 
-		else 
-		{
+		else {
 			var that = this;
 			this.interval = window.setInterval(function() {
 				that._check();
@@ -1616,8 +1610,7 @@ Js.util.activeContent = Js.create({
 	},
 	destroy: function() 
 	{
-		if(Jrun.isset(this.interval)) 
-		{
+		if(Jrun.isset(this.interval)) {
 			clearInterval(this.interval);
 			this.interval == null;
 		}
@@ -1628,8 +1621,7 @@ Js.util.activeContent = Js.create({
 	_selector: function() {
 		var that = this;
 		
-		Js.use(this.element).bind("click", function() 
-		{
+		Js.use(this.element).bind("click", function() {
 			var href = Js.use(this).attr("href");
 			var anchors = (Jrun.isset(href) ? href : this.href);
 			
@@ -1657,8 +1649,7 @@ Js.util.activeContent = Js.create({
 			}
 		});
 	},
-	_check: function() 
-	{
+	_check: function() {
 		if (location.hash != this.last && location.hash !== "#") {
 			this.last = location.hash;
 			
@@ -1688,14 +1679,14 @@ Js.util.activeContent = Js.create({
  * @param {Object} js
  */
 Js.util.buttonSubmit = Js.create({
+	appName: "buttonSubmit",
 	id: null,
 	url: null,
 	button: null,
 	setting: null,
 	handler: "click",
 	formValidate: null,
-	initiate: function(js)
-	{
+	initiate: function(js) {
 		this.id = Jrun.pick(js.id, null);
 		this.url = Jrun.pick(js.url, null);
 		this.button = Jrun.pick(js.button, null);
@@ -1709,30 +1700,26 @@ Js.util.buttonSubmit = Js.create({
 	 * @method
 	 * @param {Object} option
 	 */
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
 	/**
 	 * @method
 	 */
-	_prepSetting: function()
-	{
+	_prepSetting: function() {
 		this.formValidate = Js.nue(this.setting);
-		this.formValidate.beforeStart = null;
 		this.formValidate.success = null;
 		this.formValidate.onError = null;
 	},
 	/**
 	 * @method
 	 */
-	init: function(option) 
-	{
+	init: function(option) {
 		var that = this;
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.util.buttonSubmit);
+		this.setting = Js.append(this.setting, Js.config.util[this.appName]);
 		this._prepSetting();
 		
 		var method = Jrun.pickGrep(this.setting.method, /^(get|post)$/i);
@@ -1760,8 +1747,13 @@ Js.util.buttonSubmit = Js.create({
 							runDefault = that.setting.success(reply);
 						}
 						
-						if (runDefault != false) {
+						if (runDefault !== false) {
 							Js.parse.xhr.init(reply);	
+						}
+					},
+					onError: function() {
+						if(Jrun.isfunction(that.setting.onError)) {
+							that.setting.onError();
 						}
 					}
 				});
@@ -1786,8 +1778,7 @@ Js.util.dimension = {
 	// Get scrolled value of a page
 	page: {
 		scrolls: {
-			x: function()
-			{
+			x: function() {
 				var doc = document.body;
 				var result = 0;
 				var offset = window.pageXOffset;
@@ -1805,8 +1796,7 @@ Js.util.dimension = {
 				
 				return result;
 			},
-			y: function()
-			{
+			y: function() {
 				var doc = document.body;
 				var result = 0;
 				var offset = window.pageYOffset;
@@ -1824,16 +1814,14 @@ Js.util.dimension = {
 				
 				return result;
 			},
-			both: function()
-			{
+			both: function() {
 				return [
 					Js.util.dimension.page.scrolls.x(), 
 					Js.util.dimension.page.scrolls.y()
 				];
 			}
 		},
-		middle: function(width, height) 
-		{
+		middle: function(width, height) {
 			var doc = document.body;
 			var offset = [Js.use(window).width(), Js.use(window).height()];
 			var axis = Js.util.dimension.page.scrolls.both();
@@ -1841,7 +1829,7 @@ Js.util.dimension = {
 					
 			result[0] = Math.round(((offset[0] - width) / 2) + axis[0]);
 			result[1] = Math.round(((offset[1] - height) / 2) + axis[1]); 
-			//Math.round((((screen.height - 200) - height) / 2) + axis[1]);
+			
 			result[0] = (result[0] < 0 ? 0 : result[0]);
 			result[1] = (result[1] < 0 ? 0 : result[1]);	
 			result.reverse();
@@ -1852,8 +1840,7 @@ Js.util.dimension = {
 	node: {
 		scrolls: {},
 		size: {},
-		offset: function(node) 
-		{
+		offset: function(node) {
 			var result = [0, 0, 0, 0];
 			var loop = false;
 			
@@ -1891,6 +1878,7 @@ Js.util.dimension = {
  * @license MIT
  */
 Js.util.formSubmit = Js.util.buttonSubmit.extend({
+	appName: "formSubmit",
 	handler: "submit",
 	initiate: function(js)
 	{
@@ -1929,8 +1917,7 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
 Js.util.ticker = Js.create({
 	element: null,
 	node: null,
-	initiate: function(selector)
-	{
+	initiate: function(selector) {
 		if (Jrun.isset(selector)) {
 			this.init(selector);
 		}
@@ -1942,8 +1929,7 @@ Js.util.ticker = Js.create({
 	 * @param {Object} node
 	 * @return {Object}
 	 */
-	init: function(selector) 
-	{
+	init: function(selector) {
 		this.element = Jrun.pick(selector, null);
 		
 		if (Jrun.isset(this.element)) {
@@ -1957,8 +1943,7 @@ Js.util.ticker = Js.create({
 	 * 
 	 * @method
 	 */
-	check: function() 
-	{
+	check: function() {
 		// loop all object
 		this.node.each(function(index, value) {
 			// set checked to true
@@ -1970,8 +1955,7 @@ Js.util.ticker = Js.create({
 	 * 
 	 * @method
 	 */
-	uncheck: function() 
-	{
+	uncheck: function() {
 		// loops all object
 		this.node.each(function(index, value) { 
 			// set checked to false
@@ -1983,8 +1967,7 @@ Js.util.ticker = Js.create({
 	 * 
 	 * @method
 	 */ 
-	invert: function() 
-	{
+	invert: function() {
 		// loops all object
 		this.node.each(function(index, value) {
 			// reverse checkbox selection
@@ -2001,6 +1984,7 @@ Js.util.ticker = Js.create({
  */
 
 Js.util.editable = Js.create({
+	appName: "editable",
 	node: null,
 	element: null,
 	box: null,
@@ -2109,21 +2093,18 @@ Js.util.editable = Js.create({
 
 Js.util.smartInput = Js.create({
 	node: null,
-	initiate: function(node) 
-	{
+	initiate: function(node) {
 		if (Jrun.isset(node)) {
 			this.init(node);
 		}
 	},
-	init: function(node)
-	{
+	init: function(node) {
 		var node = Jrun.pick(node, this.node);
 		this.node = Js.use(node);
 		
 		this.activate();
 	},
-	activate: function() 
-	{	
+	activate: function() {	
 		this.node.bind("blur", function() {
 			var node = Js.use(this);
 			if (Jrun.trim(node.val()) === "") {
@@ -2136,8 +2117,7 @@ Js.util.smartInput = Js.create({
 			}
 		}).val(this.node.attr("title").toString());
 	},
-	deactivate: function()
-	{
+	deactivate: function() {
 		this.node.unbind("blur", function() {
 			var node = Js.use(this);
 			if (Jrun.trim(node.val()) === "") {
@@ -2168,14 +2148,14 @@ Js.util.smartInput = Js.create({
  * @return {Object} return this object
  */
 Js.widget.activity = Js.create({
+	appName: "activity",
 	node: null,
 	element: null,
 	box: null,
 	setting: null,
 	language: null,
 	status: 0,
-	initiate: function(selector, option)
-	{
+	initiate: function(selector, option) {
 		if (Jrun.isset(selector)) {
 			this.init(selector, option);
 		}
@@ -2188,10 +2168,10 @@ Js.widget.activity = Js.create({
 	 * @method	
 	 * @param {Object} option
 	 */
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting, ["lang"], true);
+		
 		if(Jrun.isset(option.lang)) {
 			this.language = Js.append(option.lang, this.language);
 		}
@@ -2204,12 +2184,11 @@ Js.widget.activity = Js.create({
 	 * @param {String, Object} [selector] Any selector format supported by jQuery CSS Selector Engine
 	 * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
 	 */
-	init: function(selector, option) 
-	{
+	init: function(selector, option) {
 		this.element = Jrun.pick(selector, this.element);
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.activity);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		
 		this.node = Js.use(this.element);
 		
@@ -2228,8 +2207,7 @@ Js.widget.activity = Js.create({
 	 * 
 	 * @method
 	 */
-	activate: function(callback) 
-	{
+	activate: function(callback) {
 		if (this.status == 0) {
 			this.node.css({
 				"display": "block"
@@ -2256,8 +2234,7 @@ Js.widget.activity = Js.create({
 	 * 
 	 * @method
 	 */
-	loadImage: function() 
-	{
+	loadImage: function() {
 		this.box = Js.use("<img/>").attr({
 			src: this.setting.imagePath
 		}).css({
@@ -2272,8 +2249,7 @@ Js.widget.activity = Js.create({
 	 * 
 	 * @method
 	 */
-	deactivate: function(callback) 
-	{
+	deactivate: function(callback) {
 		if (this.status > 0) {
 			this.node.fadeTo("normal", 0, function(){
 				Js.use(this).css({
@@ -2295,6 +2271,7 @@ Js.widget.activity = Js.create({
  */
 
 Js.widget.datePicker = Js.create({
+	appName: "datePicker",
 	field: null,
 	value: "",
 	lastDate: null,
@@ -2345,8 +2322,8 @@ Js.widget.datePicker = Js.create({
 		var that = this;
 		
 		this.setup(js.option);
-		this.setting = Js.append(this.setting, Js.config.widget.datePicker);
-		this.language = Js.append(this.language, Js.language.widget.datePicker);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
+		this.language = Js.append(this.language, Js.language.widget[this.appName]);
 		
 		this.element = Jrun.prep(Jrun.pick(js.element, this.element));
 		this.renderTo = Jrun.pick(js.renderTo, this.renderTo);
@@ -2889,9 +2866,9 @@ Js.widget.datePicker = Js.create({
  * @param {Object} option
  */
 Js.widget.iconizer = Js.create({
+	appName: "iconizer",
 	setting: null,
-	initiate: function(option)
-	{
+	initiate: function(option) {
 		if (Jrun.isset(option)) {
 			this.init(option);
 		}
@@ -2900,8 +2877,7 @@ Js.widget.iconizer = Js.create({
 	 * @method
 	 * @param {Object} option
 	 */
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
@@ -2909,12 +2885,11 @@ Js.widget.iconizer = Js.create({
 	 * @method
 	 * @param {Object} option
 	 */
-	init: function(option) 
-	{
+	init: function(option) {
 		var that = this;
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.iconizer);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		
 		Js.use("*[class*=icon]").each(function(index, value) {
 			var node = Js.use(value);
@@ -2976,6 +2951,7 @@ Js.widget.iconizer = Js.create({
  */
 
 Js.widget.panel = Js.create({
+	appName: "panel",
 	node: null,
 	renderTo: null,
 	element: null,
@@ -2987,28 +2963,24 @@ Js.widget.panel = Js.create({
 	content: null,
 	footer: null,
 	status: "normal",
-	initiate: function(option)
-	{
+	initiate: function(option) {
 		if (Jrun.isset(option)) {
 			this.init(option);
 		}
 	},
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
-	_prepSetting: function()
-	{
+	_prepSetting: function() {
 		this.renderTo = Jrun.pick(this.setting.renderTo, "body:eq(0)");
 		this.element = this.setting.element;	
 	},	
-	init: function(option)
-	{
+	init: function(option) {
 		var that = this;
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.panel);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		this._prepSetting();
 		
 		// set renderTo element
@@ -3020,8 +2992,7 @@ Js.widget.panel = Js.create({
 		
 		this._load();
 	},
-	_load: function()
-	{
+	_load: function() {
 		var that = this;
 		
 		// render panel and hide it
@@ -3140,8 +3111,7 @@ Js.widget.panel = Js.create({
 		
 		return this;
 	},
-	closePanel: function() 
-	{
+	closePanel: function() {
 		var that = this;
 		
 		// callback to close panel
@@ -3154,8 +3124,7 @@ Js.widget.panel = Js.create({
 		});
 		return this;
 	},
-	_fixResize: function() 
-	{
+	_fixResize: function() {
 		if (Jrun.isset(this.setting.height) && !!this.setting.scrolling) {
 			this.content.css({
 				"height": (this.setting.height - (23 + 21)) + "px", 
@@ -3175,18 +3144,16 @@ Js.widget.panel = Js.create({
 Js.widget.dialog = Js.widget.panel.extend({
 	overlay: null,
 	allowOverlay: false,
-	_prepSetting: function()
-	{
+	_prepSetting: function() {
 		this.renderTo = Jrun.pick(this.setting.renderTo, "body:eq(0)");
 		this.element = this.setting.element;
 		this.allowOverlay = Jrun.pickStrict(this.setting.overlay, this.allowOverlay, "boolean");
 	},
-	init: function(option)
-	{
+	init: function(option) {
 		var that = this;
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.panel);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		this._prepSetting();
 		
 		// set renderTo element
@@ -3206,8 +3173,7 @@ Js.widget.dialog = Js.widget.panel.extend({
 		}
 		this._dimension();
 	},
-	closePanel: function() 
-	{
+	closePanel: function() {
 		var that = this;
 		if (this.allowOverlay == true) {
 			this.overlay.deactivate();
@@ -3223,8 +3189,7 @@ Js.widget.dialog = Js.widget.panel.extend({
 		});
 		return this;
 	},
-	_dimension: function()
-	{
+	_dimension: function() {
 		var offset = [
 			this.node.width(),
 			this.node.height()
@@ -3250,15 +3215,15 @@ Js.widget.dialog = Js.widget.panel.extend({
  */
 
 Js.widget.notice = Js.widget.activity.extend({
+	appName: "notice",
 	callback: null,
 	node: null,
 	setting: null,
 	language: null,
-	initiate: function(selector, option)
-	{
+	initiate: function(selector, option) {
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.notice);
-		this.language = Js.append(this.language, Js.language.widget.notice);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
+		this.language = Js.append(this.language, Js.language.widget[this.appName]);
 		this.node = this.$super.initiate(selector, {
 			boxWidth: 550,
 			boxHeight: 0,
@@ -3350,6 +3315,7 @@ Js.widget.notice = Js.widget.activity.extend({
  * @return {Object}
  */
 Js.widget.tab = Js.create({
+	appName: "tab",
 	height: null,
 	toolbar: null,
 	node: null,
@@ -3360,19 +3326,16 @@ Js.widget.tab = Js.create({
 	handler: null,
 	statys: "off",
 	setting: null,
-	initiate: function(selector, option)
-	{
+	initiate: function(selector, option) {
 		if (!!Jrun.isset(selector)) {
 			this.init(selector, option);
 		}
 	},
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
-	init: function(selector, option)
-	{
+	init: function(selector, option) {
 		var that = this;
 		
 		// setting should be available
@@ -3388,18 +3351,13 @@ Js.widget.tab = Js.create({
 		// add tab toolbar on top
 		this._addToolbar();
 		
-		// set the first tab as active
-		this.activeHeader = Js.use("a[href=#" + this.activeTab.attr("id") + "]", this.header);
-		this.activeHeader.addClass(this.setting.cssCurrent);
-		this.activeTab.setClass(this.setting.cssActive);
+		this.activateTab("#" + Js.use("." + this.setting.cssHidden + ":first", this.node[0]).attr("id"));
 		
 		// tab is activated
 		this.status = "on";
 	},
-	_addToolbar: function() 
-	{
+	_addToolbar: function() {
 		var that = this;
-		Js.debug.log("Js.widget.simpleTab: load Toolbar");
 		
 		// DOM insert tab toolbar container
 		var div = Js.use("<div/>").attr({
@@ -3415,7 +3373,7 @@ Js.widget.tab = Js.create({
 		}).appendTo(this.toolbar[0]);
 		
 		// find all possible tabs
-		var child = Js.use(this.setting.identifier, this.node);
+		var child = Js.use(this.setting.identifier, this.node[0]);
 		
 		child.each(function(index, data) {
 			// add the tab title
@@ -3423,15 +3381,10 @@ Js.widget.tab = Js.create({
 			// hide the tab
 			Js.use(data).setClass(that.setting.cssHidden);
 		});
-		
-		// first tab should be activated
-		this.activeTab = child.eq(0);
-		
+				
 		var div2 = Js.use("<div/>").css("display", "block").appendTo(div[0]);
 	},
-	_addHeader: function(node) 
-	{
-		Js.debug.log("Js.widget.simpleTab: add header");
+	_addHeader: function(node) {
 		var that = this;
 		
 		var node = Js.use(node);
@@ -3472,27 +3425,23 @@ Js.widget.tab = Js.create({
 		}
 		else {
 			a.bind(this.handler, function(){
-				that.activateTab(this);
-				return false;
+				that.activateTab(Js.use(this).attr("href"));
 			});
 		}
 	},
-	enableTab: function(selector)
-	{
+	enableTab: function(selector) {
 		var that = this;
 		
-		var anchor = Js.use("a[href=" + selector + "]", this.header);
+		var anchor = Js.use("a[href=" + selector + "]", this.header[0]);
 		anchor.removeClass();
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
-			that.activateTab(this);
-			return false;
+			that.activateTab(Js.use(this).attr("href"));
 		});
 				
 		return false;
 	},
-	disableTab: function(selector)
-	{
+	disableTab: function(selector) {
 		var that = this;
 		var that = this;
 		
@@ -3505,31 +3454,30 @@ Js.widget.tab = Js.create({
 		
 		return false;
 	},
-	activateTab: function(node) 
-	{
+	activateTab: function(selector) {
 		var that = this;
-		this.activeHeader.removeClass(this.setting.cssCurrent);
-		this.activeTab.setClass(this.setting.cssHidden);
 		
-		this.activeHeader = Js.use(node);
-		var href = this.activeHeader.attr("href");
-		this.activeTab = Js.use(href);
+		if (Jrun.isset(this.activeTab)) {
+			this.activeHeader.removeClass(this.setting.cssCurrent);
+			this.activeTab.setClass(this.setting.cssHidden);	
+		}
+		
+		this.activeHeader = Js.use("a[href=" + selector + "]", this.header[0]);
+		this.activeTab = Js.use(selector);
 		
 		this.activeHeader.addClass(this.setting.cssCurrent);
 		this.activeTab.setClass(this.setting.cssActive);
 		
 		return false;
 	},
-	revert: function() 
-	{
+	revert: function() {
 		var active = Js.use("li > a", this.header[0]);
 		
 		if (active.length > 0) {
-			this.activateTab(active.eq(0));
+			this.activateTab(active.attr("href"));
 		}
 	},
-	toggle: function() 
-	{
+	toggle: function() {
 		if (this.status == "on") {
 			this.toolbar.hide();
 			Js.use("div." + this.setting.cssHidden, this.object).setClass(this.setting.cssActive);
@@ -3542,8 +3490,7 @@ Js.widget.tab = Js.create({
 			this.status = "on";
 		}
 	},
-	addTab: function(js) 
-	{
+	addTab: function(js) {
 		var that = this;
 		
 		if (!!js.id && Jrun.typeOf(js.id) === "string") {
@@ -3554,8 +3501,9 @@ Js.widget.tab = Js.create({
 			var set = Jrun.pick(js.activate, false);
 			
 			var node = Js.use('<div/>').attr({
-				id: id,
-				className: this.setting.cssHidden
+				'id': id,
+				className: this.setting.cssHidden,
+				title: title
 			}).plainHtml(content).appendTo(this.node[0]);
 			
 			var li = Js.use('<li/>').appendTo(this.header[0]);
@@ -3566,8 +3514,7 @@ Js.widget.tab = Js.create({
 			
 			Js.use("<em/>").appendTo(a[0]);
 			a.text(title).bind(this.handler, function(){
-				that.activateTab(this);
-				return false;
+				that.activateTab(Js.use(this).attr("href"));
 			});
 			
 			if (!!closable) {
@@ -3585,7 +3532,7 @@ Js.widget.tab = Js.create({
 			}
 			
 			if (!!set) {
-				this.activateTab(node);
+				this.activateTab("#" + id);
 			}
 		}
 		return this;

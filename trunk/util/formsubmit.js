@@ -5,6 +5,7 @@
  * @license MIT
  */
 Js.util.formSubmit = Js.util.buttonSubmit.extend({
+	appName: "formSubmit",
 	handler: "submit",
 	initiate: function(js)
 	{

@@ -5,6 +5,7 @@
  */
 
 Js.widget.datePicker = Js.create({
+	appName: "datePicker",
 	field: null,
 	value: "",
 	lastDate: null,
@@ -55,8 +56,8 @@ Js.widget.datePicker = Js.create({
 		var that = this;
 		
 		this.setup(js.option);
-		this.setting = Js.append(this.setting, Js.config.widget.datePicker);
-		this.language = Js.append(this.language, Js.language.widget.datePicker);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
+		this.language = Js.append(this.language, Js.language.widget[this.appName]);
 		
 		this.element = Jrun.prep(Jrun.pick(js.element, this.element));
 		this.renderTo = Jrun.pick(js.renderTo, this.renderTo);

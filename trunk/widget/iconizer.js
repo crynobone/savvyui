@@ -12,9 +12,9 @@
  * @param {Object} option
  */
 Js.widget.iconizer = Js.create({
+	appName: "iconizer",
 	setting: null,
-	initiate: function(option)
-	{
+	initiate: function(option) {
 		if (Jrun.isset(option)) {
 			this.init(option);
 		}
@@ -23,8 +23,7 @@ Js.widget.iconizer = Js.create({
 	 * @method
 	 * @param {Object} option
 	 */
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
@@ -32,12 +31,11 @@ Js.widget.iconizer = Js.create({
 	 * @method
 	 * @param {Object} option
 	 */
-	init: function(option) 
-	{
+	init: function(option) {
 		var that = this;
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.iconizer);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
 		
 		Js.use("*[class*=icon]").each(function(index, value) {
 			var node = Js.use(value);

@@ -23,14 +23,11 @@
 		jQuery("<div/>").attr("id", "overlay").appendTo("body");
 		
 		Js.widget.activity2 = Js.widget.activity.extend({
-			hello: function()
-			{
-				alert("hello world");
-			},
-			__construct: function(selector, option)
-			{
-				this._parentConstruct(selector, option);
-				this.hello();
+			initiate: function(selector, option) {
+				this.$parent('initiate', selector, option);
+				this.$inject(function() {
+					Js.debug.log("Js.widget.activity2 Initiated");	
+				});
 			}
 		});
 		

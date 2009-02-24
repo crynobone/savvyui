@@ -3,6 +3,7 @@
  */
 
 Js.util.editable = Js.create({
+	appName: "editable",
 	node: null,
 	element: null,
 	box: null,

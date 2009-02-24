@@ -1,11 +1,10 @@
 /**
  * @projectDescription Form Validation extension for Savvy.UI
  * @memberOf Js.ext
- * @version 0.9.4
- * @author Mior Muhammad Zaki crynobone
+ * @version 0.9.5
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
-
 
 /**
  * @alias Js.ext.validate
@@ -13,14 +12,14 @@
  * @return {Object} this object
  */
 Js.ext.validate = Js.create({
+	appName: "validate",
 	node: null,
 	first: null,
 	setting: null,
 	language: null,
 	data: "",
 	cacheResult: null,
-	initiate: function(node, option)
-	{
+	initiate: function(node, option) {
 		if (Jrun.isset(node)) {
 			return this.init(node, option);
 		}
@@ -28,17 +27,15 @@ Js.ext.validate = Js.create({
 			return this;
 		}
 	},
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting, ["lang"], true);
+		
 		if(Jrun.isset(option.lang)) {
 			this.language = Js.append(option.lang, this.setting);	
 		}
-		
 	},
-	_prepSetting: function()
-	{
+	_prepSetting: function() {
 		this.setting.errorNode.match(/^(span|div|p|em|label|strong|b|i)\.(.*)$/i);
 		this.setting.error = {
 			node: RegExp.$1,
@@ -50,8 +47,7 @@ Js.ext.validate = Js.create({
 	 * @param {Object} node
 	 * @param {Object} option
 	 */
-	init: function(node, option) 
-	{
+	init: function(node, option) {
 		// ensure that refer to this
 		var that = this;
 		
@@ -60,8 +56,8 @@ Js.ext.validate = Js.create({
 		
 		// setup configuration
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.ext.validate);
-		this.language = Js.append(this.language, Js.language.ext.validate);
+		this.setting = Js.append(this.setting, Js.config.ext[this.appName]);
+		this.language = Js.append(this.language, Js.language.ext[this.appName]);
 		
 		this._prepSetting();
 		
@@ -80,14 +76,19 @@ Js.ext.validate = Js.create({
 		var fnOnError = Jrun.pick(setting.onError, null);
 		var data = "";
 		var lang = this.language;
+		var contRun = true;
 		
 		// set this.first to NULL
 		this.first = null;
 		
 		if (Jrun.isfunction(fnBeforeStart)) {
 			// execute the function and free up the memory
-			fnBeforeStart(node);
+			contRun = fnBeforeStart(node);
 			fnBeforeStart = null;
+		}
+		
+		if (contRun === false) {
+			return false;
 		}
 		
 		if (this.node.length >= 1) {
@@ -140,7 +141,7 @@ Js.ext.validate = Js.create({
 							
 						}
 					}
-					/*
+					
 					var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
 					if (indexMatch > -1) {
 						var matched = fields.is(":input[name='" + RegExp.$1 + "']");
@@ -148,7 +149,6 @@ Js.ext.validate = Js.create({
 							error = lang.matched;
 						}
 					}
-					*/
 					
 					// this set of validate only triggered when this.value isn't empty
 					if (Jrun.trim(value) != "") {
@@ -191,7 +191,6 @@ Js.ext.validate = Js.create({
 						that._error(node, error);
 					}
 					
-					
 					data += that._invokeQueryString(node);
 				}
 			});
@@ -211,6 +210,7 @@ Js.ext.validate = Js.create({
 			if (Jrun.isfunction(fnOnError)) {
 				fnOnError(this.first);
 			}
+			
 			// stop form processing
 			this.cacheResult = false;
 			return false;
@@ -230,8 +230,7 @@ Js.ext.validate = Js.create({
 	 * @param {Object} text
 	 * @param {Object} data
 	 */
-	_error: function(node, text) 
-	{		
+	_error: function(node, text) {		
 		var that = this;
 		
 		// Mark first error occured!
@@ -293,7 +292,7 @@ Js.ext.validate = Js.create({
 		} 
 		else {
 			try {
-				errorNode.eq(0).append('... ' + message);
+				errorNode.eq(0).append('<br />' + message);
 			} catch (e) {
 				Js.debug.error(e);
 			}

@@ -6,15 +6,15 @@
  */
 
 Js.widget.notice = Js.widget.activity.extend({
+	appName: "notice",
 	callback: null,
 	node: null,
 	setting: null,
 	language: null,
-	initiate: function(selector, option)
-	{
+	initiate: function(selector, option) {
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget.notice);
-		this.language = Js.append(this.language, Js.language.widget.notice);
+		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
+		this.language = Js.append(this.language, Js.language.widget[this.appName]);
 		this.node = this.$super.initiate(selector, {
 			boxWidth: 550,
 			boxHeight: 0,

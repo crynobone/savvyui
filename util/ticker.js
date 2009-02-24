@@ -15,8 +15,7 @@
 Js.util.ticker = Js.create({
 	element: null,
 	node: null,
-	initiate: function(selector)
-	{
+	initiate: function(selector) {
 		if (Jrun.isset(selector)) {
 			this.init(selector);
 		}
@@ -28,8 +27,7 @@ Js.util.ticker = Js.create({
 	 * @param {Object} node
 	 * @return {Object}
 	 */
-	init: function(selector) 
-	{
+	init: function(selector) {
 		this.element = Jrun.pick(selector, null);
 		
 		if (Jrun.isset(this.element)) {
@@ -43,8 +41,7 @@ Js.util.ticker = Js.create({
 	 * 
 	 * @method
 	 */
-	check: function() 
-	{
+	check: function() {
 		// loop all object
 		this.node.each(function(index, value) {
 			// set checked to true
@@ -56,8 +53,7 @@ Js.util.ticker = Js.create({
 	 * 
 	 * @method
 	 */
-	uncheck: function() 
-	{
+	uncheck: function() {
 		// loops all object
 		this.node.each(function(index, value) { 
 			// set checked to false
@@ -69,8 +65,7 @@ Js.util.ticker = Js.create({
 	 * 
 	 * @method
 	 */ 
-	invert: function() 
-	{
+	invert: function() {
 		// loops all object
 		this.node.each(function(index, value) {
 			// reverse checkbox selection

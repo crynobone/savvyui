@@ -12,14 +12,14 @@
  * @param {Object} js
  */
 Js.util.buttonSubmit = Js.create({
+	appName: "buttonSubmit",
 	id: null,
 	url: null,
 	button: null,
 	setting: null,
 	handler: "click",
 	formValidate: null,
-	initiate: function(js)
-	{
+	initiate: function(js) {
 		this.id = Jrun.pick(js.id, null);
 		this.url = Jrun.pick(js.url, null);
 		this.button = Jrun.pick(js.button, null);
@@ -33,30 +33,26 @@ Js.util.buttonSubmit = Js.create({
 	 * @method
 	 * @param {Object} option
 	 */
-	setup: function(option)
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting);
 	},
 	/**
 	 * @method
 	 */
-	_prepSetting: function()
-	{
+	_prepSetting: function() {
 		this.formValidate = Js.nue(this.setting);
-		this.formValidate.beforeStart = null;
 		this.formValidate.success = null;
 		this.formValidate.onError = null;
 	},
 	/**
 	 * @method
 	 */
-	init: function(option) 
-	{
+	init: function(option) {
 		var that = this;
 		
 		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.util.buttonSubmit);
+		this.setting = Js.append(this.setting, Js.config.util[this.appName]);
 		this._prepSetting();
 		
 		var method = Jrun.pickGrep(this.setting.method, /^(get|post)$/i);
@@ -84,8 +80,13 @@ Js.util.buttonSubmit = Js.create({
 							runDefault = that.setting.success(reply);
 						}
 						
-						if (runDefault != false) {
+						if (runDefault !== false) {
 							Js.parse.xhr.init(reply);	
+						}
+					},
+					onError: function() {
+						if(Jrun.isfunction(that.setting.onError)) {
+							that.setting.onError();
 						}
 					}
 				});

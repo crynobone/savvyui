@@ -12,6 +12,7 @@
  * @see Js.base.create
  */
 Js.util.activeContent = Js.create({
+	appName: "activeContent",
 	last: null,
 	interval: null,
 	repeat: false,
@@ -20,20 +21,17 @@ Js.util.activeContent = Js.create({
 	option: null,
 	fnBeforeStart: null,
 	fnSuccess: null,
-	initiate: function(js) 
-	{
+	initiate: function(js) {
 		var js = Jrun.pickStrict(js, {}, "object");
 		this.element = Jrun.pick(js.element, null);
 		this.fnBeforeStart = Jrun.pick(js.beforeStart, this.fnBeforeStart);
 		this.fbSuccess = Jrun.pick(js.success, this.fnSuccess);
 		
-		if(Jrun.isset(this.element)) 
-		{
+		if(Jrun.isset(this.element)) {
 			this._selector();
 			this._check();
 		} 
-		else 
-		{
+		else {
 			var that = this;
 			this.interval = window.setInterval(function() {
 				that._check();
@@ -42,8 +40,7 @@ Js.util.activeContent = Js.create({
 	},
 	destroy: function() 
 	{
-		if(Jrun.isset(this.interval)) 
-		{
+		if(Jrun.isset(this.interval)) {
 			clearInterval(this.interval);
 			this.interval == null;
 		}
@@ -54,8 +51,7 @@ Js.util.activeContent = Js.create({
 	_selector: function() {
 		var that = this;
 		
-		Js.use(this.element).bind("click", function() 
-		{
+		Js.use(this.element).bind("click", function() {
 			var href = Js.use(this).attr("href");
 			var anchors = (Jrun.isset(href) ? href : this.href);
 			
@@ -83,8 +79,7 @@ Js.util.activeContent = Js.create({
 			}
 		});
 	},
-	_check: function() 
-	{
+	_check: function() {
 		if (location.hash != this.last && location.hash !== "#") {
 			this.last = location.hash;
 			

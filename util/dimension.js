@@ -9,8 +9,7 @@ Js.util.dimension = {
 	// Get scrolled value of a page
 	page: {
 		scrolls: {
-			x: function()
-			{
+			x: function() {
 				var doc = document.body;
 				var result = 0;
 				var offset = window.pageXOffset;
@@ -28,8 +27,7 @@ Js.util.dimension = {
 				
 				return result;
 			},
-			y: function()
-			{
+			y: function() {
 				var doc = document.body;
 				var result = 0;
 				var offset = window.pageYOffset;
@@ -47,16 +45,14 @@ Js.util.dimension = {
 				
 				return result;
 			},
-			both: function()
-			{
+			both: function() {
 				return [
 					Js.util.dimension.page.scrolls.x(), 
 					Js.util.dimension.page.scrolls.y()
 				];
 			}
 		},
-		middle: function(width, height) 
-		{
+		middle: function(width, height) {
 			var doc = document.body;
 			var offset = [Js.use(window).width(), Js.use(window).height()];
 			var axis = Js.util.dimension.page.scrolls.both();
@@ -64,7 +60,7 @@ Js.util.dimension = {
 					
 			result[0] = Math.round(((offset[0] - width) / 2) + axis[0]);
 			result[1] = Math.round(((offset[1] - height) / 2) + axis[1]); 
-			//Math.round((((screen.height - 200) - height) / 2) + axis[1]);
+			
 			result[0] = (result[0] < 0 ? 0 : result[0]);
 			result[1] = (result[1] < 0 ? 0 : result[1]);	
 			result.reverse();
@@ -75,8 +71,7 @@ Js.util.dimension = {
 	node: {
 		scrolls: {},
 		size: {},
-		offset: function(node) 
-		{
+		offset: function(node) {
 			var result = [0, 0, 0, 0];
 			var loop = false;
 			

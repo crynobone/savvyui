@@ -3477,17 +3477,27 @@ Js.widget.tab = Js.create({
 			this.activateTab(active.attr("href"));
 		}
 	},
-	toggle: function() {
+	showTab: function() {
 		if (this.status == "on") {
 			this.toolbar.hide();
 			Js.use("div." + this.setting.cssHidden, this.object).setClass(this.setting.cssActive);
-			this.status = "off";
 		}
-		else {
+		this.status = "off";
+	},
+	hideTab: function() {
+		if (this.status == "off") {
 			this.toolbar.show();
 			Js.use("div." + this.setting.cssActive, this.object).setClass(this.setting.cssHidden);
 			this.activeTab.setClass(this.setting.cssActive);
-			this.status = "on";
+		}
+		this.status = "on";
+	},
+	toggle: function() {
+		if (this.status == "on") {
+			this.showTab();
+		}
+		else {
+			this.hideTab();
 		}
 	},
 	addTab: function(js) {

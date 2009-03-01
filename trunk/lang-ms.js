@@ -29,7 +29,7 @@ Js.language = {
 			selectMonthYear: "Pergi ke Bulan dan Tahun yang khusus",
 			todayButton: "Pilih hari ini",
 			days: ["A", "I", "S", "R", "K", "J", "S"],
-			months: ["Januari", "Febuari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"],
+			months: ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"],
 			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"]
 		},
 		notice: {

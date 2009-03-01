@@ -55,16 +55,24 @@ Js.toString = function() {
  * @param {Object} data
  * @return {Object}
  */
-Js.nue = function(data) {
+Js.nue = function(data, deep) {
 	// data have to be an object
-	if (Jrun.typeOf(data) == "object") {
+	var deep = Jrun.pickStrict(deep, false, "boolean");
+	var type = Jrun.typeOf(data);
+	if (Jrun.inArray(type, ["object", "array"])) {
 		// prepare result object
-		var result = {};
+		if (type == "object") {
+			var result = {};
+		}
+		else {
+			var result = [];
+		}
+		
 		
 		// loop data object name
 		for (var method in data) {
 			if (data.hasOwnProperty(method)) {
-				result[method] = data[method];
+				result[method] = (!!deep ? Js.nue(data[method]) : data[method]);
 			}
 		}
 		

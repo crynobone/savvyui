@@ -6,11 +6,6 @@
  * @license MIT
  */
 
-/**
- * @alias Js.ext.validate
- * @constructor
- * @return {Object} this object
- */
 Js.ext.validate = Js.create({
 	appName: "validate",
 	node: null,
@@ -42,11 +37,6 @@ Js.ext.validate = Js.create({
 			cssMessage: RegExp.$2
 		};
 	},
-	/**
-	 * @method
-	 * @param {Object} node
-	 * @param {Object} option
-	 */
 	init: function(node, option) {
 		// ensure that refer to this
 		var that = this;
@@ -125,12 +115,6 @@ Js.ext.validate = Js.create({
 			return this.data;
 		}
 	},
-	/**
-	 * @method
-	 * @param {Object} field
-	 * @param {Object} text
-	 * @param {Object} data
-	 */
 	_error: function(node, text) {		
 		var that = this;
 		
@@ -139,10 +123,6 @@ Js.ext.validate = Js.create({
 		
 		this._messageAdd(node, text);
 	},
-	/**
-	 * @method
-	 * @param {Object} node
-	 */
 	_invokeQueryString: function(node) 
 	{
 		var data = "";
@@ -161,10 +141,6 @@ Js.ext.validate = Js.create({
 		
 		return data;
 	},
-	/**
-	 * @method
-	 * @param {Object} field
-	 */
 	_messageCleanUp: function(node) 
 	{
 		var errSpan = this.setting.errorNode;
@@ -173,11 +149,6 @@ Js.ext.validate = Js.create({
 			errNode.remove();
 		}
 	},
-	/**
-	 * @method
-	 * @param {Object} node
-	 * @param {Object} message
-	 */
 	_messageAdd: function(node, message) 
 	{
 		var that = this;

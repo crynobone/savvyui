@@ -1,16 +1,11 @@
 /**
+ * @projectDescription Tab Panel for Savvy.UI
  * @version 0.9.3
+ * @memberOf Js.widget
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
-/**
- * @alias Js.widget.tab
- * @constructor
- * @param {String} selector 
- * @param {Object} option
- * @return {Object}
- */
 Js.widget.tab = Js.create({
 	appName: "tab",
 	height: null,

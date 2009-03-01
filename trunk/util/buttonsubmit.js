@@ -1,16 +1,11 @@
 /**
- * @projectDescription Allow a customizable form submission via button
+ * @projectDescription Allow a customizable form submission via button complete with XHR Request
  * @memberOf Js.util
  * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
-/**
- * @alias Js.util.buttonSubmit
- * @constructor
- * @param {Object} js
- */
 Js.util.buttonSubmit = Js.create({
 	appName: "buttonSubmit",
 	id: null,

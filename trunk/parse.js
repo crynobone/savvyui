@@ -1,7 +1,7 @@
 /**
  * @projectDescription Parser Engine for Savvy.UI
  * @memberOf Js
- * @version 1.0.2
+ * @version 1.0.3
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -11,10 +11,6 @@
  */
 Js.parse = {
 	html: {
-		/**
-		 * @alias Js.parse.html.to
-		 * @param {String} data
-		 */
 		to: function(data) 
 		{
 			var data = new String(data);
@@ -23,10 +19,6 @@ Js.parse = {
 			
 			return data;
 		},
-		/**
-		 * @alias Js.parse.html.from
-		 * @param {String} data
-		 */
 		from: function(data) 
 		{
 			var data = new String(value);
@@ -35,23 +27,6 @@ Js.parse = {
 			
 			return data;
 		}
-	},
-	/**
-	 * @alias Js.parse.bbml
-	 * @deprecated
-	 * @param {String} data
-	 * @return {String}
-	 */
-	bbml: function(data) 
-	{
-		return new String(data)
-			.replace(/\[lt\]/g, "<")
-			.replace(/\[gt\]/g, ">")
-			.replace(/\[n\]/g, "&")
-			.replace(/\&quot\;/g, "\"")
-			.replace(/\&rsquo\;/g, "\'")
-			.replace(/\[br\]/g, "\n")
-			.replace(/\[break\]/g, "<br />");
 	},
 	xhr: {
 		init: function(reply) 

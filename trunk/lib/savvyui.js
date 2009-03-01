@@ -1,9 +1,9 @@
 /**
  * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
  * @namespace Js
- * @version 1.1.5
- * @extends jQuery-1.2.6
+ * @version 1.1.6
  * @author Mior Muhammad Zaki crynobone@gmail.com
+ * @license MIT
  */
 
 /**
@@ -12,7 +12,7 @@
  */
 var Js = {
 	adapter: "jQuery-1.2.6",
-	version: "1.1.5",
+	version: "1.1.6",
 	use: null,
 	debug: {},
 	data: {},
@@ -185,10 +185,35 @@ Js.debug = {
 
 /**
  * Misc function for Savvy.UI
- * 
- * @alias Jrun
+ * @namespace Jrun
  */
 var Jrun = {
+	behaviour: function() {
+		// Return Object containing Boolean value of each browser object.
+		return function() {
+			var win = window;
+			var doc = document;
+			// make sure ie6 or ie7 is either false or true only.
+			var items = { 
+				ie: false,
+				ie6: false,
+				ie7: false,
+				khtml: false,
+				gecko: false,
+				opera: false
+			};
+			// detect IE
+			items.ie = items[win.XMLHttpRequest ? "ie7" : "ie6"] = (win.ActiveXObject ? true : false);
+			// detect KHTML
+			items.khtml = ((doc.childNodes && !doc.all && !navigator.taintEnabled) ? true : false);
+			// detect Gecko
+			items.gecko = (doc.getBoxObjectFor != null ? true : false);
+			// detect Opera
+			items.opera = (items.opera ? true : false);
+			// return the object
+			return items;
+		}();
+	}(),
 	/**
 	 * Camelize string input
 	 * <br>e.g: background-color => backgroundColor
@@ -797,19 +822,13 @@ Js.create = function(js) {
 };
 /**
  * @projectDescription Adapter for Savvy.UI and jQuery Framework
- * @version 0.0.1
- * @extends jQuery-1.2.6
+ * @version 0.0.2
+ * @extends jQuery
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
 jQuery.fn.extend({
-	/**
-	 * revert and set new className to jQuery object
-	 * <br>Equal to: $("div").removeClass().addClass(value);
-	 * @param {Object} value
-	 * @return {jQuery}
-	 */
 	setClass: function(value) 
 	{
 		return this.each(function() {
@@ -828,8 +847,11 @@ jQuery.fn.extend({
 		}
 	} 
 });
+
+// Bind Js.use with jQuery Object
 Js.use = window.jQuery;
 /**
+ * @projectDescription Configuration Object for Savvy.UI
  * @memberOf Js
  * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
@@ -934,7 +956,10 @@ Js.config = {
 			cssDisabled: "disabled"
 		}
 	}
-};/**
+};
+/**
+ * @projectDescription Global Configurator Function for Savvy.UI
+ * @memberOf Js
  * @version 0.0.1
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
@@ -1004,7 +1029,7 @@ Js.setup = {
 		}
 	}
 };/**
- * @projectDescription Language configuration for Savvy.UI
+ * @projectDescription Language configuration for Savvy.UI (English)
  * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
@@ -1044,10 +1069,11 @@ Js.language = {
 			timer: "This message will automatically close in 5 seconds"
 		}
 	}
-};/**
+};
+/**
  * @projectDescription Parser Engine for Savvy.UI
  * @memberOf Js
- * @version 1.0.2
+ * @version 1.0.3
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -1057,10 +1083,6 @@ Js.language = {
  */
 Js.parse = {
 	html: {
-		/**
-		 * @alias Js.parse.html.to
-		 * @param {String} data
-		 */
 		to: function(data) 
 		{
 			var data = new String(data);
@@ -1069,10 +1091,6 @@ Js.parse = {
 			
 			return data;
 		},
-		/**
-		 * @alias Js.parse.html.from
-		 * @param {String} data
-		 */
 		from: function(data) 
 		{
 			var data = new String(value);
@@ -1081,23 +1099,6 @@ Js.parse = {
 			
 			return data;
 		}
-	},
-	/**
-	 * @alias Js.parse.bbml
-	 * @deprecated
-	 * @param {String} data
-	 * @return {String}
-	 */
-	bbml: function(data) 
-	{
-		return new String(data)
-			.replace(/\[lt\]/g, "<")
-			.replace(/\[gt\]/g, ">")
-			.replace(/\[n\]/g, "&")
-			.replace(/\&quot\;/g, "\"")
-			.replace(/\&rsquo\;/g, "\'")
-			.replace(/\[br\]/g, "\n")
-			.replace(/\[break\]/g, "<br />");
 	},
 	xhr: {
 		init: function(reply) 
@@ -1167,40 +1168,19 @@ Js.parse = {
 };/**
  * @projectDescription Input test script for Savvy.UI
  * @version 1.0.3
+ * @memberOf Js
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
 Js.test = {
-	/**
-	 * Check if argument is a string
-	 * @alias Js.test.isString
-	 * @param {String} [data] argument to be tested
-	 * @return {Boolean} return true if argument is a string
-	 */
-	isString: function(data) 
-	{
+	isString: function(data) {
 		return (typeof(data) == "string" && isNaN(data));
 	},
-	/**
-	 * Check if argument is a number
-	 * @alias Js.test.isNumber
-	 * @param {Number} [data] argument to be tested
-	 * @return {Boolean} return true if argument is a number
-	 */
-	isNumber: function(data) 
-	{
+	isNumber: function(data) {
 		return !isNaN(data);
 	},
-	/**
-	 * Compare data with value
-	 * @alias Js.test.isLength
-	 * @param {String} [data] 
-	 * @param {Number} [value]
-	 * @return {Boolean} 
-	 */
-	isLength: function(data, value) 
-	{
+	isLength: function(data, value) {
 		var result = null;
 		
 		if (data.match(/^(exact|min|max)\-(\d*)$/i)) {
@@ -1226,38 +1206,16 @@ Js.test = {
 		
 		return result;
 	},
-	/**
-	 * Check if argument is an email address
-	 * @alias Js.test.isEmail
-	 * @param {String} data
-	 * @return {Boolean}
-	 */
-	isEmail: function(data) 
-	{
+	isEmail: function(data) {
 		return (data.match(Js.config.test.email));
 	},
-	/**
-	 * Check if argument is a URL
-	 * @alias Js.test.isURL
-	 * @param {Object} data
-	 * @return {Boolean}
-	 */
-	isURL: function(data) 
-	{
+	isURL: function(data) {
 		return (data.match(Js.config.test.url));
 	},
-	/**
-	 * Check if argument is an IP Address
-	 * @alias Js.test.isIpAddress
-	 * @param {Object} data
-	 * @return {Boolean}
-	 */
-	isIpAddress: function(data) 
-	{
+	isIpAddress: function(data) {
 		return (data.match(Js.config.test.ip));
 	},
-	isPostcode: function(data)
-	{
+	isPostcode: function(data) {
 		return (data.match(Js.config.test.postcode));
 	}
 };/**
@@ -1268,11 +1226,6 @@ Js.test = {
  * @license MIT
  */
 
-/**
- * @alias Js.ext.validate
- * @constructor
- * @return {Object} this object
- */
 Js.ext.validate = Js.create({
 	appName: "validate",
 	node: null,
@@ -1304,11 +1257,6 @@ Js.ext.validate = Js.create({
 			cssMessage: RegExp.$2
 		};
 	},
-	/**
-	 * @method
-	 * @param {Object} node
-	 * @param {Object} option
-	 */
 	init: function(node, option) {
 		// ensure that refer to this
 		var that = this;
@@ -1387,12 +1335,6 @@ Js.ext.validate = Js.create({
 			return this.data;
 		}
 	},
-	/**
-	 * @method
-	 * @param {Object} field
-	 * @param {Object} text
-	 * @param {Object} data
-	 */
 	_error: function(node, text) {		
 		var that = this;
 		
@@ -1401,10 +1343,6 @@ Js.ext.validate = Js.create({
 		
 		this._messageAdd(node, text);
 	},
-	/**
-	 * @method
-	 * @param {Object} node
-	 */
 	_invokeQueryString: function(node) 
 	{
 		var data = "";
@@ -1423,10 +1361,6 @@ Js.ext.validate = Js.create({
 		
 		return data;
 	},
-	/**
-	 * @method
-	 * @param {Object} field
-	 */
 	_messageCleanUp: function(node) 
 	{
 		var errSpan = this.setting.errorNode;
@@ -1435,11 +1369,6 @@ Js.ext.validate = Js.create({
 			errNode.remove();
 		}
 	},
-	/**
-	 * @method
-	 * @param {Object} node
-	 * @param {Object} message
-	 */
 	_messageAdd: function(node, message) 
 	{
 		var that = this;
@@ -1577,18 +1506,13 @@ Js.ext.validate = Js.create({
 		}
 	}
 });/**
+ * @projectDescription Create Active Hyperlink for Savvy.UI
  * @memberOf Js.util
- * @extends Js.base
  * @version 0.1.2
  * @author Mior Muhammad Zaki
  * @license MIT
  */
 
-/**
- * @classDescription Js.util.activeContent is a class
- * @alias Js.util.activeContent
- * @see Js.base.create
- */
 Js.util.activeContent = Js.create({
 	appName: "activeContent",
 	last: null,
@@ -1673,19 +1597,15 @@ Js.util.activeContent = Js.create({
 			}
 		}
 	}
-});/**
- * @projectDescription Allow a customizable form submission via button
+});
+/**
+ * @projectDescription Allow a customizable form submission via button complete with XHR Request
  * @memberOf Js.util
  * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
-/**
- * @alias Js.util.buttonSubmit
- * @constructor
- * @param {Object} js
- */
 Js.util.buttonSubmit = Js.create({
 	appName: "buttonSubmit",
 	id: null,
@@ -1776,6 +1696,7 @@ Js.util.buttonSubmit = Js.create({
 		});
 	}
 });/**
+ * @projectDescription Dimension detection for Savvy.UI
  * @version 0.6.2
  * @memberOf Js.util
  * @author Mior Muhammad Zaki crynobone@gmail.com
@@ -1880,8 +1801,10 @@ Js.util.dimension = {
 		}
 	}
 };/**
+ * @projectDescription Allow a customizable form submission via submit button complete with XHR Request
  * @memberOf Js.util
  * @version 0.0.2
+ * @extends Js.util.buttonSubmit
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -1916,12 +1839,6 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
  * @license MIT
  */
 
-/**
- * Initiate new Js.util.ticker
- * @alias Js.util.ticker
- * @constructor
- * @param {Object} node
- */
 Js.util.ticker = Js.create({
 	element: null,
 	node: null,
@@ -1930,13 +1847,6 @@ Js.util.ticker = Js.create({
 			this.init(selector);
 		}
 	},
-	/**
-	 * Initialize the HTML Element
-	 * 
-	 * @method
-	 * @param {Object} node
-	 * @return {Object}
-	 */
 	init: function(selector) {
 		this.element = Jrun.pick(selector, null);
 		
@@ -1946,35 +1856,20 @@ Js.util.ticker = Js.create({
 		
 		return this;
 	},
-	/**
-	 * Tick all checkbox
-	 * 
-	 * @method
-	 */
-	check: function() {
+	tick: function() {
 		// loop all object
 		this.node.each(function(index, value) {
 			// set checked to true
 			value.checked = true;
 		});
 	},
-	/**
-	 * Untick all checkbox
-	 * 
-	 * @method
-	 */
-	uncheck: function() {
+	untick: function() {
 		// loops all object
 		this.node.each(function(index, value) { 
 			// set checked to false
 			value.checked = false;
 		});
 	},
-	/**
-	 * Invert checkbox selection
-	 * 
-	 * @method
-	 */ 
 	invert: function() {
 		// loops all object
 		this.node.each(function(index, value) {
@@ -1988,7 +1883,11 @@ Js.util.ticker = Js.create({
 		});
 	}
 });/**
- * @author crynobone
+ * @projectDescription Editable Dropdown for Savvy.UI
+ * @version 0.0.2
+ * @memberOf Js.util
+ * @author Mior Muhammad Zaki crynobone@gmail.com
+ * @license MIT
  */
 
 Js.util.editable = Js.create({
@@ -2094,7 +1993,9 @@ Js.util.editable = Js.create({
 		});
 	}
 });/**
+ * @projectDescription Smart Input Field for Savvy.UI
  * @version 0.0.2 
+ * @memberOf Js.util
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -2146,15 +2047,6 @@ Js.util.smartInput = Js.create({
  * @license MIT
  */
 
-/**
- * Initiate Activity layer to prevent user from interfering with running process.
- * 
- * @constructor
- * @alias Js.widget.activity
- * @param {String, Object} [selector] Any selector format supported by jQuery CSS Selector Engine
- * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
- * @return {Object} return this object
- */
 Js.widget.activity = Js.create({
 	appName: "activity",
 	node: null,
@@ -2170,12 +2062,6 @@ Js.widget.activity = Js.create({
 		
 		return this;
 	},
-	/**
-	 * Setup local setting for this object
-	 * 
-	 * @method	
-	 * @param {Object} option
-	 */
 	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting, ["lang"], true);
@@ -2184,14 +2070,6 @@ Js.widget.activity = Js.create({
 			this.language = Js.append(option.lang, this.language);
 		}
 	},
-	/**
-	 * Initiate internal call, assign DOM element as activity layer and this option
-	 * 
-	 * @see Js.widget.activity
-	 * @method
-	 * @param {String, Object} [selector] Any selector format supported by jQuery CSS Selector Engine
-	 * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
-	 */
 	init: function(selector, option) {
 		this.element = Jrun.pick(selector, this.element);
 		
@@ -2210,11 +2088,6 @@ Js.widget.activity = Js.create({
 			display: "none"
 		}).setClass(Jrun.prep(this.setting.identifier)).css("opacity", 0.01);
 	},
-	/**
-	 * Activate activity layer
-	 * 
-	 * @method
-	 */
 	activate: function(callback) {
 		if (this.status == 0) {
 			this.node.css({
@@ -2237,11 +2110,6 @@ Js.widget.activity = Js.create({
 			callback();
 		}
 	},
-	/**
-	 * Load activity indicator image
-	 * 
-	 * @method
-	 */
 	loadImage: function() {
 		this.box = Js.use("<img/>").attr({
 			src: this.setting.imagePath
@@ -2252,11 +2120,6 @@ Js.widget.activity = Js.create({
 			zIndex: (this.setting.zIndex + 1)
 		}).appendTo(this.node[0]);
 	},
-	/**
-	 * Deactivate activity layer
-	 * 
-	 * @method
-	 */
 	deactivate: function(callback) {
 		if (this.status > 0) {
 			this.node.fadeTo("normal", 0, function(){
@@ -2272,8 +2135,11 @@ Js.widget.activity = Js.create({
 		this.status--;
 		this.status = (this.status < 0 ? 0 : this.status);
 	}
-});/**
- * @version 0.7.3 
+});
+/**
+ * @projectDescription Calendar/datePicker for Savvy.UI
+ * @memberOf Js.widget
+ * @version 0.7.3
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -2305,12 +2171,6 @@ Js.widget.datePicker = Js.create({
 			this.init(js);
 		}
 	},
-	/**
-	 * Setup local configuration for this object
-	 * 
-	 * @method
-	 * @param {Object} [option] Contains local configuration for this object
-	 */
 	setup: function(option)
 	{
 		this.setting = Js.append(option, this.setting, ["lang"], true);
@@ -2318,13 +2178,6 @@ Js.widget.datePicker = Js.create({
 			this.language = Js.append(option.lang, this.language);
 		}
 	},
-	/**
-	 * Initiate internal call, prepare all configuration before loading the calendar
-	 * 
-	 * @method
-	 * @see Js.widget.calendar
-	 * @param {Object} [js] Contains local configuration for this object
-	 */
 	init: function(js) 
 	{
 		var that = this;
@@ -2859,12 +2712,11 @@ Js.widget.datePicker = Js.create({
 		return this;
 	}
 });
-
 /**
  * @projectDescription Iconizer widget for Savvy.UI
- * @version 0.0.2
- * @extends Js.widget
- * @author Mior Muhammad Zaki
+ * @version 0.0.3
+ * @memberOf Js.widget
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
@@ -2953,7 +2805,9 @@ Js.widget.iconizer = Js.create({
 		});
 	}
 });/**
+ * @projectDescription Panel for Savvy.UI
  * @version 0.2.1
+ * @memberOf Js.widget
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -3144,7 +2998,10 @@ Js.widget.panel = Js.create({
 	}
 });
 /**
+ * @projectDescription Modal Dialog for Savvy.UI
  * @version 0.1.2
+ * @memberOf Js.widget
+ * @extends Js.widget.panel
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -3215,10 +3072,13 @@ Js.widget.dialog = Js.widget.panel.extend({
 			"zIndex": 6000
 		});
 	}
-});/**
+});
+/**
+ * @projectDescription Notice/Error Message for Savvy.UI
  * @version 0.0.3
- * @extends Js.widget
- * @author Mior Muhammad Zaki
+ * @memberOf Js.widget
+ * @extends Js.widget.activity
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
@@ -3310,18 +3170,13 @@ Js.widget.notice = Js.widget.activity.extend({
 		this._domAddNotice(note, 'error');
 	}
 });/**
+ * @projectDescription Tab Panel for Savvy.UI
  * @version 0.9.3
+ * @memberOf Js.widget
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 
-/**
- * @alias Js.widget.tab
- * @constructor
- * @param {String} selector 
- * @param {Object} option
- * @return {Object}
- */
 Js.widget.tab = Js.create({
 	appName: "tab",
 	height: null,

@@ -1,5 +1,7 @@
 /**
- * @version 0.7.3 
+ * @projectDescription Calendar/datePicker for Savvy.UI
+ * @memberOf Js.widget
+ * @version 0.7.3
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -31,12 +33,6 @@ Js.widget.datePicker = Js.create({
 			this.init(js);
 		}
 	},
-	/**
-	 * Setup local configuration for this object
-	 * 
-	 * @method
-	 * @param {Object} [option] Contains local configuration for this object
-	 */
 	setup: function(option)
 	{
 		this.setting = Js.append(option, this.setting, ["lang"], true);
@@ -44,13 +40,6 @@ Js.widget.datePicker = Js.create({
 			this.language = Js.append(option.lang, this.language);
 		}
 	},
-	/**
-	 * Initiate internal call, prepare all configuration before loading the calendar
-	 * 
-	 * @method
-	 * @see Js.widget.calendar
-	 * @param {Object} [js] Contains local configuration for this object
-	 */
 	init: function(js) 
 	{
 		var that = this;
@@ -585,4 +574,3 @@ Js.widget.datePicker = Js.create({
 		return this;
 	}
 });
-

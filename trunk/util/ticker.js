@@ -6,12 +6,6 @@
  * @license MIT
  */
 
-/**
- * Initiate new Js.util.ticker
- * @alias Js.util.ticker
- * @constructor
- * @param {Object} node
- */
 Js.util.ticker = Js.create({
 	element: null,
 	node: null,
@@ -20,13 +14,6 @@ Js.util.ticker = Js.create({
 			this.init(selector);
 		}
 	},
-	/**
-	 * Initialize the HTML Element
-	 * 
-	 * @method
-	 * @param {Object} node
-	 * @return {Object}
-	 */
 	init: function(selector) {
 		this.element = Jrun.pick(selector, null);
 		
@@ -36,35 +23,20 @@ Js.util.ticker = Js.create({
 		
 		return this;
 	},
-	/**
-	 * Tick all checkbox
-	 * 
-	 * @method
-	 */
-	check: function() {
+	tick: function() {
 		// loop all object
 		this.node.each(function(index, value) {
 			// set checked to true
 			value.checked = true;
 		});
 	},
-	/**
-	 * Untick all checkbox
-	 * 
-	 * @method
-	 */
-	uncheck: function() {
+	untick: function() {
 		// loops all object
 		this.node.each(function(index, value) { 
 			// set checked to false
 			value.checked = false;
 		});
 	},
-	/**
-	 * Invert checkbox selection
-	 * 
-	 * @method
-	 */ 
 	invert: function() {
 		// loops all object
 		this.node.each(function(index, value) {

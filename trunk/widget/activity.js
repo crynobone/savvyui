@@ -6,15 +6,6 @@
  * @license MIT
  */
 
-/**
- * Initiate Activity layer to prevent user from interfering with running process.
- * 
- * @constructor
- * @alias Js.widget.activity
- * @param {String, Object} [selector] Any selector format supported by jQuery CSS Selector Engine
- * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
- * @return {Object} return this object
- */
 Js.widget.activity = Js.create({
 	appName: "activity",
 	node: null,
@@ -30,12 +21,6 @@ Js.widget.activity = Js.create({
 		
 		return this;
 	},
-	/**
-	 * Setup local setting for this object
-	 * 
-	 * @method	
-	 * @param {Object} option
-	 */
 	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting, ["lang"], true);
@@ -44,14 +29,6 @@ Js.widget.activity = Js.create({
 			this.language = Js.append(option.lang, this.language);
 		}
 	},
-	/**
-	 * Initiate internal call, assign DOM element as activity layer and this option
-	 * 
-	 * @see Js.widget.activity
-	 * @method
-	 * @param {String, Object} [selector] Any selector format supported by jQuery CSS Selector Engine
-	 * @param {Object} [option] Provide local setting as based on available option in Js.config.widget.activity
-	 */
 	init: function(selector, option) {
 		this.element = Jrun.pick(selector, this.element);
 		
@@ -70,11 +47,6 @@ Js.widget.activity = Js.create({
 			display: "none"
 		}).setClass(Jrun.prep(this.setting.identifier)).css("opacity", 0.01);
 	},
-	/**
-	 * Activate activity layer
-	 * 
-	 * @method
-	 */
 	activate: function(callback) {
 		if (this.status == 0) {
 			this.node.css({
@@ -97,11 +69,6 @@ Js.widget.activity = Js.create({
 			callback();
 		}
 	},
-	/**
-	 * Load activity indicator image
-	 * 
-	 * @method
-	 */
 	loadImage: function() {
 		this.box = Js.use("<img/>").attr({
 			src: this.setting.imagePath
@@ -112,11 +79,6 @@ Js.widget.activity = Js.create({
 			zIndex: (this.setting.zIndex + 1)
 		}).appendTo(this.node[0]);
 	},
-	/**
-	 * Deactivate activity layer
-	 * 
-	 * @method
-	 */
 	deactivate: function(callback) {
 		if (this.status > 0) {
 			this.node.fadeTo("normal", 0, function(){

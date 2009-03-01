@@ -1,6 +1,8 @@
 /**
+ * @projectDescription Allow a customizable form submission via submit button complete with XHR Request
  * @memberOf Js.util
  * @version 0.0.2
+ * @extends Js.util.buttonSubmit
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */

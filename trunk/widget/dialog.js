@@ -1,5 +1,8 @@
 /**
+ * @projectDescription Modal Dialog for Savvy.UI
  * @version 0.1.2
+ * @memberOf Js.widget
+ * @extends Js.widget.panel
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */

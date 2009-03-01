@@ -1,5 +1,7 @@
 /**
+ * @projectDescription Panel for Savvy.UI
  * @version 0.2.1
+ * @memberOf Js.widget
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */

@@ -1,4 +1,5 @@
 /**
+ * @projectDescription Configuration Object for Savvy.UI
  * @memberOf Js
  * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com

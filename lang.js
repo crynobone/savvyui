@@ -1,5 +1,5 @@
 /**
- * @projectDescription Language configuration for Savvy.UI
+ * @projectDescription Language configuration for Savvy.UI (English)
  * @version 0.0.2
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT

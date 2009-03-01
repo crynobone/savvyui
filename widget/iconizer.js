@@ -1,8 +1,8 @@
 /**
  * @projectDescription Iconizer widget for Savvy.UI
- * @version 0.0.2
- * @extends Js.widget
- * @author Mior Muhammad Zaki
+ * @version 0.0.3
+ * @memberOf Js.widget
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 

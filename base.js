@@ -1,9 +1,9 @@
 /**
  * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
  * @namespace Js
- * @version 1.1.5
- * @extends jQuery-1.2.6
+ * @version 1.1.6
  * @author Mior Muhammad Zaki crynobone@gmail.com
+ * @license MIT
  */
 
 /**
@@ -12,7 +12,7 @@
  */
 var Js = {
 	adapter: "jQuery-1.2.6",
-	version: "1.1.5",
+	version: "1.1.6",
 	use: null,
 	debug: {},
 	data: {},
@@ -185,10 +185,35 @@ Js.debug = {
 
 /**
  * Misc function for Savvy.UI
- * 
- * @alias Jrun
+ * @namespace Jrun
  */
 var Jrun = {
+	behaviour: function() {
+		// Return Object containing Boolean value of each browser object.
+		return function() {
+			var win = window;
+			var doc = document;
+			// make sure ie6 or ie7 is either false or true only.
+			var items = { 
+				ie: false,
+				ie6: false,
+				ie7: false,
+				khtml: false,
+				gecko: false,
+				opera: false
+			};
+			// detect IE
+			items.ie = items[win.XMLHttpRequest ? "ie7" : "ie6"] = (win.ActiveXObject ? true : false);
+			// detect KHTML
+			items.khtml = ((doc.childNodes && !doc.all && !navigator.taintEnabled) ? true : false);
+			// detect Gecko
+			items.gecko = (doc.getBoxObjectFor != null ? true : false);
+			// detect Opera
+			items.opera = (items.opera ? true : false);
+			// return the object
+			return items;
+		}();
+	}(),
 	/**
 	 * Camelize string input
 	 * <br>e.g: background-color => backgroundColor

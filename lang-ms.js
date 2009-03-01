@@ -1,8 +1,7 @@
 /**
- * @projectDescription Language configuration for Savvy.UI
+ * @projectDescription Language configuration for Savvy.UI (Malay)
  * @version 0.0.2
- * @author Mior Muhammad Zaki crynobone@gmail.com
- * @translated Huzairy huzairy@gmail.com
+ * @author Mior Muhammad Zaki and Huzairy crynobone@gmail.com, huzairy@gmail.com
  * @license MIT
  */
 

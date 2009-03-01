@@ -1,7 +1,9 @@
 /**
+ * @projectDescription Notice/Error Message for Savvy.UI
  * @version 0.0.3
- * @extends Js.widget
- * @author Mior Muhammad Zaki
+ * @memberOf Js.widget
+ * @extends Js.widget.activity
+ * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
 

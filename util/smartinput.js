@@ -1,5 +1,7 @@
 /**
+ * @projectDescription Smart Input Field for Savvy.UI
  * @version 0.0.2 
+ * @memberOf Js.util
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */

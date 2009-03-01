@@ -6,13 +6,6 @@
  * @license MIT
  */
 
-/**
- * Global Js.widget.message<br>
- * Enable user to display message on top of the display with customize CSS
- * 
- * @alias Js.widget.message
- */
-
 Js.widget.message = Js.create({
 	appName: "message",
 	node: null,

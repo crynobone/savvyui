@@ -1263,7 +1263,7 @@ Js.test = {
 };/**
  * @projectDescription Form Validation extension for Savvy.UI
  * @memberOf Js.ext
- * @version 0.9.5
+ * @version 0.9.6
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -1336,8 +1336,7 @@ Js.ext.validate = Js.create({
 		var fnBeforeStart = Jrun.pick(setting.beforeStart,null);
 		var fnSuccess = Jrun.pick(setting.success, null);
 		var fnOnError = Jrun.pick(setting.onError, null);
-		var data = "";
-		var lang = this.language;
+		this.data = "";
 		var contRun = true;
 		
 		// set this.first to NULL
@@ -1358,107 +1357,9 @@ Js.ext.validate = Js.create({
 			var fields = Js.use(":input", this.node);
 			
 			fields.each(function(index, field) {
-				var node = Js.use(field);
-				var value = node.val();
-				// Double confirm the element is either input, select or textarea
-				
-				if (node.attr('name') != "") {
-					// remove previously loaded error message
-					that._messageCleanUp(node);
-					
-					// turn the className into array so we can do some testing
-					var klasses = (!!node.attr('class') ? node.attr('class') : "");
-					var klass = klasses.split(/\s/);
-					var error = "";
-						
-					// if the element is required
-					if (!!Jrun.inArray("required", klass)) {
-						if (Jrun.trim(value) === "") {
-							error = lang.required;
-						} else {
-							var indexLength = Jrun.indexOfGrep(/^(max|min|exact)\-(\d*)$/i, klass);
-							
-							if (indexLength > -1) {
-								var types = RegExp.$1;
-								var values = RegExp.$2;
-								
-								if (!Js.test.isLength(klass[indexLength], value.length)) {
-									if (types == "min") {
-										types = lang.lengthMinimum;
-									}
-									else if (types == "max") {
-										types = lang.lengthMaximum;
-									}
-									else if (types == "exact") {
-										types = lang.lengthExact;
-									}
-										
-									var note = lang.length;
-									note = note.replace(/{type}/, types);
-									note = note.replace(/{value}/, values);
-										
-									that._error(node, note);
-								}
-							}
-							
-						}
-					}
-					
-					var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
-					if (indexMatch > -1) {
-						var matched = fields.is(":input[name='" + RegExp.$1 + "']");
-						if (value != matched.val() && error == "") {
-							error = lang.matched;
-						}
-					}
-					
-					// this set of validate only triggered when this.value isn't empty
-					if (Jrun.trim(value) != "") {
-						if (!!Jrun.inArray("string", klass) && !Js.test.isString(value)) {
-							error = lang.string;
-						}
-						else if (!!Jrun.inArrayGrep(/^(integer|number)$/, klass) && !Js.test.isNumber(value)) {
-							error = lang.number;
-						}
-						else if (!!Jrun.inArray("email", klass) && !Js.test.isEmail(value)) {
-							error = lang.email;
-						}
-					}
-					
-					var testIndex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
-					
-					if (testIndex > -1) {
-						var tester = Jrun.camelize(klass[testIndex]);
-						var validate = that.setting[tester];
-						
-						if (Jrun.isset(validate)) {
-							var required = Jrun.pickStrict(validate.required, false, "boolean");
-							
-							if (required === true && Jrun.trim(value) === "") {
-								error = Jrun.pickStrict(validate.error, error, "string");
-							}
-							
-							if (Jrun.trim(value) !== "") {
-								if (Jrun.isfunction(validate.callback) && !validate.callback(value)) {
-									error = Jrun.pickStrict(validate.error, error, "string");
-								}
-								else if (validate.regex && !value.match(validate.regex)) {
-									error = Jrun.pickStrict(validate.error, error, "string");
-								}
-							}
-						}
-					}
-						
-					if (error !== "") {
-						that._error(node, error);
-					}
-					
-					data += that._invokeQueryString(node);
-				}
+				that._validate(field);
 			});
 		}
-		
-		this.data = data;
 		
 		if (Jrun.isset(this.first)) {
 			// there an error, set focus to first invalid field
@@ -1480,10 +1381,10 @@ Js.ext.validate = Js.create({
 		else {
 			// return all field data in querystring format
 			if (Jrun.isfunction(fnSuccess)) {
-				fnSuccess(data);
+				fnSuccess(this.data);
 			}
-			this.cacheResult = data;
-			return data;
+			this.cacheResult = this.data;
+			return this.data;
 		}
 	},
 	/**
@@ -1567,6 +1468,113 @@ Js.ext.validate = Js.create({
 				that.first = null;
 			}
 		});
+	},
+	_validate: function(field){
+		var that = this;
+		var lang = this.language;
+		var node = Js.use(field);
+		var value = node.val();
+		// Double confirm the element is either input, select or textarea
+		
+		if (node.attr('name') != "") {
+			// remove previously loaded error message
+			that._messageCleanUp(node);
+			
+			// turn the className into array so we can do some testing
+			var klasses = (!!node.attr('class') ? node.attr('class') : "");
+			var klass = klasses.split(/\s/);
+			var error = "";
+			
+			// if the element is required
+			if (!!Jrun.inArray("required", klass)) {
+				if (Jrun.trim(value) === "") {
+					error = lang.required;
+				}
+				else {
+					var indexLength = Jrun.indexOfGrep(/^(max|min|exact)\-(\d*)$/i, klass);
+					
+					if (indexLength > -1) {
+						var types = RegExp.$1;
+						var values = RegExp.$2;
+						
+						if (!Js.test.isLength(klass[indexLength], value.length)) {
+							if (types == "min") {
+								types = lang.lengthMinimum;
+							}
+							else 
+								if (types == "max") {
+									types = lang.lengthMaximum;
+								}
+								else 
+									if (types == "exact") {
+										types = lang.lengthExact;
+									}
+							
+							var note = lang.length;
+							note = note.replace(/{type}/, types);
+							note = note.replace(/{value}/, values);
+							
+							this._error(node, note);
+						}
+					}
+					
+				}
+			}
+			
+			var indexMatch = Jrun.indexOfGrep(/^match-(.*)$/i, klass);
+			if (indexMatch > -1) {
+				var matched = fields.is(":input[name='" + RegExp.$1 + "']");
+				if (value != matched.val() && error == "") {
+					error = lang.matched;
+				}
+			}
+			
+			// this set of validate only triggered when this.value isn't empty
+			if (Jrun.trim(value) != "") {
+				if (!!Jrun.inArray("string", klass) && !Js.test.isString(value)) {
+					error = lang.string;
+				}
+				else 
+					if (!!Jrun.inArrayGrep(/^(integer|number)$/, klass) && !Js.test.isNumber(value)) {
+						error = lang.number;
+					}
+					else 
+						if (!!Jrun.inArray("email", klass) && !Js.test.isEmail(value)) {
+							error = lang.email;
+						}
+			}
+			
+			var testIndex = Jrun.indexOfGrep(/^(custom)\-(\w*)$/g, klass);
+			
+			if (testIndex > -1) {
+				var tester = Jrun.camelize(klass[testIndex]);
+				var validate = this.setting[tester];
+				
+				if (Jrun.isset(validate)) {
+					var required = Jrun.pickStrict(validate.required, false, "boolean");
+					
+					if (required === true && Jrun.trim(value) === "") {
+						error = Jrun.pickStrict(validate.error, error, "string");
+					}
+					
+					if (Jrun.trim(value) !== "") {
+						if (Jrun.isfunction(validate.callback) && !validate.callback(value)) {
+							error = Jrun.pickStrict(validate.error, error, "string");
+						}
+						else 
+							if (validate.regex && !value.match(validate.regex)) {
+								error = Jrun.pickStrict(validate.error, error, "string");
+							}
+					}
+				}
+			}
+			
+			if (error !== "") {
+				that._error(node, error);
+			}
+			
+			this.data += this._invokeQueryString(node);
+		}
 	}
 });/**
  * @memberOf Js.util
@@ -3302,7 +3310,7 @@ Js.widget.notice = Js.widget.activity.extend({
 		this._domAddNotice(note, 'error');
 	}
 });/**
- * @version 0.9.2
+ * @version 0.9.3
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -3326,6 +3334,7 @@ Js.widget.tab = Js.create({
 	handler: null,
 	statys: "off",
 	setting: null,
+	tabs: null,
 	initiate: function(selector, option) {
 		if (!!Jrun.isset(selector)) {
 			this.init(selector, option);
@@ -3381,7 +3390,9 @@ Js.widget.tab = Js.create({
 			// hide the tab
 			Js.use(data).setClass(that.setting.cssHidden);
 		});
-				
+		
+		this.tabs = child;
+		
 		var div2 = Js.use("<div/>").css("display", "block").appendTo(div[0]);
 	},
 	_addHeader: function(node) {
@@ -3426,6 +3437,7 @@ Js.widget.tab = Js.create({
 		else {
 			a.bind(this.handler, function(){
 				that.activateTab(Js.use(this).attr("href"));
+				return false;
 			});
 		}
 	},
@@ -3437,6 +3449,7 @@ Js.widget.tab = Js.create({
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
 			that.activateTab(Js.use(this).attr("href"));
+			return false;
 		});
 				
 		return false;
@@ -3480,6 +3493,7 @@ Js.widget.tab = Js.create({
 	showTab: function() {
 		if (this.status == "off") {
 			this.toolbar.show();
+			this.tabs.setClass(this.setting.cssHidden);
 			this.activeTab.setClass(this.setting.cssActive);
 		}
 		this.status = "on";
@@ -3487,8 +3501,7 @@ Js.widget.tab = Js.create({
 	hideTab: function() {
 		if (this.status == "on") {
 			this.toolbar.hide();
-			Js.use("div." + this.setting.cssActive, this.object).setClass(this.setting.cssHidden);
-			
+			this.tabs.setClass(this.setting.cssActive);
 		}
 		this.status = "off";
 	},
@@ -3516,6 +3529,8 @@ Js.widget.tab = Js.create({
 				title: title
 			}).plainHtml(content).appendTo(this.node[0]);
 			
+			this.tab.add(node[0]);
+			
 			var li = Js.use('<li/>').appendTo(this.header[0]);
 			var a = Js.use('<a/>').attr({
 				href: "#" + id,
@@ -3525,6 +3540,7 @@ Js.widget.tab = Js.create({
 			Js.use("<em/>").appendTo(a[0]);
 			a.text(title).bind(this.handler, function(){
 				that.activateTab(Js.use(this).attr("href"));
+				return false;
 			});
 			
 			if (!!closable) {

@@ -1,5 +1,5 @@
 /**
- * @version 0.9.2
+ * @version 0.9.3
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -23,6 +23,7 @@ Js.widget.tab = Js.create({
 	handler: null,
 	statys: "off",
 	setting: null,
+	tabs: null,
 	initiate: function(selector, option) {
 		if (!!Jrun.isset(selector)) {
 			this.init(selector, option);
@@ -78,7 +79,9 @@ Js.widget.tab = Js.create({
 			// hide the tab
 			Js.use(data).setClass(that.setting.cssHidden);
 		});
-				
+		
+		this.tabs = child;
+		
 		var div2 = Js.use("<div/>").css("display", "block").appendTo(div[0]);
 	},
 	_addHeader: function(node) {
@@ -123,6 +126,7 @@ Js.widget.tab = Js.create({
 		else {
 			a.bind(this.handler, function(){
 				that.activateTab(Js.use(this).attr("href"));
+				return false;
 			});
 		}
 	},
@@ -134,6 +138,7 @@ Js.widget.tab = Js.create({
 		anchor.unbind(this.handler);
 		anchor.bind(this.handler, function(){
 			that.activateTab(Js.use(this).attr("href"));
+			return false;
 		});
 				
 		return false;
@@ -177,6 +182,7 @@ Js.widget.tab = Js.create({
 	showTab: function() {
 		if (this.status == "off") {
 			this.toolbar.show();
+			this.tabs.setClass(this.setting.cssHidden);
 			this.activeTab.setClass(this.setting.cssActive);
 		}
 		this.status = "on";
@@ -184,8 +190,7 @@ Js.widget.tab = Js.create({
 	hideTab: function() {
 		if (this.status == "on") {
 			this.toolbar.hide();
-			Js.use("div." + this.setting.cssActive, this.object).setClass(this.setting.cssHidden);
-			
+			this.tabs.setClass(this.setting.cssActive);
 		}
 		this.status = "off";
 	},
@@ -213,6 +218,8 @@ Js.widget.tab = Js.create({
 				title: title
 			}).plainHtml(content).appendTo(this.node[0]);
 			
+			this.tab.add(node[0]);
+			
 			var li = Js.use('<li/>').appendTo(this.header[0]);
 			var a = Js.use('<a/>').attr({
 				href: "#" + id,
@@ -222,6 +229,7 @@ Js.widget.tab = Js.create({
 			Js.use("<em/>").appendTo(a[0]);
 			a.text(title).bind(this.handler, function(){
 				that.activateTab(Js.use(this).attr("href"));
+				return false;
 			});
 			
 			if (!!closable) {

@@ -2002,7 +2002,7 @@ Js.util.editable = Js.create({
 			overlay: true
 		});
 		
-		var div = J.use("<div/>").setClass("data").appendTo(this.box.content[0]);
+		var div = Js.use("<div/>").setClass("data").appendTo(this.box.content[0]);
 		var p = Js.use("<label/>").plainHtml("" + this.language.message).appendTo(div[0]);
 		this.input = Js.use('<input type="text" name="util_editable_' + Jrun.prep(this.element) + '" value="' + this.setting.prefix + '"/>').appendTo(div[0]);
 		var buttonDiv = Js.use("<div/>").setClass("button").appendTo(this.box.content[0]);

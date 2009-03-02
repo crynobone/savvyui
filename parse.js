@@ -74,7 +74,7 @@ Js.parse = {
 					var callback = eval( object );
 					
 					// execute the function
-					if(Jrun.isfunction(callback)) 
+					if( Jrun.isfunction(callback) ) 
 						callback(args);
 				}
 			}

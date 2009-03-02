@@ -1,9 +1,5 @@
-/**
- * @projectDescription Create Active Hyperlink for Savvy.UI
- * @memberOf Js.util
- * @version 0.1.2
- * @author Mior Muhammad Zaki
- * @license MIT
+/* Create Active Hyperlink for Savvy.UI
+ * version: 0.1.2
  */
 
 Js.util.activeContent = Js.create({
@@ -16,78 +12,71 @@ Js.util.activeContent = Js.create({
 	option: null,
 	fnBeforeStart: null,
 	fnSuccess: null,
-	initiate: function(js) {
-		var js = Jrun.pickStrict(js, {}, "object");
-		this.element = Jrun.pick(js.element, null);
-		this.fnBeforeStart = Jrun.pick(js.beforeStart, this.fnBeforeStart);
-		this.fbSuccess = Jrun.pick(js.success, this.fnSuccess);
+	
+	initiate: function( js ) {
+		var that = this;
+		var js = Jrun.pickType( js, {}, "object" );
+		this.element = Jrun.pick( js.element, null );
+		this.fnBeforeStart = Jrun.pick( js.beforeStart, this.fnBeforeStart );
+		this.fbSuccess = Jrun.pick( js.success, this.fnSuccess );
 		
-		if(Jrun.isset(this.element)) {
+		if ( Jrun.isset(this.element) ) {
 			this._selector();
 			this._check();
 		} 
 		else {
-			var that = this;
-			this.interval = window.setInterval(function() {
+			this.interval = window.setInterval( function() {
 				that._check();
-			}, 100);
+			}, 100 );
 		}
 	},
-	destroy: function() 
-	{
-		if(Jrun.isset(this.interval)) {
-			clearInterval(this.interval);
+	
+	destroy: function() {
+		if( Jrun.isset(this.interval) ) {
+			clearInterval( this.interval );
 			this.interval == null;
 		}
 		
 		this.element = null;
 		return null;
 	},
+	
 	_selector: function() {
 		var that = this;
 		
-		Js.use(this.element).bind("click", function() {
-			var href = Js.use(this).attr("href");
-			var anchors = (Jrun.isset(href) ? href : this.href);
+		Js.use( this.element ).bind( "click", function() {
+			var href = Js.use( this ).attr( "href" );
+			var hash = ( Jrun.isset(href) ? href : this.href );
+			var ret;
 			
-			if (anchors.match(/^\#/)) {
-				var ahref = ["", anchors.substr(1)];
-			} 
-			else { 
-				var ahref = anchors.split(/\#/);
-			}
+			ret = ( hash.match(/^\#/) ? ["", hash.substr(1)] : hash.split(/\#/) ); 
 			
-			if(Jrun.isfunction(that.fnBeforeStart)) {
+			if ( Jrun.isfunction(that.fnBeforeStart) ) 
 				that.fnBeforeStart();
-			}
 			
-			if(Jrun.isset(ahref[1])) {
-				that.repeat = (ahref[1] === that.last);
+			if ( Jrun.isset(ret[1]) ) {
+				that.repeat = ( ret[1] === that.last );
 				
-				that.last = ahref[1];
-				var data = ahref[1].split(/\//);
-				that.init(data);
+				that.last = ret[1];
+				that.init( ret[1].split(/\//) );
 				
-				if(Jrun.isfunction(that.fnSuccess)) {
+				if ( Jrun.isfunction(that.fnSuccess) ) 
 					that.fnSuccess();
-				}
 			}
 		});
 	},
+	
 	_check: function() {
-		if (location.hash != this.last && location.hash !== "#") {
+		if ( location.hash != this.last && location.hash !== "#" ) {
 			this.last = location.hash;
 			
-			if (Jrun.isfunction(this.fnBeforeStart)) {
+			if ( Jrun.isfunction(this.fnBeforeStart) ) 
 				this.fnBeforeStart();
-			}
 			
-			var data = location.hash.substr(1).split(/\//);
-			this.init(data);
+			this.init( location.hash.substr(1).split(/\//) );
 			
-			if (Jrun.isfunction(this.fnSuccess)) {
+			if ( Jrun.isfunction(this.fnSuccess) ) 
 				this.fnSuccess();
-			}
 		}
 	}
 });

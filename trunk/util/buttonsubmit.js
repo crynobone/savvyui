@@ -65,14 +65,14 @@ Js.util.buttonSubmit = Js.create({
 					data: params,
 					beforeSend: function() {
 						if (Jrun.isfunction(that.setting.beforeSend)) {
-							that.setting.beforeSend();
+							that.setting.beforeSend.apply(that);
 						}
 					},
 					success: function(reply) {
 						var runDefault = true;
 						
 						if (Jrun.isfunction(that.setting.success)) {
-							runDefault = that.setting.success(reply);
+							runDefault = that.setting.success.apply(that, [reply]);
 						}
 						
 						if (runDefault !== false) {
@@ -81,7 +81,7 @@ Js.util.buttonSubmit = Js.create({
 					},
 					onError: function() {
 						if(Jrun.isfunction(that.setting.onError)) {
-							that.setting.onError();
+							that.setting.onError.apply(that);
 						}
 					}
 				});

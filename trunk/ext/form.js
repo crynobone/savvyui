@@ -72,7 +72,7 @@ Js.ext.validate = Js.create({
 		
 		if (Jrun.isfunction(fnBeforeStart)) {
 			// execute the function and free up the memory
-			contRun = fnBeforeStart(node);
+			contRun = fnBeforeStart.apply(this, [node]);
 			fnBeforeStart = null;
 		}
 		
@@ -99,7 +99,7 @@ Js.ext.validate = Js.create({
 			}
 			
 			if (Jrun.isfunction(fnOnError)) {
-				fnOnError(this.first);
+				fnOnError.apply(this);
 			}
 			
 			// stop form processing
@@ -109,7 +109,7 @@ Js.ext.validate = Js.create({
 		else {
 			// return all field data in querystring format
 			if (Jrun.isfunction(fnSuccess)) {
-				fnSuccess(this.data);
+				fnSuccess.apply(this);
 			}
 			this.cacheResult = this.data;
 			return this.data;

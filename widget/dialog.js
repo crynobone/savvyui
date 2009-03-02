@@ -48,7 +48,7 @@ Js.widget.dialog = Js.widget.panel.extend({
 		// callback to close panel
 		this.node.fadeOut("slow", function() {
 			if (Jrun.isfunction(that.setting.onClose)) {
-				that.setting.onClose();
+				that.setting.onClose.apply(that);
 			}
 			
 			that.node.remove();

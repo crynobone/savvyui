@@ -213,7 +213,7 @@ Js.widget.tab = Js.create({
 				title: title
 			}).plainHtml(content).appendTo(this.node[0]);
 			
-			this.tab.add(node[0]);
+			this.tabs.add(node[0]);
 			
 			var li = Js.use('<li/>').appendTo(this.header[0]);
 			var a = Js.use('<a/>').attr({

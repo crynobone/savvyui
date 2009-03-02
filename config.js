@@ -40,7 +40,9 @@ Js.config = {
 		},
 		editable: {
 			identifier: "Other",
-			prefix: ""
+			prefix: "",
+			beforeStart: null,
+			onUpdate: null
 		}
 	},
 	widget: {

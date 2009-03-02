@@ -33,7 +33,7 @@ Js.widget.notice = Js.widget.activity.extend({
 	{
 		var that = this;
 		if (Jrun.isfunction(this.callback)) {
-			this.callback();
+			this.callback.apply(this);
 			this.callback = null;
 		}
 		

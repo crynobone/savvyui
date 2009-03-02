@@ -22,10 +22,10 @@ Js.util.editable = Js.create({
 		}
 		return this;
 	},
-	setup: function(option) 
-	{
+	setup: function(option) {
 		var option = Jrun.pickStrict(option, {}, "object");
 		this.setting = Js.append(option, this.setting, ["lang"], true);
+		
 		if(Jrun.isset(option.lang)) {
 			this.language = Js.append(option.lang, this.language);
 		}
@@ -53,24 +53,34 @@ Js.util.editable = Js.create({
 			}
 		});
 	},
-	onModalBoxClose: function(field)
-	{
+	onModalBoxClose: function(field) {
 		var opt = [];
 		Js.use(field).children("option").each(function(index, value) {
 			opt.push(Js.use(value).val());
 		});
+		var updated = false;
 		var value = this.input.val();
 		if(Jrun.isset(value) && Jrun.trim(value) != "" && !Jrun.inArray(value, opt)) {
 			Js.use('<option selected="selected" value="' + value + '">' + value + '</option>').appendTo(field);
 			this.value = value;
+			
+			updated = true;
 		} 
 		else {
 			field.options[0].selected = true;
 		}
+		
+		if (Jrun.isfunction(this.setting.onUpdate)) {
+			this.setting.onUpdate.apply(this, [updated]);
+		}
 	},
-	getModalBox: function(field)
-	{
+	getModalBox: function(field) {
 		var that = this;
+		
+		if (Jrun.isfunction(this.setting.beforeStart)) {
+			this.setting.beforeStart.apply(this);
+		}
+		
 		var content = Js.use("<div/>");
 		
 		this.box = new Js.widget.dialog({
@@ -86,8 +96,10 @@ Js.util.editable = Js.create({
 		
 		var p = Js.use("<p/>").plainHtml("" + this.language.message).appendTo(this.box.content[0]);
 		this.input = Js.use('<input type="text" name="util_editable_' + Jrun.prep(this.element) + '" value="' + this.setting.prefix + '"/>').appendTo(this.box.content[0]);
+		
 		var submitBtn = Js.use('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(this.box.content[0]);
 		var cancelBtn = Js.use('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(this.box.content[0]);
+		
 		var box = this.box;
 		
 		box.overlay.node.click(function() {

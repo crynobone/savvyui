@@ -42,6 +42,7 @@ Js.config = {
 			identifier: "Other",
 			prefix: "",
 			beforeStart: null,
+			onBeforeUpdate: null,
 			onUpdate: null
 		}
 	},

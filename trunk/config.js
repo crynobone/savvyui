@@ -16,6 +16,7 @@ Js.config = {
 			autoExecute: true
 		}
 	},
+	
 	test: {
 		email: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 		url: /^https?:\/\/([a-z0-9-]+\.)+[a-z0-9]{2,4}.*$/,
@@ -23,6 +24,7 @@ Js.config = {
 		username: /^([a-zA-Z0-9_\.\-\+])$/,
 		postcode: /^\d{5}$/
 	},
+	
 	util: {
 		formSubmit: {
 			method: "POST",
@@ -31,6 +33,7 @@ Js.config = {
 			success: null,
 			onError: null
 		},
+		
 		buttonSubmit: {
 			method: "POST",
 			beforeStart: null,
@@ -38,6 +41,7 @@ Js.config = {
 			success: null,
 			onError: null
 		},
+		
 		editable: {
 			identifier: "Other",
 			prefix: "",
@@ -46,6 +50,7 @@ Js.config = {
 			onUpdate: null
 		}
 	},
+	
 	widget: {
 		activity: {
 			imagePath: "images/",
@@ -56,6 +61,7 @@ Js.config = {
 			background: "#fff",
 			zIndex: 5000
 		},
+		
 		datePicker: {
 			daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 			dateFormat: /^(\d{2}|\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})$/,
@@ -64,10 +70,12 @@ Js.config = {
 			fieldType: "hidden",
 			beforeStart: null
 		},
+		
 		iconizer: {
 			fileType: "png",
 			folder: "icons/"
 		},
+		
 		message: {
 			identifier: "#overlay-message",
 			cssSuccess: "message-success",
@@ -75,6 +83,7 @@ Js.config = {
 			cssError: "message-error",
 			seconds: 5
 		},
+		
 		notice: {
 			cssSuccess: "notice-success",
 			cssNote: "notice-note",
@@ -83,6 +92,7 @@ Js.config = {
 			beforeStart: null,
 			onClose: null
 		},
+		
 		panel: {
 			title: "Untitled",
 			width: null,
@@ -93,6 +103,7 @@ Js.config = {
 			allowClose: true,
 			allowMinimize: false
 		},
+		
 		tab: {
 			handler: "click",
 			identifier: ".tab",

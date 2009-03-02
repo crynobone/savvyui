@@ -1,6 +1,6 @@
 /**
  * @projectDescription Editable Dropdown for Savvy.UI
- * @version 0.0.2
+ * @version 0.0.3
  * @memberOf Js.util
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
@@ -15,6 +15,7 @@ Js.util.editable = Js.create({
 	language: null,
 	value: null,
 	input: null,
+	cacheData: null,
 	lastSelected: null,
 	initiate: function(element, option) {
 		if(!!Jrun.isset(element)) {
@@ -58,12 +59,19 @@ Js.util.editable = Js.create({
 		Js.use(field).children("option").each(function(index, value) {
 			opt.push(Js.use(value).val());
 		});
+		
+		this.cacheData = opt;
 		var updated = false;
+		var runDefault = true;
 		var value = this.input.val();
-		if(Jrun.isset(value) && Jrun.trim(value) != "" && !Jrun.inArray(value, opt)) {
+		this.value = value;
+		
+		if (Jrun.isfunction(this.setting.onBeforeUpdate)) {
+			runDefault = this.setting.onBeforeUpdate.apply(this, [field]);
+		}
+		
+		if(runDefault !== false && (Jrun.isset(value) && Jrun.trim(value) != "" && !Jrun.inArray(value, opt))) {
 			Js.use('<option selected="selected" value="' + value + '">' + value + '</option>').appendTo(field);
-			this.value = value;
-			
 			updated = true;
 		} 
 		else {
@@ -71,7 +79,7 @@ Js.util.editable = Js.create({
 		}
 		
 		if (Jrun.isfunction(this.setting.onUpdate)) {
-			this.setting.onUpdate.apply(this, [updated]);
+			this.setting.onUpdate.apply(this, [field, updated]);
 		}
 	},
 	getModalBox: function(field) {
@@ -94,11 +102,12 @@ Js.util.editable = Js.create({
 			overlay: true
 		});
 		
-		var p = Js.use("<p/>").plainHtml("" + this.language.message).appendTo(this.box.content[0]);
-		this.input = Js.use('<input type="text" name="util_editable_' + Jrun.prep(this.element) + '" value="' + this.setting.prefix + '"/>').appendTo(this.box.content[0]);
-		
-		var submitBtn = Js.use('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(this.box.content[0]);
-		var cancelBtn = Js.use('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(this.box.content[0]);
+		var div = J.use("<div/>").setClass("data").appendTo(this.box.content[0]);
+		var p = Js.use("<label/>").plainHtml("" + this.language.message).appendTo(div[0]);
+		this.input = Js.use('<input type="text" name="util_editable_' + Jrun.prep(this.element) + '" value="' + this.setting.prefix + '"/>').appendTo(div[0]);
+		var buttonDiv = Js.use("<div/>").setClass("button").appendTo(this.box.content[0]);
+		var submitBtn = Js.use('<input type="button"/>').val("Ok").setClass("submit-button").appendTo(buttonDiv[0]);
+		var cancelBtn = Js.use('<input type="button"/>').val("Cancel").setClass("cancel-button").appendTo(buttonDiv[0]);
 		
 		var box = this.box;
 		

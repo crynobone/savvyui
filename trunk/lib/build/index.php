@@ -16,6 +16,7 @@
 		'util/formsubmit',
 		'util/ticker',
 		'util/editable',
+		'util/includer',
 		'util/smartinput',
 		'widget/activity',
 		'widget/datepicker',

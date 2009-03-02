@@ -9,7 +9,7 @@
 		'lang',
 		'parse',
 		'test',
-		'ext/form',
+		'ext/validate',
 		'util/activecontent',
 		'util/buttonsubmit',
 		'util/dimension',

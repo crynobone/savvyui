@@ -1,7 +1,7 @@
 /**
  * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
  * @namespace Js
- * @version 1.1.6
+ * @version 1.1.7
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
  */
@@ -12,7 +12,7 @@
  */
 var Js = {
 	adapter: "jQuery-1.2.6",
-	version: "1.1.6",
+	version: "1.1.7",
 	use: null,
 	debug: {},
 	data: {},

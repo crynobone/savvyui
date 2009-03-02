@@ -1,9 +1,5 @@
-/**
- * @projectDescription Panel for Savvy.UI
- * @version 0.2.1
- * @memberOf Js.widget
- * @author Mior Muhammad Zaki crynobone@gmail.com
- * @license MIT
+/* Panel for Savvy.UI
+ * version: 0.2.1
  */
 
 Js.widget.panel = Js.create({
@@ -19,143 +15,164 @@ Js.widget.panel = Js.create({
 	content: null,
 	footer: null,
 	status: "normal",
-	initiate: function(option) {
-		if (Jrun.isset(option)) {
-			this.init(option);
-		}
+	
+	initiate: function( option ) {
+		if ( Jrun.isset(option) ) 
+			this.init( option );
+		
+		return this;
 	},
-	setup: function(option) {
-		var option = Jrun.pickStrict(option, {}, "object");
-		this.setting = Js.append(option, this.setting);
+	
+	setup: function( option ) {
+		var option = Jrun.pickType( option, {}, "object" );
+		this.setting = Js.append( option, this.setting );
+		
+		return this;
 	},
+	
 	_prepSetting: function() {
-		this.renderTo = Jrun.pick(this.setting.renderTo, "body:eq(0)");
-		this.element = this.setting.element;	
+		this.renderTo = Jrun.pick( this.setting.renderTo, "body:eq(0)" );
+		this.element = this.setting.element;
 	},	
+	
 	init: function(option) {
 		var that = this;
 		
-		this.setup(option);
-		this.setting = Js.append(this.setting, Js.config.widget[this.appName]);
+		this.setup( option );
+		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this._prepSetting();
 		
 		// set renderTo element
-		if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) { 
-			this.renderTo = Js.use(this.renderTo);
-		} else if (!this.renderTo || !this.renderTo.nodeType) {
-			this.renderTo = Js.use("body").eq(0);
-		}
+		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) 
+			this.renderTo = Js.use( this.renderTo );
+		else if ( !this.renderTo || !this.renderTo.nodeType ) 
+			this.renderTo = Js.use( "body" ).eq(0);
 		
 		this._load();
 	},
+	
 	_load: function() {
 		var that = this;
 		
 		// render panel and hide it
-		this.node = Js.use("<div/>").attr({
-			id: this.element + "_panel",
-			className: "widget-panel"
-		}).appendTo(this.renderTo[0]);
+		this.node = Js.use( "<div/>" )
+			.attr( "id", this.element + "_panel" )
+			.setClass( "widget-panel" )
+			.appendTo( this.renderTo[0] );
 		
 		// set panel width
-		if (Jrun.isset(this.setting.width)) {
-			this.node.css("width", this.setting.width + "px");
-		}
+		if ( Jrun.isset(this.setting.width) ) 
+			this.node.css( "width", this.setting.width + "px" );
 		
 		// render header
-		this.header = Js.use("<div/>").addClass("panel-header").appendTo(this.node[0]);
-		// render content
-		this.container = Js.use("<div/>").addClass("panel-content-container").appendTo(this.node[0]);
-		// render footer
-		this.footer = Js.use("<div/>").css({
-			width: "100%",
-			height: "15px"
-		}).appendTo(this.node[0]);
+		this.header = Js.use( "<div/>" )
+			.addClass( "panel-header" )
+			.appendTo( this.node[0] );
 		
+		// render content
+		this.container = Js.use( "<div/>" )
+			.addClass( "panel-content-container" )
+			.appendTo( this.node[0] );
+		
+		// render footer
+		this.footer = Js.use( "<div/>" )
+			.css({
+				width: "100%",
+				height: "15px"
+			})
+			.appendTo( this.node[0] );
 		
 		// set panel height
-		if (Jrun.isset(this.setting.height)) {
+		if ( Jrun.isset(this.setting.height) ) 
 			this.container.css("height", this.setting.height + "px");
-		}
 		
 		// render header container for close and minimize button
-		var ext = Js.use("<div/>").attr({
-			className: "panel-ext"
-		}).css({
-			"cssFloat": "right", 
-			"overflow": "hidden", 
-			"width": "28px", 
-			"height": "20px", 
-			"textAlign": "right"
-		}).appendTo(this.header[0]);
+		var ext = Js.use( "<div/>" )
+			.setClass( "panel-ext" )
+			.css({
+				"cssFloat": "right", 
+				"overflow": "hidden", 
+				"width": "28px", 
+				"height": "20px", 
+				"textAlign": "right"
+			})
+			.appendTo( this.header[0] );
 		
 		// render header title
-		var title = Js.use("<div/>").addClass("panel-title").text(this.setting.title).css({
-			"overflow": "hidden", 
-			"height": "20px"
-		}).appendTo(this.header[0]);
+		var title = Js.use( "<div/>" )
+			.addClass( "panel-title" )
+			.text( this.setting.title )
+			.css({
+				"overflow": "hidden", 
+				"height": "20px"
+			})
+			.appendTo( this.header[0] );
 		
 		// render Close-Button 
-		var tclose = Js.use("<span/>").text("x").css({
-			"width": "14px",
-			"display": "none"
-		}).appendTo(ext[0]);
+		var tclose = Js.use( "<span/>" )
+			.text("x")
+			.css({
+				"width": "14px",
+				"display": "none"
+			})
+			.appendTo( ext[0] );
 		
 		// render Minimize-Button
-		var tmin = Js.use("<span/>").text("_").css({
-			"width": "14px",
-			"display": "none"
-		}).appendTo(ext[0]);
+		var tmin = Js.use( "<span/>" )
+			.text("_")
+			.css({
+				"width": "14px",
+				"display": "none"
+			})
+			.appendTo( ext[0] );
 		
 		// Enable Minimize-Button option
-		if (!!this.setting.allowMinimize) {
-			tmin.addClass("panel-min").css({
+		if ( !!this.setting.allowMinimize ) {
+			tmin.addClass( "panel-min" ).css({
 				"display": "block", 
 				"cursor": "pointer"
-			}).bind("click", function() {
-				if (that.status == "normal") {
-					
-					that.container.slideUp("normal");
+			}).bind( "click", function() {
+				if ( that.status == "normal" ) {
+					that.container.slideUp( "normal" );
 					that.status = "minimize";
 				} 
 				else {
-					that.container.slideDown("normal");
+					that.container.slideDown( "normal" );
 					that.status = "normal";
 				}
 			});
+		} else 
+			tmin.addClass( "panel-disabled" );
 			
-		} else {
-			tmin.addClass("panel-disabled");
-		}
 		this.minimizeButton = tmin;
 		
 		// Enable Close-Button option
-		if (!!this.setting.allowClose) {
-			tclose.addClass("panel-close").css({
+		if ( !!this.setting.allowClose ) {
+			tclose.addClass( "panel-close" ).css({
 				"display": "block",
 				"cursor": "pointer"
 			}).click(function() {
 				that.closePanel();
 			});
-		} else {
-			tclose.addClass("panel-disabled");
-		}
+		} else 
+			tclose.addClass( "panel-disabled" );
+		
 		this.closeButton = tclose;
 		
 		// THIS IS WHERE YOUR CONTENT SHOULD GO
-		this.content = Js.use("<div/>").attr({
+		this.content = Js.use( "<div/>" ).attr({
 			id: this.element, 
 			className: "panel-content"
-		}).appendTo(this.container[0]);
+		}).appendTo( this.container[0] );
 		
 		try {
-			this.content.html(this.setting.content);
+			this.content.html( this.setting.content );
 		} catch(e) {
-			this.content.plainHtml(this.setting.content);
+			this.content.plainHtml( this.setting.content );
 		}
 		
 		// set height and scrolling option for content CONTAINER
-		if (Jrun.isset(this.setting.height) && !!this.setting.scrolling) {
+		if ( Jrun.isset(this.setting.height) && !!this.setting.scrolling ) {
 			this.content.css({
 				"height": (this.setting.height - (23 + 21)) + "px",
 				"overflow": "auto"
@@ -163,7 +180,7 @@ Js.widget.panel = Js.create({
 		}
 		
 		// make the panel visible
-		this.node.show("slow");
+		this.node.show( "slow" );
 		
 		return this;
 	},
@@ -171,17 +188,18 @@ Js.widget.panel = Js.create({
 		var that = this;
 		
 		// callback to close panel
-		this.node.fadeOut("slow", function() {
-			if (Jrun.isfunction(that.setting.onClose)) {
-				that.setting.onClose.apply(that);
-			}
+		this.node.fadeOut( "slow", function() {
+			if ( Jrun.isfunction(that.setting.onClose) ) 
+				that.setting.onClose.apply( that );
 			
 			that.node.remove();
 		});
+		
 		return this;
 	},
+	
 	_fixResize: function() {
-		if (Jrun.isset(this.setting.height) && !!this.setting.scrolling) {
+		if ( Jrun.isset(this.setting.height) && !!this.setting.scrolling ) {
 			this.content.css({
 				"height": (this.setting.height - (23 + 21)) + "px", 
 				"overflow": "auto"

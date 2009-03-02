@@ -11,8 +11,8 @@
  * @alias Js
  */
 var Js = {
-	adapter: "jQuery-1.2.6",
-	version: "1.1.7",
+	adapter: "jQuery-1.3.2",
+	version: "1.2.0-draft",
 	use: null,
 	debug: {},
 	data: {},
@@ -55,9 +55,9 @@ Js.toString = function() {
  * @param {Object} data
  * @return {Object}
  */
-Js.nue = function(data, deep) {
+Js.nue = function(data, depth) {
 	// data have to be an object
-	var deep = Jrun.pickStrict(deep, 1, "number");
+	var deep = Jrun.pickStrict(depth, 1, "number");
 	var type = Jrun.typeOf(data);
 	if (Jrun.inArray(type, ["object", "array"])) {
 		// prepare result object
@@ -68,12 +68,12 @@ Js.nue = function(data, deep) {
 			var result = [];
 		}
 		
-		deep--;
+		--depth;
 		// loop data object name
 		for (var method in data) {
 			if (data.hasOwnProperty(method)) {
-				if (deep > 0) {
-					result[method] = Js.nue(result[method], deep);
+				if (depth > 0) {
+					result[method] = Js.nue(result[method], depth);
 				} 
 				else {
 				 	result[method] = data[method];

@@ -1,14 +1,5 @@
-/**
- * @projectDescription Savvy.UI JavaScript extends the functionality of DOM manipulation via jQuery Framework
- * @namespace Js
- * @version 1.1.7
- * @author Mior Muhammad Zaki crynobone@gmail.com
- * @license MIT
- */
-
-/**
- * Global Object for Savvy.UI
- * @alias Js
+/* Map Savvy.UI Global Namespace Object
+ * namespace: Js
  */
 var Js = {
 	adapter: "jQuery-1.3.2",
@@ -38,131 +29,74 @@ var Js = {
 	}
 };
 
-/**
- * Display Savvy.UI current version
- * 
- * @alias Js.toString
- * @return {String}
- */
 Js.toString = function() {
 	return ["Savvy.UI", "version", Js.version, "using", Js.adapter].join(" ");	
 };
 
-/**
- * Return new object without adding any reference to the old object
- * 
- * @alias Js.nue
- * @param {Object} data
- * @return {Object}
- */
-Js.nue = function(data, depth) {
-	// data have to be an object
-	var deep = Jrun.pickStrict(depth, 1, "number");
-	var type = Jrun.typeOf(data);
-	if (Jrun.inArray(type, ["object", "array"])) {
-		// prepare result object
-		if (type == "object") {
-			var result = {};
-		}
-		else {
-			var result = [];
-		}
-		
+Js.nue = function( data, depth ) {
+	var depth = Jrun.pickType( depth, 1, "number" );
+	var type = Jrun.typeOf( data );
+	
+	if ( Jrun.inArray(type, ["object", "array"]) ) {
+		var ret = ( type == "object" ? {} : [] );
 		--depth;
-		// loop data object name
-		for (var method in data) {
-			if (data.hasOwnProperty(method)) {
-				if (depth > 0) {
-					result[method] = Js.nue(result[method], depth);
-				} 
-				else {
-				 	result[method] = data[method];
-				}
-			}
+		
+		for ( var method in data ) {
+			if ( data.hasOwnProperty(method) ) 
+				ret[method] = ( depth > 0 ? Js.nue(ret[method], depth) : data[method] );
 		}
 		
-		return result;
+		return ret;
 	}
-	else {
-		// data not an object, just return the original data
+	else 
 		return data;
-	}
 };
 
-/**
- * Append data object with value method
- * 
- * @param {Object} data
- * @param {Object} value
- * @param {Object} filter
- */
-Js.append = function(data, value, filter, invert) {
-	var filter = Jrun.pickStrict(filter, null, "array");
-	var invert = Jrun.pickStrict(invert, false, "boolean");
+Js.append = function( data, base, filter, invert ) {
+	var filter = Jrun.pickType( filter, null, "array" );
+	var invert = Jrun.pickType( invert, false, "boolean" );
 	
-	if (Jrun.typeOf(data) !== "object") {
+	if ( Jrun.typeOf( data ) !== "object" )
 		data = {};
-	}
 	
-	if (Jrun.typeOf(data) !== "object") {
-		data = {};
-	}
-	
-	var result = data;
+	var ret = data;
 	
 	// loop value's method
-	for (var method in value) {
+	for ( var method in base ) {
 		// if data doesn't have the method add it
-		var valid = (Jrun.isnull(filter) || Jrun.inArray(method, filter));
-		var notDuplicate = (!data.hasOwnProperty(method) && value.hasOwnProperty(method));
-		var valid = (!!invert ? !valid : valid);
+		var valid = ( Jrun.isnull(filter) || Jrun.inArray(method, filter) );
+		var unique = ( !data.hasOwnProperty(method) && base.hasOwnProperty(method) );
+		var valid = ( !!invert ? !valid : valid );
 		 
-		if (!!notDuplicate && !!valid) {
-			result[method] = value[method];
-		}
+		if ( !!unique && !!valid )
+			ret[method] = base[method];
 	}
-		
-	return result;
 	
+	return ret;
 };
 
-Js.filter = function (data, filter) {
-	return Js.append(data, {}, filter);
-};
-
-/**
- * Debugging engine for Savvy.UI
- * 
- * @alias Js.debug
- */
+// Debugging engine for Savvy.UI
 Js.debug = {
-	/* Set to true to display error message in the output
-	 * e.g: Js.debug.enable = true;
-	 */
+	// Set to true to display error message in the output
 	enable: false,
-	/* Set to true to display all log for dev purpose
-	 * e.g: Js.debug.dev = true;
-	 */
+	
+	// Set to true to display all log for dev purpose
 	dev: false,
-	/* error/log stack:
-	 * - error[] contain all errors
-	 * - log[] contain all logs 
-	 */
+	
+	// error/log stack
 	data: {
+		// contain all errors
 		error: [],
+		// cocntain all logs
 		log: []
 	},
-	/**
-	 * Log a message
-	 * 
-	 * @alias Js.debug.log
-	 * @param {String} text
-	 */
-	log: function(text) {
+	
+	// Log a message/note
+	log: function( text ) {
 		// push log to stack
-		this.data.log.push(text);
+		this.data.log.push( text );
 		
-		if (!!this.dev) {
+		if ( !!this.dev ) {
 			try {
 				console.log(text);
 			}
@@ -171,24 +105,19 @@ Js.debug = {
 			}
 		}
 	},
-	/**
-	 * Log an error
-	 * 
-	 * @alias Js.debug.error
-	 * @param {String} text
-	 */
-	error: function(text) 
-	{
+	
+	// Log an error
+	error: function( text ) {
 		// push error to stack
-		this.data.error.push(text);
+		this.data.error.push( text );
 		
 		// if Js.debug.enable is true, display the error
-		if (!!this.enable) {
+		if ( !!this.enable ) {
 			try {
 				// good browser come with console
 				console.log(text);
 			} 
-			catch (e) {
+			catch(e) {
 				// browser doesn't support console so alert
 				alert(text);
 			}
@@ -196,9 +125,8 @@ Js.debug = {
 	}
 };
 
-/**
- * Misc function for Savvy.UI
- * @namespace Jrun
+/* Misc function for Savvy.UI
+ * namespace: Jrun
  */
 var Jrun = {
 	behaviour: function() {
@@ -216,72 +144,49 @@ var Jrun = {
 				opera: false
 			};
 			// detect IE
-			items.ie = items[win.XMLHttpRequest ? "ie7" : "ie6"] = (win.ActiveXObject ? true : false);
+			items.ie = items[win.XMLHttpRequest ? "ie7" : "ie6"] = ( win.ActiveXObject ? true : false );
 			// detect KHTML
-			items.khtml = ((doc.childNodes && !doc.all && !navigator.taintEnabled) ? true : false);
+			items.khtml = ( (doc.childNodes && !doc.all && !navigator.taintEnabled) ? true : false );
 			// detect Gecko
-			items.gecko = (doc.getBoxObjectFor != null ? true : false);
+			items.gecko = ( doc.getBoxObjectFor != null ? true : false );
 			// detect Opera
-			items.opera = (items.opera ? true : false);
+			items.opera = ( items.opera ? true : false );
 			// return the object
 			return items;
 		}();
 	}(),
-	/**
-	 * Camelize string input
-	 * <br>e.g: background-color => backgroundColor
-	 * 
-	 * @alias Jrun.camelize
-	 * @param {String} data
-	 * @return {String} string with camelize format
-	 */
-	camelize: function(data) {
-		var values = data.split(/\-/);
+	
+	// Camelize string input
+	camelize: function( data ) {
+		var val = data.split(/\-/);
 		
 		// if array only have one value
-		if (values.length === 1) {
-			return values[0];
-		}
+		if ( val.length === 1 )
+			return val[0];
 		
-		var result = (data.indexOf('-') == 0 ? values[0].charAt(0).toUpperCase() + values[0].substr(1) : values[0]);
+		var ret = ( data.indexOf('-') == 0 ? val[0].charAt(0).toUpperCase() + val[0].substr(1) : val[0] );
 		
-		jQuery.each(values, function(index, value) {
-			if (index > 0) {
-				result = result + value.charAt(0).toUpperCase() + value.substr(1);
-			}
+		jQuery.each(val, function( i, v ) {
+			if ( i > 0 )
+				ret = ret + v.charAt(0).toUpperCase() + v.substr(1);
 		});
 		
-		return result;
+		return ret;
 	},
-	/**
-	 * Open a URL using JavaScript
-	 * 
-	 * @alias Jrun.href
-	 * @param {String} [url] set the hyperlink of destination path 
-	 * @param {String} [target] set the target to show the page, if applicable
-	 */
-	href: function(url, target) {
-		if (this.trim(url) !== "") {
-			if (this.isnull(target)) {
-				// when target is not define load the url in the same window
+	
+	// Open a URL using JavaScript
+	href: function( url, target ) {
+		if ( this.trim(url) !== "" ) {
+			if ( this.isnull(target) ) 
 				window.location.href = url;
-			} 
-			else {
-				// load the url in the specified target
-				window.open(url, target);
-			}
+			else 
+				window.open( url, target );
 		} 
-		else {
+		else 
 			Js.debug.error("Jrun.href: failed to load page " + url);
-		}
 	},
-	/**
-	 * Encode HTML entities from any given string
-	 * 
-	 * @alias Jrun.htmlEncode
-	 * @param {String} [value] any string with HTML entities
-	 * @return {String}
-	 */
+	
+	// Encode HTML entities from any given string
 	htmlEncode: function(value) {
 		return value
 			.replace(/&/g, "&amp;")
@@ -289,13 +194,8 @@ var Jrun = {
 			.replace(/>/g, "&gt;")
 			.replace(/\+/g, "&#43;");
 	},
-	/**
-	 * Decode HTML entities from any given string
-	 * 
-	 * @alias Jrun.htmlDecode
-	 * @param {String} value
-	 * @return {String}
-	 */
+	
+	// Decode HTML entities from any given string
 	htmlDecode: function(value) {
 		return value
 			.replace(/&amp;/g, "&")
@@ -303,17 +203,11 @@ var Jrun = {
 			.replace(/&gt;/g, ">")
 			.replace(/&#43;/g, "+");
 	},
-	/**
-	 * Check whether the value is in an array
-	 * 
-	 * @alias Jrun.inArray 
-	 * @param {String} value
-	 * @param {Array} data
-	 * @return {Boolean}
-	 */
-	inArray: function(value, data) {
-		for(var index = 0; index < data.length && !!data[index]; index++) {
-			if(data[index] === value) {
+	
+	// Check whether the value is in an array
+	inArray: function( value, data ) {
+		for ( var i = 0; i < data.length && !!data[i]; i++ ) {
+			if ( data[i] === value ) {
 				return true;
 				break;
 			}
@@ -321,19 +215,11 @@ var Jrun = {
 		
 		return false;
 	},
-	/**
-	 * Check whether the value is in an array, check validity based on Regular Expression
-	 * 
-	 * @alias Jrun.inArrayGrep
-	 * @param {RegExp} value
-	 * @param {Array} data
-	 * @return {Boolean}
-	 */
-	inArrayGrep: function(value, data) {
-		for(var index = 0; index < data.length && !!data[index]; index++) 
-		{
-			if(data[index].match(value)) 
-			{
+	
+	// Check whether the value is in an array, check validity based on Regular Expression
+	inArrayGrep: function( value, data ) {
+		for ( var i = 0; i < data.length && !!data[i]; i++ ) {
+			if ( data[i].match(value) ) {
 				return true;
 				break;
 			}
@@ -341,128 +227,86 @@ var Jrun = {
 		
 		return false;
 	},
-	/**
-	 * Get the indexOf based on value in an array
-	 * 
-	 * @alias Jrun.indexOf
-	 * @param {Object} value
-	 * @param {Array} data
-	 * @return {Number}
-	 */
-	'indexOf': function(value, data) {
-		for (var index = data.length; index-- && data[index] !== value;);
-		return index;
+	
+	// Get the indexOf based on value in an array
+	'indexOf': function( value, data ) {
+		for ( var i = data.length; i-- && data[i] !== value; );
+		return i;
 	},
-	/**
-	 * Get the indexOf based on value in an array
-	 * 
-	 * @alias Jrun.indexOfGrep
-	 * @param {RegExp} value
-	 * @param {Array} data
-	 * @return {Number}
-	 */
-	indexOfGrep: function(value, data) {
-		for (var index = data.length; index-- && !data[index].match(value););
-		return index;
+	// Get the indexOf based on value in an array
+	indexOfGrep: function( value, data ) {
+		for ( var i = data.length; i-- && !data[i].match(value); );
+		return i;
 	},
-	/**
-	 * Check if data is not defined
-	 * 
-	 * @alias Jrun.isnull
-	 * @param {Object} data
-	 * @return {Boolean}
-	 */
-	isnull: function(data) {
-		return (typeof(data) == "undefined" || data == null);
+	
+	// Check if data is not defined
+	isnull: function( data ) {
+		return ( typeof(data) == "undefined" || data == null );
 	},
-	/**
-	 * Check if data is defined
-	 * 
-	 * @alias Jrun.isset
-	 * @param {Object} data
-	 * @return {Boolean}
-	 */
-	isset: function(data) {
-		return !this.isnull(data);
+	
+	// Check if data is defined
+	isset: function( data ) {
+		return !this.isnull( data );
 	},
-	/**
-	 * Check whether the passed value is a function
-	 * <br>Replace with jQuery.isFunction
-	 * 
-	 * @alias Jrun.isfunction
-	 * @deprecated
-	 * @param {Object} data
-	 * @return {Boolean}
+	
+	/* Check whether the passed value is a function
+	 * Deprecated: Replace with jQuery.isFunction
 	 */
-	isfunction: function(data) {
-		return jQuery.isFunction(data);
+	isfunction: function( data ) {
+		return jQuery.isFunction( data );
 	},
-	/**
-	 * Trim left of a string
-	 * @alias Jrun.ltrim
-	 * @param {String} value
-	 * @return {String}
-	 */
-	ltrim: function(value) {
-		return new String(value).replace(/^\s+/g, "");
+	
+	// Trim left of a string
+	ltrim: function( value ) {
+		return new String( value ).replace( /^\s+/g, "" );
 	},
-	parameter: function(data, length, values) {
-		var data = jQuery.makeArray(data);
-		var values = Jrun.pickStrict(values, [], "array");
+	
+	parameter: function( data, length, type ) {
+		var data = jQuery.makeArray( data );
+		var type = Jrun.pickType( type, [], "array" );
 		
-		if (data.length === length) {
-			var result = true;
-			jQuery.each(data, function(index, value) {
-				if (values[index] !== true && Jrun.typeOf(value) !== values[index]) {
-					result = false;
-				}
+		if ( data.length === length ) {
+			var ret = true;
+			
+			jQuery.each(data, function( i, v ) {
+				if ( type[i] !== true && Jrun.typeOf(v) !== type[i] ) 
+					ret = false;
 			});
 			
-			return result;
-		} 
-		else {
-			return false;
+			return ret;
 		}
+		else 
+			return false;
 	},
-	/**
-	 * Pick the first arguments that is defined
-	 * 
-	 * @alias Jrun.pick
-	 * @param {Object} js
-	 * @return {Object}
-	 */
-	pick: function(js) {
-		var data = jQuery.makeArray(arguments);
+	
+	// Pick the first arguments that is defined
+	pick: function( js ) {
+		var data = jQuery.makeArray( arguments );
 		
-		for(var index = 0; index < data.length; index++) {
-			var value = data[index];
+		for ( var i = 0; i < data.length; i++ ) {
+			var ret = data[i];
             
-            if (Jrun.isset(value)) {
-                return value;
+            if ( Jrun.isset(ret) ) {
+                return ret;
 				break;
             }
 		};
 		
 		return null;
 	},
-	/**
-	 * Pick the first arguments that is defined and typeof match the last arguments
-	 * 
-	 * @alias Jrun.pickStrict
-	 * @param {Object} [js]
-	 * @return {Object}
-	 */
-	pickStrict: function(js) {
-		var data = jQuery.makeArray(arguments);
+	
+	// Pick the first arguments that is defined and typeof match the last arguments
+	pickType: function( js ) {
+		var data = jQuery.makeArray( arguments );
 		var length = data.length;
 		var last = data[(length - 1)];
 		
-		for(var index = 0; index < (length - 1); index++) {
-			var value = data[index];
+		for ( var i = 0; i < (length - 1); i++ ) {
+			var ret = data[i];
             
-            if (Jrun.isset(value)) {
-                if (this.typeOf(value) == last) {
-                    return value;
+            if ( Jrun.isset(ret) ) {
+                if ( this.typeOf(ret) == last ) {
+                    return ret;
 					break;
                 }
             }
@@ -470,28 +314,22 @@ var Jrun = {
 		
 		return null;
 	},
-	/**
-	 * Pick the first arguments that is defined and match Regular Expression passed in the last arguments
-	 * 
-	 * @alias Jrun.pickGrep
-	 * @param {Object} js
-	 * @return {Object}
-	 */
-	pickGrep: function(js) {
-		var data = jQuery.makeArray(arguments);
+	
+	// Pick the first arguments that is defined and match Regular Expression passed in the last arguments
+	pickGrep: function( js ) {
+		var data = jQuery.makeArray( arguments );
 		var length = data.length;
 		var last = data[(length - 1)];
 		
-		if (this.typeOf(last) == "string") {
+		if ( this.typeOf(last) == "string" ) 
 			last = new RegExp(last);
-		}
 		
-		for(var index = 0; index < (length - 1); index++) {
-			var value = data[index];
+		for ( var i = 0; i < (length - 1); i++ ) {
+			var ret = data[i];
             
-            if (Jrun.isset(value)) {
-                if (!!value.match(last)) {
-                    return value;
+            if ( Jrun.isset(ret) ) {
+                if ( !!ret.match(last) ) {
+                    return ret;
 					break;
                 }
             }
@@ -499,228 +337,156 @@ var Jrun = {
 		
 		return null;
 	},
-	/**
-	 * @alias Jrun.prettyList
-	 * @param {Array} data
-	 * @param {String} between
-	 * @param {String} last
-	 * @return {String}
-	 */
-	prettyList: function(data, between, last) {
+	
+	prettyList: function( data, between, last ) {
 		var length = data.length;
-		var result = new String;
+		var ret = new String;
 		
-		if (length > 1) {
-			jQuery.each(data, function(index, value) {
-				result = [result, (index == 0 ? "" : (index == (length - 1) ? last : between)), value].join("");
+		if ( length > 1 ) {
+			jQuery.each(data, function( i, v ) {
+				ret = [ret, ( i == 0 ? "" : ( i == (length - 1) ? last : between) ), v].join("");
 			});
 		} 
-		else {
-			result = data[0];
-		}
+		else 
+			ret = data[0];
 		
-		return result;
+		return ret;
 	},
-	/**
-	 * @alias Jrun.rand
-	 * @param {Object} js
-	 */
-	rand: function(js) {
+	
+	rand: function( js ) {
 		var data = arguments;
 		var length = 0;
 		var offset = 0;
 		
-		if (data.length === 2) {
+		if ( data.length === 2 ) {
 			offset = data[0];
 			length = data[1];
 		} 
-		else if (data.length === 1) {
+		else if ( data.length === 1 ) 
 			length = data[0];
-		}
 		
-		return (Math.floor(Math.random() * length) + offset);
+		return ( Math.floor(Math.random() * length) + offset );
 	},
-	/** 
-	 * Trim right of a string.
-	 * 
-	 * @alias Jrun.rtrim
-	 * @param {String} value
-	 * @return {String}
-	 */
-	rtrim: function(value) {
-		return new String(value).replace(/\s$/g, "");
+	
+	// Trim right of a string.
+	rtrim: function( value ) {
+		return new String( value ).replace( /\s$/g, "" );
 	},
-	/**
-	 * Striptags work similiar to strip_tags() in PHP
-	 * <br>strip any html attribute from a string
-	 * 
-	 * @alias Jrun.stripTags
-	 * @param {String} value
-	 * @return {String}
-	 */
-	stripTags: function(value) {
-		return new String(value).replace(/<([^>]+)>/g, "");
+	
+	// Striptags work similiar to strip_tags() in PHP
+	stripTags: function( value ) {
+		return new String( value ).replace( /<([^>]+)>/g, "" );
 	},
-	/**
-	 * Parse input string value as Number using parseInt
-	 * 
-	 * @alias Jrun.toNumber
-	 * @param {Object} data
-	 * @return {Number}
-	 */
-	toNumber: function(data) {
+	
+	// Parse input string value as Number using parseInt
+	toNumber: function( data ) {
 		// return possible integer value of a string, if not a string then return self
-		return (typeof(data) == "string" ? parseInt(data, 10) : data);
+		return ( typeof(data) == "string" ? parseInt( data, 10 ) : data );
 	},
-	/**
-	 * Parse input string value as Float using parseFloat
-	 * 
-	 * @alias Jrun.toFloat
-	 * @param {String} data
-	 * @return {Float}
-	 */
-	toFloat: function(data) {
-		return (typeof(data) == "string" ? parseFloat(data, 10) : data);
+	
+	// Parse input string value as Float using parseFloat
+	toFloat: function( data ) {
+		return ( typeof(data) == "string" ? parseFloat( data, 10 ) : data );
 	},
-	/**
-	 * @alias Jrun.toProperCase
-	 * @param {String} data
-	 * @return {String}
-	 */
-	toProperCase: function(data) {
-		var array = data.split(/ /g);
-		var result = [];
+	
+	toProperCase: function( data ) {
+		var val = data.split(/ /g);
+		var ret = [];
 		
-		jQuery.each(array, function(index, value) {
-			var val = value.toString();
-			var first = val.substr(0, 1).toUpperCase();
-			var other = val.substr(1);
+		jQuery.each(val, function(i, v) {
+			var v = v.toString();
+			var first = v.substr( 0, 1 ).toUpperCase();
+			var other = v.substr(1);
 			
-			result.push([first, other].join(""));
+			ret.push( [first, other].join("") );
 		});
 		
-		return result.join(" ");
+		return ret.join(" ");
 	},
-	/**
-	 * convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
-	 * @alias Jrun.toArray
-	 * @param {Object, Array} [data] the source of data to be converted to Array 
-	 * @param {Number} [offset] offset where to start converting to array, if applicable
-	 * @return {Array}
-	 */  
-	toArray: function(data, offset) {
-		var offset = (this.isnull(offset) || offset < 1 ? 0 : offset);
+	
+	// Convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
+	toArray: function( data, offset ) {
+		var offset = ( this.isnull(offset) || offset < 1 ? 0 : offset );
+		var len = {
+			offset: 0,
+			data: 0
+		};
+		var ret = [];
 		
 		// return empty array
-		if (this.isnull(data)) {
-			return [];
-		}
-		else {
+		if ( this.isset(data) ) {
 			// ensure the offset
-			var offsetLength = (data.length - offset);
-			var dataLength = data.length;
-			var result = [];
+			len.offset = ( data.length - offset );
+			len.data = data.length;
 			
 			// loop and prepare r to be return
-			while (offsetLength > 0) {
-				--offsetLength;
-				--dataLength;
-				result[offsetLength] = data[dataLength];
+			while ( len.offset > 0 ) {
+				--len.offset;
+				--len.data;
+				ret[len.offset] = data[len.data];
 			}
-			return result;
 		}
+		
+		return ret;
 	},
-	/**
-	 * Trim both left and right of a string.
-	 * <br>replace with jQuery.trim();
-	 * @alias jQuery.trim
-	 * @deprecated
-	 * @param {String} data
-	 * @return {String}
-	 */
-	trim: function(data) {
-		return jQuery.trim(data); 
+	
+	// Trim both left and right of a string.
+	trim: function( data ) {
+		return jQuery.trim( data ); 
 	},
-	/**
-	 * Return the typeof passed argument, extending JavaScript default typeof
-	 * @alias Jrun.typeOf
-	 * @param {Object} data
-	 * @return {String}
-	 */
-	typeOf: function(data) {
-		if (Jrun.isnull(data)) {
+	
+	// Return the typeof passed argument, extending JavaScript default typeof
+	typeOf: function( data ) {
+		if ( Jrun.isnull(data) ) 
 			return "undefined";
-		}
 		else {
-			var value = Object.prototype.toString.call(data).match(/(\w+)\]/)[1];
-			
-			if (value == "HTMLDocument") {
-				return "element";
-			}
-			else {
-				return value.toLowerCase();
-			}
-			
+			var val = Object.prototype.toString.call(data).match(/(\w+)\]/)[1];
+			return ( val == "HTMLDocument" ? "element" : val.toLowerCase() );
 		}
 	},
-	/** 
-	 * return only unique value of an array
-	 * @alias Jrun.unique
-	 * @param {Object, Array} [data]
-	 * @param {Boolean} [repeat]
-	 */
-	unique: function(data, repeat) {
+	
+	// return only unique value of an array
+	unique: function( data, repeat ) {
 		// when option equal true it only reject value which is repeating
-		var repeat = this.pick(repeat, false);
-		var result = [];
+		var repeat = this.pick( repeat, false );
+		var ret = [];
 		
 		// loop the array
-		jQuery.each(data, function(index, value) {
-			if (!repeat) {
+		jQuery.each(data, function( i, v ) {
+			if ( !repeat ) {
 				// add only if unique
-				if (!Jrun.inArray(value, result)) {
-					result.push(value);
-				}
+				if ( !Jrun.inArray(v, ret) ) 
+					ret.push(v);
 			} 
 			else {
-				if (index == 0) {
-					result.push(value);
-				}
-				else if (value !== Jrun.trim(data[index - 1])) {
-					result.push(value);
-				}
+				if ( i == 0 ) 
+					ret.push(v);
+				else if ( v !== Jrun.trim(data[i - 1]) ) 
+					ret.push(v);
 			}
 		});
 		
-		return result;
+		return ret;
 	},
+	
 	prep: function(data) {
-		if (data.match(/^(#|\.)?(.*)$/gi)) {
-			return RegExp.$2;
-		}
-		else {
-			return data;
-		}
+		return ( data.match(/^(#|\.)?(.*)$/gi) ? RegExp.$2 : data );
 	}
 };
 
-/**
- * Create a new Class with some simple Object-Oriented capability<br>
+/*
+ * Create a new Class with some simple Object-Oriented capability
  * Based from Simple JavaScript Inheritance by John Resig http://ejohn.org/blog/simple-javascript-inheritance/ 
- * @param {Object} js
- * @return {Object}
  */
-Js.create = function(js) {
+Js.create = function( js ) {
 	var base = function() {};
 	base.prototype.destroy = function() {
 		// remove all properties and method for this object
-		for (var method in this) {
+		for ( var method in this ) 
 			this[method] = null;
-		}
 				
-		for (var method in this.prototype) {
+		for ( var method in this.prototype ) 
 			this.prototype[method] = null;
-		}
 			
 		// delete this (which doesn't actually totally delete it
 		delete this;
@@ -737,93 +503,86 @@ Js.create = function(js) {
 	// Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
 	function Class() {
 		// initiate the __construct function if construct available
-		if (!initialized && !!this.initiate) {
-			this.initiate.apply(this, Jrun.toArray(arguments));
-			
-		}
+		if ( !initialized && !!this.initiate ) 
+			this.initiate.apply( this, Jrun.toArray(arguments) );
 	};
 	
 	Class.prototype = prototype;
-	Class.prototype.initiate = Jrun.pick(js.initiate, js.__construct, null);
+	Class.prototype.initiate = Jrun.pick( js.initiate, js.__construct, null );
 	Class.constructor = Class;
 	
-	Class.prototype.$inject = function(method, args) {
-		if (Jrun.isfunction(method)) {
-			return method.apply(this, Jrun.toArray(arguments, 1));
-		}
+	Class.prototype.$inject = function( method, args ) {
+		if ( Jrun.isfunction(method) ) 
+			return method.apply( this, Jrun.toArray(arguments, 1) );
 	};
 	
-	Class.prototype.$const = (function(js) {
+	Class.prototype.$const = (function( js ) {
 		var $const = {};
-		if(Jrun.typeOf(js.Const) == "object") {
-			var $const = Js.nue(js.Const);
+		
+		if ( Jrun.typeOf(js.Const) == "object" ) {
+			var $const = Js.nue( js.Const );
 			delete js.Const;
 		}
 		
-		return (function(method, args) {
-			if (Jrun.typeOf(method) == "string") {
-				if (Jrun.isfunction($const[method])) {
-					return $const[method].apply(this, Jrun.toArray(arguments, 1));
-				} else {
+		return (function( method, args ) {
+			if ( Jrun.typeOf(method) == "string" ) {
+				if ( Jrun.isfunction($const[method]) ) 
+					return $const[method].apply( this, Jrun.toArray(arguments, 1) );
+				else 
 					return $const[method];
-				}
 			}
 		});
-	})(js);
+	})( js );
 	
 	// create inheritance capability using .extend
-	Class.extend = function(js) {
+	Class.extend = function( js ) {
 		js.Extend = this;	
-		return Js.create(js);
+		return Js.create( js );
 	};
 	
 	// if this function is being called from .extend, prepare parent method inheritant
-	var Extend = Jrun.pick(js.Extend, null);
-	
+	var Extend = Jrun.pick( js.Extend, null );
 	
 	// assign object with method provided in js
-	(function(js) {
+	(function( js ) {
 		// restrict object from looping certain method
-		var disallow = ["Extend", "__construct", "__destruct", "$super", "prototype"];
+		var not = ["Extend", "__construct", "__destruct", "$super", "prototype"];
+		
 		// add method to this object
-		for (var method in js) {
-			if (js.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
+		for ( var method in js ) {
+			if ( js.hasOwnProperty(method) && (!Jrun.inArray(method, not) && !this[method]) ) 
 				this[method] = js[method];
-			}
 		};
 		
-	}).call(prototype, js);
+	}).call( prototype, js );
 	
 	// object called from .extend, inherit parent method if object does not have it's own method
-	if(!!Jrun.isset(Extend)) {
+	if( !!Jrun.isset(Extend) ) {
 		try {
-			(function(ext) {
+			(function( ext ) {
 				// restrict object from looping certain method
-				var disallow = ["Extend", "__construct", "__destruct", "$super", "prototype"];
+				var not = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 				
-				for (var method in ext) {
-					if (ext.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
+				for ( var method in ext ) {
+					if ( ext.hasOwnProperty(method) && (!Jrun.inArray(method, not) && !this[method]) ) 
 						this[method] = ext[method];
-					}
 				}
 				
-				for (var method in ext.prototype) {
-					if (ext.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, disallow) && !this[method])) {
+				for ( var method in ext.prototype ) {
+					if ( ext.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, not) && !this[method]) ) 
 						this[method] = ext.prototype[method];
-						
-					}
 				}
 				
 				// create a linkage to the parent object
 				this.$super = ext.prototype;
-			}).call(prototype, Extend);
+			}).call( prototype, Extend );
 		} catch(e) {
 			// incase something goes wrong
-			Js.debug.error("Js.create: failed " + e);
+			Js.debug.error( "Js.create: failed " + e );
 		}
 		
-		Class.prototype.$parent = function(method, args) {
-			return this.$super[method].apply(this, Jrun.toArray(arguments, 1));
+		Class.prototype.$parent = function( method, args ) {
+			return this.$super[method].apply( this, Jrun.toArray(arguments, 1) );
 		};
 	}
 	

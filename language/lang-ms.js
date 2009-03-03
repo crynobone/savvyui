@@ -18,12 +18,14 @@ Js.language = {
 			lengthMaximum: "maksimum"
 		}
 	},
+	
 	util: {
 		editable: {
 			message: "Sila masukkan pilihan baru...",
 			title: "Widget boleh sunting"
 		}
 	},
+	
 	widget: {
 		datePicker: {
 			selectMonthYear: "Pergi ke Bulan dan Tahun yang khusus",
@@ -32,11 +34,16 @@ Js.language = {
 			months: ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"],
 			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"]
 		},
+		
 		notice: {
 			titleSuccess: "Tahniah",
 			titleNote: "Nota",
 			titleError: "Ralat",
 			timer: "Mesej ini akan ditutup dalam masa 5 saat"
+		},
+		
+		panel: {
+			closeText: "Tutup"
 		}
 	}
 };

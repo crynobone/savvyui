@@ -97,11 +97,9 @@ Js.config = {
 			title: "Untitled",
 			width: null,
 			height: null,
-			cssLayout: "sui-panel",
 			content: "",
 			onClose: null,
-			allowClose: true,
-			allowMinimize: false
+			closable: true
 		},
 		
 		tab: {

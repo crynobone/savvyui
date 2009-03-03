@@ -18,12 +18,14 @@ Js.language = {
 			lengthMaximum: "maximum"
 		}
 	},
+	
 	util: {
 		editable: {
 			message: "Please enter a new option value...",
 			title: "Editable Widget"
 		}
 	},
+	
 	widget: {
 		datePicker: {
 			selectMonthYear: "Jump to specific month and year",
@@ -32,11 +34,16 @@ Js.language = {
 			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 		},
+		
 		notice: {
 			titleSuccess: "Congratulation",
 			titleNote: "Note",
 			titleError: "Error has Occur",
 			timer: "This message will automatically close in 5 seconds"
+		},
+		
+		panel: {
+			closeText: "Close"
 		}
 	}
 };

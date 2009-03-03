@@ -6,7 +6,7 @@
 		'adapter',
 		'config',
 		'setup',
-		'lang',
+		'language/lang-en',
 		'parse',
 		'test',
 		'ext/validate',

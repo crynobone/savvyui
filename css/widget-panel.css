@@ -6,7 +6,7 @@ table.widget-panel {
 	text-align: left;
 }
 table.widget-panel td {
-	border-bottom: 0;
+	border: none;
 	padding: 0;
 }
 table.widget-panel td.c {
@@ -37,6 +37,7 @@ table.widget-panel .tl, table.widget-panel .tr, table.widget-panel .bl, table.wi
 	width: 10px;
 	overflow: hidden;
 	padding: 0;
+	border: none;
 }
 
 .widget-panel .header {

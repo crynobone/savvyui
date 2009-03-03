@@ -36,7 +36,7 @@ Js.widget.notice = Js.widget.activity.extend({
 			this.callback = null;
 		}
 		
-		this.node.deactivate(function() {
+		this.node.deactivate( function() {
 			that.node.box.text("");
 		});
 	},
@@ -51,8 +51,9 @@ Js.widget.notice = Js.widget.activity.extend({
 		var message = "";
 		var ret = false;
 		
-		if ( Jrun.typeOf(note) != "object" ) 
+		if ( Jrun.typeOf(note) != "object" ) {
 			title = note;
+		} 
 		else {
 			title = Jrun.pick( note.title, "" );
 			message = Jrun.pick( note.message, "" );
@@ -65,8 +66,9 @@ Js.widget.notice = Js.widget.activity.extend({
 			.text( title )
 			.appendTo( this.node.box[0] );
 		
-		if ( message != "" ) 
+		if ( message != "" ) { 
 			var p = Js.use( "<p/>" ).plainHtml( "" + message ).appendTo( this.node.box[0] );
+		}
 		
 		var span = Js.use( "<em/>" )
 			.text( Js.language.widget.notice.timer )

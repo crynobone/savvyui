@@ -7,17 +7,15 @@ Js.util.ticker = Js.create({
 	node: null,
 	
 	initiate: function( selector ) {
-		if ( Jrun.isset(selector) ) 
-			this.init( selector );
-		
-		return this;
+		return ( Jrun.isset(selector) ? this.init( selector ) : this );
 	},
 	
 	init: function( selector ) {
 		this.element = Jrun.pick( selector, null );
 		
-		if ( Jrun.isset(this.element) ) 
+		if ( Jrun.isset(this.element) ) { 
 			this.node = Js.use( this.element );
+		}
 		
 		return this;
 	},
@@ -39,10 +37,7 @@ Js.util.ticker = Js.create({
 	invert: function() {
 		this.node.each(function( i, v ) {
 			// reverse checkbox selection
-			if ( v.checked == true ) 
-				v.checked = false;
-			else 
-				v.checked = true;
+			v.checked = !v.checked;
 		});
 	}
 });

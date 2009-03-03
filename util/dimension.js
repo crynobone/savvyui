@@ -12,13 +12,15 @@ Js.util.dimension = {
 				var offset = window.pageXOffset;
 				var el = document.documentElement;
 				
-				if ( typeof(offset) == "number" ) 
+				if ( typeof(offset) == "number" ) {
 					ret = offset;
-				else if ( doc && doc.scrollLeft ) 
+				} 
+				else if ( doc && doc.scrollLeft ) {
 					ret = doc.scrollLeft;
-				else if ( el && el.scrollLeft ) 
+				} 
+				else if ( el && el.scrollLeft ) {
 					ret = el.scrollLeft;
-				
+				}
 				return ret;
 			},
 			
@@ -28,12 +30,15 @@ Js.util.dimension = {
 				var offset = window.pageYOffset;
 				var el = document.documentElement;
 				
-				if ( typeof(offset) == "number" ) 
+				if ( typeof(offset) == "number" ) {
 					ret = offset;
-				else if ( doc && doc.scrollTop ) 
+				}
+				else if ( doc && doc.scrollTop ) { 
 					ret = doc.scrollLeft;
-				else if ( el && el.scrollTop ) 
+				}
+				else if ( el && el.scrollTop ) {
 					ret = el.scrollLeft;
+				}
 				
 				return ret;
 			},
@@ -67,7 +72,7 @@ Js.util.dimension = {
 		scrolls: {},
 		size: {},
 		
-		offset: function( node ) {
+		offset: function( node ){
 			var ret = [0, 0, 0, 0];
 			var loop = false;
 			
@@ -82,9 +87,9 @@ Js.util.dimension = {
 						ret[3] += node.offsetLeft;
 						node = node.offsetParent;
 					}
-				} 
+				}
 				else {
-					if (loop == false) {
+					if ( loop == false ) {
 						ret[0] = Jrun.pick( node.scrollWidth, 0 );
 						ret[1] = Jrun.pick( node.scrollHeight, 0 );
 						ret[2] = Jrun.pick( node.offsetTop, 0 );
@@ -93,9 +98,10 @@ Js.util.dimension = {
 				}
 				
 				return ret;
-			} 
-			else 
-				Js.debug.log( "Js.util.dimension.node.offset: failed because node does not exist" );
+			}
+			else {
+				Js.debug.log("Js.util.dimension.node.offset: failed because node does not exist");
+			}
 		}
 	}
 };

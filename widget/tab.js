@@ -17,10 +17,7 @@ Js.widget.tab = Js.create({
 	tabs: null,
 	
 	initiate: function( selector, option ) {
-		if ( !!Jrun.isset(selector) ) 
-			this.init(selector, option);
-		
-		return this;
+		return ( !!Jrun.isset(selector) ? this.init(selector, option) : this );
 	},
 	
 	setup: function( option ) {
@@ -50,6 +47,8 @@ Js.widget.tab = Js.create({
 		
 		// tab is activated
 		this.status = "on";
+		
+		return this;
 	},
 	
 	_addToolbar: function() {
@@ -210,10 +209,12 @@ Js.widget.tab = Js.create({
 		this.status = "off";
 	},
 	toggle: function() {
-		if ( this.status == "off" ) 
+		if ( this.status == "off" ) {
 			this.showTab();
-		else 
+		}
+		else {
 			this.hideTab();
+		}
 	},
 	
 	addTab: function( js ) {
@@ -268,8 +269,9 @@ Js.widget.tab = Js.create({
 					.appendTo( a[0] );
 			}
 			
-			if ( !!set ) 
-				this.activateTab( "#" + id );
+			if ( !!set ) {
+				this.activateTab("#" + id);
+			}
 		}
 		
 		return this;

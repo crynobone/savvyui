@@ -21,25 +21,30 @@ Js.widget.dialog = Js.widget.panel.extend({
 		this._prepSetting();
 		
 		// set renderTo element
-		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType )  
-			this.renderTo = Js.use( this.renderTo );
-		else if ( !this.renderTo || !this.renderTo.nodeType ) 
-			this.renderTo = Js.use( "body" ).eq(0);
+		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) {
+			this.renderTo = Js.use(this.renderTo);
+		}
+		else if ( !this.renderTo || !this.renderTo.nodeType ) {
+			this.renderTo = Js.use("body").eq(0);
+		}
 		
-		if ( this.allowOverlay == true ) 
+		if ( this.allowOverlay == true ) {
 			this.overlay = new Js.widget.activity("#overlay-panel");
+		}
 		
 		this._loadBorder();
 		this._loadContent();
 		
-		if (Jrun.isset(this.setting.button)) {
-			for (var i = 0; i < this.setting.button.length; i++) 
-				this.addButton(this.setting.button[i]);
+		if ( Jrun.isset(this.setting.button) ) {
+			for ( var i = 0; i < this.setting.button.length; i++ ) { 
+				this.addButton( this.setting.button[i] );
+			}
 		}
 	
 		
-		if ( this.allowOverlay == true ) 
+		if ( this.allowOverlay == true ) {
 			this.overlay.activate();
+		}
 		
 		this.fixDimension();
 		
@@ -49,13 +54,15 @@ Js.widget.dialog = Js.widget.panel.extend({
 	closePanel: function() {
 		var that = this;
 		
-		if ( this.allowOverlay == true ) 
+		if ( this.allowOverlay == true ) {
 			this.overlay.deactivate();
+		}
 		
 		// callback to close panel
 		this.node.fadeOut( "slow", function() {
-			if ( Jrun.isfunction(that.setting.onClose) ) 
+			if ( Jrun.isfunction(that.setting.onClose) ) {
 				that.setting.onClose.apply(that);
+			}
 			
 			that.node.remove();
 		});

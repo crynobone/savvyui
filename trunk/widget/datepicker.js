@@ -46,10 +46,12 @@ Js.widget.datePicker = Js.create({
 		this.element = Jrun.prep( Jrun.pick( js.element, this.element ) );
 		this.renderTo = Jrun.pick( js.renderTo, this.renderTo );
 		
-		if ( !this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType) ) 
-			this.renderTo = Js.use( "<div/>" ).appendTo( "body" );
-		else if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) 
-			this.renderTo = Js.use( this.renderTo ).eq(0);
+		if ( !this.renderTo || (typeof(this.renderTo) !== "string" && !this.renderTo.nodeType) ) {
+			this.renderTo = Js.use("<div/>").appendTo("body");
+		}
+		else if (typeof(this.renderTo) === "string" || this.renderTo.nodeType) {
+			this.renderTo = Js.use(this.renderTo).eq(0) ;
+		}
 		
 		js.range = Jrun.pickType( js.range, this.range, [null, null], "array" );
 		this.field = Jrun.pickType( js.field, this.field, "calendar-value", "string" );
@@ -140,8 +142,6 @@ Js.widget.datePicker = Js.create({
 		
 		this.content = Js.use( "<div/>" ).addClass( "calendar-content" ).appendTo( content[0] );
 		this.option = Js.use( "<div/>" ).addClass( "calendar-option" ).hide().appendTo( content[0] );
-		
-		
 		
 		this.callback();
 		
@@ -259,7 +259,7 @@ Js.widget.datePicker = Js.create({
 	customMonth: function( data ) {
 		this.day = null;
 		this.dateObject = new Date( this.year, data );
-		var ret = []
+		var ret = [];
 		ret[0] = this.dateObject.getMonth();
 		ret[1] = this.dateObject.getFullYear();
 		this.date = [ret[1], (ret[0] + 1), this.dayOfMonth( ret[0], ret[1] )].join("-");
@@ -281,7 +281,7 @@ Js.widget.datePicker = Js.create({
 	customYear: function( data ) {
 		this.day = null;
 		this.dateObject = new Date( data, this.month );
-		var ret = []
+		var ret = [];
 		ret[0] = this.dateObject.getMonth();
 		ret[1] = this.dateObject.getFullYear();
 		this.date = [ret[1], (ret[0] + 1), this.dayOfMonth( ret[0], ret[1] )].join("-");
@@ -473,6 +473,7 @@ Js.widget.datePicker = Js.create({
 			Js.use( "<a/>" )
 				.setClass( "prev-month" )
 				.text( this.language.prevMonth )
+				.attr( "href", "#" )
 				.click( function () {
 					that.prevMonth();
 					return false;
@@ -482,6 +483,7 @@ Js.widget.datePicker = Js.create({
 			Js.use( "<a/>" )
 				.setClass( "next-month" )
 				.text( this.language.nextMonth )
+				.attr( "href", "#" )
 				.click( function () {
 					that.nextMonth();
 					return false;

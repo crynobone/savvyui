@@ -15,18 +15,16 @@ Js.util.editable = Js.create({
 	lastSelected: null,
 	
 	initiate: function( element, option ) {
-		if( !!Jrun.isset(element) ) 
-			this.init( element, option );
-		
-		return this;
+		return ( !!Jrun.isset(element) ? this.init( element, option ) : this );
 	},
 	
 	setup: function( option ) {
 		var option = Jrun.pickType( option, {}, "object" );
 		this.setting = Js.append( option, this.setting, ["lang"], true );
 		
-		if ( Jrun.isset(option.lang) ) 
+		if ( Jrun.isset(option.lang) ) {
 			this.language = Js.append( option.lang, this.language );
+		}
 		
 		return this;
 	},
@@ -43,14 +41,18 @@ Js.util.editable = Js.create({
 		this.node.bind( "change", function() {
 			var node = Js.use( this );
 			
-			if ( node.val() == that.setting.identifier ) 
+			if ( node.val() == that.setting.identifier ) {
 				that.getModalBox( this );
+			}
 		});
 		
 		this.node.each(function() {
-			if ( Js.use(this).val() == that.setting.identifier ) 
+			if ( Js.use(this).val() == that.setting.identifier ) {
 				this.options[0].selected = true;
+			}
 		});
+		
+		return this;
 	},
 	onModalBoxClose: function( field ) {
 		var ret = [];
@@ -65,24 +67,28 @@ Js.util.editable = Js.create({
 		var val = this.input.val();
 		this.value = val;
 		
-		if ( Jrun.isfunction(this.setting.onBeforeUpdate) ) 
+		if ( Jrun.isfunction(this.setting.onBeforeUpdate) ) {
 			runDefault = this.setting.onBeforeUpdate.apply( this, [field] );
+		}
 		
 		if ( runDefault !== false && (Jrun.isset(val) && Jrun.trim(val) != "" && !Jrun.inArray(val, ret)) ) {
 			Js.use( '<option selected="selected" value="' + val + '">' + val + '</option>' ).appendTo( field );
 			updated = true;
 		} 
-		else 
+		else {
 			field.options[0].selected = true;
+		}
 		
-		if ( Jrun.isfunction(this.setting.onUpdate) ) 
+		if ( Jrun.isfunction(this.setting.onUpdate) ) {
 			this.setting.onUpdate.apply( this, [field, updated] );
+		}
 	},
 	getModalBox: function( field ) {
 		var that = this;
 		
-		if ( Jrun.isfunction(this.setting.beforeStart) ) 
+		if ( Jrun.isfunction(this.setting.beforeStart) ) { 
 			this.setting.beforeStart.apply( this );
+		}
 		
 		this.box = new Js.widget.dialog({
 			element: "editable_edit_box_" + Jrun.prep( this.element ),
@@ -110,9 +116,11 @@ Js.util.editable = Js.create({
 		var div = Js.use( "<div/>" )
 			.setClass( "data" )
 			.appendTo( this.box.content[0] );
+		
 		var p = Js.use( "<label/>" )
 			.plainHtml( "" + this.language.message )
 			.appendTo( div[0] );
+			
 		this.input = Js.use( '<input type="text"/>')
 			.attr( "name", "util_editable_" + Jrun.prep( this.element ) )
 			.val( this.setting.prefix )

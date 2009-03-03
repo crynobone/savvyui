@@ -11,8 +11,9 @@ Js.widget.message = Js.create({
 		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		
-		if ( Jrun.isnull(this.node) ) 
+		if ( Jrun.isnull(this.node) ) { 
 			this.init();
+		}
 		
 		return this;
 	},
@@ -27,8 +28,9 @@ Js.widget.message = Js.create({
 	add: function( js ) {
 		var that = this;
 		
-		if ( Jrun.isnull(this.node) ) 
+		if ( Jrun.isnull(this.node) ) {
 			this.init();
+		}
 		
 		var text = Jrun.pick( js.text, "" );
 		var type = Jrun.pickGrep( js.type, "note", /^(note|error|success)$/ );
@@ -80,8 +82,11 @@ Js.widget.message = Js.create({
 		
 		this.node = Js.use( "#" + this.setting.identifier );
 		
-		if ( this.node.length < 1 ) 
-			this.node = Js.use( "<div/>" ).attr( "id", this.setting.identifier ).appendTo( "body" );
+		if ( this.node.length < 1 ) {
+			this.node = Js.use( "<div/>" )
+				.attr( "id", this.setting.identifier )
+				.appendTo( "body" );
+		}
 		
 		var scrollMe = function() {
 			that.node.css("top", Js.util.dimension.page.scrolls.y() + "px");

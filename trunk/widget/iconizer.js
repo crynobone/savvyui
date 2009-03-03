@@ -7,10 +7,7 @@ Js.widget.iconizer = Js.create({
 	setting: null,
 	
 	initiate: function( option ) {
-		if ( Jrun.isset(option) ) 
-			this.init( option );
-		
-		return this;
+		return ( Jrun.isset(option) ? this.init( option ) : this );
 	},
 	
 	setup: function( option ) {
@@ -78,5 +75,7 @@ Js.widget.iconizer = Js.create({
 				}
 			}
 		});
+		
+		return this;
 	}
 });

@@ -43,14 +43,15 @@
 			element: "#calendar",
 			range: ["+120", "-15"],
 			option: {
-				onPickDate: (function(){
+				onUpdate: (function(){
 					alert(this.value);
 				})
 			}
 		});
 		
-		alert(jQuery.isFunction(dates.setting.onPickDate));
-		alert(Jrun.typeOf(dates.setting.onPickDate));
+		alert(jQuery.isFunction(dates.setting.onUpdate));
+		alert(toString.call(dates.setting.onUpdate));
+		alert(Object.prototype.toString.call(window));
 		-->
 		</script>
 	</body>

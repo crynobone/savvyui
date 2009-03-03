@@ -28,8 +28,9 @@ Js.widget.panel = Js.create({
 		var option = Jrun.pickType( option, {}, "object" );
 		this.setting = Js.append( option, this.setting, ["lang"], true );
 		
-		if( Jrun.isset(option.lang) ) 
-			this.language = Js.append( option.lang, this.language );
+		if ( Jrun.isset(option.lang) ) {
+			this.language = Js.append(option.lang, this.language);
+		}
 		
 		return this;
 	},
@@ -48,17 +49,20 @@ Js.widget.panel = Js.create({
 		this._prepSetting();
 		
 		// set renderTo element
-		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) 
-			this.renderTo = Js.use( this.renderTo );
-		else if ( !this.renderTo || !this.renderTo.nodeType ) 
-			this.renderTo = Js.use( "body" ).eq(0);
-		
+		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) {
+			this.renderTo = Js.use(this.renderTo);
+		}
+		else if ( !this.renderTo || !this.renderTo.nodeType ) {
+			this.renderTo = Js.use("body").eq(0);
+		}
+			
 		this._loadBorder();
 		this._loadContent();
 		
-		if (Jrun.isset(this.setting.button)) {
-			for (var i = 0; i < this.setting.button.length; i++) 
-				this.addButton(this.setting.button[i]);
+		if ( Jrun.isset(this.setting.button) ) {
+			for ( var i = 0; i < this.setting.button.length; i++ ) {
+				this.addButton( this.setting.button[i] );
+			}
 		}
 		
 		return this;
@@ -101,8 +105,9 @@ Js.widget.panel = Js.create({
 		var that = this;
 		
 		// set panel width
-		if ( Jrun.isset(this.setting.width) ) 
+		if ( Jrun.isset(this.setting.width) ) {
 			this.main.css( "width", this.setting.width + "px" );
+		}
 		
 		// render header
 		this.header = Js.use( "<h2/>" )
@@ -121,8 +126,9 @@ Js.widget.panel = Js.create({
 		
 		
 		// set panel height
-		if ( Jrun.isset(this.setting.height) ) 
+		if ( Jrun.isset(this.setting.height) ) { 
 			this.container.css( "height", this.setting.height + "px" );
+		}
 		
 		// render header title
 		this.mainTitle = Js.use( "<span/>" )
@@ -142,14 +148,18 @@ Js.widget.panel = Js.create({
 			.appendTo( this.footer[0] );
 		
 		// Enable Close-Button option
-		if ( !!this.setting.closable ) 
+		if ( !!this.setting.closable ) {
 			this.closeButton.addClass( "close" ).click( function() { that.closePanel(); });
-		else 
+		}
+		else { 
 			this.closeButton.addClass( "button-disabled" );
-		
+		}
 		
 		// THIS IS WHERE YOUR CONTENT SHOULD GO
-		this.content = Js.use( "<div/>" ).attr( "id", this.element ).setClass( "content" ).appendTo( this.container[0] );
+		this.content = Js.use( "<div/>" )
+			.attr( "id", this.element )
+			.setClass( "content" )
+			.appendTo( this.container[0] );
 		
 		try {
 			this.content.html( this.setting.content );
@@ -176,9 +186,9 @@ Js.widget.panel = Js.create({
 		
 		// callback to close panel
 		this.node.fadeOut( "slow", function() {
-			if ( Jrun.isfunction(that.setting.onClose) ) 
+			if ( Jrun.isfunction(that.setting.onClose) ) { 
 				that.setting.onClose.apply( that );
-			
+			}
 			that.node.remove();
 		});
 		
@@ -199,11 +209,15 @@ Js.widget.panel = Js.create({
 			.attr( "href", "#" )
 			.click( function() {
 				var runDefault = false;
-				if ( Jrun.isfunction(callback) ) 
+				if ( Jrun.isfunction(callback) ) {
 					runDefault = callback();
+				}
 				
-				if ( runDefault === true )
+				if ( runDefault === true ) {
 					that.closePanel();
+				}
+				
+				return false;
 			})
 			.addClass( "buttons" )
 			.addClass( type )

@@ -3,6 +3,7 @@
 	
 	$files = array(
 		'base',
+		'create',
 		'adapter',
 		'config',
 		'setup',
@@ -20,6 +21,7 @@
 		'util/smartinput',
 		'widget/activity',
 		'widget/datepicker',
+		'widget/dropmenu',
 		'widget/iconizer',
 		'widget/panel',
 		'widget/dialog',

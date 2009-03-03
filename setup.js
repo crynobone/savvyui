@@ -48,6 +48,10 @@ Js.setup = {
 				Js.language.widget.datePicker = Js.append( option.lang, Js.language.widget.datePicker );
 		},
 		
+		dropmenu: function( option ) {
+			Js.config.widget.dropmenu = Js.append( option, Js.config.widget.dropmenu );
+		},
+		
 		iconizer: function( option ) {
 			Js.config.widget.iconizer = Js.append( option, Js.config.widget.iconizer );
 		},

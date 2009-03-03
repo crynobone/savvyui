@@ -13,9 +13,8 @@ Js.util.ticker = Js.create({
 	init: function( selector ) {
 		this.element = Jrun.pick( selector, null );
 		
-		if ( Jrun.isset(this.element) ) { 
+		if ( Jrun.isset(this.element) ) 
 			this.node = Js.use( this.element );
-		}
 		
 		return this;
 	},

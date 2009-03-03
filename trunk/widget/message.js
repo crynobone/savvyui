@@ -11,9 +11,8 @@ Js.widget.message = Js.create({
 		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		
-		if ( Jrun.isnull(this.node) ) { 
+		if ( Jrun.isnull(this.node) ) 
 			this.init();
-		}
 		
 		return this;
 	},
@@ -28,9 +27,8 @@ Js.widget.message = Js.create({
 	add: function( js ) {
 		var that = this;
 		
-		if ( Jrun.isnull(this.node) ) {
+		if ( Jrun.isnull(this.node) ) 
 			this.init();
-		}
 		
 		var text = Jrun.pick( js.text, "" );
 		var type = Jrun.pickGrep( js.type, "note", /^(note|error|success)$/ );

@@ -23,7 +23,7 @@ Js.widget.iconizer = Js.create({
 		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		
-		Js.use( "*[class*=icon]" ).each(function( i, v ) {
+		Js.use( this.setting.identifier ).is( "*[class*=icon]" ).each(function( i, v ) {
 			var node = Js.use( v );
 			
 			var klas = node.attr("className");

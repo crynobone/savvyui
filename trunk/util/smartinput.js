@@ -6,11 +6,7 @@ Js.util.smartInput = Js.create({
 	node: null,
 	
 	initiate: function( node ) {
-		if ( Jrun.isset(node) ) { 
-			this.init( node );
-		}
-		
-		return this;
+		return ( Jrun.isset(node) ? this.init( node ) : this );
 	},
 	
 	init: function( node ) {
@@ -26,15 +22,15 @@ Js.util.smartInput = Js.create({
 		this.node.bind( "blur", function() {
 			var node = Js.use( this );
 			
-			if ( Jrun.trim(node.val()) === "" ) { 
+			if ( Jrun.trim(node.val()) === "" ) 
 				node.val( node.attr("title").toString() );
-			}
+			
 		}).bind( "focus", function() {
 			var node = Js.use(this);
 			
-			if ( node.attr("title") == node.val() ) { 
+			if ( node.attr("title") == node.val() )  
 				node.val("");
-			}
+			
 		}).val( this.node.attr("title").toString() );
 	},
 	
@@ -42,15 +38,15 @@ Js.util.smartInput = Js.create({
 		this.node.unbind( "blur", function() {
 			var node = Js.use( this );
 			
-			if ( Jrun.trim(node.val()) === "" ) { 
+			if ( Jrun.trim(node.val()) === "" ) 
 				node.val( node.attr("title").toString() );
-			}
+			
 		}).unbind( "focus", function() {
 			var node = Js.use( this );
 			
-			if ( node.attr("title") == node.val() ) {
+			if ( node.attr("title") == node.val() ) 
 				node.val("");
-			}
+			
 		});
 	}
 });

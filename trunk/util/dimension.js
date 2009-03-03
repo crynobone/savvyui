@@ -12,15 +12,15 @@ Js.util.dimension = {
 				var offset = window.pageXOffset;
 				var el = document.documentElement;
 				
-				if ( typeof(offset) == "number" ) {
+				if ( typeof(offset) == "number" ) 
 					ret = offset;
-				} 
-				else if ( doc && doc.scrollLeft ) {
+				
+				else if ( doc && doc.scrollLeft ) 
 					ret = doc.scrollLeft;
-				} 
-				else if ( el && el.scrollLeft ) {
+				
+				else if ( el && el.scrollLeft ) 
 					ret = el.scrollLeft;
-				}
+				
 				return ret;
 			},
 			
@@ -30,15 +30,14 @@ Js.util.dimension = {
 				var offset = window.pageYOffset;
 				var el = document.documentElement;
 				
-				if ( typeof(offset) == "number" ) {
+				if ( typeof(offset) == "number" ) 
 					ret = offset;
-				}
-				else if ( doc && doc.scrollTop ) { 
+				
+				else if ( doc && doc.scrollTop ) 
 					ret = doc.scrollLeft;
-				}
-				else if ( el && el.scrollTop ) {
+				
+				else if ( el && el.scrollTop ) 
 					ret = el.scrollLeft;
-				}
 				
 				return ret;
 			},
@@ -99,9 +98,8 @@ Js.util.dimension = {
 				
 				return ret;
 			}
-			else {
+			else 
 				Js.debug.log("Js.util.dimension.node.offset: failed because node does not exist");
-			}
 		}
 	}
 };

@@ -12,7 +12,6 @@ Js.widget.datePicker = Js.create({
 	element: null,
 	renderTo: null,
 	content: null,
-	option: null,
 	setting: null,
 	language: null,
 	range: null,
@@ -129,7 +128,7 @@ Js.widget.datePicker = Js.create({
 		this.box = new Js.widget.dialog({
 			element: [this.element, "calendar"].join("-"),
 			renderTo: this.renderTo[0],
-			title: this.language.months[this.month] + " " + this.year,
+			title: "",
 			width: 350,
 			language: {
 				closeText: "Cancel"
@@ -394,8 +393,8 @@ Js.widget.datePicker = Js.create({
 			}
 		}
 		
-		if ( Jrun.isfunction(this.setting.onPickDate) ) 
-			this.setting.onPickDate.apply( this, [this.value] );
+		if ( Jrun.isfunction(this.setting.onUpdate) ) 
+			this.setting.onUpdate.apply(this);
 		
 		return this;
 	},
@@ -406,6 +405,7 @@ Js.widget.datePicker = Js.create({
 		this.content.html("");
 		this.option.html("");
 		
+		this.box.title( this.language.months[this.month] + " " + this.year );
 		var first_day = new Date( this.year, this.month, 1 );
 		var start_day = first_day.getDay();
 		var html = "";

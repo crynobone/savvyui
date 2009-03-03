@@ -93,7 +93,7 @@ Js.util.editable = Js.create({
 			},
 			button: [
 				{
-					text: "Ok",
+					text: this.language.submitButton,
 					callback: function() {
 						return true;
 					},

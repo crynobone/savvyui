@@ -195,9 +195,9 @@ Js.widget.panel = Js.create({
 	
 	addButton: function( js ) {
 		var that = this;
-		var callback = Jrun.pickType(js.callback, "function");
-		var text = Jrun.pickType(js.text, this.language.defaultButton, "string");
-		var type = Jrun.pickGrep(js.type, "normal", /^(normal|submit|cancel)$/i);
+		var callback = Jrun.pickType( js.callback, "function" );
+		var text = Jrun.pickType( js.text, this.language.defaultButton, "string" );
+		var type = Jrun.pickGrep( js.type, "normal", /^(normal|submit|cancel)$/i );
 		
 		Js.use( "<a/>" )
 			.attr( "href", "#" )

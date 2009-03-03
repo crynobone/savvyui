@@ -22,7 +22,8 @@ Js.language = {
 	util: {
 		editable: {
 			message: "Please enter a new option value...",
-			title: "Editable Widget"
+			title: "Editable Widget",
+			submitButton: "Ok"
 		}
 	},
 	

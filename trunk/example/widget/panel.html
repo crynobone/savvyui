@@ -10,19 +10,6 @@
 	</head>
 	<body>
 		<h1>Js.widget.panel</h1>
-		<div id="result">
-			<pre>
-				var panel = new Js.widget.panel({
-					element: "controller",
-					renderTo: "#panel-container",
-					title: "Hello world",
-					width: 400,
-					height: 350,
-					content: "&lt;p&gt;Some content&lt;/p&gt;&lt;p&gt;Some other content&lt;/p&gt;&lt;pre&gt;some.code.here&lt;/pre&gt;",
-					allowMinimize: true
-				});
-			</pre>
-		</div>
 		<div id="panel-container">
 			
 		</div>
@@ -38,8 +25,18 @@
 				element: "controller",
 				renderTo: "#panel-container",
 				title: "Hello world",
-				width: 300,
-				content: "<p>Some content</p><p>Some other content</p><pre>some.code.here</pre>"
+				content: "<div style='width:500px'><p>Some content</p><p>Some other content</p><pre>some.code.here</pre></div>",
+				button: [
+					{
+						type: "submit",
+						text: "Submit",
+						callback: function () {
+							alert("Submitting...");
+							
+							return true;
+						}
+					}
+				]
 			});
 		});
 		-->

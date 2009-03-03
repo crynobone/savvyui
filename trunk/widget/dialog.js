@@ -17,6 +17,7 @@ Js.widget.dialog = Js.widget.panel.extend({
 		
 		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
+		this.language = Js.append( this.language, Js.language.widget[this.appName] );
 		this._prepSetting();
 		
 		// set renderTo element
@@ -28,12 +29,21 @@ Js.widget.dialog = Js.widget.panel.extend({
 		if ( this.allowOverlay == true ) 
 			this.overlay = new Js.widget.activity("#overlay-panel");
 		
-		this._load();
+		this._loadBorder();
+		this._loadContent();
+		
+		if (Jrun.isset(this.setting.button)) {
+			for (var i = 0; i < this.setting.button.length; i++) 
+				this.addButton(this.setting.button[i]);
+		}
+	
 		
 		if ( this.allowOverlay == true ) 
 			this.overlay.activate();
 		
-		this._dimension();
+		this.fixDimension();
+		
+		return this;
 	},
 	
 	closePanel: function() {
@@ -52,10 +62,11 @@ Js.widget.dialog = Js.widget.panel.extend({
 		
 		return this;
 	},
-	_dimension: function() {
+	
+	fixDimension: function() {
 		var offset = [
-			this.node.width(),
-			this.node.height()
+			this.main.width(),
+			this.main.height()
 		];
 		
 		var center = Js.util.dimension.page.middle( offset[0], offset[1] );

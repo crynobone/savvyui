@@ -84,8 +84,6 @@ Js.util.editable = Js.create({
 		if ( Jrun.isfunction(this.setting.beforeStart) ) 
 			this.setting.beforeStart.apply( this );
 		
-		var content = Js.use( "<div/>" );
-		
 		this.box = new Js.widget.dialog({
 			element: "editable_edit_box_" + Jrun.prep( this.element ),
 			title: this.language.title,
@@ -93,6 +91,18 @@ Js.util.editable = Js.create({
 			height: 100,
 			onClose: function() {
 				that.onModalBoxClose( field );
+			},
+			button: [
+				{
+					text: "Ok",
+					callback: function() {
+						return true;
+					},
+					type: "submit"
+				}
+			],
+			language: {
+				closeText: "Cancel"
 			},
 			overlay: true
 		});
@@ -108,17 +118,6 @@ Js.util.editable = Js.create({
 			.val( this.setting.prefix )
 			.appendTo( div[0] );
 		
-		var buttonDiv = Js.use( "<div/>" )
-			.setClass( "button" )
-			.appendTo( this.box.content[0] );
-		var submitBtn = Js.use( '<input type="button"/>' )
-			.val( "Ok" )
-			.setClass( "submit-button" )
-			.appendTo( buttonDiv[0] );
-		var cancelBtn = Js.use( '<input type="button"/>' )
-			.val( "Cancel" )
-			.setClass( "cancel-button" )
-			.appendTo( buttonDiv[0] );
 		
 		var box = this.box;
 		
@@ -128,15 +127,6 @@ Js.util.editable = Js.create({
 		});
 		
 		box.closeButton.bind( "click", function() {
-			that.input.val("");
-			box.closePanel();
-		});
-		
-		submitBtn.bind( "click", function() {
-			box.closePanel();
-		});
-		
-		cancelBtn.bind( "click", function() {
 			that.input.val("");
 			box.closePanel();
 		});

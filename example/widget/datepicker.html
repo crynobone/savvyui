@@ -31,20 +31,26 @@
 		</div>
 		<script type="text/javascript">
 		<!--
-		jQuery(function() {
-			var dates = new Js.widget.datePicker({
-				value: "",
-				renderTo: "#datepicker",
-				field: "date_value",
-				element: "#calendar",
-				range: ["+120", "-15"],
-				option: {
-					onPickDate: (function(){
-						alert(this.value);
-					})
-				}
-			});
+		Js.debug.enable = true;
+		Js.debug.dev = true;
+		Js.setup.widget.datePicker({
+			fieldType: "text"
 		});
+		var dates = new Js.widget.datePicker({
+			value: "",
+			renderTo: "#datepicker",
+			field: "date_value",
+			element: "#calendar",
+			range: ["+120", "-15"],
+			option: {
+				onPickDate: (function(){
+					alert(this.value);
+				})
+			}
+		});
+		
+		alert(jQuery.isFunction(dates.setting.onPickDate));
+		alert(Jrun.typeOf(dates.setting.onPickDate));
 		-->
 		</script>
 	</body>

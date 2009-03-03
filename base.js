@@ -253,7 +253,7 @@ var Jrun = {
 	 * Deprecated: Replace with jQuery.isFunction
 	 */
 	isfunction: function( data ) {
-		return jQuery.isFunction( data );
+		return jQuery.isFunction( data ) || this.typeOf ( data ) == "function";
 	},
 	
 	// Trim left of a string

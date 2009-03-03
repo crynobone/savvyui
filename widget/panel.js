@@ -6,6 +6,7 @@ Js.widget.panel = Js.create({
 	appName: "panel",
 	node: null,
 	main: null,
+	mainTitle: null,
 	renderTo: null,
 	element: null,
 	setting: null,
@@ -124,7 +125,7 @@ Js.widget.panel = Js.create({
 			this.container.css( "height", this.setting.height + "px" );
 		
 		// render header title
-		var title = Js.use( "<span/>" )
+		this.mainTitle = Js.use( "<span/>" )
 			.addClass( "title" )
 			.text( this.setting.title )
 			.appendTo( this.header[0] );
@@ -182,6 +183,10 @@ Js.widget.panel = Js.create({
 		});
 		
 		return this;
+	},
+	
+	title: function( text ) {
+		this.mainTitle.html("").text( text );
 	},
 	
 	addButton: function( js ) {

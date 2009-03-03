@@ -22,7 +22,8 @@ Js.language = {
 	util: {
 		editable: {
 			message: "Sila masukkan pilihan baru...",
-			title: "Widget boleh sunting"
+			title: "Widget boleh sunting",
+			submitButton: "Hantar"
 		}
 	},
 	

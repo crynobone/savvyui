@@ -30,6 +30,8 @@ Js.language = {
 		datePicker: {
 			selectMonthYear: "Jump to specific month and year",
 			todayButton: "Select Today",
+			prevMonth: "Previous Month",
+			nextMonth: "Next Month",
 			days: ["S", "M", "T", "W", "T", "F", "S"],
 			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			shortMonths: ["Jan", "Feb", "Mac", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]

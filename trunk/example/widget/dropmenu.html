@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Js.widget.datePicker</title>
+		<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../../lib/savvyui.js"></script>
+		<script type="text/javascript" src="../unit-testing.js"></script>
+		<link type="text/css" href="../../css/all.css" rel="stylesheet" media="all" />
+	</head>
+	<body>
+		<h1>Js.widget.datePicker</h1>
+		<div >
+			<ul id="menu">
+				<li><a href="#">Home</a></li>
+				<li><a href="#">About</a>
+					<ul>
+						<li><a href="#">My Life</a>
+							<ul>
+								<li><a href="#">My Life</a></li>
+							</ul>
+						</li>
+						<li><a href="#">About</a></li>
+						<li><a href="#">About</a></li>
+					</ul>
+				</li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">About</a></li>
+			</ul>
+		</div>
+		<div id="result">
+			<pre>
+				var dates = new Js.widget.datePicker({
+				value: "",
+				renderTo: "#datepicker",
+				field:"date_value",
+				element: "#calendar",
+				range: ["+120", "-15"],
+				option: {
+					onUpdate: (function(){
+						alert(this.value);
+					})
+				}
+			});
+			</pre>
+		</div>
+		<div id="datepicker">
+			
+		</div>
+		<script type="text/javascript">
+		<!--
+		Js.debug.enable = true;
+		Js.debug.dev = true;
+		new Js.widget.dropmenu( "#menu" );
+		-->
+		</script>
+	</body>
+</html>

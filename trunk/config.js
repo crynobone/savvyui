@@ -71,6 +71,12 @@ Js.config = {
 			beforeStart: null
 		},
 		
+		dropmenu: {
+			speed: 250,
+			zIndex: 100,
+			css: 'widget-dropmenu'
+		},
+		
 		iconizer: {
 			fileType: "png",
 			folder: "icons/"

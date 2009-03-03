@@ -1,10 +1,7 @@
 /* Dropdown Menu for Savvy.UI
  * version: 0.0.1
  */
-Js.config.widget.dropmenu = {
-	speed: 250,
-	zIndex: 100
-};
+
 Js.widget.dropmenu = Js.create({
 	node: null,
 	setting: null,
@@ -21,7 +18,7 @@ Js.widget.dropmenu = Js.create({
 	init: function( selector, option ) {
 		var that = this;
 		
-		this.node = Js.use( selector ).addClass( 'widget-dropmenu' );
+		this.node = Js.use( selector ).addClass( this.setting.css );
 		this.setup( option );
 		
 		Js.use( "ul, li", this.node[0] ).hover( function(){

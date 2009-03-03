@@ -17,5 +17,14 @@
 	padding: 5px 3px 10px;
 	background: #fff;
 	font-size: 11px;
-	
+}
+
+.widget-panel .calendar-content .prev-month {
+	cursor: pointer;
+	float: left;
+}
+
+.widget-panel .calendar-content .next-month {
+	cursor: pointer;
+	float: right;
 }

@@ -470,6 +470,23 @@ Js.widget.datePicker = Js.create({
 		}
 		
 		if ( this.setting.navigation == true ) {
+			Js.use( "<a/>" )
+				.setClass( "prev-month" )
+				.text( this.language.prevMonth )
+				.click( function () {
+					that.prevMonth();
+					return false;
+				})
+				.appendTo( this.content[0] );
+			
+			Js.use( "<a/>" )
+				.setClass( "next-month" )
+				.text( this.language.nextMonth )
+				.click( function () {
+					that.nextMonth();
+					return false;
+				})
+				.appendTo( this.content[0] );
 			
 			Js.use( "<p/>" ).text( this.language.selectMonthYear ).appendTo( this.option[0] );
 			
@@ -501,8 +518,6 @@ Js.widget.datePicker = Js.create({
 					.text( i.toString() )
 					.appendTo( selyear[0] );
 			}
-			
-			
 			
 			var _toggleContent = function() {
 				var i = that.box.node.data("toggle");

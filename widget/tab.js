@@ -123,6 +123,8 @@ Js.widget.tab = Js.create({
 					Js.use( this.parentNode.parentNode ).remove();
 				
 					that.revert();
+					
+					return false;
 				})
 				.appendTo( a[0] );
 		}
@@ -136,6 +138,7 @@ Js.widget.tab = Js.create({
 		else {
 			a.bind( this.handler, function(){
 				that.activateTab( Js.use(this).attr("href") );
+				
 				return false;
 			});
 		}
@@ -209,12 +212,7 @@ Js.widget.tab = Js.create({
 		this.status = "off";
 	},
 	toggle: function() {
-		if ( this.status == "off" ) {
-			this.showTab();
-		}
-		else {
-			this.hideTab();
-		}
+		this.status == "off" ? this.showTab() : this.hideTab() ;
 	},
 	
 	addTab: function( js ) {
@@ -245,6 +243,7 @@ Js.widget.tab = Js.create({
 			
 			a.text( title ).bind( this.handler, function(){
 				that.activateTab( Js.use(this).attr("href") );
+				
 				return false;
 			});
 			
@@ -263,15 +262,16 @@ Js.widget.tab = Js.create({
 						Js.use( this.parentNode.parentNode ).remove();
 						
 						that.revert();
+						
+						return false;
 					})
 					.css( "paddingLeft", "10px" )
 					.text( "x" )
 					.appendTo( a[0] );
 			}
 			
-			if ( !!set ) {
+			if ( !!set ) 
 				this.activateTab("#" + id);
-			}
 		}
 		
 		return this;

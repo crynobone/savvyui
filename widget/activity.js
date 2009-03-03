@@ -19,9 +19,8 @@ Js.widget.activity = Js.create({
 		var option = Jrun.pickType( option, {}, "object" );
 		this.setting = Js.append( option, this.setting, ["lang"], true );
 		
-		if ( Jrun.isset(option.lang) ) {
+		if ( Jrun.isset(option.lang) ) 
 			this.language = Js.append( option.lang, this.language );
-		}
 		
 		return this;
 	},
@@ -34,9 +33,8 @@ Js.widget.activity = Js.create({
 		
 		this.node = Js.use( this.element );
 		
-		if ( this.node.length == 0 ) {
+		if ( this.node.length == 0 ) 
 			this.node = Js.use( "<div/>" ).attr( "id", Jrun.prep(this.element) ).appendTo( "body" );
-		}
 		
 		this.node.css({
 			background: this.setting.background,
@@ -63,9 +61,8 @@ Js.widget.activity = Js.create({
 		
 		this.status++;
 		
-		if ( Jrun.isfunction(callback) ) {
+		if ( Jrun.isfunction(callback) ) 
 			callback();
-		}
 	},
 	loadImage: function() {
 		this.box = Js.use( "<img/>" )
@@ -84,9 +81,8 @@ Js.widget.activity = Js.create({
 			this.node.fadeTo( "normal", 0, function(){
 				Js.use( this ).css(	"display", "none" );
 				
-				if ( Jrun.isfunction(callback) ) {
+				if ( Jrun.isfunction(callback) ) 
 					callback();
-				}
 			});
 		}
 		

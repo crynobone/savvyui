@@ -17,9 +17,8 @@ Js.util.buttonSubmit = Js.create({
 		this.button = Jrun.pick( js.button, null );
 		
 		// if id, url and button have been defined, straight away call this.init()
-		if ( !!this.id && !!this.url && this.button ) {
+		if ( !!this.id && !!this.url && this.button ) 
 			this.init( js.option );
-		}
 		
 		return this;
 	},
@@ -58,32 +57,27 @@ Js.util.buttonSubmit = Js.create({
 					url: that.url,
 					data: params,
 					beforeSend: function() {
-						if ( Jrun.isfunction(that.setting.beforeSend) ) {
+						if ( Jrun.isfunction(that.setting.beforeSend) ) 
 							that.setting.beforeSend.apply( that );
-						}
 					},
 					success: function( reply ) {
 						var runDefault = true;
 						
-						if ( Jrun.isfunction(that.setting.success) ) {
+						if ( Jrun.isfunction(that.setting.success) ) 
 							runDefault = that.setting.success.apply( that, [reply] );
-						}
 						
-						if ( runDefault !== false ) {
+						if ( runDefault !== false ) 
 							Js.parse.xhr.init(reply);
-						}
 					},
 					onError: function() {
-						if( Jrun.isfunction(that.setting.onError) ) {
+						if( Jrun.isfunction(that.setting.onError) ) 
 							that.setting.onError.apply( that );
-						}
 					}
 				});
 			}
 			else {
-				if( Jrun.isfunction(that.setting.onError) ) {
+				if( Jrun.isfunction(that.setting.onError) ) 
 					that.setting.onError();
-				}
 			}
 			
 			return false;

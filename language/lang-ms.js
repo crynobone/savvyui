@@ -13,9 +13,9 @@ Js.language = {
 			email: "Sila masukkan alamat emel yang sah ",
 			required: "Bahagian ini wajib diisi",
 			length: "Bahagian ini memerlukan input  {type} {value} aksara.",
-			lengthExact: "tepat",
-			lengthMinimum: "minimum",
-			lengthMaximum: "maksimum"
+			exact: "tepat",
+			min: "minimum",
+			max: "maksimum"
 		}
 	},
 	

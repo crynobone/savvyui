@@ -189,13 +189,13 @@ Js.ext.validate = Js.create({
 						
 						if ( !Js.test.isLength(klass[indexLength], value.length) ) {
 							if ( types == "min" ) 
-								types = lang.lengthMinimum;
+								types = lang.max;
 							
 							else if ( types == "max" ) 
-								types = lang.lengthMaximum;
+								types = lang.min;
 							
 							else if ( types == "exact" ) 
-								types = lang.lengthExact;
+								types = lang.exact;
 							
 							var note = lang.length;
 							note = note.replace(/{type}/, types);

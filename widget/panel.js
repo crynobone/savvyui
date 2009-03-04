@@ -145,7 +145,7 @@ Js.widget.panel = Js.create({
 		
 		// Enable Close-Button option
 		if ( !!this.setting.closable ) 
-			this.closeButton.addClass( "close" ).click( function() { that.closePanel(); });
+			this.closeButton.addClass( "close" ).click( function() { that.closePanel(); return false; });
 		else 
 			this.closeButton.addClass( "button-disabled" );
 		

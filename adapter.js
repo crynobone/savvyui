@@ -1,6 +1,5 @@
-/**
- * @projectDescription Adapter for Savvy.UI and jQuery Framework
- * @version 0.0.2
+/* Adapter for Savvy.UI and jQuery Framework
+ * version: 0.0.3
  * @extends jQuery
  * @author Mior Muhammad Zaki crynobone@gmail.com
  * @license MIT
@@ -24,7 +23,10 @@ jQuery.fn.extend({
 			
 			return this;
 		}
-	} 
+	},
+	htmlText: function( value ) {
+		return jQuery.fn.plainHtml( value );
+	}
 });
 
 // Bind Js.use with jQuery Object

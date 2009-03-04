@@ -65,11 +65,12 @@ Js.widget.datePicker = Js.create({
 		if ( !!js.maxDate && this.setting.dateFormat.test(js.maxDate) ) 
 			this.maxDate = Jrun.pick( js.maxDate, null );
 		
-		if ( !!js.value && this.setting.dateFormat.test(js.value) ) {
-			var todayDate = js.value.match( this.setting.dateFormat );
+		if ( !!js.value && js.value.match( this.setting.dateFormat ) ) {
 			js.month = RegExp.$2;
 			js.year = RegExp.$1;
 			js.day = RegExp.$3;
+			
+			this.value = js.value;
 		} 
 		else if ( !!js.value && js.value === "today" ) {
 			// get today date
@@ -77,11 +78,15 @@ Js.widget.datePicker = Js.create({
 			js.month = tmpdate.getMonth();
 			js.year = tmpdate.getFullYear();
 			js.day = tmpdate.getDate();
+			
+			this.value = [js.year, js.month, js.day].join("-");
 		}
+		
+		
 		
 		this.month = ( (!js.month || isNaN(js.month) || js.month > 12 || js.month < 0) ? this.dateObject.getMonth() : Math.abs(js.month - 1) );
 		this.year = ( (!js.year || isNaN(js.year) || js.year < 1000) ? this.dateObject.getFullYear() : js.year );
-		this.day = Jrun.pickType( js.day, this.day, "number" );
+		this.day = Jrun.pick( js.day, this.day );
 		
 		this.date = [this.year, (this.month + 1), Jrun.pick(this.day, 1)].join("-");
 		this.navigation = Jrun.pick( js.navigate, true );

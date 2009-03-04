@@ -59,24 +59,24 @@ Js.parse = {
 		},
 		
 		update: function( data ) {
-			var args = Jrun.pickType( data.text, "string" );
+			var args = Jrun.pick( data.text );
 			var id = Jrun.pickType( data.id, "string" );
 			var selector = Jrun.pickType( selector, "string" );
-			var object = Jrun.pickType( data.callback, null, "string" );
+			var object = Jrun.pickType( data.callback, "string" );
 			
-			if ( !!args ) {
-				if( !!selector ) 
-					Js.use( selector ).html( args );
+			if ( Jrun.typeOf( args ) == "string" ) {
+				if ( !!selector ) 
+					Js.use(selector).html(args);
 				else if ( !!id ) 
-					Js.use( "#" + id ).html( args );
-				else if ( Jrun.isset(object) ) {
-					// eval the function without making a callback
-					var callback = eval( object );
+					Js.use("#" + id).html(args);
+			}
+			else if ( Jrun.isset(object) ) {
+				// eval the function without making a callback
+				var callback = eval( object );
 					
-					// execute the function
-					if( Jrun.isfunction(callback) ) 
-						callback(args);
-				}
+				// execute the function
+				if ( Jrun.isfunction(callback) ) 
+					callback( args );
 			}
 		}
 	}

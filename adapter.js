@@ -9,18 +9,19 @@
 jQuery.fn.extend({
 	setClass: function(value) 
 	{
-		return this.each(function() {
+		return this.each( function() {
 			this.className = value;
 		});
 	},
-	plainHtml: function(value) {
-		if (value == undefined) {
-			return (this[0] ? this[0].innerHTML : null);
-		}
+	plainHtml: function( value ) {
+		if ( value == undefined ) 
+			return ( this[0] ? this[0].innerHTML : null );
+		
 		else if(this[0]) {
 			try {
 				this[0].innerHTML = value;
 			} catch(e) {}
+			
 			return this;
 		}
 	} 

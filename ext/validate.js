@@ -123,6 +123,7 @@ Js.ext.validate = Js.create({
 			if ( node.is(':checked') ) 
 				data += "&" + node.attr( 'name' ) + "=" + Js.parse.html.to( node.val() );
 		} 
+		
 		else 
 			data += "&" + node.attr( 'name' ) + "=" + Js.parse.html.to( node.val() );
 		
@@ -146,6 +147,7 @@ Js.ext.validate = Js.create({
 					.addClass( this.setting.error.cssMessage )
 					.text( message )
 					.insertAfter( node[0] );
+		
 		else 
 			errorNode.eq(0).append( '<br />' + message );
 		
@@ -188,8 +190,10 @@ Js.ext.validate = Js.create({
 						if ( !Js.test.isLength(klass[indexLength], value.length) ) {
 							if ( types == "min" ) 
 								types = lang.lengthMinimum;
+							
 							else if ( types == "max" ) 
 								types = lang.lengthMaximum;
+							
 							else if ( types == "exact" ) 
 								types = lang.lengthExact;
 							
@@ -207,6 +211,7 @@ Js.ext.validate = Js.create({
 			
 			if ( indexMatch > -1 ) {
 				var matched = fields.is( ":input[name='" + RegExp.$1 + "']" );
+				
 				if ( value != matched.val() && error == "" ) 
 					error = lang.matched;
 			}
@@ -215,8 +220,10 @@ Js.ext.validate = Js.create({
 			if ( Jrun.trim(value) != "" ) {
 				if ( !!Jrun.inArray("string", klass) && !Js.test.isString(value) ) 
 					error = lang.string;
+				
 				else if ( !!Jrun.inArrayGrep(/^(integer|number)$/, klass) && !Js.test.isNumber(value) ) 
 					error = lang.number;
+				
 				else if ( !!Jrun.inArray("email", klass) && !Js.test.isEmail(value) ) 
 					error = lang.email;
 			}
@@ -236,6 +243,7 @@ Js.ext.validate = Js.create({
 					if ( Jrun.trim(value) !== "" ) {
 						if ( Jrun.isfunction(validate.callback) && !validate.callback(value) ) 
 							error = Jrun.pickType( validate.error, error, "string" );
+						
 						else if ( validate.regex && !value.match(validate.regex) ) 
 							error = Jrun.Jrun.pickType( validate.error, error, "string" );
 					}

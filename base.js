@@ -184,11 +184,11 @@ var Jrun = {
 				window.open( url, target );
 		} 
 		else 
-			Js.debug.error("Jrun.href: failed to load page " + url);
+			Js.debug.error( "Jrun.href: failed to load page " + url );
 	},
 	
 	// Encode HTML entities from any given string
-	htmlEncode: function(value) {
+	htmlEncode: function( value ) {
 		return value
 			.replace(/&/g, "&amp;")
 			.replace(/</g, "&lt;")
@@ -197,7 +197,7 @@ var Jrun = {
 	},
 	
 	// Decode HTML entities from any given string
-	htmlDecode: function(value) {
+	htmlDecode: function( value ) {
 		return value
 			.replace(/&amp;/g, "&")
 			.replace(/&lt;/g, "<")
@@ -207,7 +207,10 @@ var Jrun = {
 	
 	// Check whether the value is in an array
 	inArray: function( value, data ) {
-		for ( var i = 0; i < data.length && !!data[i]; i++ ) {
+		var i = 0, 
+			len = data.length;
+		
+		for ( ; i < len && !!data[i]; i++ ) {
 			if ( data[i] === value ) {
 				return true;
 				break;
@@ -219,7 +222,10 @@ var Jrun = {
 	
 	// Check whether the value is in an array, check validity based on Regular Expression
 	inArrayGrep: function( value, data ) {
-		for ( var i = 0; i < data.length && !!data[i]; i++ ) {
+		var i = 0,
+			len = data.length;
+		
+		for ( ; i < data.length && !!data[i]; i++ ) {
 			if ( data[i].match(value) ) {
 				return true;
 				break;
@@ -231,18 +237,23 @@ var Jrun = {
 	
 	// Get the indexOf based on value in an array
 	'indexOf': function( value, data ) {
-		for ( var i = data.length; i-- && data[i] !== value; );
+		var i = data.length;
+		
+		for ( ; i-- && data[i] !== value; );
 		return i;
 	},
+	
 	// Get the indexOf based on value in an array
 	indexOfGrep: function( value, data ) {
-		for ( var i = data.length; i-- && !data[i].match(value); );
+		var i = data.length;
+		
+		for ( ; i-- && !data[i].match(value); );
 		return i;
 	},
 	
 	// Check if data is not defined
 	isnull: function( data ) {
-		return ( typeof(data) == "undefined" || data == null );
+		return ( this.typeOf(data) == "undefined" || data == null );
 	},
 	
 	// Check if data is defined
@@ -254,7 +265,7 @@ var Jrun = {
 	 * Deprecated: Replace with jQuery.isFunction
 	 */
 	isfunction: function( data ) {
-		return jQuery.isFunction( data ) || this.typeOf ( data ) == "function";
+		return this.typeOf ( data ) == "function";
 	},
 	
 	// Trim left of a string
@@ -282,9 +293,11 @@ var Jrun = {
 	
 	// Pick the first arguments that is defined
 	pick: function( js ) {
-		var data = jQuery.makeArray( arguments );
+		var data = jQuery.makeArray( arguments ),
+			i = 0,
+			len = data.length;
 		
-		for ( var i = 0; i < data.length; i++ ) {
+		for ( ; i < len; i++ ) {
 			var ret = data[i];
             
             if ( Jrun.isset(ret) ) {
@@ -298,11 +311,12 @@ var Jrun = {
 	
 	// Pick the first arguments that is defined and typeof match the last arguments
 	pickType: function( js ) {
-		var data = jQuery.makeArray( arguments );
-		var length = data.length;
-		var last = data[(length - 1)];
+		var data = jQuery.makeArray( arguments ),
+			i = 0,
+			len = data.length;
+		var last = data[(len - 1)];
 		
-		for ( var i = 0; i < (length - 1); i++ ) {
+		for ( ; i < (len - 1); i++ ) {
 			var ret = data[i];
             
             if ( Jrun.isset(ret) ) {
@@ -318,14 +332,15 @@ var Jrun = {
 	
 	// Pick the first arguments that is defined and match Regular Expression passed in the last arguments
 	pickGrep: function( js ) {
-		var data = jQuery.makeArray( arguments );
-		var length = data.length;
-		var last = data[(length - 1)];
+		var data = jQuery.makeArray( arguments ),
+			i = 0,
+			len = data.length;
+		var last = data[(len - 1)];
 		
 		if ( this.typeOf(last) == "string" ) 
 			last = new RegExp(last);
 		
-		for ( var i = 0; i < (length - 1); i++ ) {
+		for ( ; i < (len - 1); i++ ) {
 			var ret = data[i];
             
             if ( Jrun.isset(ret) ) {
@@ -340,12 +355,12 @@ var Jrun = {
 	},
 	
 	prettyList: function( data, between, last ) {
-		var length = data.length;
-		var ret = new String;
+		var len = data.length,
+			ret = new String;
 		
-		if ( length > 1 ) {
+		if ( len > 1 ) {
 			jQuery.each(data, function( i, v ) {
-				ret = [ret, ( i == 0 ? "" : ( i == (length - 1) ? last : between) ), v].join("");
+				ret = [ret, ( i == 0 ? "" : ( i == (len - 1) ? last : between) ), v].join("");
 			});
 		} 
 		else 
@@ -355,28 +370,28 @@ var Jrun = {
 	},
 	
 	rand: function( js ) {
-		var data = arguments;
-		var length = 0;
-		var offset = 0;
+		var data = arguments,
+			len = 0,
+			val = 0;
 		
 		if ( data.length === 2 ) {
-			offset = data[0];
-			length = data[1];
+			val = data[0];
+			len = data[1];
 		} 
 		else if ( data.length === 1 ) 
-			length = data[0];
+			len = data[0];
 		
-		return ( Math.floor(Math.random() * length) + offset );
+		return ( Math.floor(Math.random() * len) + val );
 	},
 	
 	// Trim right of a string.
-	rtrim: function( value ) {
-		return new String( value ).replace( /\s$/g, "" );
+	rtrim: function( data ) {
+		return new String( data ).replace( /\s$/g, "" );
 	},
 	
 	// Striptags work similiar to strip_tags() in PHP
-	stripTags: function( value ) {
-		return new String( value ).replace( /<([^>]+)>/g, "" );
+	stripTags: function( data ) {
+		return new String( data ).replace( /<([^>]+)>/g, "" );
 	},
 	
 	// Parse input string value as Number using parseInt
@@ -391,15 +406,18 @@ var Jrun = {
 	},
 	
 	toProperCase: function( data ) {
-		var val = data.split(/ /g);
-		var ret = [];
+		var val = data.split(/ /g), 
+			ret = [],
+			that = function(v) {
+				var v = v.toString();
+				return [
+					v.substr( 0, 1 ).toUpperCase(),
+					v.substr( 1 )
+				];
+			};
 		
 		jQuery.each(val, function(i, v) {
-			var v = v.toString();
-			var first = v.substr( 0, 1 ).toUpperCase();
-			var other = v.substr(1);
-			
-			ret.push( [first, other].join("") );
+			ret.push( that(v).join("") );
 		});
 		
 		return ret.join(" ");
@@ -453,7 +471,7 @@ var Jrun = {
 		var ret = [];
 		
 		// loop the array
-		jQuery.each(data, function( i, v ) {
+		jQuery.each( data, function( i, v ) {
 			if ( !repeat ) {
 				// add only if unique
 				if ( !Jrun.inArray(v, ret) ) 
@@ -470,7 +488,7 @@ var Jrun = {
 		return ret;
 	},
 	
-	prep: function(data) {
+	prep: function( data ) {
 		return ( data.match(/^(#|\.)?(.*)$/gi) ? RegExp.$2 : data );
 	}
 };

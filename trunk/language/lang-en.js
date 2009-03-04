@@ -13,9 +13,9 @@ Js.language = {
 			email: "Require valid e-mail address input",
 			required: "This input field is required",
 			length: "This input field require {type} {value} character.",
-			lengthExact: "exactly",
-			lengthMinimum: "minimum",
-			lengthMaximum: "maximum"
+			exact: "exactly",
+			min: "minimum",
+			max: "maximum"
 		}
 	},
 	

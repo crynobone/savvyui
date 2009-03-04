@@ -253,7 +253,7 @@ var Jrun = {
 	
 	// Check if data is not defined
 	isnull: function( data ) {
-		return ( this.typeOf(data) == "undefined" || data == null );
+		return ( typeof(data) == "undefined" || data == null );
 	},
 	
 	// Check if data is defined

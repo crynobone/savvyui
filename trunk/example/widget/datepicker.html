@@ -37,7 +37,7 @@
 			fieldType: "text"
 		});
 		var dates = new Js.widget.datePicker({
-			value: "",
+			value: "2009-03-01",
 			renderTo: "#datepicker",
 			field: "date_value",
 			element: "#calendar",
@@ -48,10 +48,6 @@
 				})
 			}
 		});
-		
-		alert(jQuery.isFunction(dates.setting.onUpdate));
-		alert(toString.call(dates.setting.onUpdate));
-		alert(Object.prototype.toString.call(window));
 		-->
 		</script>
 	</body>

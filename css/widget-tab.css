@@ -54,11 +54,8 @@ ul.tab-toolbar li a:hover {
 	color: #fff; 
 	border-bottom: 1px solid #3B5998; 
 }
-.tab-hidden { 
-	display: none; 
-	padding: 15px 5px 5px; 
-}
-.tab-active { 
-	display: block; 
+.tab-hidden, .tab-active { 
+	display: block;
+	clear: left;
 	padding: 15px 5px 5px; 
 }

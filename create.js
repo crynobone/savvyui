@@ -5,6 +5,7 @@
  */
 
 Js.create = function( js ) {
+	var js = Jrun.pickType( js, {}, "object" );
 	var base = function() {};
 	base.prototype.destroy = function() {
 		// remove all properties and method for this object
@@ -89,18 +90,24 @@ Js.create = function( js ) {
 				// restrict object from looping certain method
 				var not = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 				
-				for ( var method in ext ) {
-					if ( ext.hasOwnProperty(method) && (!Jrun.inArray(method, not) && !this[method]) ) 
-						this[method] = ext[method];
-				}
-				
 				for ( var method in ext.prototype ) {
 					if ( ext.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, not) && !this[method]) ) 
 						this[method] = ext.prototype[method];
 				}
 				
+				for ( var method in ext ) {
+					if ( ext.hasOwnProperty(method) && !Jrun.inArray(method, not) ) {
+						if ( !this[method] )
+							this.method = ext[method];
+						
+					}
+				}
+				
+				
+				
 				// create a linkage to the parent object
 				this.$super = ext.prototype;
+				
 			}).call( prototype, Extend );
 		
 		} catch(e) {

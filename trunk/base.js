@@ -44,7 +44,7 @@ Js.nue = function( data, depth ) {
 		
 		for ( var method in data ) {
 			if ( data.hasOwnProperty(method) ) 
-				ret[method] = ( depth > 0 ? Js.nue(ret[method], depth) : data[method] );
+				ret[method] = ( depth > 0 ? Js.nue(data[method], depth) : data[method] );
 		}
 		
 		return ret;

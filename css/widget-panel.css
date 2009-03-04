@@ -4,6 +4,7 @@ table.widget-panel {
 	border-collapse: collapse;
 	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	text-align: left;
+	width: auto;
 }
 table.widget-panel td {
 	border: none;

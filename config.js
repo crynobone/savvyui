@@ -123,7 +123,8 @@ Js.config = {
 			cssHidden: "tab-hidden",
 			cssActive: "tab-active",
 			cssCurrent: "current",
-			cssDisabled: "disabled"
+			cssDisabled: "disabled",
+			fx: true
 		}
 	}
 };

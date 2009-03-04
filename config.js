@@ -30,16 +30,20 @@ Js.config = {
 			method: "POST",
 			beforeStart: null,
 			beforeSend: null,
-			success: null,
-			onError: null
+			formSuccess: null,
+			sendSuccess: null,
+			onError: null,
+			onSendError: null
 		},
 		
 		buttonSubmit: {
 			method: "POST",
 			beforeStart: null,
 			beforeSend: null,
-			success: null,
-			onError: null
+			formSuccess: null,
+			sendSuccess: null,
+			onError: null,
+			onSendError: null
 		},
 		
 		editable: {

@@ -32,8 +32,8 @@ Js.util.buttonSubmit = Js.create({
 	
 	_prepSetting: function() {
 		this.formValidate = Js.nue( this.setting );
-		this.formValidate.success = null;
-		this.formValidate.onError = null;
+		this.formValidate.success = this.setting.formSuccess;
+		this.formValidate.onError = this.setting.formError;
 	},
 	
 	init: function( option ) {
@@ -63,21 +63,17 @@ Js.util.buttonSubmit = Js.create({
 					success: function( reply ) {
 						var runDefault = true;
 						
-						if ( Jrun.isfunction(that.setting.success) ) 
-							runDefault = that.setting.success.apply( that, [reply] );
+						if ( Jrun.isfunction(that.setting.sendSuccess) ) 
+							runDefault = that.setting.sendSuccess.apply( that, [reply] );
 						
 						if ( runDefault !== false ) 
 							Js.parse.xhr.init(reply);
 					},
 					onError: function() {
-						if( Jrun.isfunction(that.setting.onError) ) 
-							that.setting.onError.apply( that );
+						if( Jrun.isfunction(that.setting.onSendError) ) 
+							that.setting.onSendError.apply( that );
 					}
 				});
-			}
-			else {
-				if( Jrun.isfunction(that.setting.onError) ) 
-					that.setting.onError();
 			}
 			
 			return false;

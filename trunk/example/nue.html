@@ -9,21 +9,6 @@
 	</head>
 	<body>
 		<h1>Js.nue</h1>
-		<pre>
-			Js.debug.enable = true;
-		
-			var person = {
-				firstName: "Mior Muhammad Zaki",
-				lastName: "Mior Khairuddin"
-			};
-			
-			var student = Js.nue(person);
-			student.matric = "49070";
-				
-			Js.util.Assert.isTrue(student.matric, '49070', 'student.matric is set to ' + student.matric); 
-			Js.util.Assert.isFalse(person.matric, null, 'person.matric is ' + person.matric);
-			Js.util.Assert.isTrue(student.firstName, person.firstName, 'student.firstName inherit person.firstName');
-		</pre>
 		<div id="result">
 			<h2>Result</h2>
 		</div>
@@ -33,8 +18,10 @@
 		Js.debug.enable = true;
 		
 		var person = {
-			firstName: "Mior Muhammad Zaki",
-			lastName: "Mior Khairuddin"
+			name: {
+				first: "Mior Muhammad Zaki",
+				last: "Mior Khairuddin",
+			}
 		};
 		
 		var student = Js.nue(person);
@@ -42,7 +29,9 @@
 			
 		Js.util.Assert.isTrue(student.matric, '49070', 'student.matric is set to ' + student.matric); 
 		Js.util.Assert.isFalse(person.matric, null, 'person.matric is ' + person.matric);
-		Js.util.Assert.isTrue(student.firstName, person.firstName, 'student.firstName inherit person.firstName');
+		Js.util.Assert.isTrue(student.name.first, person.name.first, 'student.name.first inherit person.name.first');
+		person.name.first = "Zaki";
+		Js.util.Assert.isFalse(student.name.first, person.name.first, 'student.name.first does not equal person.name.first');
 		
 		-->
 		</script>

@@ -15,7 +15,7 @@
 		<script type="text/javascript">
 		<!--
 		
-		var Person = Js.create({
+		var Person = new Js.create({
 			name: null,
 			initiate: function(name) {
 				this.name = name;
@@ -37,7 +37,7 @@
 			}
 		});
 		var me = new Student("Andrea", 30);
-		alert(me.getName());
+		console.log(me.getName());
 		
 		var Icon = Js.create({
 			_value: 0,
@@ -59,6 +59,20 @@
 			this._value = 25;
 		});
 		icon.print();
+		
+		var nescafe = new Js.create;
+		nescafe.prototype.say = function() {
+			console.log("hello world");
+		};
+		nes = nescafe.extend({
+			say: function() {
+				this.$parent('say');
+				console.log("hello world again");
+			}
+		});
+		
+		var original = new nes;
+		original.say();
 		-->
 		</script>
 		

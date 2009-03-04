@@ -79,7 +79,7 @@ Js.widget.tab = Js.create({
 			// add the tab title
 			that._addHeader( v );
 			// hide the tab
-			Js.use( v ).setClass( that.setting.cssHidden );
+			Js.use( v ).setClass( that.setting.cssHidden ).css( "display", "none" );
 		});
 		
 		this.tabs = child;
@@ -172,18 +172,25 @@ Js.widget.tab = Js.create({
 	},
 	
 	activateTab: function( selector ) {
+		var selector = selector;
 		var that = this;
+		
+		var newTab = function() {
+			that.activeHeader = Js.use( "a[href=" + selector + "]", that.header[0] );
+			that.activeTab = Js.use( selector );
+			
+			that.activeHeader.addClass( that.setting.cssCurrent );
+			that.activeTab.setClass( that.setting.cssActive ).slideDown("normal");
+		};
 		
 		if ( Jrun.isset(this.activeTab) ) {
 			this.activeHeader.removeClass( this.setting.cssCurrent );
-			this.activeTab.setClass( this.setting.cssHidden );
-		}
-		
-		this.activeHeader = Js.use( "a[href=" + selector + "]", this.header[0] );
-		this.activeTab = Js.use( selector );
-		
-		this.activeHeader.addClass( this.setting.cssCurrent );
-		this.activeTab.setClass( this.setting.cssActive );
+			this.activeTab.setClass( this.setting.cssHidden ).slideUp( "normal", function() {
+				newTab();
+			});
+		} 
+		else 
+			newTab();
 		
 		return false;
 	},
@@ -225,11 +232,15 @@ Js.widget.tab = Js.create({
 			var closable = Jrun.pick( js.closable, false );
 			var set = Jrun.pick( js.activate, false );
 			
-			var node = Js.use( '<div/>' ).attr({
-				id: id,
-				className: this.setting.cssHidden,
-				title: title
-			}).plainHtml( content ).appendTo( this.node[0] );
+			var node = Js.use( '<div/>' )
+				.attr({
+					id: id,
+					className: this.setting.cssHidden,
+					title: title
+				})
+				.css( "display", "none" )
+				.plainHtml( content )
+				.appendTo( this.node[0] );
 			
 			this.tabs.add( node[0] );
 			

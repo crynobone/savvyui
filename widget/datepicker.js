@@ -464,9 +464,8 @@ Js.widget.datePicker = Js.create({
 					days.plainHtml("&nbsp;").setClass("calendar-invalid");
 			}
 			
-			if (day > monthLength) {
+			if (day > monthLength) 
 				break;
-			}
 		}
 		
 		if ( this.setting.navigation == true ) {

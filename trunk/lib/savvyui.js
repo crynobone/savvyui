@@ -790,7 +790,8 @@ Js.config = {
 			cssHidden: "tab-hidden",
 			cssActive: "tab-active",
 			cssCurrent: "current",
-			cssDisabled: "disabled"
+			cssDisabled: "disabled",
+			fx: true
 		}
 	}
 };
@@ -3155,6 +3156,7 @@ Js.widget.tab = Js.create({
 	statys: "off",
 	setting: null,
 	tabs: null,
+	current: "",
 	
 	initiate: function( selector, option ) {
 		return ( !!Jrun.isset(selector) ? this.init(selector, option) : this );
@@ -3316,22 +3318,40 @@ Js.widget.tab = Js.create({
 		var that = this;
 		
 		var newTab = function() {
+			if ( Jrun.isset(that.activeHeader) )
+				that.activeHeader.removeClass( that.setting.cssCurrent );
+			
 			that.activeHeader = Js.use( "a[href=" + selector + "]", that.header[0] );
 			that.activeTab = Js.use( selector );
 			
 			that.activeHeader.addClass( that.setting.cssCurrent );
-			that.activeTab.setClass( that.setting.cssActive ).slideDown("normal");
+			that.activeTab.setClass( that.setting.cssActive );
+			
+			if ( !!that.setting.fx ) 
+				that.activeTab.slideDown( "normal" );
+			else 
+				that.activeTab.show();
+			
+			that.current = selector;
 		};
 		
-		if ( Jrun.isset(this.activeTab) ) {
-			this.activeHeader.removeClass( this.setting.cssCurrent );
-			this.activeTab.setClass( this.setting.cssHidden ).slideUp( "normal", function() {
+		if( this.current !== selector ) {
+			if ( Jrun.isset(this.activeTab) ) {
+				this.activeTab.setClass( this.setting.cssHidden );
+				
+				if ( !!this.setting.fx ) {
+					this.activeTab.slideUp( "normal", function(){
+						newTab();
+					});
+				}
+				else {
+					this.activeTab.hide();
+					newTab();
+				}
+			} 
+			else 
 				newTab();
-			});
-		} 
-		else 
-			newTab();
-		
+		}
 		return false;
 	},
 	

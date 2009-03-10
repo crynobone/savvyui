@@ -34,10 +34,10 @@ Js.util.dimension = {
 					ret = offset;
 				
 				else if ( doc && doc.scrollTop ) 
-					ret = doc.scrollLeft;
+					ret = doc.scrollTop;
 				
 				else if ( el && el.scrollTop ) 
-					ret = el.scrollLeft;
+					ret = el.scrollTop;
 				
 				return ret;
 			},

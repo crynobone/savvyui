@@ -4,7 +4,7 @@
  */
 var Js = {
 	adapter: "jQuery-1.2.6",
-	version: "1.2.0-draft",
+	version: "1.2.0-a1",
 	use: null,
 	debug: {},
 	data: {},
@@ -225,7 +225,7 @@ var Jrun = {
 		var i = 0,
 			len = data.length;
 		
-		for ( ; i < data.length && !!data[i]; i++ ) {
+		for ( ; i < data.len && !!data[i]; i++ ) {
 			if ( data[i].match(value) ) {
 				return true;
 				break;

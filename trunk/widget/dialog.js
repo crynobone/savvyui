@@ -67,8 +67,10 @@ Js.widget.dialog = Js.widget.panel.extend({
 	},
 	
 	fixDimension: function() {
+		var width = ( this.main.width() > Jrun.pickType(this.setting.width, 0, 'number') ? this.main.width() : this.setting.width );
+		
 		var offset = [
-			this.main.width(),
+			width,
 			this.main.height()
 		];
 		

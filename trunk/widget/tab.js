@@ -41,13 +41,15 @@ Js.widget.tab = Js.create({
 		
 		this.handler = Jrun.pickGrep( this.setting.handler, "click", /^(mouseover|click)$/i );
 		
-		// add tab toolbar on top
-		this._addToolbar();
-		
-		this.activateTab( "#" + Js.use("." + this.setting.cssHidden + ":first", this.node[0]).attr("id") );
-		
-		// tab is activated
-		this.status = "on";
+		if (this.node.size() > 0) {
+			// add tab toolbar on top
+			this._addToolbar();
+			
+			this.activateTab("#" + Js.use("." + this.setting.cssHidden + ":first", this.node[0]).attr("id"));
+			
+			// tab is activated
+			this.status = "on";
+		}
 		
 		return this;
 	},
@@ -80,10 +82,11 @@ Js.widget.tab = Js.create({
 			// add the tab title
 			that._addHeader( v );
 			// hide the tab
-			Js.use( v ).setClass( that.setting.cssHidden ).css( "display", "none" );
+			Js.use( v ).setClass( that.setting.cssHidden );
 		});
 		
 		this.tabs = child;
+		this.tabs.css( "display", "none" );
 		
 		var div2 = Js.use( "<div/>" ).css( "display", "block" ).appendTo( div[0] );
 	},

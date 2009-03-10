@@ -1,8 +1,10 @@
 /**
  * Savvy.UI JavaScript Library v1.2.0-draft
- * Version: 1.2.0-draft
+ * Version: 1.2.0-a1
  * Author: Mior Muhammad Zaki crynobone@gmail.com 
  * 
  * Copyright (c) 2009 Mior Muhammad Zaki Mior Khairuddin
  * Licensed under the MIT
+ *
+ * Revision: r320
  */

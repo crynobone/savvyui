@@ -1,10 +1,12 @@
 /**
  * Savvy.UI JavaScript Library v1.2.0-draft
- * Version: 1.2.0-draft
+ * Version: 1.2.0-a1
  * Author: Mior Muhammad Zaki crynobone@gmail.com 
  * 
  * Copyright (c) 2009 Mior Muhammad Zaki Mior Khairuddin
  * Licensed under the MIT
+ *
+ * Revision: r320
  */
 
 /* Map Savvy.UI Global Namespace Object
@@ -13,7 +15,7 @@
  */
 var Js = {
 	adapter: "jQuery-1.2.6",
-	version: "1.2.0-draft",
+	version: "1.2.0-a1",
 	use: null,
 	debug: {},
 	data: {},
@@ -234,7 +236,7 @@ var Jrun = {
 		var i = 0,
 			len = data.length;
 		
-		for ( ; i < data.length && !!data[i]; i++ ) {
+		for ( ; i < data.len && !!data[i]; i++ ) {
 			if ( data[i].match(value) ) {
 				return true;
 				break;
@@ -1521,10 +1523,10 @@ Js.util.dimension = {
 					ret = offset;
 				
 				else if ( doc && doc.scrollTop ) 
-					ret = doc.scrollLeft;
+					ret = doc.scrollTop;
 				
 				else if ( el && el.scrollTop ) 
-					ret = el.scrollLeft;
+					ret = el.scrollTop;
 				
 				return ret;
 			},
@@ -3020,8 +3022,10 @@ Js.widget.dialog = Js.widget.panel.extend({
 	},
 	
 	fixDimension: function() {
+		var width = ( this.main.width() > Jrun.pickType(this.setting.width, 0, 'number') ? this.main.width() : this.setting.width );
+		
 		var offset = [
-			this.main.width(),
+			width,
 			this.main.height()
 		];
 		
@@ -3182,13 +3186,15 @@ Js.widget.tab = Js.create({
 		
 		this.handler = Jrun.pickGrep( this.setting.handler, "click", /^(mouseover|click)$/i );
 		
-		// add tab toolbar on top
-		this._addToolbar();
-		
-		this.activateTab( "#" + Js.use("." + this.setting.cssHidden + ":first", this.node[0]).attr("id") );
-		
-		// tab is activated
-		this.status = "on";
+		if (this.node.size() > 0) {
+			// add tab toolbar on top
+			this._addToolbar();
+			
+			this.activateTab("#" + Js.use("." + this.setting.cssHidden + ":first", this.node[0]).attr("id"));
+			
+			// tab is activated
+			this.status = "on";
+		}
 		
 		return this;
 	},
@@ -3221,10 +3227,11 @@ Js.widget.tab = Js.create({
 			// add the tab title
 			that._addHeader( v );
 			// hide the tab
-			Js.use( v ).setClass( that.setting.cssHidden ).css( "display", "none" );
+			Js.use( v ).setClass( that.setting.cssHidden );
 		});
 		
 		this.tabs = child;
+		this.tabs.css( "display", "none" );
 		
 		var div2 = Js.use( "<div/>" ).css( "display", "block" ).appendTo( div[0] );
 	},

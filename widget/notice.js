@@ -66,7 +66,7 @@ Js.widget.notice = Js.widget.activity.extend({
 			.appendTo( this.node.box[0] );
 		
 		if ( message != "" ) 
-			var p = Js.use( "<p/>" ).plainHtml( "" + message ).appendTo( this.node.box[0] );
+			var p = Js.use( "<p/>" ).htmlText( "" + message ).appendTo( this.node.box[0] );
 		
 		
 		var span = Js.use( "<em/>" )

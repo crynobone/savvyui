@@ -466,7 +466,7 @@ Js.widget.datePicker = Js.create({
 					day++;
 				}
 				else 
-					days.plainHtml("&nbsp;").setClass("calendar-invalid");
+					days.htmlText("&nbsp;").setClass("calendar-invalid");
 			}
 			
 			if (day > monthLength) 

@@ -261,7 +261,7 @@ Js.widget.tab = Js.create({
 					title: title
 				})
 				.css( "display", "none" )
-				.plainHtml( content )
+				.htmlText( content )
 				.appendTo( this.node[0] );
 			
 			this.tabs.add( node[0] );

@@ -158,7 +158,7 @@ Js.widget.panel = Js.create({
 		try {
 			this.content.html( this.setting.content );
 		} catch(e) {
-			this.content.plainHtml( this.setting.content );
+			this.content.htmlText( this.setting.content );
 		}
 		
 		// set height and scrolling option for content CONTAINER

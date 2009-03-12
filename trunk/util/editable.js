@@ -111,7 +111,7 @@ Js.util.editable = Js.create({
 			.appendTo( this.box.content[0] );
 		
 		var p = Js.use( "<label/>" )
-			.plainHtml( "" + this.language.message )
+			.htmlText( "" + this.language.message )
 			.appendTo( div[0] );
 			
 		this.input = Js.use( '<input type="text"/>')

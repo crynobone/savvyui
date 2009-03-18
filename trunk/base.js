@@ -1,13 +1,17 @@
 /* Map Savvy.UI Global Namespace Object
  * namespace: Js
- * Developed and tested with jQuery-1.2.6
+ * Developed and tested with jQuery-1.3.2
  */
 var Js = {
-	adapter: "jQuery-1.2.6",
-	version: "1.2.0-a1",
+	adapter: "jQuery-1.3.2",
+	version: "1.2.0-a2",
 	use: null,
 	debug: {},
-	data: {},
+	data: {
+		ext: {},
+		util: {},
+		widget: {}
+	},
 	ext: {},
 	util: {},
 	parse: {},
@@ -34,46 +38,48 @@ Js.toString = function() {
 	return ["Savvy.UI", "version", Js.version, "using", Js.adapter].join(" ");	
 };
 
-Js.nue = function( data, depth ) {
-	var depth = Jrun.pickType( depth, 1, "number" );
-	var type = Jrun.typeOf( data );
+Js.nue = function( dt, d ) {
+	var d = Jrun.pickType( d, 1, "number" );
+	var t = Jrun.typeOf( dt, "object" );
 	
-	if ( Jrun.inArray(type, ["object", "array"]) ) {
-		var ret = ( type == "object" ? {} : [] );
-		--depth;
+	if ( Jrun.inArray(t, ["object", "array"]) ) {
+		var r = ( t == "object" ? {} : [] );
+		--d;
 		
-		for ( var method in data ) {
-			if ( data.hasOwnProperty(method) ) 
-				ret[method] = ( depth > 0 ? Js.nue(data[method], depth) : data[method] );
+		for ( var m in dt ) {
+			if ( dt.hasOwnProperty(m) ) 
+				r[m] = ( d > 0 ? Js.nue( dt[m], d ) : dt[m] );
 		}
 		
-		return ret;
+		return r;
 	}
 	else 
-		return data;
+		return dt;
 };
 
-Js.append = function( data, base, filter, invert ) {
-	var filter = Jrun.pickType( filter, null, "array" );
-	var invert = Jrun.pickType( invert, false, "boolean" );
+Js.append = function( dt, alt, f, i ) {
+	// provide list of method (in array) to be append
+	var f = Jrun.pickType( f, null, "array" );
+	// invert append option
+	var i = Jrun.pickType( i, false, "boolean" );
 	
-	if ( Jrun.typeOf( data ) !== "object" )
-		data = {};
+	if ( !Jrun.typeOf( dt, "object" ) )
+		dt = {};
 	
-	var ret = data;
+	var r = dt;
 	
 	// loop value's method
-	for ( var method in base ) {
+	for ( var m in alt ) {
 		// if data doesn't have the method add it
-		var valid = ( Jrun.isnull(filter) || Jrun.inArray(method, filter) );
-		var unique = ( !data.hasOwnProperty(method) && base.hasOwnProperty(method) );
-		var valid = ( !!invert ? !valid : valid );
+		var v = ( Jrun.isnull(f) || Jrun.inArray(m, f) );
+		var u = ( !dt.hasOwnProperty(m) && alt.hasOwnProperty(m) );
+		var v = ( !!i ? !v : v );
 		 
-		if ( !!unique && !!valid )
-			ret[method] = base[method];
+		if ( !!u && !!v )
+			r[m] = alt[m];
 	}
 	
-	return ret;
+	return r;
 };
 
 // Debugging engine for Savvy.UI
@@ -91,36 +97,49 @@ Js.debug = {
 		// cocntain all logs
 		log: []
 	},
+	value: {
+		error: [],
+		log: []
+	},
 	
 	// Log a message/note
-	log: function( text ) {
+	log: function( tx, v ) {
+		var v = Jrun.pick(v, "")
+		
 		// push log to stack
-		this.data.log.push( text );
+		this.data.log.push( tx );
+		this.value.log.push( v );
 		
 		if ( !!this.dev ) {
 			try {
-				console.log(text);
+				if ( v === "")
+					console.log( tx );
+				else 
+					console.log( tx, v );
 			}
 			catch(e) {
-				alert(text);
+				alert( tx + v );
 			}
 		}
 	},
 	
 	// Log an error
-	error: function( text ) {
-		// push error to stack
-		this.data.error.push( text );
+	error: function( tx, v ) {
+		var v = Jrun.pick(v, "");
 		
-		// if Js.debug.enable is true, display the error
-		if ( !!this.enable ) {
+		// push log to stack
+		this.data.error.push( tx );
+		this.value.error.push( v );
+		
+		if ( !!this.enable || !!this.dev ) {
 			try {
-				// good browser come with console
-				console.log(text);
-			} 
+				if ( v === "")
+					console.log( tx );
+				else 
+					console.log( tx, v );
+			}
 			catch(e) {
-				// browser doesn't support console so alert
-				alert(text);
+				alert( tx + v );
 			}
 		}
 	}
@@ -133,10 +152,10 @@ var Jrun = {
 	behaviour: function() {
 		// Return Object containing Boolean value of each browser object.
 		return function() {
-			var win = window;
-			var doc = document;
+			var w = window,
+				d = document;
 			// make sure ie6 or ie7 is either false or true only.
-			var items = { 
+			var i = { 
 				ie: false,
 				ie6: false,
 				ie7: false,
@@ -145,51 +164,63 @@ var Jrun = {
 				opera: false
 			};
 			// detect IE
-			items.ie = items[win.XMLHttpRequest ? "ie7" : "ie6"] = ( win.ActiveXObject ? true : false );
+			i.ie = i[w.XMLHttpRequest ? "ie7" : "ie6"] = !!w.ActiveXObject;
 			// detect KHTML
-			items.khtml = ( (doc.childNodes && !doc.all && !navigator.taintEnabled) ? true : false );
+			i.khtml = (d.childNodes && !d.all && !navigator.taintEnabled);
 			// detect Gecko
-			items.gecko = ( doc.getBoxObjectFor != null ? true : false );
+			i.gecko = d.getBoxObjectFor != null;
 			// detect Opera
-			items.opera = ( items.opera ? true : false );
+			i.opera = !!w.opera;
+			
 			// return the object
-			return items;
+			return i;
 		}();
 	}(),
 	
 	// Camelize string input
-	camelize: function( data ) {
-		var val = data.split(/\-/);
+	camelize: function( dt ) {
+		var v = dt.split(/\-/);
 		
 		// if array only have one value
-		if ( val.length === 1 )
-			return val[0];
+		if ( v.length === 1 )
+			return v[0];
 		
-		var ret = ( data.indexOf('-') == 0 ? val[0].charAt(0).toUpperCase() + val[0].substr(1) : val[0] );
+		var r = ( dt.indexOf('-') == 0 ? v[0].charAt(0).toUpperCase() + v[0].substr(1) : v[0] );
 		
-		jQuery.each(val, function( i, v ) {
+		jQuery.each(v, function( i, val ) {
 			if ( i > 0 )
-				ret = ret + v.charAt(0).toUpperCase() + v.substr(1);
+				r = r + val.charAt(0).toUpperCase() + val.substr(1);
 		});
 		
-		return ret;
+		return r;
+	},
+	
+	filter: function( dt, val ) {
+		var r = [];
+		
+		jQuery.each(dt, function( i, v ) {
+			if ( v.match(val) ) 
+				r.push(v);
+		});
+		
+		return r;
 	},
 	
 	// Open a URL using JavaScript
-	href: function( url, target ) {
-		if ( this.trim(url) !== "" ) {
-			if ( this.isnull(target) ) 
-				window.location.href = url;
+	href: function( u, t ) {
+		if ( this.trim( u ) !== "" ) {
+			if ( this.isnull(t) ) 
+				window.location.href = u;
 			else 
-				window.open( url, target );
+				window.open( u, t );
 		} 
 		else 
-			Js.debug.error( "Jrun.href: failed to load page " + url );
+			Js.debug.error( "Jrun.href: failed to load page " + u );
 	},
 	
 	// Encode HTML entities from any given string
-	htmlEncode: function( value ) {
-		return value
+	htmlEncode: function( v ) {
+		return v
 			.replace(/&/g, "&amp;")
 			.replace(/</g, "&lt;")
 			.replace(/>/g, "&gt;")
@@ -197,8 +228,8 @@ var Jrun = {
 	},
 	
 	// Decode HTML entities from any given string
-	htmlDecode: function( value ) {
-		return value
+	htmlDecode: function( v ) {
+		return v
 			.replace(/&amp;/g, "&")
 			.replace(/&lt;/g, "<")
 			.replace(/&gt;/g, ">")
@@ -206,12 +237,11 @@ var Jrun = {
 	},
 	
 	// Check whether the value is in an array
-	inArray: function( value, data ) {
-		var i = 0, 
-			len = data.length;
+	inArray: function( v, dt ) {
+		var i = dt.length;
 		
-		for ( ; i < len && !!data[i]; i++ ) {
-			if ( data[i] === value ) {
+		for ( ; i > -1 && !!dt[i]; i-- ) {
+			if ( dt[i] === v ) {
 				return true;
 				break;
 			}
@@ -221,12 +251,11 @@ var Jrun = {
 	},
 	
 	// Check whether the value is in an array, check validity based on Regular Expression
-	inArrayGrep: function( value, data ) {
-		var i = 0,
-			len = data.length;
+	inArrayGrep: function( v, dt ) {
+		var i = dt.length;
 		
-		for ( ; i < data.len && !!data[i]; i++ ) {
-			if ( data[i].match(value) ) {
+		for ( ; i > -1 && !!dt[i]; i-- ) {
+			if ( dt[i].match(v) ) {
 				return true;
 				break;
 			}
@@ -236,72 +265,67 @@ var Jrun = {
 	},
 	
 	// Get the indexOf based on value in an array
-	'indexOf': function( value, data ) {
-		var i = data.length;
-		
-		for ( ; i-- && data[i] !== value; );
+	'indexOf': function( v, dt ) {
+		var i = dt.length;
+		for ( ; i-- && dt[i] !== v; );
 		return i;
 	},
 	
 	// Get the indexOf based on value in an array
-	indexOfGrep: function( value, data ) {
-		var i = data.length;
-		
-		for ( ; i-- && !data[i].match(value); );
+	indexOfGrep: function( v, dt ) {
+		var i = dt.length;
+		for ( ; i-- && !dt[i].match(v); );
 		return i;
 	},
 	
 	// Check if data is not defined
-	isnull: function( data ) {
-		return ( typeof(data) == "undefined" || data == null );
+	isnull: function( v ) {
+		return ( typeof(v) == "undefined" || v == null );
 	},
 	
 	// Check if data is defined
-	isset: function( data ) {
-		return !this.isnull( data );
+	isset: function( v ) {
+		return !this.isnull( v );
 	},
 	
-	/* Check whether the passed value is a function
-	 * Deprecated: Replace with jQuery.isFunction
-	 */
-	isfunction: function( data ) {
-		return this.typeOf ( data ) == "function";
+	// Check whether the passed value is a function
+	isfunction: function( v ) {
+		return this.typeOf( v, "function" );
 	},
 	
 	// Trim left of a string
-	ltrim: function( value ) {
-		return new String( value ).replace( /^\s+/g, "" );
+	ltrim: function( v ) {
+		return new String( v ).replace( /^\s+/g, "" );
 	},
 	
-	parameter: function( data, length, type ) {
-		var data = jQuery.makeArray( data );
-		var type = Jrun.pickType( type, [], "array" );
+	parameter: function( dt, l, t ) {
+		var dt = jQuery.makeArray( dt );
+		var t = Jrun.pickType( t, [], "array" );
+		var r = false;
 		
-		if ( data.length === length ) {
-			var ret = true;
+		if ( dt.length === l ) {
+			r = true;
 			
-			jQuery.each(data, function( i, v ) {
-				if ( type[i] !== true && Jrun.typeOf(v) !== type[i] ) 
-					ret = false;
+			jQuery.each(dt, function( i, v ) {
+				if ( t[i] !== true && Jrun.typeOf(v) !== t[i] ) 
+					r = false;
 			});
-			
-			return ret;
 		}
-		else 
-			return false;
+			
+		return r;
 	},
 	
 	// Pick the first arguments that is defined
-	pick: function( js ) {
-		var data = jQuery.makeArray( arguments ),
-			i = 0,
-			len = data.length;
+	pick: function() {
+		var dt = jQuery.makeArray( arguments ),
+			i = 0;
+		var l = dt.length;
 		
-		for ( ; i < len; i++ ) {
-			var ret = data[i];
+		for ( ; i < l; i++ ) {
+			var r = dt[i];
             
-            if ( Jrun.isset(ret) ) {
-                return ret;
+            if ( Jrun.isset(r) ) {
+                return r;
 				break;
             }
 		};
@@ -310,18 +334,18 @@ var Jrun = {
 	},
 	
 	// Pick the first arguments that is defined and typeof match the last arguments
-	pickType: function( js ) {
-		var data = jQuery.makeArray( arguments ),
-			i = 0,
-			len = data.length;
-		var last = data[(len - 1)];
+	pickType: function() {
+		var dt = jQuery.makeArray( arguments ),
+			i = 0;
+		var l = dt.length;
+		var v = dt[(l - 1)];
 		
-		for ( ; i < (len - 1); i++ ) {
-			var ret = data[i];
+		for ( ; i < (l - 1); i++ ) {
+			var r = dt[i];
             
-            if ( Jrun.isset(ret) ) {
-                if ( this.typeOf(ret) == last ) {
-                    return ret;
+            if ( Jrun.isset(r) ) {
+                if ( this.typeOf(r, v) ) {
+                    return r;
 					break;
                 }
             }
@@ -331,21 +355,21 @@ var Jrun = {
 	},
 	
 	// Pick the first arguments that is defined and match Regular Expression passed in the last arguments
-	pickGrep: function( js ) {
-		var data = jQuery.makeArray( arguments ),
-			i = 0,
-			len = data.length;
-		var last = data[(len - 1)];
+	pickGrep: function() {
+		var dt = jQuery.makeArray( arguments ),
+			i = 0;
+		var l = dt.length;
+		var v = dt[(l - 1)];
 		
-		if ( this.typeOf(last) == "string" ) 
-			last = new RegExp(last);
+		if ( this.typeOf(v) == "string" ) 
+			v = new RegExp(v);
 		
-		for ( ; i < (len - 1); i++ ) {
-			var ret = data[i];
+		for ( ; i < (l - 1); i++ ) {
+			var r = dt[i];
             
-            if ( Jrun.isset(ret) ) {
-                if ( !!ret.match(last) ) {
-                    return ret;
+            if ( Jrun.isset(r) ) {
+                if ( !!r.match(v) ) {
+                    return r;
 					break;
                 }
             }
@@ -354,60 +378,55 @@ var Jrun = {
 		return null;
 	},
 	
-	prettyList: function( data, between, last ) {
-		var len = data.length,
-			ret = new String;
+	prettyList: function( dt, b, d ) {
+		var l = dt.length,
+			r = new String;
 		
-		if ( len > 1 ) {
-			jQuery.each(data, function( i, v ) {
-				ret = [ret, ( i == 0 ? "" : ( i == (len - 1) ? last : between) ), v].join("");
+		if ( l > 1 ) {
+			jQuery.each(dt, function( i, v ) {
+				r = [r, ( i == 0 ? "" : ( i == (l - 1) ? d : b) ), v].join("");
 			});
 		} 
 		else 
-			ret = data[0];
+			r = dt[0];
 		
-		return ret;
+		return r;
 	},
 	
-	rand: function( js ) {
-		var data = arguments,
-			len = 0,
-			val = 0;
+	replace: function( s, v, dt ) {
+		var v = Jrun.pickType( v, "", "string" );
 		
-		if ( data.length === 2 ) {
-			val = data[0];
-			len = data[1];
-		} 
-		else if ( data.length === 1 ) 
-			len = data[0];
-		
-		return ( Math.floor(Math.random() * len) + val );
+		return dt.split(s).join(v);
 	},
 	
 	// Trim right of a string.
-	rtrim: function( data ) {
-		return new String( data ).replace( /\s$/g, "" );
+	rtrim: function( v ) {
+		return new String( v ).replace( /\s$/g, "" );
 	},
 	
 	// Striptags work similiar to strip_tags() in PHP
-	stripTags: function( data ) {
-		return new String( data ).replace( /<([^>]+)>/g, "" );
+	stripTags: function( v ) {
+		return new String( v ).replace( /<([^>]+)>/g, "" );
 	},
 	
 	// Parse input string value as Number using parseInt
-	toNumber: function( data ) {
+	toNumber: function( v ) {
+		var v = this.replace( ",", "", v );
+		
 		// return possible integer value of a string, if not a string then return self
-		return ( typeof(data) == "string" ? parseInt( data, 10 ) : data );
+		return ( typeof(v) == "string" ? parseInt( v, 10 ) : v );
 	},
 	
 	// Parse input string value as Float using parseFloat
-	toFloat: function( data ) {
-		return ( typeof(data) == "string" ? parseFloat( data, 10 ) : data );
+	toFloat: function( v ) {
+		var v = this.replace( ",", "", v );
+		
+		return ( typeof(v) == "string" ? parseFloat( v, 10 ) : v );
 	},
 	
-	toProperCase: function( data ) {
-		var val = data.split(/ /g), 
-			ret = [],
+	toProperCase: function( dt ) {
+		var val = dt.split(/ /g), 
+			r = [],
 			that = function(v) {
 				var v = v.toString();
 				return [
@@ -416,79 +435,86 @@ var Jrun = {
 				];
 			};
 		
-		jQuery.each(val, function(i, v) {
-			ret.push( that(v).join("") );
+		jQuery.each(val, function( i, v ) {
+			r.push( that(v).join("") );
 		});
 		
-		return ret.join(" ");
+		return r.join(" ");
 	},
 	
 	// Convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
-	toArray: function( data, offset ) {
-		var offset = ( this.isnull(offset) || offset < 1 ? 0 : offset );
-		var len = {
-			offset: 0,
-			data: 0
+	toArray: function( dt, off ) {
+		var off = Jrun.pickType( off, 0, "number");
+		off = ( off < 1 ? 0 : off );
+		var l = {
+			off: 0,
+			dt: 0
 		};
-		var ret = [];
+		var r = [];
 		
 		// return empty array
-		if ( this.isset(data) ) {
+		if ( this.isset(dt) ) {
 			// ensure the offset
-			len.offset = ( data.length - offset );
-			len.data = data.length;
+			l.off = ( dt.length - off );
+			l.dt = dt.length;
 			
 			// loop and prepare r to be return
-			while ( len.offset > 0 ) {
-				--len.offset;
-				--len.data;
-				ret[len.offset] = data[len.data];
+			while ( l.off > 0 ) {
+				--l.off;
+				--l.dt;
+				
+				r[l.off] = dt[l.dt];
 			}
 		}
 		
-		return ret;
+		return r;
 	},
 	
 	// Trim both left and right of a string.
-	trim: function( data ) {
-		return jQuery.trim( data ); 
+	trim: function( v ) {
+		return jQuery.trim( v ); 
 	},
 	
 	// Return the typeof passed argument, extending JavaScript default typeof
-	typeOf: function( data ) {
-		if ( Jrun.isnull(data) ) 
-			return "undefined";
-		else {
-			var val = Object.prototype.toString.call(data).match(/(\w+)\]/)[1];
-			return ( val == "HTMLDocument" ? "element" : val.toLowerCase() );
-		}
+	typeOf: function( dt, t ) {
+		var t = Jrun.pickType( t, null, "string");
+		var r = (function( dt ) {
+			if ( Jrun.isnull(dt) ) 
+				return "undefined";
+			else {
+				var v = Object.prototype.toString.call(dt).match(/(\w+)\]/)[1];
+				return ( v == "HTMLDocument" ? "element" : v.toLowerCase() );
+			}
+		})( dt );
+		
+		return (Jrun.isset(t) ? (r === t.toLowerCase()) : r );
 	},
 	
 	// return only unique value of an array
-	unique: function( data, repeat ) {
+	unique: function( dt, rt ) {
 		// when option equal true it only reject value which is repeating
-		var repeat = this.pick( repeat, false );
-		var ret = [];
+		var rt = this.pickType( rt, false, "boolean" );
+		var r = [];
 		
 		// loop the array
-		jQuery.each( data, function( i, v ) {
-			if ( !repeat ) {
+		jQuery.each( dt, function( i, v ) {
+			if ( !rt ) {
 				// add only if unique
-				if ( !Jrun.inArray(v, ret) ) 
-					ret.push(v);
+				if ( !Jrun.inArray(v, r) ) 
+					r.push(v);
 			} 
 			else {
 				if ( i == 0 ) 
-					ret.push(v);
-				else if ( v !== Jrun.trim(data[i - 1]) ) 
-					ret.push(v);
+					r.push(v);
+				else if ( v !== Jrun.trim( dt[i - 1] ) ) 
+					r.push(v);
 			}
 		});
 		
-		return ret;
+		return r;
 	},
 	
-	prep: function( data ) {
-		return ( data.match(/^(#|\.)?(.*)$/gi) ? RegExp.$2 : data );
+	prep: function( dt ) {
+		return ( dt.match(/^(#|\.)?(.*)$/gi) ? RegExp.$2 : dt );
 	}
 };

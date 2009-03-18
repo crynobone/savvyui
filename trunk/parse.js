@@ -4,79 +4,72 @@
 
 Js.parse = {
 	html: {
-		to: function( data ) {
-			var data = new String( data );
-			data = Jrun.htmlEncode( data );
-			data = encodeURIComponent( data );
-			
-			return data;
+		to: function( r ) {
+			return encodeURIComponent( Jrun.htmlEncode( new String(r) ) );
 		},
 		
-		from: function( data ) {
-			var data = new String( data);
-			data = decodeURIComponent( data );
-			data = Jrun.htmlDecode( data );
-			
-			return data;
+		from: function( r ) {
+			return Jrun.htmlDecode( decodeURIComponent( new String(r) ) );
 		}
 	},
 	
 	xhr: {
-		init: function( reply ) {
+		init: function( v ) {
 			var that = Js.parse.xhr;
-			var data = eval( "(" + reply + ")" );
+			var dt = eval( "(" + v + ")" );
 			
-			Js.debug.log( "XHR: " + reply );
+			Js.debug.log( "XHR: " + v );
 			
-			if ( Jrun.typeOf(data) == "object" ) {
-				if ( !!data.SUIXHR ) {
-					that.notice( data );
-					that.href( data );
-					that.update( data );
+			if ( Jrun.typeOf(dt) == "object" ) {
+				if ( !!dt.SUIXHR ) {
+					that.notice( dt );
+					that.href( dt );
+					that.update( dt );
 				}
 			}
 		},
 		
-		notice: function( data ) {
-			var note = Jrun.pickType( data.notice, "string" );
+		notice: function( dt ) {
+			var v = Jrun.pickType( dt.notice, "string" );
 			
-			if ( Jrun.isset(note) && note !== "" ) {
-				window.alert( note );
+			if ( Jrun.isset(v) && v !== "" ) {
+				window.alert( v );
 				
-				if ( !!console ) 
-					console.log( note );
+				try {
+					console.log( v );
+				} catch(e) { }
 			}
 		},
-		href: function( data ) {
-			var href = Jrun.pickGrep( data.href, /^https?:\/\//g );
-			var xhref = Jrun.pickGrep( data.xhref, /^https?:\/\//g );
+		href: function( dt ) {
+			var h = Jrun.pickGrep( dt.href, /^https?:\/\//g );
+			var x = Jrun.pickGrep( dt.xhref, /^https?:\/\//g );
 			
-			if ( Jrun.isset(xhref) && xhref !== "" ) 
-				Jrun.href( xhref, "_blank" );
+			if ( Jrun.isset(x) && x !== "" ) 
+				Jrun.href( x, "_blank" );
 			
-			else if ( Jrun.isset(href) && href !== "" ) 
-				Jrun.href( href );
+			else if ( Jrun.isset(h) && h !== "" ) 
+				Jrun.href( h );
 		},
 		
-		update: function( data ) {
-			var args = Jrun.pick( data.text );
-			var id = Jrun.pickType( data.id, "string" );
-			var selector = Jrun.pickType( selector, "string" );
-			var object = Jrun.pickType( data.callback, "string" );
+		update: function( dt ) {
+			var args = Jrun.pick( dt.text );
+			var id = Jrun.pickType( dt.id, "string" );
+			var el = Jrun.pickType( dt.selector, "string" );
+			var fn = Jrun.pickType( dt.callback, "string" );
 			
 			if ( Jrun.typeOf( args ) == "string" ) {
-				if ( !!selector ) 
-					Js.use(selector).html(args);
+				if ( !!el ) 
+					Js.use( el ).html( args );
 				else if ( !!id ) 
-					Js.use("#" + id).html(args);
+					Js.use("#" + id).html( args );
 			}
 			else if ( Jrun.isset(object) ) {
 				// eval the function without making a callback
-				var callback = eval( object );
+				var fn = eval( fn );
 					
 				// execute the function
-				if ( Jrun.isfunction(callback) ) 
-					callback( args );
+				if ( Jrun.isfunction(fn) ) 
+					fn( args );
 			}
 		}
 	}

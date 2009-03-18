@@ -125,7 +125,8 @@ Js.config = {
 			cssActive: "tab-active",
 			cssCurrent: "current",
 			cssDisabled: "disabled",
-			fx: true
+			fx: true,
+			header: ""
 		}
 	}
 };

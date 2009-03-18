@@ -20,16 +20,17 @@ Js.widget.panel = Js.create({
 	footer: null,
 	status: "normal",
 	
-	initiate: function( option ) {
-		return ( Jrun.isset(option) ? this.init( option ) : this );
+	initiate: function( opt ) {
+		return ( Jrun.isset( opt ) ? this.init( opt ) : this );
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting, ["lang"], true );
-		
-		if ( Jrun.isset(option.lang) ) 
-			this.language = Js.append(option.lang, this.language);
+	setup: function( opt ) {
+		if ( Jrun.typeOf( opt, "object" ) ) {
+			this.setting = Js.append( opt, this.setting, ["lang"], true );
+			
+			if ( Jrun.isset(opt.lang) ) 
+				this.language = Js.append(opt.lang, this.language);
+		}
 		
 		return this;
 	},
@@ -37,12 +38,12 @@ Js.widget.panel = Js.create({
 	_prepSetting: function() {
 		this.renderTo = Jrun.pick( this.setting.renderTo, "body:eq(0)" );
 		this.element = this.setting.element;
-	},	
+	},
 	
-	init: function(option) {
+	init: function( opt ) {
 		var that = this;
 		
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
 		this._prepSetting();
@@ -52,14 +53,15 @@ Js.widget.panel = Js.create({
 			this.renderTo = Js.use(this.renderTo);
 		}
 		else if ( !this.renderTo || !this.renderTo.nodeType ) {
-			this.renderTo = Js.use("body").eq(0);
+			this.renderTo = Js.use("body:eq(0)");
 		}
 			
 		this._loadBorder();
 		this._loadContent();
 		
 		if ( Jrun.isset(this.setting.button) ) {
-			for ( var i = 0; i < this.setting.button.length; i++ ) 
+			var l = this.setting.button.length;
+			for ( var i = 0; i < l; i++ ) 
 				this.addButton( this.setting.button[i] );
 		}
 		
@@ -100,16 +102,20 @@ Js.widget.panel = Js.create({
 		this.main = dc[1];
 	},
 	_loadContent: function() {
-		var that = this;
+		var that = this,
+			opt = this.setting;
 		
 		// set panel width
-		if ( Jrun.isset(this.setting.width) ) 
-			this.main.css( "width", this.setting.width + "px" );
+		if ( Jrun.isset(opt.width) ) 
+			this.main.css( "width", opt.width + "px" );
 		
 		// render header
 		this.header = Js.use( "<h2/>" )
 			.addClass( "header" )
 			.appendTo( this.main[0] );
+		
+		if ( !opt.header ) 
+			this.header.hide();
 		
 		// render content
 		this.container = Js.use( "<div/>" )
@@ -123,13 +129,13 @@ Js.widget.panel = Js.create({
 		
 		
 		// set panel height
-		if ( Jrun.isset(this.setting.height) ) 
-			this.container.css( "height", this.setting.height + "px" );
+		if ( Jrun.isset( opt.height ) ) 
+			this.container.css( "height", opt.height + "px" );
 		
 		// render header title
 		this.mainTitle = Js.use( "<span/>" )
 			.addClass( "title" )
-			.text( this.setting.title )
+			.text( opt.title )
 			.appendTo( this.header[0] );
 		
 		this.buttons = Js.use( "<span/>" )
@@ -144,7 +150,7 @@ Js.widget.panel = Js.create({
 			.appendTo( this.footer[0] );
 		
 		// Enable Close-Button option
-		if ( !!this.setting.closable ) 
+		if ( !!opt.closable ) 
 			this.closeButton.addClass( "close" ).click( function() { that.closePanel(); return false; });
 		else 
 			this.closeButton.addClass( "button-disabled" );
@@ -156,15 +162,15 @@ Js.widget.panel = Js.create({
 			.appendTo( this.container[0] );
 		
 		try {
-			this.content.html( this.setting.content );
+			this.content.html( opt.content );
 		} catch(e) {
-			this.content.htmlText( this.setting.content );
+			this.content.htmlText( opt.content );
 		}
 		
 		// set height and scrolling option for content CONTAINER
-		if ( Jrun.isset(this.setting.height) && !!this.setting.scroll ) {
+		if ( Jrun.isset( opt.height ) && !!opt.scroll ) {
 			this.content.css({
-				"height": (this.setting.height - (23 + 21)) + "px",
+				"height": opt.height + "px",
 				"overflow": "auto"
 			});
 		}
@@ -176,12 +182,13 @@ Js.widget.panel = Js.create({
 	},
 	
 	closePanel: function() {
-		var that = this;
+		var that = this,
+			opt = this.setting;
 		
 		// callback to close panel
 		this.node.fadeOut( "slow", function() {
-			if ( Jrun.isfunction(that.setting.onClose) ) 
-				that.setting.onClose.apply( that );
+			if ( Jrun.isfunction( opt.onClose ) ) 
+				opt.onClose.apply( that );
 			
 			that.node.remove();
 		});
@@ -189,22 +196,23 @@ Js.widget.panel = Js.create({
 		return this;
 	},
 	
-	title: function( text ) {
-		this.mainTitle.html("").text( text );
+	title: function( tx ) {
+		this.mainTitle.html("").text( tx );
+		return this;
 	},
 	
-	addButton: function( js ) {
+	addButton: function( jo ) {
 		var that = this;
-		var callback = Jrun.pickType( js.callback, "function" );
-		var text = Jrun.pickType( js.text, this.language.defaultButton, "string" );
-		var type = Jrun.pickGrep( js.type, "normal", /^(normal|submit|cancel)$/i );
+		var fn = Jrun.pickType( jo.callback, "function" );
+		var tx = Jrun.pickType( jo.text, this.language.defaultButton, "string" );
+		var t = Jrun.pickGrep( jo.type, "normal", /^(normal|submit|cancel)$/i );
 		
 		Js.use( "<a/>" )
 			.attr( "href", "#" )
 			.click( function() {
 				var runDefault = false;
-				if ( Jrun.isfunction(callback) ) 
-					runDefault = callback();
+				if ( Jrun.isfunction(fn) ) 
+					runDefault = fn();
 				
 				if ( runDefault === true ) 
 					that.closePanel();
@@ -212,19 +220,19 @@ Js.widget.panel = Js.create({
 				return false;
 			})
 			.addClass( "buttons" )
-			.addClass( type )
-			.text( text )
+			.addClass( t )
+			.text( tx )
 			.appendTo( this.buttons[0] );
 	},
 	
 	_fixResize: function() {
-		if ( Jrun.isset(this.setting.height) && !!this.setting.scroll ) {
+		var opt = this.setting;
+		
+		if ( Jrun.isset(opt.height) && !!opt.scroll ) {
 			this.content.css({
-				"height": (this.setting.height - (23 + 21)) + "px", 
+				"height": opt.height + "px", 
 				"overflow": "auto"
 			});
 		}
-		
-		return this;
 	}
 });

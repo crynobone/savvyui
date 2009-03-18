@@ -110,7 +110,8 @@ Js.config = {
 			height: null,
 			content: "",
 			onClose: null,
-			closable: true
+			closable: true,
+			header: true
 		},
 		
 		tab: {

@@ -6,21 +6,21 @@ Js.widget.iconizer = Js.create({
 	appName: "iconizer",
 	setting: null,
 	
-	initiate: function( option ) {
-		return ( Jrun.isset(option) ? this.init( option ) : this );
+	initiate: function( opt ) {
+		return ( Jrun.isset(opt) ? this.init( opt ) : this );
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting );
+	setup: function( opt ) {
+		if ( Jrun.typeOf( opt, "object" ) )
+			this.setting = Js.append( opt, this.setting );
 		
 		return this;
 	},
 	
-	init: function( option ) {
+	init: function( opt ) {
 		var that = this;
 		
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		
 		Js.use( this.setting.identifier ).is( "*[class*=icon]" ).each(function( i, v ) {

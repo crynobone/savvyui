@@ -61,6 +61,7 @@ Js.widget.panel = Js.create({
 		
 		if ( Jrun.isset(this.setting.button) ) {
 			var l = this.setting.button.length;
+			
 			for ( var i = 0; i < l; i++ ) 
 				this.addButton( this.setting.button[i] );
 		}

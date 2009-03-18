@@ -9,32 +9,38 @@ Js.widget.activity = Js.create({
 	box: null,
 	setting: null,
 	language: null,
-	status: 0,
+	count: 0,
 	
-	initiate: function( selector, option ) {
-		return ( Jrun.isset(selector) ? this.init( selector, option ) : this );
+	initiate: function( elem, opt ) {
+		return ( Jrun.isset(elem) ? this.init( elem, opt ) : this );
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting, ["lang"], true );
-		
-		if ( Jrun.isset(option.lang) ) 
-			this.language = Js.append( option.lang, this.language );
-		
+	setup: function( opt ) {
+		if ( Jrun.typeOf(opt, "object") ) {
+			this.setting = Js.append(opt, this.setting, ["lang"], true);
+			
+			if ( Jrun.isset(opt.lang) ) 
+				this.language = Js.append(opt.lang, this.language);
+		}
 		return this;
 	},
 	
-	init: function( selector, option ) {
-		this.element = Jrun.pick( selector, this.element );
-		
-		this.setup( option );
+	init: function( elem, opt ) {
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
+		this.language = Js.append( this.language, Js.config.widget[this.appName] );
 		
+		this.element = Jrun.pick( elem, this.element );
 		this.node = Js.use( this.element );
 		
-		if ( this.node.length == 0 ) 
-			this.node = Js.use( "<div/>" ).attr( "id", Jrun.prep(this.element) ).appendTo( "body" );
+		if ( this.node.size() == 0 ) {
+			try {
+				this.node = Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+			}
+			catch(e) {
+				Js.debug.error("Js.widget.activity: fail to create elementById '" + this.element + "'");
+			}
+		}
 		
 		this.node.css({
 			background: this.setting.background,
@@ -45,11 +51,12 @@ Js.widget.activity = Js.create({
 		return this;
 	},
 	
-	activate: function( callback ) {
-		if ( this.status == 0 ) {
-			this.node.css( "display", "block" ).fadeTo( "normal", this.setting.opacity );
-			
-			var t = Js.util.dimension.page.middle( this.setting.boxWidth, this.setting.boxHeight );
+	activate: function( fn ) {
+		var opt = this.setting;
+		
+		if ( this.count == 0 ) {
+			this.node.css( "display", "block" ).fadeTo( "normal", opt.opacity );
+			var t = Js.util.dimension.page.middle( opt.boxWidth, opt.boxHeight );
 			
 			if ( Jrun.isset(this.box) ) {
 				this.box.css({
@@ -59,34 +66,38 @@ Js.widget.activity = Js.create({
 			}
 		}
 		
-		this.status++;
-		
-		if ( Jrun.isfunction(callback) ) 
-			callback();
-	},
-	loadImage: function() {
-		this.box = Js.use( "<img/>" )
-			.attr( "src", this.setting.imagePath )
-			.css({
-				position: "absolute",
-				width: this.setting.boxWidth + "px",
-				height: this.setting.boxHeight + "px",
-				zIndex: (this.setting.zIndex + 1)
-			})
-			.appendTo( this.node[0] );
+		this.count++;
+		if ( Jrun.isfunction(fn) ) 
+			fn();
 	},
 	
-	deactivate: function( callback ) {
-		if ( this.status > 0 ) {
-			this.node.fadeTo( "normal", 0, function(){
-				Js.use( this ).css(	"display", "none" );
-				
-				if ( Jrun.isfunction(callback) ) 
-					callback();
-			});
+	loadImage: function() {
+		var opt = this.setting;
+		this.box = Js.use( "<img/>" )
+			.attr( "src", opt.imagePath )
+			.css({
+				position: "absolute",
+				width: opt.boxWidth + "px",
+				height: opt.boxHeight + "px",
+				zIndex: (opt.zIndex + 1)
+			})
+			.appendTo( this.node[0] );
+		
+		return this;
+	},
+	
+	deactivate: function( fn ) {
+		if ( this.count > 0 ) {
+			this.node.fadeTo( "normal", 0, 
+				function() {
+					Js.use( this ).css(	"display", "none" );
+					if ( Jrun.isfunction(fn) ) 
+						fn();
+				}
+			);
 		}
 		
-		this.status--;
-		this.status = ( this.status < 0 ? 0 : this.status );
+		this.count--;
+		this.count = ( this.count < 0 ? 0 : this.count );
 	}
 });

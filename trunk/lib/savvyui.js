@@ -11,14 +11,18 @@
 
 /* Map Savvy.UI Global Namespace Object
  * namespace: Js
- * Developed and tested with jQuery-1.2.6
+ * Developed and tested with jQuery-1.3.2
  */
 var Js = {
-	adapter: "jQuery-1.2.6",
-	version: "1.2.0-a1",
+	adapter: "jQuery-1.3.2",
+	version: "1.2.0-a2",
 	use: null,
 	debug: {},
-	data: {},
+	data: {
+		ext: {},
+		util: {},
+		widget: {}
+	},
 	ext: {},
 	util: {},
 	parse: {},
@@ -45,46 +49,48 @@ Js.toString = function() {
 	return ["Savvy.UI", "version", Js.version, "using", Js.adapter].join(" ");	
 };
 
-Js.nue = function( data, depth ) {
-	var depth = Jrun.pickType( depth, 1, "number" );
-	var type = Jrun.typeOf( data );
+Js.nue = function( dt, d ) {
+	var d = Jrun.pickType( d, 1, "number" );
+	var t = Jrun.typeOf( dt, "object" );
 	
-	if ( Jrun.inArray(type, ["object", "array"]) ) {
-		var ret = ( type == "object" ? {} : [] );
-		--depth;
+	if ( Jrun.inArray(t, ["object", "array"]) ) {
+		var r = ( t == "object" ? {} : [] );
+		--d;
 		
-		for ( var method in data ) {
-			if ( data.hasOwnProperty(method) ) 
-				ret[method] = ( depth > 0 ? Js.nue(data[method], depth) : data[method] );
+		for ( var m in dt ) {
+			if ( dt.hasOwnProperty(m) ) 
+				r[m] = ( d > 0 ? Js.nue( dt[m], d ) : dt[m] );
 		}
 		
-		return ret;
+		return r;
 	}
 	else 
-		return data;
+		return dt;
 };
 
-Js.append = function( data, base, filter, invert ) {
-	var filter = Jrun.pickType( filter, null, "array" );
-	var invert = Jrun.pickType( invert, false, "boolean" );
+Js.append = function( dt, alt, f, i ) {
+	// provide list of method (in array) to be append
+	var f = Jrun.pickType( f, null, "array" );
+	// invert append option
+	var i = Jrun.pickType( i, false, "boolean" );
 	
-	if ( Jrun.typeOf( data ) !== "object" )
-		data = {};
+	if ( !Jrun.typeOf( dt, "object" ) )
+		dt = {};
 	
-	var ret = data;
+	var r = dt;
 	
 	// loop value's method
-	for ( var method in base ) {
+	for ( var m in alt ) {
 		// if data doesn't have the method add it
-		var valid = ( Jrun.isnull(filter) || Jrun.inArray(method, filter) );
-		var unique = ( !data.hasOwnProperty(method) && base.hasOwnProperty(method) );
-		var valid = ( !!invert ? !valid : valid );
+		var v = ( Jrun.isnull(f) || Jrun.inArray(m, f) );
+		var u = ( !dt.hasOwnProperty(m) && alt.hasOwnProperty(m) );
+		var v = ( !!i ? !v : v );
 		 
-		if ( !!unique && !!valid )
-			ret[method] = base[method];
+		if ( !!u && !!v )
+			r[m] = alt[m];
 	}
 	
-	return ret;
+	return r;
 };
 
 // Debugging engine for Savvy.UI
@@ -102,36 +108,49 @@ Js.debug = {
 		// cocntain all logs
 		log: []
 	},
+	value: {
+		error: [],
+		log: []
+	},
 	
 	// Log a message/note
-	log: function( text ) {
+	log: function( tx, v ) {
+		var v = Jrun.pick( v, "" );
+		
 		// push log to stack
-		this.data.log.push( text );
+		this.data.log.push( tx );
+		this.value.log.push( v );
 		
 		if ( !!this.dev ) {
 			try {
-				console.log(text);
+				if ( v === "")
+					console.log( tx );
+				else 
+					console.log( tx, v );
 			}
 			catch(e) {
-				alert(text);
+				alert( tx + v );
 			}
 		}
 	},
 	
 	// Log an error
-	error: function( text ) {
-		// push error to stack
-		this.data.error.push( text );
+	error: function( tx, v ) {
+		var v = Jrun.pick( v, "" );
 		
-		// if Js.debug.enable is true, display the error
-		if ( !!this.enable ) {
+		// push log to stack
+		this.data.error.push( tx );
+		this.value.error.push( v );
+		
+		if ( !!this.enable || !!this.dev ) {
 			try {
-				// good browser come with console
-				console.log(text);
-			} 
+				if ( v === "")
+					console.log( tx );
+				else 
+					console.log( tx, v );
+			}
 			catch(e) {
-				// browser doesn't support console so alert
-				alert(text);
+				alert( tx + v );
 			}
 		}
 	}
@@ -144,10 +163,10 @@ var Jrun = {
 	behaviour: function() {
 		// Return Object containing Boolean value of each browser object.
 		return function() {
-			var win = window;
-			var doc = document;
+			var w = window,
+				d = document;
 			// make sure ie6 or ie7 is either false or true only.
-			var items = { 
+			var i = { 
 				ie: false,
 				ie6: false,
 				ie7: false,
@@ -156,51 +175,63 @@ var Jrun = {
 				opera: false
 			};
 			// detect IE
-			items.ie = items[win.XMLHttpRequest ? "ie7" : "ie6"] = ( win.ActiveXObject ? true : false );
+			i.ie = i[w.XMLHttpRequest ? "ie7" : "ie6"] = !!w.ActiveXObject;
 			// detect KHTML
-			items.khtml = ( (doc.childNodes && !doc.all && !navigator.taintEnabled) ? true : false );
+			i.khtml = (d.childNodes && !d.all && !navigator.taintEnabled);
 			// detect Gecko
-			items.gecko = ( doc.getBoxObjectFor != null ? true : false );
+			i.gecko = d.getBoxObjectFor != null;
 			// detect Opera
-			items.opera = ( items.opera ? true : false );
+			i.opera = !!w.opera;
+			
 			// return the object
-			return items;
+			return i;
 		}();
 	}(),
 	
 	// Camelize string input
-	camelize: function( data ) {
-		var val = data.split(/\-/);
+	camelize: function( dt ) {
+		var v = dt.split(/\-/);
 		
 		// if array only have one value
-		if ( val.length === 1 )
-			return val[0];
+		if ( v.length === 1 )
+			return v[0];
 		
-		var ret = ( data.indexOf('-') == 0 ? val[0].charAt(0).toUpperCase() + val[0].substr(1) : val[0] );
+		var r = ( dt.indexOf('-') == 0 ? v[0].charAt(0).toUpperCase() + v[0].substr(1) : v[0] );
 		
-		jQuery.each(val, function( i, v ) {
+		jQuery.each(v, function( i, val ) {
 			if ( i > 0 )
-				ret = ret + v.charAt(0).toUpperCase() + v.substr(1);
+				r = r + val.charAt(0).toUpperCase() + val.substr(1);
 		});
 		
-		return ret;
+		return r;
+	},
+	
+	filter: function( dt, val ) {
+		var r = [];
+		
+		jQuery.each(dt, function( i, v ) {
+			if ( v.match(val) ) 
+				r.push(v);
+		});
+		
+		return r;
 	},
 	
 	// Open a URL using JavaScript
-	href: function( url, target ) {
-		if ( this.trim(url) !== "" ) {
-			if ( this.isnull(target) ) 
-				window.location.href = url;
+	href: function( u, t ) {
+		if ( this.trim( u ) !== "" ) {
+			if ( this.isnull(t) ) 
+				window.location.href = u;
 			else 
-				window.open( url, target );
+				window.open( u, t );
 		} 
 		else 
-			Js.debug.error( "Jrun.href: failed to load page " + url );
+			Js.debug.error( "Jrun.href: failed to load page " + u );
 	},
 	
 	// Encode HTML entities from any given string
-	htmlEncode: function( value ) {
-		return value
+	htmlEncode: function( v ) {
+		return v
 			.replace(/&/g, "&amp;")
 			.replace(/</g, "&lt;")
 			.replace(/>/g, "&gt;")
@@ -208,8 +239,8 @@ var Jrun = {
 	},
 	
 	// Decode HTML entities from any given string
-	htmlDecode: function( value ) {
-		return value
+	htmlDecode: function( v ) {
+		return v
 			.replace(/&amp;/g, "&")
 			.replace(/&lt;/g, "<")
 			.replace(/&gt;/g, ">")
@@ -217,12 +248,11 @@ var Jrun = {
 	},
 	
 	// Check whether the value is in an array
-	inArray: function( value, data ) {
-		var i = 0, 
-			len = data.length;
+	inArray: function( v, dt ) {
+		var i = dt.length;
 		
-		for ( ; i < len && !!data[i]; i++ ) {
-			if ( data[i] === value ) {
+		for ( ; i > -1 && !!dt[i]; i-- ) {
+			if ( dt[i] === v ) {
 				return true;
 				break;
 			}
@@ -232,12 +262,11 @@ var Jrun = {
 	},
 	
 	// Check whether the value is in an array, check validity based on Regular Expression
-	inArrayGrep: function( value, data ) {
-		var i = 0,
-			len = data.length;
+	inArrayGrep: function( v, dt ) {
+		var i = dt.length;
 		
-		for ( ; i < data.len && !!data[i]; i++ ) {
-			if ( data[i].match(value) ) {
+		for ( ; i > -1 && !!dt[i]; i-- ) {
+			if ( dt[i].match(v) ) {
 				return true;
 				break;
 			}
@@ -247,72 +276,67 @@ var Jrun = {
 	},
 	
 	// Get the indexOf based on value in an array
-	'indexOf': function( value, data ) {
-		var i = data.length;
-		
-		for ( ; i-- && data[i] !== value; );
+	'indexOf': function( v, dt ) {
+		var i = dt.length;
+		for ( ; i-- && dt[i] !== v; );
 		return i;
 	},
 	
 	// Get the indexOf based on value in an array
-	indexOfGrep: function( value, data ) {
-		var i = data.length;
-		
-		for ( ; i-- && !data[i].match(value); );
+	indexOfGrep: function( v, dt ) {
+		var i = dt.length;
+		for ( ; i-- && !dt[i].match(v); );
 		return i;
 	},
 	
 	// Check if data is not defined
-	isnull: function( data ) {
-		return ( typeof(data) == "undefined" || data == null );
+	isnull: function( v ) {
+		return ( typeof(v) == "undefined" || v == null );
 	},
 	
 	// Check if data is defined
-	isset: function( data ) {
-		return !this.isnull( data );
+	isset: function( v ) {
+		return !this.isnull( v );
 	},
 	
-	/* Check whether the passed value is a function
-	 * Deprecated: Replace with jQuery.isFunction
-	 */
-	isfunction: function( data ) {
-		return this.typeOf ( data ) == "function";
+	// Check whether the passed value is a function
+	isfunction: function( v ) {
+		return this.typeOf( v, "function" );
 	},
 	
 	// Trim left of a string
-	ltrim: function( value ) {
-		return new String( value ).replace( /^\s+/g, "" );
+	ltrim: function( v ) {
+		return new String( v ).replace( /^\s+/g, "" );
 	},
 	
-	parameter: function( data, length, type ) {
-		var data = jQuery.makeArray( data );
-		var type = Jrun.pickType( type, [], "array" );
+	parameter: function( dt, l, t ) {
+		var dt = jQuery.makeArray( dt );
+		var t = Jrun.pickType( t, [], "array" );
+		var r = false;
 		
-		if ( data.length === length ) {
-			var ret = true;
+		if ( dt.length === l ) {
+			r = true;
 			
-			jQuery.each(data, function( i, v ) {
-				if ( type[i] !== true && Jrun.typeOf(v) !== type[i] ) 
-					ret = false;
+			jQuery.each(dt, function( i, v ) {
+				if ( t[i] !== true && Jrun.typeOf(v) !== t[i] ) 
+					r = false;
 			});
-			
-			return ret;
 		}
-		else 
-			return false;
+			
+		return r;
 	},
 	
 	// Pick the first arguments that is defined
-	pick: function( js ) {
-		var data = jQuery.makeArray( arguments ),
-			i = 0,
-			len = data.length;
+	pick: function() {
+		var dt = jQuery.makeArray( arguments ),
+			i = 0;
+		var l = dt.length;
 		
-		for ( ; i < len; i++ ) {
-			var ret = data[i];
+		for ( ; i < l; i++ ) {
+			var r = dt[i];
             
-            if ( Jrun.isset(ret) ) {
-                return ret;
+            if ( Jrun.isset(r) ) {
+                return r;
 				break;
             }
 		};
@@ -321,18 +345,18 @@ var Jrun = {
 	},
 	
 	// Pick the first arguments that is defined and typeof match the last arguments
-	pickType: function( js ) {
-		var data = jQuery.makeArray( arguments ),
-			i = 0,
-			len = data.length;
-		var last = data[(len - 1)];
+	pickType: function() {
+		var dt = jQuery.makeArray( arguments ),
+			i = 0;
+		var l = dt.length;
+		var v = dt[(l - 1)];
 		
-		for ( ; i < (len - 1); i++ ) {
-			var ret = data[i];
+		for ( ; i < (l - 1); i++ ) {
+			var r = dt[i];
             
-            if ( Jrun.isset(ret) ) {
-                if ( this.typeOf(ret) == last ) {
-                    return ret;
+            if ( Jrun.isset(r) ) {
+                if ( this.typeOf(r, v) ) {
+                    return r;
 					break;
                 }
             }
@@ -342,21 +366,21 @@ var Jrun = {
 	},
 	
 	// Pick the first arguments that is defined and match Regular Expression passed in the last arguments
-	pickGrep: function( js ) {
-		var data = jQuery.makeArray( arguments ),
-			i = 0,
-			len = data.length;
-		var last = data[(len - 1)];
+	pickGrep: function() {
+		var dt = jQuery.makeArray( arguments ),
+			i = 0;
+		var l = dt.length;
+		var v = dt[(l - 1)];
 		
-		if ( this.typeOf(last) == "string" ) 
-			last = new RegExp(last);
+		if ( this.typeOf(v) == "string" ) 
+			v = new RegExp(v);
 		
-		for ( ; i < (len - 1); i++ ) {
-			var ret = data[i];
+		for ( ; i < (l - 1); i++ ) {
+			var r = dt[i];
             
-            if ( Jrun.isset(ret) ) {
-                if ( !!ret.match(last) ) {
-                    return ret;
+            if ( Jrun.isset(r) ) {
+                if ( !!r.match(v) ) {
+                    return r;
 					break;
                 }
             }
@@ -365,60 +389,56 @@ var Jrun = {
 		return null;
 	},
 	
-	prettyList: function( data, between, last ) {
-		var len = data.length,
-			ret = new String;
+	prettyList: function( dt, b, d ) {
+		var l = dt.length,
+			r = new String;
 		
-		if ( len > 1 ) {
-			jQuery.each(data, function( i, v ) {
-				ret = [ret, ( i == 0 ? "" : ( i == (len - 1) ? last : between) ), v].join("");
+		if ( l > 1 ) {
+			jQuery.each(dt, function( i, v ) {
+				r = [r, ( i == 0 ? "" : ( i == (l - 1) ? d : b) ), v].join("");
 			});
 		} 
 		else 
-			ret = data[0];
+			r = dt[0];
 		
-		return ret;
+		return r;
 	},
 	
-	rand: function( js ) {
-		var data = arguments,
-			len = 0,
-			val = 0;
+	replace: function( s, v, dt ) {
+		var dt = new String( dt );
+		var v = Jrun.pickType( v, "", "string" );
 		
-		if ( data.length === 2 ) {
-			val = data[0];
-			len = data[1];
-		} 
-		else if ( data.length === 1 ) 
-			len = data[0];
-		
-		return ( Math.floor(Math.random() * len) + val );
+		return dt.split(s).join(v);
 	},
 	
 	// Trim right of a string.
-	rtrim: function( data ) {
-		return new String( data ).replace( /\s$/g, "" );
+	rtrim: function( v ) {
+		return new String( v ).replace( /\s$/g, "" );
 	},
 	
 	// Striptags work similiar to strip_tags() in PHP
-	stripTags: function( data ) {
-		return new String( data ).replace( /<([^>]+)>/g, "" );
+	stripTags: function( v ) {
+		return new String( v ).replace( /<([^>]+)>/g, "" );
 	},
 	
 	// Parse input string value as Number using parseInt
-	toNumber: function( data ) {
+	toNumber: function( v ) {
+		var v = this.replace( ",", "", v );
+		
 		// return possible integer value of a string, if not a string then return self
-		return ( typeof(data) == "string" ? parseInt( data, 10 ) : data );
+		return ( typeof(v) == "string" ? parseInt( v, 10 ) : v );
 	},
 	
 	// Parse input string value as Float using parseFloat
-	toFloat: function( data ) {
-		return ( typeof(data) == "string" ? parseFloat( data, 10 ) : data );
+	toFloat: function( v ) {
+		var v = this.replace( ",", "", v );
+		
+		return ( typeof(v) == "string" ? parseFloat( v, 10 ) : v );
 	},
 	
-	toProperCase: function( data ) {
-		var val = data.split(/ /g), 
-			ret = [],
+	toProperCase: function( dt ) {
+		var val = dt.split(/ /g), 
+			r = [],
 			that = function(v) {
 				var v = v.toString();
 				return [
@@ -427,80 +447,86 @@ var Jrun = {
 				];
 			};
 		
-		jQuery.each(val, function(i, v) {
-			ret.push( that(v).join("") );
+		jQuery.each(val, function( i, v ) {
+			r.push( that(v).join("") );
 		});
 		
-		return ret.join(" ");
+		return r.join(" ");
 	},
 	
 	// Convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
-	toArray: function( data, offset ) {
-		var offset = ( this.isnull(offset) || offset < 1 ? 0 : offset );
-		var len = {
-			offset: 0,
-			data: 0
+	toArray: function( dt, off ) {
+		var off = Jrun.pickType( off, 0, "number");
+		off = ( off < 1 ? 0 : off );
+		var l = {
+			off: 0,
+			dt: 0
 		};
-		var ret = [];
+		var r = [];
 		
 		// return empty array
-		if ( this.isset(data) ) {
+		if ( this.isset(dt) ) {
 			// ensure the offset
-			len.offset = ( data.length - offset );
-			len.data = data.length;
+			l.off = ( dt.length - off );
+			l.dt = dt.length;
 			
 			// loop and prepare r to be return
-			while ( len.offset > 0 ) {
-				--len.offset;
-				--len.data;
-				ret[len.offset] = data[len.data];
+			while ( l.off > 0 ) {
+				--l.off;
+				--l.dt;
+				
+				r[l.off] = dt[l.dt];
 			}
 		}
 		
-		return ret;
+		return r;
 	},
 	
 	// Trim both left and right of a string.
-	trim: function( data ) {
-		return jQuery.trim( data ); 
+	trim: function( v ) {
+		return jQuery.trim( v ); 
 	},
 	
 	// Return the typeof passed argument, extending JavaScript default typeof
-	typeOf: function( data ) {
-		if ( Jrun.isnull(data) ) 
-			return "undefined";
-		else {
-			var val = Object.prototype.toString.call(data).match(/(\w+)\]/)[1];
-			return ( val == "HTMLDocument" ? "element" : val.toLowerCase() );
-		}
+	typeOf: function( dt, t ) {
+		var r = (function( dt ) {
+			if ( Jrun.isnull(dt) ) 
+				return "undefined";
+			else {
+				var v = Object.prototype.toString.call(dt).match(/(\w+)\]/)[1];
+				return ( v == "HTMLDocument" ? "element" : v.toLowerCase() );
+			}
+		})( dt );
+		
+		return (Jrun.isset(t) ? (r === t.toLowerCase()) : r );
 	},
 	
 	// return only unique value of an array
-	unique: function( data, repeat ) {
+	unique: function( dt, rt ) {
 		// when option equal true it only reject value which is repeating
-		var repeat = this.pick( repeat, false );
-		var ret = [];
+		var rt = this.pickType( rt, false, "boolean" );
+		var r = [];
 		
 		// loop the array
-		jQuery.each( data, function( i, v ) {
-			if ( !repeat ) {
+		jQuery.each( dt, function( i, v ) {
+			if ( !rt ) {
 				// add only if unique
-				if ( !Jrun.inArray(v, ret) ) 
-					ret.push(v);
+				if ( !Jrun.inArray(v, r) ) 
+					r.push(v);
 			} 
 			else {
 				if ( i == 0 ) 
-					ret.push(v);
-				else if ( v !== Jrun.trim(data[i - 1]) ) 
-					ret.push(v);
+					r.push(v);
+				else if ( v !== Jrun.trim( dt[i - 1] ) ) 
+					r.push(v);
 			}
 		});
 		
-		return ret;
+		return r;
 	},
 	
-	prep: function( data ) {
-		return ( data.match(/^(#|\.)?(.*)$/gi) ? RegExp.$2 : data );
+	prep: function( dt ) {
+		return ( dt.match(/^(#|\.)?(.*)$/gi) ? RegExp.$2 : dt );
 	}
 };
 
@@ -510,16 +536,17 @@ var Jrun = {
  * version: 0.4.1 
  */
 
-Js.create = function( js ) {
-	var js = Jrun.pickType( js, {}, "object" );
+Js.create = function( jo ) {
+	var jo = Jrun.pickType( jo, {}, "object" );
 	var base = function() {};
+	
 	base.prototype.destroy = function() {
 		// remove all properties and method for this object
-		for ( var method in this ) 
-			this[method] = null;
+		for ( var m in this ) 
+			this[m] = null;
 				
-		for ( var method in this.prototype ) 
-			this.prototype[method] = null;
+		for ( var m in this.prototype ) 
+			this.prototype[m] = null;
 			
 		// delete this (which doesn't actually totally delete it
 		delete this;
@@ -527,84 +554,84 @@ Js.create = function( js ) {
 		return null;
 	};
 	
-	var initialized = true;
+	var initd = true;
 	
 	// add prototyping based on Js.base
-	var prototype = new base;
-	initialized = false;
+	var proto = new base;
+	initd = false;
 	
 	// Class is a dummy constructor allowing user to automatically call __construct or parent::__construct 
 	function Class() {
 		// initiate the __construct function if construct available
-		if ( !initialized && !!this.initiate ) 
+		if ( !initd && !!this.initiate ) 
 			this.initiate.apply( this, Jrun.toArray(arguments) );
 	};
 	
-	Class.prototype = prototype;
-	Class.prototype.initiate = Jrun.pick( js.initiate, js.__construct, null );
+	Class.prototype = proto;
+	Class.prototype.initiate = Jrun.pick( jo.initiate, jo.__construct, null );
 	Class.constructor = Class;
 	
-	Class.prototype.$inject = function( method, args ) {
-		if ( Jrun.isfunction(method) ) 
-			return method.apply( this, Jrun.toArray(arguments, 1) );
+	Class.prototype.$inject = function( fn ) {
+		if ( Jrun.isfunction(fn) ) 
+			return fn.apply( this, Jrun.toArray(arguments, 1) );
 	};
 	
-	Class.prototype.$const = (function( js ) {
+	Class.prototype.$const = (function( jo ) {
 		var $const = { };
 		
-		if ( Jrun.typeOf(js.Const) == "object" ) {
-			var $const = Js.nue( js.Const );
-			delete js.Const;
+		if ( Jrun.typeOf(jo.Const) == "object" ) {
+			var $const = Js.nue( jo.Const );
+			delete jo.Const;
 		}
 		
-		return (function( method, args ) {
-			if ( Jrun.typeOf(method) == "string" ) {
-				if ( Jrun.isfunction($const[method]) ) 
-					return $const[method].apply( this, Jrun.toArray(arguments, 1) );
+		return (function( fn ) {
+			if ( Jrun.typeOf(fn) == "string" ) {
+				if ( Jrun.isfunction($const[fn]) ) 
+					return $const[fn].apply( this, Jrun.toArray(arguments, 1) );
 				else 
-					return $const[method];
+					return $const[fn];
 			}
 		});
-	})( js );
+	})( jo );
 	
 	// create inheritance capability using .extend
-	Class.extend = function( js ) {
-		js.Extend = this;	
-		return Js.create( js );
+	Class.extend = function( jo ) {
+		jo.Extend = this;	
+		return Js.create( jo );
 	};
 	
 	// if this function is being called from .extend, prepare parent method inheritant
-	var Extend = Jrun.pick( js.Extend, null );
+	var Extend = Jrun.pick( jo.Extend, null );
 	
 	// assign object with method provided in js
-	(function( js ) {
+	(function( proto ) {
 		// restrict object from looping certain method
 		var not = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 		
 		// add method to this object
-		for ( var method in js ) {
-			if ( js.hasOwnProperty(method) && (!Jrun.inArray(method, not) && !this[method]) ) 
-				this[method] = js[method];
+		for ( var m in proto ) {
+			if ( proto.hasOwnProperty(m) && (!Jrun.inArray(m, not) && !this[m]) ) 
+				this[m] = proto[m];
 		};
 		
-	}).call( prototype, js );
+	}).call( proto, jo );
 	
 	// object called from .extend, inherit parent method if object does not have it's own method
 	if( !!Jrun.isset(Extend) ) {
 		try {
-			(function( ext ) {
+			(function( proto ) {
 				// restrict object from looping certain method
 				var not = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 				
-				for ( var method in ext.prototype ) {
-					if ( ext.prototype.hasOwnProperty(method) && (!Jrun.inArray(method, not) && !this[method]) ) 
-						this[method] = ext.prototype[method];
+				for ( var m in proto.prototype ) {
+					if ( proto.prototype.hasOwnProperty(m) && (!Jrun.inArray(m, not) && !this[m]) ) 
+						this[m] = proto.prototype[m];
 				}
 				
-				for ( var method in ext ) {
-					if ( ext.hasOwnProperty(method) && !Jrun.inArray(method, not) ) {
-						if ( !this[method] )
-							this.method = ext[method];
+				for ( var m in proto ) {
+					if ( proto.hasOwnProperty(m) && !Jrun.inArray(m, not) ) {
+						if ( !this[m] )
+							this[m] = proto[m];
 						
 					}
 				}
@@ -612,23 +639,23 @@ Js.create = function( js ) {
 				
 				
 				// create a linkage to the parent object
-				this.$super = ext.prototype;
+				this.$super = proto.prototype;
 				
-			}).call( prototype, Extend );
+			}).call( proto, Extend );
 		
 		} catch(e) {
 			// incase something goes wrong
 			Js.debug.error( "Js.create: failed " + e );
 		}
 		
-		Class.prototype.$parent = function( method, args ) {
-			return this.$super[method].apply( this, Jrun.toArray(arguments, 1) );
+		Class.prototype.$parent = function( fn ) {
+			return this.$super[fn].apply( this, Jrun.toArray(arguments, 1) );
 		};
 	}
 	
 	// avoid Extend to be duplicated in this.prototype 
 	delete Extend;
-	delete js;
+	delete jo;
 	
 	return Class;
 };
@@ -641,19 +668,18 @@ Js.create = function( js ) {
  */
 
 jQuery.fn.extend({
-	setClass: function(value) 
-	{
+	setClass: function( v ) {
 		return this.each( function() {
-			this.className = value;
+			this.className = v;
 		});
 	},
-	htmlText: function(value) {
-		if ( value == undefined ) 
+	htmlText: function( tx ) {
+		if ( tx == undefined ) 
 			return ( this[0] ? this[0].innerHTML : null );
 		
 		else {
 			this.each(function() {
-				this.innerHTML = value;
+				this.innerHTML = tx;
 			});
 			return this;
 		}
@@ -716,7 +742,8 @@ Js.config = {
 			prefix: "",
 			beforeStart: null,
 			onBeforeUpdate: null,
-			onUpdate: null
+			onUpdate: null,
+			overlay: true
 		}
 	},
 	
@@ -726,7 +753,7 @@ Js.config = {
 			boxWidth: 200,
 			boxHeight: 20,
 			identifier: ".widget-activity",
-			opacity: 0.6,
+			opacity: 0.3,
 			background: "#fff",
 			zIndex: 5000
 		},
@@ -774,7 +801,11 @@ Js.config = {
 			height: null,
 			content: "",
 			onClose: null,
-			closable: true
+			closable: true,
+			header: true,
+			overlay: true,
+			clickOver: false,
+			onClickOver: null 
 		},
 		
 		tab: {
@@ -789,7 +820,8 @@ Js.config = {
 			cssActive: "tab-active",
 			cssCurrent: "current",
 			cssDisabled: "disabled",
-			fx: true
+			fx: true,
+			header: ""
 		}
 	}
 };
@@ -804,67 +836,67 @@ Js.config = {
 
 Js.setup = {
 	ext: {
-		validate: function( option ) {
-			Js.config.ext.validate = Js.append( option, Js.config.ext.validate, ["lang"], true );
+		validate: function( dt ) {
+			Js.config.ext.validate = Js.append( dt, Js.config.ext.validate, ["lang"], true );
 			
-			if ( Jrun.isset(option.lang) ) 
-				Js.language.ext.validate = Js.append( option.lang, Js.language.ext.validate );
+			if ( Jrun.isset(dt.lang) ) 
+				Js.language.ext.validate = Js.append( dt.lang, Js.language.ext.validate );
 		}
 	},
 	
-	test: function( option ) {
-		Js.config.test = Js.append( option, Js.config.test );
+	test: function( dt ) {
+		Js.config.test = Js.append( dt, Js.config.test );
 	},
 	
 	util: {
-		buttonSubmit: function( option ) {
-			Js.config.util.buttonSubmit = Js.append( option, Js.config.util.buttonSubmit );
+		buttonSubmit: function( dt ) {
+			Js.config.util.buttonSubmit = Js.append( dt, Js.config.util.buttonSubmit );
 		},
 		
-		formSubmit: function( option ) {
-			Js.config.util.formSubmit = Js.append( option, Js.config.util.formSubmit );
+		formSubmit: function( dt ) {
+			Js.config.util.formSubmit = Js.append( dt, Js.config.util.formSubmit );
 		},
-		editable: function( option ) {
-			Js.config.util.editable = Js.append( option, Js.config.util.editable, ["lang"], true );
+		editable: function( dt ) {
+			Js.config.util.editable = Js.append( dt, Js.config.util.editable, ["lang"], true );
 			
-			if ( Jrun.isset(option.lang) ) 
-				Js.language.util.editable = Js.append( option.lang, Js.language.util.editable );
+			if ( Jrun.isset(dt.lang) ) 
+				Js.language.util.editable = Js.append( dt.lang, Js.language.util.editable );
 		}
 	},
 	
 	widget: {
-		activity: function( option ) {
-			Js.config.widget.activity = Js.append( option, Js.config.widget.activity );
+		activity: function( dt ) {
+			Js.config.widget.activity = Js.append( dt, Js.config.widget.activity );
 		},
 		
-		datePicker: function( option ) {
-			Js.config.widget.datePicker = Js.append( option, Js.config.widget.datePicker, ["lang"], true );
+		datePicker: function( dt ) {
+			Js.config.widget.datePicker = Js.append( dt, Js.config.widget.datePicker, ["lang"], true );
 			
-			if ( Jrun.isset(option.lang) ) 
-				Js.language.widget.datePicker = Js.append( option.lang, Js.language.widget.datePicker );
+			if ( Jrun.isset(dt.lang) ) 
+				Js.language.widget.datePicker = Js.append( dt.lang, Js.language.widget.datePicker );
 		},
 		
-		dropmenu: function( option ) {
-			Js.config.widget.dropmenu = Js.append( option, Js.config.widget.dropmenu );
+		dropmenu: function( dt ) {
+			Js.config.widget.dropmenu = Js.append( dt, Js.config.widget.dropmenu );
 		},
 		
-		iconizer: function( option ) {
-			Js.config.widget.iconizer = Js.append( option, Js.config.widget.iconizer );
+		iconizer: function( dt ) {
+			Js.config.widget.iconizer = Js.append( dt, Js.config.widget.iconizer );
 		},
 		
-		notice: function( option ) {
-			Js.config.widget.notice = Js.append( option, Js.config.widget.notice, ["lang"], true );
+		notice: function( dt ) {
+			Js.config.widget.notice = Js.append( dt, Js.config.widget.notice, ["lang"], true );
 			
-			if ( Jrun.isset(option.lang) ) 
-				Js.language.widget.notice = Js.append( option.lang, Js.language.widget.notice );
+			if ( Jrun.isset(dt.lang) ) 
+				Js.language.widget.notice = Js.append( dt.lang, Js.language.widget.notice );
 		},
 		
-		panel: function( option ) {
-			Js.config.widget.panel = Js.append( option, Js.config.widget.panel );
+		panel: function( dt ) {
+			Js.config.widget.panel = Js.append( dt, Js.config.widget.panel );
 		},
 		
-		tab: function( option ) {
-			Js.config.widget.tab = Js.append( option, Js.config.widget.tab );
+		tab: function( dt ) {
+			Js.config.widget.tab = Js.append( dt, Js.config.widget.tab );
 		}
 	}
 };
@@ -927,79 +959,72 @@ Js.language = {
 
 Js.parse = {
 	html: {
-		to: function( data ) {
-			var data = new String( data );
-			data = Jrun.htmlEncode( data );
-			data = encodeURIComponent( data );
-			
-			return data;
+		to: function( r ) {
+			return encodeURIComponent( Jrun.htmlEncode( new String(r) ) );
 		},
 		
-		from: function( data ) {
-			var data = new String( data);
-			data = decodeURIComponent( data );
-			data = Jrun.htmlDecode( data );
-			
-			return data;
+		from: function( r ) {
+			return Jrun.htmlDecode( decodeURIComponent( new String(r) ) );
 		}
 	},
 	
 	xhr: {
-		init: function( reply ) {
+		init: function( v ) {
 			var that = Js.parse.xhr;
-			var data = eval( "(" + reply + ")" );
+			var dt = eval( "(" + v + ")" );
 			
-			Js.debug.log( "XHR: " + reply );
+			Js.debug.log( "XHR: " + v );
 			
-			if ( Jrun.typeOf(data) == "object" ) {
-				if ( !!data.SUIXHR ) {
-					that.notice( data );
-					that.href( data );
-					that.update( data );
+			if ( Jrun.typeOf(dt) == "object" ) {
+				if ( !!dt.SUIXHR ) {
+					that.notice( dt );
+					that.href( dt );
+					that.update( dt );
 				}
 			}
 		},
 		
-		notice: function( data ) {
-			var note = Jrun.pickType( data.notice, "string" );
+		notice: function( dt ) {
+			var v = Jrun.pickType( dt.notice, "string" );
 			
-			if ( Jrun.isset(note) && note !== "" ) {
-				window.alert( note );
+			if ( Jrun.isset(v) && v !== "" ) {
+				window.alert( v );
 				
-				if ( !!console ) 
-					console.log( note );
+				try {
+					console.log( v );
+				} catch(e) { }
 			}
 		},
-		href: function( data ) {
-			var href = Jrun.pickGrep( data.href, /^https?:\/\//g );
-			var xhref = Jrun.pickGrep( data.xhref, /^https?:\/\//g );
+		href: function( dt ) {
+			var h = Jrun.pickGrep( dt.href, /^https?:\/\//g );
+			var x = Jrun.pickGrep( dt.xhref, /^https?:\/\//g );
 			
-			if ( Jrun.isset(xhref) && xhref !== "" ) 
-				Jrun.href( xhref, "_blank" );
+			if ( Jrun.isset(x) && x !== "" ) 
+				Jrun.href( x, "_blank" );
 			
-			else if ( Jrun.isset(href) && href !== "" ) 
-				Jrun.href( href );
+			else if ( Jrun.isset(h) && h !== "" ) 
+				Jrun.href( h );
 		},
 		
-		update: function( data ) {
-			var args = Jrun.pick( data.text );
-			var id = Jrun.pickType( data.id, "string" );
-			var selector = Jrun.pickType( selector, "string" );
-			var object = Jrun.pickType( data.callback, "string" );
+		update: function( dt ) {
+			var args = Jrun.pick( dt.text );
+			var id = Jrun.pickType( dt.id, "string" );
+			var el = Jrun.pickType( dt.selector, "string" );
+			var fn = Jrun.pickType( dt.callback, "string" );
 			
 			if ( Jrun.typeOf( args ) == "string" ) {
-				if ( !!selector ) 
-					Js.use(selector).html(args);
+				if ( !!el ) 
+					Js.use( el ).html( args );
 				else if ( !!id ) 
-					Js.use("#" + id).html(args);
+					Js.use("#" + id).html( args );
 			}
 			else if ( Jrun.isset(object) ) {
 				// eval the function without making a callback
-				var callback = eval( object );
+				var fn = eval( fn );
 					
 				// execute the function
-				if ( Jrun.isfunction(callback) ) 
-					callback( args );
+				if ( Jrun.isfunction(fn) ) 
+					fn( args );
 			}
 		}
 	}
@@ -1010,52 +1035,52 @@ Js.parse = {
  */
 
 Js.test = {
-	isString: function( data ) {
-		return ( typeof(data) == "string" && isNaN(data) );
+	isString: function( v ) {
+		return ( typeof(v) == "string" && isNaN(v) );
 	},
 	
-	isNumber: function( data ) {
-		return !isNaN( data );
+	isNumber: function( v ) {
+		return !isNaN( v );
 	},
 	
-	isLength: function( data, value ) {
-		var ret = false;
+	isLength: function( dt, v ) {
+		var r = false;
 		
-		if ( data.match(/^(exact|min|max)\-(\d*)$/i) ) {
-			var length = Jrun.toNumber(RegExp.$2);
+		if ( dt.match(/^(exact|min|max)\-(\d*)$/i) ) {
+			var l = Jrun.toNumber(RegExp.$2);
 			
 			switch ( RegExp.$1 ) {
 				case 'max':
-					ret = value <= length;
+					r = v <= l;
 					break;
 				case 'min':
-					ret = value >= length;
+					r = v >= l;
 					break;
 				case 'exact':
-					ret = value == length;
+					r = v == l;
 					break;
 				default:
-					ret = false;
+					r = false;
 			}
 		}
 		
-		return ret;
+		return r;
 	},
 	
-	isEmail: function( data ) {
-		return ( data.match(Js.config.test.email) );
+	isEmail: function( v ) {
+		return ( v.match(Js.config.test.email) );
 	},
 	
-	isURL: function( data ) {
-		return ( data.match(Js.config.test.url) );
+	isURL: function( v ) {
+		return ( v.match(Js.config.test.url) );
 	},
 	
-	isIpAddress: function( data ) {
-		return ( data.match(Js.config.test.ip) );
+	isIpAddress: function( v ) {
+		return ( v.match(Js.config.test.ip) );
 	},
 	
-	isPostcode: function( data ) {
-		return ( data.match(Js.config.test.postcode) );
+	isPostcode: function( v ) {
+		return ( v.match(Js.config.test.postcode) );
 	}
 };
 /* Form Validation extension for Savvy.UI
@@ -1332,12 +1357,12 @@ Js.util.activeContent = Js.create({
 	fnBeforeStart: null,
 	fnSuccess: null,
 	
-	initiate: function( js ) {
+	initiate: function( jo ) {
 		var that = this;
-		var js = Jrun.pickType( js, {}, "object" );
-		this.element = Jrun.pick( js.element, null );
-		this.fnBeforeStart = Jrun.pick( js.beforeStart, this.fnBeforeStart );
-		this.fbSuccess = Jrun.pick( js.success, this.fnSuccess );
+		var jo = Jrun.pickType( jo, {}, "object" );
+		this.element = Jrun.pick( jo.element, null );
+		this.fnBeforeStart = Jrun.pick( jo.beforeStart, this.fnBeforeStart );
+		this.fbSuccess = Jrun.pick( jo.success, this.fnSuccess );
 		
 		if ( Jrun.isset(this.element) ) {
 			this._selector();
@@ -1366,18 +1391,18 @@ Js.util.activeContent = Js.create({
 		Js.use( this.element ).bind( "click", function() {
 			var href = Js.use( this ).attr( "href" );
 			var hash = ( Jrun.isset(href) ? href : this.href );
-			var ret;
+			var r;
 			
-			ret = ( hash.match(/^\#/) ? ["", hash.substr(1)] : hash.split(/\#/) ); 
+			r = ( hash.match(/^\#/) ? ["", hash.substr(1)] : hash.split(/\#/) ); 
 			
 			if ( Jrun.isfunction(that.fnBeforeStart) ) 
 				that.fnBeforeStart();
 			
-			if ( Jrun.isset(ret[1]) ) {
-				that.repeat = ( ret[1] === that.last );
+			if ( Jrun.isset(r[1]) ) {
+				that.repeat = ( r[1] === that.last );
 				
-				that.last = ret[1];
-				that.init( ret[1].split(/\//) );
+				that.last = r[1];
+				that.init( r[1].split(/\//) );
 				
 				if ( Jrun.isfunction(that.fnSuccess) ) 
 					that.fnSuccess();
@@ -1413,21 +1438,21 @@ Js.util.buttonSubmit = Js.create({
 	handler: "click",
 	formValidate: null,
 	
-	initiate: function( js ) {
-		this.id = Jrun.pick( js.id, null );
-		this.url = Jrun.pick( js.url, null );
-		this.button = Jrun.pick( js.button, null );
+	initiate: function( jo ) {
+		this.id = Jrun.pick( jo.id, null );
+		this.url = Jrun.pick( jo.url, null );
+		this.button = Jrun.pick( jo.button, null );
 		
 		// if id, url and button have been defined, straight away call this.init()
 		if ( !!this.id && !!this.url && this.button ) 
-			this.init( js.option );
+			this.init( jo.option );
 		
 		return this;
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting );
+	setup: function( opt ) {
+		var opt = Jrun.pickType( opt, {}, "object" );
+		this.setting = Js.append( opt, this.setting );
 		
 		return this;
 	},
@@ -1438,10 +1463,10 @@ Js.util.buttonSubmit = Js.create({
 		this.formValidate.onError = this.setting.formError;
 	},
 	
-	init: function( option ) {
+	init: function( opt ) {
 		var that = this;
 		
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.util[this.appName] );
 		this._prepSetting();
 		
@@ -1450,14 +1475,14 @@ Js.util.buttonSubmit = Js.create({
 		// bind onClick event delegation to the button
 		Js.use( this.button ).bind( this.handler, function() {
 			// we need to validate the form
-			var form = new Js.ext.validate( that.id, that.formValidate );
-			var params = form.cacheResult;
+			var f = new Js.ext.validate( that.id, that.formValidate );
+			var dt = f.cacheResult;
 			
-			if( !!params ) {
+			if( !!dt ) {
 			   jQuery.ajax({
 					type: method,
 					url: that.url,
-					data: params,
+					data: dt,
 					beforeSend: function() {
 						if ( Jrun.isfunction(that.setting.beforeSend) ) 
 							that.setting.beforeSend.apply( that );
@@ -1492,39 +1517,39 @@ Js.util.dimension = {
 	page: {
 		scrolls: {
 			x: function() {
-				var doc = document.body;
-				var ret = 0;
-				var offset = window.pageXOffset;
+				var d = document.body;
+				var r = 0;
+				var off = window.pageXOffset;
 				var el = document.documentElement;
 				
-				if ( typeof(offset) == "number" ) 
-					ret = offset;
+				if ( typeof(off) == "number" ) 
+					r = off;
 				
-				else if ( doc && doc.scrollLeft ) 
-					ret = doc.scrollLeft;
+				else if ( d && d.scrollLeft ) 
+					r = d.scrollLeft;
 				
 				else if ( el && el.scrollLeft ) 
-					ret = el.scrollLeft;
+					r = el.scrollLeft;
 				
-				return ret;
+				return r;
 			},
 			
 			y: function() {
-				var doc = document.body;
-				var ret = 0;
-				var offset = window.pageYOffset;
+				var d = document.body;
+				var r = 0;
+				var off = window.pageYOffset;
 				var el = document.documentElement;
 				
-				if ( typeof(offset) == "number" ) 
-					ret = offset;
+				if ( typeof(off) == "number" ) 
+					r = off;
 				
-				else if ( doc && doc.scrollTop ) 
-					ret = doc.scrollTop;
+				else if ( d && d.scrollTop ) 
+					r = d.scrollTop;
 				
 				else if ( el && el.scrollTop ) 
-					ret = el.scrollTop;
+					r = el.scrollTop;
 				
-				return ret;
+				return r;
 			},
 			
 			both: function() {
@@ -1536,19 +1561,19 @@ Js.util.dimension = {
 			}
 		},
 		
-		middle: function( width, height ) {
-			var doc = document.body;
-			var offset = [Js.use(window).width(), Js.use(window).height()];
-			var axis = Js.util.dimension.page.scrolls.both();
-			var ret = [];
+		middle: function( w, h ) {
+			var d = document.body;
+			var off = [Js.use(window).width(), Js.use(window).height()];
+			var a = Js.util.dimension.page.scrolls.both();
+			var r = [];
 					
-			ret[0] = Math.round( ((offset[0] - width) / 2) + axis[0] );
-			ret[1] = Math.round( ((offset[1] - height) / 2) + axis[1] ); 
+			r[0] = Math.round( ((off[0] - w) / 2) + a[0] );
+			r[1] = Math.round( ((off[1] - h) / 2) + a[1] ); 
 			
-			ret[0] = ( ret[0] < 0 ? 0 : ret[0] );
-			ret[1] = ( ret[1] < 0 ? 0 : ret[1] );
+			r[0] = ( r[0] < 0 ? 0 : r[0] );
+			r[1] = ( r[1] < 0 ? 0 : r[1] );
 				
-			return ret.reverse();
+			return r.reverse();
 		}
 	},
 	
@@ -1596,10 +1621,10 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
 	appName: "formSubmit",
 	handler: "submit",
 	
-	initiate: function( js ) {
+	initiate: function( jo ) {
 		if ( Jrun.parameter(arguments, 1, ["object"]) ) {
-			this.id = Jrun.pick( js.id, null );
-			this.url = Jrun.pick( js.url, null );	
+			this.id = Jrun.pick( jo.id, null );
+			this.url = Jrun.pick( jo.url, null );	
 		} 
 		else if ( Jrun.parameter(arguments, 2, [true, "string"]) ) {
 			this.id = Jrun.pick( arguments[0], null );
@@ -1610,8 +1635,7 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
 		
 		// if id, url and button have been defined, straight away call this.init()
 		if( !!this.id && !!this.url && this.button ) 
-			this.init( js.option );
-		
+			this.init( jo.option );
 		
 		return this;
 	}
@@ -1626,12 +1650,12 @@ Js.util.ticker = Js.create({
 	element: null,
 	node: null,
 	
-	initiate: function( selector ) {
-		return ( Jrun.isset(selector) ? this.init( selector ) : this );
+	initiate: function( elem ) {
+		return ( Jrun.isset(elem) ? this.init( selector ) : this );
 	},
 	
-	init: function( selector ) {
-		this.element = Jrun.pick( selector, null );
+	init: function( elem ) {
+		this.element = Jrun.pick( elem, null );
 		
 		if ( Jrun.isset(this.element) ) 
 			this.node = Js.use( this.element );
@@ -1676,25 +1700,25 @@ Js.util.editable = Js.create({
 	cacheData: null,
 	lastSelected: null,
 	
-	initiate: function( element, option ) {
-		return ( !!Jrun.isset(element) ? this.init( element, option ) : this );
+	initiate: function( elem, opt ) {
+		return ( !!Jrun.isset(elem) ? this.init( elem, opt ) : this );
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting, ["lang"], true );
+	setup: function( opt ) {
+		var opt = Jrun.pickType( opt, {}, "object" );
+		this.setting = Js.append( opt, this.setting, ["lang"], true );
 		
-		if ( Jrun.isset(option.lang) ) 
-			this.language = Js.append( option.lang, this.language );
+		if ( Jrun.isset(opt.lang) ) 
+			this.language = Js.append( opt.lang, this.language );
 		
 		return this;
 	},
 	
-	init: function( selector, option ) {
+	init: function( elem, opt ) {
 		var that = this;
 		
-		this.element = Jrun.pick( this.element, selector );
-		this.setup( option );
+		this.element = Jrun.pick( this.element, elem );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.util.editable );
 		this.language = Js.append( this.language, Js.language.util.editable );
 		this.node = Js.use( this.element );
@@ -1765,7 +1789,11 @@ Js.util.editable = Js.create({
 			language: {
 				closeText: "Cancel"
 			},
-			overlay: true
+			overlay: this.setting.overlay,
+			clickOver: true,
+			onClickOver: function() {
+				that.input.val("");
+			}
 		});
 		
 		var div = Js.use( "<div/>" )
@@ -1784,15 +1812,10 @@ Js.util.editable = Js.create({
 		
 		var box = this.box;
 		
-		box.overlay.node.bind( "click", function() {
+		box.closeButton.htmlText("Cancel").bind( "click", function() {
 			that.input.val("");
 			box.closePanel();
-		});
-		
-		box.closeButton.bind( "click", function() {
-			that.input.val("");
-			box.closePanel();
-		});
+		})
 	}
 });
 /* Includer for Savvy.UI
@@ -1800,24 +1823,20 @@ Js.util.editable = Js.create({
  */
 
 Js.util.includer = { 
-	script: function( src ) {
-		var node = Js.use( "<script/>" ).attr({
+	script: function( s ) {
+		return Js.use( "<script/>" ).attr({
 			"type": "text/javascript",
-			"src": src
+			"src": s
 		}).appendTo( "head" );
-		
-		return node;
 	},
 	
-	style: function( src, media ) {
-		var media = Js.pickGrep(media, "all", /^(all|print|screen|handheld)$/i);
-		var node = Js.use( "<link/>" ).attr({
+	style: function( s, m ) {
+		var m = Js.pickGrep( m, "all", /^(all|print|screen|handheld)$/i );
+		return Js.use( "<link/>" ).attr({
 			"type": "text/css",
-			"href": src,
-			"media": media
+			"href": s,
+			"media": m
 		}).appendTo( "head" );
-		
-		return node;
 	}
 };
 /* Smart Input Field for Savvy.UI
@@ -1826,14 +1845,15 @@ Js.util.includer = {
 
 Js.util.smartInput = Js.create({
 	node: null,
+	element: null,
 	
-	initiate: function( node ) {
-		return ( Jrun.isset(node) ? this.init( node ) : this );
+	initiate: function( elem ) {
+		return ( Jrun.isset(elem) ? this.init( elem ) : this );
 	},
 	
-	init: function( node ) {
-		var node = Jrun.pick( node, this.node );
-		this.node = Js.use( node );
+	init: function( elem ) {
+		this.element = Jrun.pick( elem, this.elem );
+		this.node = Js.use( this.element );
 		
 		this.activate();
 		
@@ -1883,32 +1903,38 @@ Js.widget.activity = Js.create({
 	box: null,
 	setting: null,
 	language: null,
-	status: 0,
+	count: 0,
 	
-	initiate: function( selector, option ) {
-		return ( Jrun.isset(selector) ? this.init( selector, option ) : this );
+	initiate: function( elem, opt ) {
+		return ( Jrun.isset(elem) ? this.init( elem, opt ) : this );
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting, ["lang"], true );
-		
-		if ( Jrun.isset(option.lang) ) 
-			this.language = Js.append( option.lang, this.language );
-		
+	setup: function( opt ) {
+		if ( Jrun.typeOf(opt, "object") ) {
+			this.setting = Js.append(opt, this.setting, ["lang"], true);
+			
+			if ( Jrun.isset(opt.lang) ) 
+				this.language = Js.append(opt.lang, this.language);
+		}
 		return this;
 	},
 	
-	init: function( selector, option ) {
-		this.element = Jrun.pick( selector, this.element );
-		
-		this.setup( option );
+	init: function( elem, opt ) {
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
+		this.language = Js.append( this.language, Js.config.widget[this.appName] );
 		
+		this.element = Jrun.pick( elem, this.element );
 		this.node = Js.use( this.element );
 		
-		if ( this.node.length == 0 ) 
-			this.node = Js.use( "<div/>" ).attr( "id", Jrun.prep(this.element) ).appendTo( "body" );
+		if ( this.node.size() == 0 ) {
+			try {
+				this.node = Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+			}
+			catch(e) {
+				Js.debug.error("Js.widget.activity: fail to create elementById '" + this.element + "'");
+			}
+		}
 		
 		this.node.css({
 			background: this.setting.background,
@@ -1919,11 +1945,12 @@ Js.widget.activity = Js.create({
 		return this;
 	},
 	
-	activate: function( callback ) {
-		if ( this.status == 0 ) {
-			this.node.css( "display", "block" ).fadeTo( "normal", this.setting.opacity );
-			
-			var t = Js.util.dimension.page.middle( this.setting.boxWidth, this.setting.boxHeight );
+	activate: function( fn ) {
+		var opt = this.setting;
+		
+		if ( this.count == 0 ) {
+			this.node.css( "display", "block" ).fadeTo( "normal", opt.opacity );
+			var t = Js.util.dimension.page.middle( opt.boxWidth, opt.boxHeight );
 			
 			if ( Jrun.isset(this.box) ) {
 				this.box.css({
@@ -1933,35 +1960,39 @@ Js.widget.activity = Js.create({
 			}
 		}
 		
-		this.status++;
-		
-		if ( Jrun.isfunction(callback) ) 
-			callback();
-	},
-	loadImage: function() {
-		this.box = Js.use( "<img/>" )
-			.attr( "src", this.setting.imagePath )
-			.css({
-				position: "absolute",
-				width: this.setting.boxWidth + "px",
-				height: this.setting.boxHeight + "px",
-				zIndex: (this.setting.zIndex + 1)
-			})
-			.appendTo( this.node[0] );
+		this.count++;
+		if ( Jrun.isfunction(fn) ) 
+			fn();
 	},
 	
-	deactivate: function( callback ) {
-		if ( this.status > 0 ) {
-			this.node.fadeTo( "normal", 0, function(){
-				Js.use( this ).css(	"display", "none" );
-				
-				if ( Jrun.isfunction(callback) ) 
-					callback();
-			});
+	loadImage: function() {
+		var opt = this.setting;
+		this.box = Js.use( "<img/>" )
+			.attr( "src", opt.imagePath )
+			.css({
+				position: "absolute",
+				width: opt.boxWidth + "px",
+				height: opt.boxHeight + "px",
+				zIndex: (opt.zIndex + 1)
+			})
+			.appendTo( this.node[0] );
+		
+		return this;
+	},
+	
+	deactivate: function( fn ) {
+		if ( this.count > 0 ) {
+			this.node.fadeTo( "normal", 0, 
+				function() {
+					Js.use( this ).css(	"display", "none" );
+					if ( Jrun.isfunction(fn) ) 
+						fn();
+				}
+			);
 		}
 		
-		this.status--;
-		this.status = ( this.status < 0 ? 0 : this.status );
+		this.count--;
+		this.count = ( this.count < 0 ? 0 : this.count );
 	}
 });
 
@@ -2547,93 +2578,111 @@ Js.widget.datePicker = Js.create({
 });
 
 /* Dropdown Menu for Savvy.UI
- * version: 0.0.1
+ * version: 0.0.2
  */
 
 Js.widget.dropmenu = Js.create({
 	node: null,
+	element: null,
 	setting: null,
 	
-	initiate: function( selector, option ) {
-		return ( Jrun.isset( selector ) ? this.init( selector ) : this );
+	initiate: function( elem, opt ) {
+		var that = this;
+		var prepare = function( elem, opt ) {
+			that.element = elem;
+			that.init( opt );
+		};
+		
+		if ( Jrun.isset( elem ) ) 
+			prepare( elem, opt );
+			
+		return this;
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting );
+	setup: function( opt ) {
+		if ( Jrun.typeOf( opt, "object" ) ) 
+			this.setting = Js.append( opt, this.setting );
+			
+		return this;
 	},
 	
-	init: function( selector, option ) {
+	init: function( elem, opt ) {
 		var that = this;
 		
-		this.node = Js.use( selector ).addClass( this.setting.css );
-		this.setup( option );
+		this.element = Jrun.pick( elem, this.element );
+		this.setup( opt );
+		this.setting = Js.append( this.setting, Js.config.widget.dropmenu );
+		this.node = Js.use( this.element );
 		
-		Js.use( "ul, li", this.node[0] ).hover( function(){
-			that._show( this );
-		}, function(){
-			that._hide( this );
-		});
-		
-		Js.use( 'li', this.node[0] ).hover( function() { 
-			Js.use( this ).addClass( 'hover' ); 
-			Js.use( '> a', this ).addClass( 'hover' ); 
-		}, function() { 
-			Js.use( this ).removeClass( 'hover' );
-			Js.use( '> a', this ).removeClass( 'hover' ); 
-		});
+		if ( this.node.size() > 0 ) {
+			
+			Js.use( "ul, li", this.node[0] ).hover( function() {
+				that._show( this );
+			}, function(){
+				that._hide( this );
+			});
+			
+			Js.use( 'li', this.node[0] ).hover( function() { 
+				Js.use( this ).addClass( 'hover' ); 
+				Js.use( '> a', this ).addClass( 'hover' ); 
+			}, function() { 
+				Js.use( this ).removeClass( 'hover' );
+				Js.use( '> a', this ).removeClass( 'hover' ); 
+			});
+		}
+		else 
+			Js.debug.error("Js.widget.dropdown: No elements found");
 		
 		return this;	
 	},
 	
-	_show: function( field ) {
-		var child = this._getChild( field );
+	_show: function( el ) {
+		var c = this._getChild( el );
 		
-		if ( !child ) 
+		if ( !c ) 
 			return false;
 		
-		var node = Js.use( child )
+		Js.use( c )
 			.data( 'cancelHide', true )
 			.css( "zIndex", this.setting.zIndex++ )
 			.fadeIn( this.setting.speed )
 			.slideDown( this.setting.speed );
 		
-		if ( field.nodeName.toLowerCase() == "ul" ) {
-			var li = this._getPosition( field );
+		if ( el.nodeName.toLowerCase() == "ul" ) {
+			var li = this._getPosition( el );
 			Js.use( li ).addClass( 'hover' );
 			Js.use( '> a', li ).addClass( 'hover' );
 		}
 	},
 	
-	_hide: function( field ) {
+	_hide: function( el ) {
 		var that = this;
 		
-		var child = this._getChild( field );
+		var c = this._getChild( el );
 		
-		if ( !child )
+		if ( !c )
 			return false;
 			
-		var node = Js.use( child )
+		var node = Js.use( c )
 			.data( 'cancelHide', false );
 		
 		setTimeout( function() {
-			if( !node.data( 'cancelHide' ) ) {
+			if( !node.data( 'cancelHide' ) ) 
 				node.slideUp( that.setting.speed );
-			}
 		}, 200);
 	},
 	
-	_getChild: function( field ) {
-		if ( field.nodeName.toLowerCase() == "li" ) {
-			var child = Js.use( "> ul", field );
-			return child.size() > 0 ? child[0] : null ;
+	_getChild: function( el ) {
+		if ( el.nodeName.toLowerCase() == "li" ) {
+			var c = Js.use( "> ul", el );
+			return c.size() > 0 ? c[0] : null ;
 		}
 		else 
-			return field;
+			return el;
 	},
 	
-	_getPosition: function( field ) {
-		return ( field.nodeName.toLowerCase() == 'ul' ? Js.use( field ).parents( 'li' )[0] : field );
+	_getPosition: function( el ) {
+		return ( el.nodeName.toLowerCase() == 'ul' ? Js.use( el ).parents( 'li' )[0] : el );
 	}
 });
 
@@ -2645,21 +2694,21 @@ Js.widget.iconizer = Js.create({
 	appName: "iconizer",
 	setting: null,
 	
-	initiate: function( option ) {
-		return ( Jrun.isset(option) ? this.init( option ) : this );
+	initiate: function( opt ) {
+		return ( Jrun.isset(opt) ? this.init( opt ) : this );
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting );
+	setup: function( opt ) {
+		if ( Jrun.typeOf( opt, "object" ) )
+			this.setting = Js.append( opt, this.setting );
 		
 		return this;
 	},
 	
-	init: function( option ) {
+	init: function( opt ) {
 		var that = this;
 		
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		
 		Js.use( this.setting.identifier ).is( "*[class*=icon]" ).each(function( i, v ) {
@@ -2740,16 +2789,17 @@ Js.widget.panel = Js.create({
 	footer: null,
 	status: "normal",
 	
-	initiate: function( option ) {
-		return ( Jrun.isset(option) ? this.init( option ) : this );
+	initiate: function( opt ) {
+		return ( Jrun.isset( opt ) ? this.init( opt ) : this );
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting, ["lang"], true );
-		
-		if ( Jrun.isset(option.lang) ) 
-			this.language = Js.append(option.lang, this.language);
+	setup: function( opt ) {
+		if ( Jrun.typeOf( opt, "object" ) ) {
+			this.setting = Js.append( opt, this.setting, ["lang"], true );
+			
+			if ( Jrun.isset(opt.lang) ) 
+				this.language = Js.append(opt.lang, this.language);
+		}
 		
 		return this;
 	},
@@ -2757,12 +2807,12 @@ Js.widget.panel = Js.create({
 	_prepSetting: function() {
 		this.renderTo = Jrun.pick( this.setting.renderTo, "body:eq(0)" );
 		this.element = this.setting.element;
-	},	
+	},
 	
-	init: function(option) {
+	init: function( opt ) {
 		var that = this;
 		
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
 		this._prepSetting();
@@ -2772,14 +2822,16 @@ Js.widget.panel = Js.create({
 			this.renderTo = Js.use(this.renderTo);
 		}
 		else if ( !this.renderTo || !this.renderTo.nodeType ) {
-			this.renderTo = Js.use("body").eq(0);
+			this.renderTo = Js.use("body:eq(0)");
 		}
 			
 		this._loadBorder();
 		this._loadContent();
 		
 		if ( Jrun.isset(this.setting.button) ) {
-			for ( var i = 0; i < this.setting.button.length; i++ ) 
+			var l = this.setting.button.length;
+			
+			for ( var i = 0; i < l; i++ ) 
 				this.addButton( this.setting.button[i] );
 		}
 		
@@ -2820,16 +2872,20 @@ Js.widget.panel = Js.create({
 		this.main = dc[1];
 	},
 	_loadContent: function() {
-		var that = this;
+		var that = this,
+			opt = this.setting;
 		
 		// set panel width
-		if ( Jrun.isset(this.setting.width) ) 
-			this.main.css( "width", this.setting.width + "px" );
+		if ( Jrun.isset(opt.width) ) 
+			this.main.css( "width", opt.width + "px" );
 		
 		// render header
 		this.header = Js.use( "<h2/>" )
 			.addClass( "header" )
 			.appendTo( this.main[0] );
+		
+		if ( !opt.header ) 
+			this.header.hide();
 		
 		// render content
 		this.container = Js.use( "<div/>" )
@@ -2843,13 +2899,13 @@ Js.widget.panel = Js.create({
 		
 		
 		// set panel height
-		if ( Jrun.isset(this.setting.height) ) 
-			this.container.css( "height", this.setting.height + "px" );
+		if ( Jrun.isset( opt.height ) ) 
+			this.container.css( "height", opt.height + "px" );
 		
 		// render header title
 		this.mainTitle = Js.use( "<span/>" )
 			.addClass( "title" )
-			.text( this.setting.title )
+			.text( opt.title )
 			.appendTo( this.header[0] );
 		
 		this.buttons = Js.use( "<span/>" )
@@ -2864,7 +2920,7 @@ Js.widget.panel = Js.create({
 			.appendTo( this.footer[0] );
 		
 		// Enable Close-Button option
-		if ( !!this.setting.closable ) 
+		if ( !!opt.closable ) 
 			this.closeButton.addClass( "close" ).click( function() { that.closePanel(); return false; });
 		else 
 			this.closeButton.addClass( "button-disabled" );
@@ -2876,15 +2932,15 @@ Js.widget.panel = Js.create({
 			.appendTo( this.container[0] );
 		
 		try {
-			this.content.html( this.setting.content );
+			this.content.html( opt.content );
 		} catch(e) {
-			this.content.htmlText( this.setting.content );
+			this.content.htmlText( opt.content );
 		}
 		
 		// set height and scrolling option for content CONTAINER
-		if ( Jrun.isset(this.setting.height) && !!this.setting.scroll ) {
+		if ( Jrun.isset( opt.height ) && !!opt.scroll ) {
 			this.content.css({
-				"height": (this.setting.height - (23 + 21)) + "px",
+				"height": opt.height + "px",
 				"overflow": "auto"
 			});
 		}
@@ -2896,12 +2952,13 @@ Js.widget.panel = Js.create({
 	},
 	
 	closePanel: function() {
-		var that = this;
+		var that = this,
+			opt = this.setting;
 		
 		// callback to close panel
 		this.node.fadeOut( "slow", function() {
-			if ( Jrun.isfunction(that.setting.onClose) ) 
-				that.setting.onClose.apply( that );
+			if ( Jrun.isfunction( opt.onClose ) ) 
+				opt.onClose.apply( that );
 			
 			that.node.remove();
 		});
@@ -2909,22 +2966,23 @@ Js.widget.panel = Js.create({
 		return this;
 	},
 	
-	title: function( text ) {
-		this.mainTitle.html("").text( text );
+	title: function( tx ) {
+		this.mainTitle.html("").text( tx );
+		return this;
 	},
 	
-	addButton: function( js ) {
+	addButton: function( jo ) {
 		var that = this;
-		var callback = Jrun.pickType( js.callback, "function" );
-		var text = Jrun.pickType( js.text, this.language.defaultButton, "string" );
-		var type = Jrun.pickGrep( js.type, "normal", /^(normal|submit|cancel)$/i );
+		var fn = Jrun.pickType( jo.callback, "function" );
+		var tx = Jrun.pickType( jo.text, this.language.defaultButton, "string" );
+		var t = Jrun.pickGrep( jo.type, "normal", /^(normal|submit|cancel)$/i );
 		
 		Js.use( "<a/>" )
 			.attr( "href", "#" )
 			.click( function() {
 				var runDefault = false;
-				if ( Jrun.isfunction(callback) ) 
-					runDefault = callback();
+				if ( Jrun.isfunction(fn) ) 
+					runDefault = fn();
 				
 				if ( runDefault === true ) 
 					that.closePanel();
@@ -2932,20 +2990,20 @@ Js.widget.panel = Js.create({
 				return false;
 			})
 			.addClass( "buttons" )
-			.addClass( type )
-			.text( text )
+			.addClass( t )
+			.text( tx )
 			.appendTo( this.buttons[0] );
 	},
 	
 	_fixResize: function() {
-		if ( Jrun.isset(this.setting.height) && !!this.setting.scroll ) {
+		var opt = this.setting;
+		
+		if ( Jrun.isset(opt.height) && !!opt.scroll ) {
 			this.content.css({
-				"height": (this.setting.height - (23 + 21)) + "px", 
+				"height": opt.height + "px", 
 				"overflow": "auto"
 			});
 		}
-		
-		return this;
 	}
 });
 
@@ -2955,21 +3013,21 @@ Js.widget.panel = Js.create({
 
 Js.widget.dialog = Js.widget.panel.extend({
 	overlay: null,
-	allowOverlay: false,
 	
 	_prepSetting: function() {
 		this.renderTo = Jrun.pick( this.setting.renderTo, "body:eq(0)" );
 		this.element = this.setting.element;
-		this.allowOverlay = Jrun.pickType( this.setting.overlay, this.allowOverlay, "boolean" );
 	},
 	
-	init: function( option ) {
+	init: function( opt ) {
 		var that = this;
 		
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
 		this._prepSetting();
+		
+		var opt = this.setting;
 		
 		// set renderTo element
 		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) {
@@ -2979,32 +3037,42 @@ Js.widget.dialog = Js.widget.panel.extend({
 			this.renderTo = Js.use("body").eq(0);
 		}
 		
-		if ( this.allowOverlay == true ) 
+		if ( !!opt.overlay ) 
 			this.overlay = new Js.widget.activity("#overlay-panel");
 		
 		
 		this._loadBorder();
 		this._loadContent();
 		
-		if ( Jrun.isset(this.setting.button) ) {
-			for ( var i = 0; i < this.setting.button.length; i++ ) 
-				this.addButton( this.setting.button[i] );
+		if ( Jrun.isset( opt.button ) ) {
+			for ( var i = 0; i < opt.button.length; i++ ) 
+				this.addButton( opt.button[i] );
 		}
 	
 		
-		if ( this.allowOverlay == true ) 
+		if ( !!opt.overlay ) 
 			this.overlay.activate();
 		
 		this.fixDimension();
 		
+		if ( !!opt.clickOver && !!opt.overlay ) {
+			this.overlay.node.one("click", function() {
+				that.closePanel( opt.onClickOver );
+			});
+		}
+		
 		return this;
 	},
 	
-	closePanel: function() {
-		var that = this;
+	closePanel: function( fn ) {
+		var that = this,
+			opt = this.setting;
 		
-		if ( this.allowOverlay == true ) 
+		if ( !!opt.overlay ) 
 			this.overlay.deactivate();
+			
+		if ( Jrun.isfunction( fn ) )
+			fn.apply( this );
 		
 		// callback to close panel
 		this.node.fadeOut( "slow", function() {
@@ -3052,12 +3120,12 @@ Js.widget.notice = Js.widget.activity.extend({
 	setting: null,
 	language: null,
 	
-	initiate: function( selector, option ) {
-		this.setup( option );
+	initiate: function( elem, opt ) {
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
 		
-		this.node = this.$super.initiate( selector, {
+		this.node = this.$super.initiate( elem, {
 			boxWidth: 550,
 			boxHeight: 0,
 			opacity: 0.9
@@ -3083,33 +3151,33 @@ Js.widget.notice = Js.widget.activity.extend({
 			that.node.box.text("");
 		});
 	},
-	_domAddNotice: function( note, status ) {
-		var status = Jrun.pickGrep( status, "note", /^(note|success|error)$/i );
+	_domAddNotice: function( v, s ) {
+		var s = Jrun.pickGrep( s, "note", /^(note|success|error)$/i );
 		var that = this;
 		
 		this.node.box.text("");
 		this.node.activate();
 		
 		var title = this.language[Jrun.camelize("title-" + status)];
-		var message = "";
-		var ret = false;
+		var tx = "";
+		var r = false;
 		
-		if ( Jrun.typeOf(note) != "object" ) 
-			title = note;
+		if ( Jrun.typeOf(v) != "object" ) 
+			title = v;
 		else {
 			title = Jrun.pick( note.title, "" );
-			message = Jrun.pick( note.message, "" );
-			ret = Jrun.pick( note.sticky, false );
+			tx = Jrun.pick( note.message, "" );
+			r = Jrun.pick( note.sticky, false );
 		}
 		
-		this.node.box.setClass( this.setting['css' + Jrun.toProperCase(status)] );
+		this.node.box.setClass( this.setting['css' + Jrun.toProperCase(s)] );
 		
 		Js.use( "<h3/>" )
 			.text( title )
 			.appendTo( this.node.box[0] );
 		
-		if ( message != "" ) 
-			var p = Js.use( "<p/>" ).htmlText( "" + message ).appendTo( this.node.box[0] );
+		if ( tx != "" ) 
+			var p = Js.use( "<p/>" ).htmlText( "" + tx ).appendTo( this.node.box[0] );
 		
 		
 		var span = Js.use( "<em/>" )
@@ -3120,27 +3188,27 @@ Js.widget.notice = Js.widget.activity.extend({
 			that.closeNotice();
 		});
 		
-		if ( ret == false ) {
+		if ( r == false ) {
 			setTimeout( function() {
 				that.closeNotice();
 			}, (this.setting.seconds * 1000) );
 		}
 	},
-	success: function( note, callback ) {
-		this.callback = Jrun.pick( callback, null );
-		this._domAddNotice( note, 'success' );
+	success: function( tx, fn ) {
+		this.callback = Jrun.pick( fn, null );
+		this._domAddNotice( tx, 'success' );
 	},
-	note: function( note, callback ) {
-		this.callback = Jrun.pick( callback, null );
-		this._domAddNotice( note, 'note' );
+	note: function( tx, fn ) {
+		this.callback = Jrun.pick( fn, null );
+		this._domAddNotice( tx, 'note' );
 	},
-	error: function( note, callback ) {
-		this.callback = Jrun.pick( callback, null );
-		this._domAddNotice( note, 'error' );
+	error: function( tx, fn ) {
+		this.callback = Jrun.pick( fn, null );
+		this._domAddNotice( tx, 'error' );
 	}
 });
 /* Tab Panel for Savvy.UI
- * version: 0.9.3
+ * version: 0.9.4
  */
 
 Js.widget.tab = Js.create({
@@ -3153,93 +3221,105 @@ Js.widget.tab = Js.create({
 	activeTab: null,
 	activeHeader: null,
 	handler: null,
-	statys: "off",
+	status: "off",
 	setting: null,
 	tabs: null,
 	current: "",
 	
-	initiate: function( selector, option ) {
-		return ( !!Jrun.isset(selector) ? this.init(selector, option) : this );
-	},
-	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting );
+	initiate: function( elem, opt ) {
+		var that = this;
+		var prepare = function( elem, opt ) {
+			that.node = Js.use( elem );
+			that.init( opt );	
+		};
+		
+		if ( !!Jrun.isset(elem) )
+			prepare( elem, opt );
 		
 		return this;
 	},
 	
-	init: function( selector, option ) {
+	setup: function( opt ) {
+		this.setting = Js.append( opt, this.setting );
+		return this;
+	},
+	
+	init: function( opt ) {
 		var that = this;
 		
 		// setting should be available
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget.tab );
-		
-		this.node = Js.use( selector );
-		this.node.addClass( this.setting.container );
-		this.element = this.node.eq(0).attr( "id" );
-		
 		this.handler = Jrun.pickGrep( this.setting.handler, "click", /^(mouseover|click)$/i );
 		
 		if (this.node.size() > 0) {
+			this.node.addClass( this.setting.container );
+			this.element = this.node.eq(0).attr( "id" );
+			
 			// add tab toolbar on top
 			this._addToolbar();
+			// activate tab
+			this.activateTab( "#" + Js.use( "." + this.setting.cssHidden + ":first", this.node[0] ).attr( "id" ) );
 			
-			this.activateTab("#" + Js.use("." + this.setting.cssHidden + ":first", this.node[0]).attr("id"));
-			
-			// tab is activated
 			this.status = "on";
 		}
+		else 
+			Js.debug.error( "Js.widget.tab: No elements found" );
 		
 		return this;
 	},
 	
 	_addToolbar: function() {
-		var that = this;
+		var that = this,
+			opt = this.setting;
 		
-		// DOM insert tab toolbar container
-		var div = Js.use( "<div/>" )
-			.attr({
-				className: this.setting.toolbarContainer, 
-				id: [this.element, "toolbar", "container"].join("-")
-			})
-			.prependTo( this.node[0] );
+		if ( Jrun.trim(opt.header) == "" ) {
+			// DOM insert tab toolbar container
+			var dv = Js.use( "<div/>" )
+				.attr({
+					className: opt.toolbarContainer, 
+					id: [this.element, "toolbar", "container"].join("-")
+				})
+				.prependTo( this.node[0] );
+		}
+		else {
+			var dv = Js.use( opt.header ).addClass( opt.toolbarContainer  );
+		}
 		
-		this.toolbar = div;
+		this.toolbar = dv;
 		
 		// DOM insert tab toolbar
 		this.header = Js.use( "<ul/>" )
 			.attr({
 				id: [this.element, "toolbar"].join("-"), 
-				className: this.setting.toolbar
+				className: opt.toolbar
 			})
 			.appendTo( this.toolbar[0] );
 		
 		// find all possible tabs
-		var child = Js.use( this.setting.identifier, this.node[0] );
+		var c = Js.use( opt.identifier, this.node[0] );
 		
-		child.each(function( i, v ) {
+		c.each(function( i, v ) {
 			// add the tab title
 			that._addHeader( v );
 			// hide the tab
-			Js.use( v ).setClass( that.setting.cssHidden );
+			Js.use( v ).setClass( opt.cssHidden );
 		});
 		
-		this.tabs = child;
+		this.tabs = c;
 		this.tabs.css( "display", "none" );
 		
-		var div2 = Js.use( "<div/>" ).css( "display", "block" ).appendTo( div[0] );
+		Js.use( "<div/>" ).css( "display", "block" ).appendTo( dv[0] );
 	},
 	
-	_addHeader: function( node ) {
-		var that = this;
+	_addHeader: function( elem ) {
+		var that = this,
+			opt = this.setting,
+			node = Js.use( elem );
 		
-		var node = Js.use( node );
-		var title = node.attr( "title" );
-		
-		var closable = node.hasClass( this.setting.closable );
-		var disabled = node.hasClass( this.setting.disabled );
+		var title = node.attr( "title" ),
+			c = node.hasClass( opt.closable ),
+			d = node.hasClass( opt.disabled );
 		
 		var li = Js.use( "<li/>" ).appendTo( this.header[0] );
 		var a = Js.use( "<a/>" )
@@ -3252,19 +3332,19 @@ Js.widget.tab = Js.create({
 		Js.use( "<em/>" ).appendTo( a[0] );
 		a.text( title );
 				
-		if ( !!closable ) {
+		if ( !!c ) {
 			Js.use( "<span/>" )
 				.css( "paddingLeft", "10px" )
 				.text("x")
-				.click(function(){
+				.click(function() {
 					var my = Js.use( this.parentNode ).click(function(){
 						return false;
 					});
 				
-					var href = my.attr( "href" );
+					var h = my.attr( "href" );
 					that.activeHeader.removeClass();
-					that.activeTab.setClass( that.setting.hidden );
-					Js.use( href ).remove();
+					that.activeTab.setClass( opt.hidden );
+					Js.use( h ).remove();
 					Js.use( this.parentNode.parentNode ).remove();
 				
 					that.revert();
@@ -3274,25 +3354,25 @@ Js.widget.tab = Js.create({
 				.appendTo( a[0] );
 		}
 		
-		if ( !!disabled ) {
-			a.setClass( this.setting.cssDisabled )
+		if ( !!d ) {
+			a.setClass( opt.cssDisabled )
 				.bind( this.handler, function(){
 					return false;
 				});
 		}
 		else {
-			a.bind( this.handler, function(){
-				that.activateTab( Js.use(this).attr("href") );
+			a.bind( this.handler, function() {
+				that.activateTab( Js.use( this ).attr("href") );
 				
 				return false;
 			});
 		}
 	},
 	
-	enableTab: function( selector ) {
+	enableTab: function( el ) {
 		var that = this;
 		
-		Js.use( "a[href=" + selector + "]", this.header[0] )
+		Js.use( "a[href=" + el + "]", this.header[0] )
 			.removeClass()
 			.unbind( this.handler )
 			.bind( this.handler, function(){
@@ -3303,10 +3383,10 @@ Js.widget.tab = Js.create({
 		return false;
 	},
 	
-	disableTab: function( selector ) {
+	disableTab: function( el ) {
 		var that = this;
 		
-		Js.use( "a[href=" + selector + "]", this.header[0] )
+		Js.use( "a[href=" + el + "]", this.header[0] )
 			.setClass( this.setting.cssDisabled )
 			.unbind( this.handler )
 			.bind( this.handler, function(){
@@ -3316,53 +3396,54 @@ Js.widget.tab = Js.create({
 		return false;
 	},
 	
-	activateTab: function( selector ) {
-		var selector = selector;
-		var that = this;
+	activateTab: function( el ) {
+		var el = el,
+			that = this,
+			opt = this.setting;
 		
-		var newTab = function() {
+		var fn = function() {
 			if ( Jrun.isset(that.activeHeader) )
-				that.activeHeader.removeClass( that.setting.cssCurrent );
+				that.activeHeader.removeClass( opt.cssCurrent );
 			
-			that.activeHeader = Js.use( "a[href=" + selector + "]", that.header[0] );
-			that.activeTab = Js.use( selector );
+			that.activeHeader = Js.use( "a[href=" + el + "]", that.header[0] );
+			that.activeTab = Js.use( el );
 			
-			that.activeHeader.addClass( that.setting.cssCurrent );
-			that.activeTab.setClass( that.setting.cssActive );
+			that.activeHeader.addClass( opt.cssCurrent );
+			that.activeTab.setClass( opt.cssActive );
 			
-			if ( !!that.setting.fx ) 
+			if ( !!opt.fx ) 
 				that.activeTab.slideDown( "normal" );
 			else 
 				that.activeTab.show();
 			
-			that.current = selector;
+			that.current = el;
 		};
 		
-		if( this.current !== selector ) {
+		if( this.current !== el ) {
 			if ( Jrun.isset(this.activeTab) ) {
-				this.activeTab.setClass( this.setting.cssHidden );
+				this.activeTab.setClass( opt.cssHidden );
 				
-				if ( !!this.setting.fx ) {
+				if ( !!opt.fx ) {
 					this.activeTab.slideUp( "normal", function(){
-						newTab();
+						fn();
 					});
 				}
 				else {
 					this.activeTab.hide();
-					newTab();
+					fn();
 				}
 			} 
 			else 
-				newTab();
+				fn();
 		}
 		return false;
 	},
 	
 	revert: function() {
-		var active = Js.use( "li > a", this.header[0] );
+		var v = Js.use( "li > a", this.header[0] );
 		
-		if ( active.length > 0 ) 
-			this.activateTab( active.attr("href") );
+		if ( v.size() > 0 ) 
+			this.activateTab( v.attr("href") );
 	},
 	showTab: function() {
 		if ( this.status == "off" ) {
@@ -3385,15 +3466,15 @@ Js.widget.tab = Js.create({
 		this.status == "off" ? this.showTab() : this.hideTab() ;
 	},
 	
-	addTab: function( js ) {
+	addTab: function( jo ) {
 		var that = this;
 		
-		if ( !!js.id && Jrun.typeOf(js.id) === "string" ) {
-			var title = Jrun.pick( js.title, "Untitled" );
-			var id = js.id;
-			var content = Jrun.pick( js.content, "" );
-			var closable = Jrun.pick( js.closable, false );
-			var set = Jrun.pick( js.activate, false );
+		if ( !!jo.id && Jrun.typeOf(jo.id) === "string" ) {
+			var title = Jrun.pick( jo.title, "Untitled" );
+			var id = jo.id;
+			var tx = Jrun.pick( jo.content, "" );
+			var c = Jrun.pick( jo.closable, false );
+			var set = Jrun.pick( jo.activate, false );
 			
 			var node = Js.use( '<div/>' )
 				.attr({
@@ -3402,7 +3483,7 @@ Js.widget.tab = Js.create({
 					title: title
 				})
 				.css( "display", "none" )
-				.htmlText( content )
+				.htmlText( tx )
 				.appendTo( this.node[0] );
 			
 			this.tabs.add( node[0] );
@@ -3421,10 +3502,10 @@ Js.widget.tab = Js.create({
 				return false;
 			});
 			
-			if ( !!closable ) {
+			if ( !!c ) {
 				Js.use( "<span/>" )
-					.click(function(){
-						var href = Js.use( this.parentNode ).attr( "href" );
+					.click(function() {
+						var h = Js.use( this.parentNode ).attr( "href" );
 						that.activeHeader.removeClass();
 						
 						that.activeTab.setClass( that.setting.hidden )
@@ -3432,7 +3513,7 @@ Js.widget.tab = Js.create({
 								Js.use( this ).remove();
 							});
 						
-						Js.use( href ).remove();					
+						Js.use( h ).remove();					
 						Js.use( this.parentNode.parentNode ).remove();
 						
 						that.revert();
@@ -3451,3 +3532,4 @@ Js.widget.tab = Js.create({
 		return this;
 	}
 });
+

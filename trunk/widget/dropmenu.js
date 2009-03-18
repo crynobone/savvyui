@@ -1,90 +1,108 @@
 /* Dropdown Menu for Savvy.UI
- * version: 0.0.1
+ * version: 0.0.2
  */
 
 Js.widget.dropmenu = Js.create({
 	node: null,
+	element: null,
 	setting: null,
 	
-	initiate: function( selector, option ) {
-		return ( Jrun.isset( selector ) ? this.init( selector ) : this );
+	initiate: function( elem, opt ) {
+		var that = this;
+		var prepare = function( elem, opt ) {
+			that.element = elem;
+			that.init( opt );
+		};
+		
+		if ( Jrun.isset( elem ) ) 
+			prepare( elem, opt );
+			
+		return this;
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting );
+	setup: function( opt ) {
+		if ( Jrun.typeOf( opt, "object" ) ) 
+			this.setting = Js.append( opt, this.setting );
+			
+		return this;
 	},
 	
-	init: function( selector, option ) {
+	init: function( elem, opt ) {
 		var that = this;
 		
-		this.node = Js.use( selector ).addClass( this.setting.css );
-		this.setup( option );
+		this.element = Jrun.pick( elem, this.element );
+		this.setup( opt );
+		this.setting = Js.append( this.setting, Js.config.widget.dropmenu );
+		this.node = Js.use( this.element );
 		
-		Js.use( "ul, li", this.node[0] ).hover( function(){
-			that._show( this );
-		}, function(){
-			that._hide( this );
-		});
-		
-		Js.use( 'li', this.node[0] ).hover( function() { 
-			Js.use( this ).addClass( 'hover' ); 
-			Js.use( '> a', this ).addClass( 'hover' ); 
-		}, function() { 
-			Js.use( this ).removeClass( 'hover' );
-			Js.use( '> a', this ).removeClass( 'hover' ); 
-		});
+		if ( this.node.size() > 0 ) {
+			
+			Js.use( "ul, li", this.node[0] ).hover( function() {
+				that._show( this );
+			}, function(){
+				that._hide( this );
+			});
+			
+			Js.use( 'li', this.node[0] ).hover( function() { 
+				Js.use( this ).addClass( 'hover' ); 
+				Js.use( '> a', this ).addClass( 'hover' ); 
+			}, function() { 
+				Js.use( this ).removeClass( 'hover' );
+				Js.use( '> a', this ).removeClass( 'hover' ); 
+			});
+		}
+		else 
+			Js.debug.error("Js.widget.dropdown: No elements found");
 		
 		return this;	
 	},
 	
-	_show: function( field ) {
-		var child = this._getChild( field );
+	_show: function( el ) {
+		var c = this._getChild( el );
 		
-		if ( !child ) 
+		if ( !c ) 
 			return false;
 		
-		var node = Js.use( child )
+		Js.use( c )
 			.data( 'cancelHide', true )
 			.css( "zIndex", this.setting.zIndex++ )
 			.fadeIn( this.setting.speed )
 			.slideDown( this.setting.speed );
 		
-		if ( field.nodeName.toLowerCase() == "ul" ) {
-			var li = this._getPosition( field );
+		if ( el.nodeName.toLowerCase() == "ul" ) {
+			var li = this._getPosition( el );
 			Js.use( li ).addClass( 'hover' );
 			Js.use( '> a', li ).addClass( 'hover' );
 		}
 	},
 	
-	_hide: function( field ) {
+	_hide: function( el ) {
 		var that = this;
 		
-		var child = this._getChild( field );
+		var c = this._getChild( el );
 		
-		if ( !child )
+		if ( !c )
 			return false;
 			
-		var node = Js.use( child )
+		var node = Js.use( c )
 			.data( 'cancelHide', false );
 		
 		setTimeout( function() {
-			if( !node.data( 'cancelHide' ) ) {
+			if( !node.data( 'cancelHide' ) ) 
 				node.slideUp( that.setting.speed );
-			}
 		}, 200);
 	},
 	
-	_getChild: function( field ) {
-		if ( field.nodeName.toLowerCase() == "li" ) {
-			var child = Js.use( "> ul", field );
-			return child.size() > 0 ? child[0] : null ;
+	_getChild: function( el ) {
+		if ( el.nodeName.toLowerCase() == "li" ) {
+			var c = Js.use( "> ul", el );
+			return c.size() > 0 ? c[0] : null ;
 		}
 		else 
-			return field;
+			return el;
 	},
 	
-	_getPosition: function( field ) {
-		return ( field.nodeName.toLowerCase() == 'ul' ? Js.use( field ).parents( 'li' )[0] : field );
+	_getPosition: function( el ) {
+		return ( el.nodeName.toLowerCase() == 'ul' ? Js.use( el ).parents( 'li' )[0] : el );
 	}
 });

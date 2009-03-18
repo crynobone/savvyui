@@ -104,7 +104,7 @@ Js.debug = {
 	
 	// Log a message/note
 	log: function( tx, v ) {
-		var v = Jrun.pick(v, "")
+		var v = Jrun.pick( v, "" );
 		
 		// push log to stack
 		this.data.log.push( tx );
@@ -125,7 +125,7 @@ Js.debug = {
 	
 	// Log an error
 	error: function( tx, v ) {
-		var v = Jrun.pick(v, "");
+		var v = Jrun.pick( v, "" );
 		
 		// push log to stack
 		this.data.error.push( tx );
@@ -394,6 +394,7 @@ var Jrun = {
 	},
 	
 	replace: function( s, v, dt ) {
+		var dt = new String( dt );
 		var v = Jrun.pickType( v, "", "string" );
 		
 		return dt.split(s).join(v);
@@ -477,7 +478,6 @@ var Jrun = {
 	
 	// Return the typeof passed argument, extending JavaScript default typeof
 	typeOf: function( dt, t ) {
-		var t = Jrun.pickType( t, null, "string");
 		var r = (function( dt ) {
 			if ( Jrun.isnull(dt) ) 
 				return "undefined";

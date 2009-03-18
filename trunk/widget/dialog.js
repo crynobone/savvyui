@@ -4,21 +4,21 @@
 
 Js.widget.dialog = Js.widget.panel.extend({
 	overlay: null,
-	allowOverlay: false,
 	
 	_prepSetting: function() {
 		this.renderTo = Jrun.pick( this.setting.renderTo, "body:eq(0)" );
 		this.element = this.setting.element;
-		this.allowOverlay = Jrun.pickType( this.setting.overlay, this.allowOverlay, "boolean" );
 	},
 	
-	init: function( option ) {
+	init: function( opt ) {
 		var that = this;
 		
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
 		this._prepSetting();
+		
+		var opt = this.setting;
 		
 		// set renderTo element
 		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) {
@@ -28,32 +28,42 @@ Js.widget.dialog = Js.widget.panel.extend({
 			this.renderTo = Js.use("body").eq(0);
 		}
 		
-		if ( this.allowOverlay == true ) 
+		if ( !!opt.overlay ) 
 			this.overlay = new Js.widget.activity("#overlay-panel");
 		
 		
 		this._loadBorder();
 		this._loadContent();
 		
-		if ( Jrun.isset(this.setting.button) ) {
-			for ( var i = 0; i < this.setting.button.length; i++ ) 
-				this.addButton( this.setting.button[i] );
+		if ( Jrun.isset( opt.button ) ) {
+			for ( var i = 0; i < opt.button.length; i++ ) 
+				this.addButton( opt.button[i] );
 		}
 	
 		
-		if ( this.allowOverlay == true ) 
+		if ( !!opt.overlay ) 
 			this.overlay.activate();
 		
 		this.fixDimension();
 		
+		if ( !!opt.clickOver && !!opt.overlay ) {
+			this.overlay.node.one("click", function() {
+				that.closePanel( opt.onClickOver );
+			});
+		}
+		
 		return this;
 	},
 	
-	closePanel: function() {
-		var that = this;
+	closePanel: function( fn ) {
+		var that = this,
+			opt = this.setting;
 		
-		if ( this.allowOverlay == true ) 
+		if ( !!opt.overlay ) 
 			this.overlay.deactivate();
+			
+		if ( Jrun.isfunction( fn ) )
+			fn.apply( this );
 		
 		// callback to close panel
 		this.node.fadeOut( "slow", function() {

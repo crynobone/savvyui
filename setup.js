@@ -8,67 +8,67 @@
 
 Js.setup = {
 	ext: {
-		validate: function( option ) {
-			Js.config.ext.validate = Js.append( option, Js.config.ext.validate, ["lang"], true );
+		validate: function( dt ) {
+			Js.config.ext.validate = Js.append( dt, Js.config.ext.validate, ["lang"], true );
 			
-			if ( Jrun.isset(option.lang) ) 
-				Js.language.ext.validate = Js.append( option.lang, Js.language.ext.validate );
+			if ( Jrun.isset(dt.lang) ) 
+				Js.language.ext.validate = Js.append( dt.lang, Js.language.ext.validate );
 		}
 	},
 	
-	test: function( option ) {
-		Js.config.test = Js.append( option, Js.config.test );
+	test: function( dt ) {
+		Js.config.test = Js.append( dt, Js.config.test );
 	},
 	
 	util: {
-		buttonSubmit: function( option ) {
-			Js.config.util.buttonSubmit = Js.append( option, Js.config.util.buttonSubmit );
+		buttonSubmit: function( dt ) {
+			Js.config.util.buttonSubmit = Js.append( dt, Js.config.util.buttonSubmit );
 		},
 		
-		formSubmit: function( option ) {
-			Js.config.util.formSubmit = Js.append( option, Js.config.util.formSubmit );
+		formSubmit: function( dt ) {
+			Js.config.util.formSubmit = Js.append( dt, Js.config.util.formSubmit );
 		},
-		editable: function( option ) {
-			Js.config.util.editable = Js.append( option, Js.config.util.editable, ["lang"], true );
+		editable: function( dt ) {
+			Js.config.util.editable = Js.append( dt, Js.config.util.editable, ["lang"], true );
 			
-			if ( Jrun.isset(option.lang) ) 
-				Js.language.util.editable = Js.append( option.lang, Js.language.util.editable );
+			if ( Jrun.isset(dt.lang) ) 
+				Js.language.util.editable = Js.append( dt.lang, Js.language.util.editable );
 		}
 	},
 	
 	widget: {
-		activity: function( option ) {
-			Js.config.widget.activity = Js.append( option, Js.config.widget.activity );
+		activity: function( dt ) {
+			Js.config.widget.activity = Js.append( dt, Js.config.widget.activity );
 		},
 		
-		datePicker: function( option ) {
-			Js.config.widget.datePicker = Js.append( option, Js.config.widget.datePicker, ["lang"], true );
+		datePicker: function( dt ) {
+			Js.config.widget.datePicker = Js.append( dt, Js.config.widget.datePicker, ["lang"], true );
 			
-			if ( Jrun.isset(option.lang) ) 
-				Js.language.widget.datePicker = Js.append( option.lang, Js.language.widget.datePicker );
+			if ( Jrun.isset(dt.lang) ) 
+				Js.language.widget.datePicker = Js.append( dt.lang, Js.language.widget.datePicker );
 		},
 		
-		dropmenu: function( option ) {
-			Js.config.widget.dropmenu = Js.append( option, Js.config.widget.dropmenu );
+		dropmenu: function( dt ) {
+			Js.config.widget.dropmenu = Js.append( dt, Js.config.widget.dropmenu );
 		},
 		
-		iconizer: function( option ) {
-			Js.config.widget.iconizer = Js.append( option, Js.config.widget.iconizer );
+		iconizer: function( dt ) {
+			Js.config.widget.iconizer = Js.append( dt, Js.config.widget.iconizer );
 		},
 		
-		notice: function( option ) {
-			Js.config.widget.notice = Js.append( option, Js.config.widget.notice, ["lang"], true );
+		notice: function( dt ) {
+			Js.config.widget.notice = Js.append( dt, Js.config.widget.notice, ["lang"], true );
 			
-			if ( Jrun.isset(option.lang) ) 
-				Js.language.widget.notice = Js.append( option.lang, Js.language.widget.notice );
+			if ( Jrun.isset(dt.lang) ) 
+				Js.language.widget.notice = Js.append( dt.lang, Js.language.widget.notice );
 		},
 		
-		panel: function( option ) {
-			Js.config.widget.panel = Js.append( option, Js.config.widget.panel );
+		panel: function( dt ) {
+			Js.config.widget.panel = Js.append( dt, Js.config.widget.panel );
 		},
 		
-		tab: function( option ) {
-			Js.config.widget.tab = Js.append( option, Js.config.widget.tab );
+		tab: function( dt ) {
+			Js.config.widget.tab = Js.append( dt, Js.config.widget.tab );
 		}
 	}
 };

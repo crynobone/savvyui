@@ -51,7 +51,8 @@ Js.config = {
 			prefix: "",
 			beforeStart: null,
 			onBeforeUpdate: null,
-			onUpdate: null
+			onUpdate: null,
+			overlay: false
 		}
 	},
 	

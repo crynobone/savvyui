@@ -50,12 +50,12 @@ Js.widget.tab = Js.create({
 			// add tab toolbar on top
 			this._addToolbar();
 			// activate tab
-			this.activateTab("#" + Js.use("." + this.setting.cssHidden + ":first", this.node[0]).attr("id"));
+			this.activateTab( "#" + Js.use( "." + this.setting.cssHidden + ":first", this.node[0] ).attr( "id" ) );
 			
 			this.status = "on";
 		}
 		else 
-			Js.debug.error("Js.widget.tab: No elements found");
+			Js.debug.error( "Js.widget.tab: No elements found" );
 		
 		return this;
 	},
@@ -76,6 +76,7 @@ Js.widget.tab = Js.create({
 		else {
 			var dv = Js.use( opt.header ).addClass( opt.toolbarContainer  );
 		}
+		
 		this.toolbar = dv;
 		
 		// DOM insert tab toolbar
@@ -261,7 +262,7 @@ Js.widget.tab = Js.create({
 		
 		if ( !!jo.id && Jrun.typeOf(jo.id) === "string" ) {
 			var title = Jrun.pick( jo.title, "Untitled" );
-			var id = js.id;
+			var id = jo.id;
 			var tx = Jrun.pick( jo.content, "" );
 			var c = Jrun.pick( jo.closable, false );
 			var set = Jrun.pick( jo.activate, false );

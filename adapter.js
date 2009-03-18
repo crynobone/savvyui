@@ -6,7 +6,7 @@
  */
 
 jQuery.fn.extend({
-	setClass: function( tx ) {
+	setClass: function( v ) {
 		return this.each( function() {
 			this.className = v;
 		});

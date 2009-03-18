@@ -52,7 +52,7 @@ Js.config = {
 			beforeStart: null,
 			onBeforeUpdate: null,
 			onUpdate: null,
-			overlay: false
+			overlay: true
 		}
 	},
 	
@@ -62,7 +62,7 @@ Js.config = {
 			boxWidth: 200,
 			boxHeight: 20,
 			identifier: ".widget-activity",
-			opacity: 0.6,
+			opacity: 0.3,
 			background: "#fff",
 			zIndex: 5000
 		},
@@ -111,7 +111,10 @@ Js.config = {
 			content: "",
 			onClose: null,
 			closable: true,
-			header: true
+			header: true,
+			overlay: true,
+			clickOver: false,
+			onClickOver: null 
 		},
 		
 		tab: {

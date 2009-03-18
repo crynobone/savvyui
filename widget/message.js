@@ -7,8 +7,8 @@ Js.widget.message = Js.create({
 	node: null,
 	setting: null,
 	
-	initiate: function( option ) {
-		this.setup( option );
+	initiate: function( opt ) {
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		
 		if ( Jrun.isnull(this.node) ) 
@@ -17,22 +17,22 @@ Js.widget.message = Js.create({
 		return this;
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting );
+	setup: function( opt ) {
+		var opt = Jrun.pickType( opt, {}, "object" );
+		this.setting = Js.append( opt, this.setting );
 		
 		return this;
 	},
 	
-	add: function( js ) {
+	add: function( jo ) {
 		var that = this;
 		
 		if ( Jrun.isnull(this.node) ) 
 			this.init();
 		
-		var text = Jrun.pick( js.text, "" );
+		var tx = Jrun.pick( js.text, "" );
 		var type = Jrun.pickGrep( js.type, "note", /^(note|error|success)$/ );
-		var closable = Jrun.pickType( js.closable, true, "boolean" );
+		var c = Jrun.pickType( js.closable, true, "boolean" );
 		
 		(function() {
 			var div = Js.use( "<div/>" )
@@ -42,7 +42,7 @@ Js.widget.message = Js.create({
 				.css( "margin", "2px 0px" )
 				.appendTo(that.node[0]).hide();
 			
-			if ( !!closable ) {
+			if ( !!c ) {
 				var span = Js.use( "<span/>" )
 					.attr({
 						className: "widgetmessage-close"
@@ -51,7 +51,7 @@ Js.widget.message = Js.create({
 					.appendTo( div[0] );
 			}
 			
-			var p = Js.use( "<p/>" ).htmlText( text ).appendTo( div[0] );
+			var p = Js.use( "<p/>" ).htmlText( tx ).appendTo( div[0] );
 			
 			var t = setTimeout(function() {
 				div.hide( "normal", function() {
@@ -60,7 +60,7 @@ Js.widget.message = Js.create({
 				});
 			}, (this.setting.seconds * 1000) );
 			
-			if ( !!closable ) {
+			if ( !!c ) {
 				span.bind( "click", function(){
 					clearTimeout(t);
 					t = null;
@@ -86,13 +86,11 @@ Js.widget.message = Js.create({
 				.appendTo( "body" );
 		}
 		
-		var scrollMe = function() {
+		var fn = function() {
 			that.node.css("top", Js.util.dimension.page.scrolls.y() + "px");
 		};
 		
-		jQuery(window).bind( "scroll", function() {
-			scrollMe();
-		});
-		scrollMe();
+		jQuery(window).bind( "scroll", fn );
+		fn();
 	}
 });

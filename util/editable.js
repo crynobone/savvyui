@@ -103,7 +103,11 @@ Js.util.editable = Js.create({
 			language: {
 				closeText: "Cancel"
 			},
-			overlay: this.setting.overlay
+			overlay: this.setting.overlay,
+			clickOver: true,
+			onClickOver: function() {
+				that.input.val("");
+			}
 		});
 		
 		var div = Js.use( "<div/>" )
@@ -122,14 +126,9 @@ Js.util.editable = Js.create({
 		
 		var box = this.box;
 		
-		box.overlay.node.bind( "click", function() {
+		box.closeButton.htmlText("Cancel").bind( "click", function() {
 			that.input.val("");
 			box.closePanel();
-		});
-		
-		box.closeButton.bind( "click", function() {
-			that.input.val("");
-			box.closePanel();
-		});
+		})
 	}
 });

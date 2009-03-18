@@ -9,12 +9,12 @@ Js.widget.notice = Js.widget.activity.extend({
 	setting: null,
 	language: null,
 	
-	initiate: function( selector, option ) {
-		this.setup( option );
+	initiate: function( elem, opt ) {
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
 		
-		this.node = this.$super.initiate( selector, {
+		this.node = this.$super.initiate( elem, {
 			boxWidth: 550,
 			boxHeight: 0,
 			opacity: 0.9
@@ -40,33 +40,33 @@ Js.widget.notice = Js.widget.activity.extend({
 			that.node.box.text("");
 		});
 	},
-	_domAddNotice: function( note, status ) {
-		var status = Jrun.pickGrep( status, "note", /^(note|success|error)$/i );
+	_domAddNotice: function( v, s ) {
+		var s = Jrun.pickGrep( s, "note", /^(note|success|error)$/i );
 		var that = this;
 		
 		this.node.box.text("");
 		this.node.activate();
 		
 		var title = this.language[Jrun.camelize("title-" + status)];
-		var message = "";
-		var ret = false;
+		var tx = "";
+		var r = false;
 		
-		if ( Jrun.typeOf(note) != "object" ) 
-			title = note;
+		if ( Jrun.typeOf(v) != "object" ) 
+			title = v;
 		else {
 			title = Jrun.pick( note.title, "" );
-			message = Jrun.pick( note.message, "" );
-			ret = Jrun.pick( note.sticky, false );
+			tx = Jrun.pick( note.message, "" );
+			r = Jrun.pick( note.sticky, false );
 		}
 		
-		this.node.box.setClass( this.setting['css' + Jrun.toProperCase(status)] );
+		this.node.box.setClass( this.setting['css' + Jrun.toProperCase(s)] );
 		
 		Js.use( "<h3/>" )
 			.text( title )
 			.appendTo( this.node.box[0] );
 		
-		if ( message != "" ) 
-			var p = Js.use( "<p/>" ).htmlText( "" + message ).appendTo( this.node.box[0] );
+		if ( tx != "" ) 
+			var p = Js.use( "<p/>" ).htmlText( "" + tx ).appendTo( this.node.box[0] );
 		
 		
 		var span = Js.use( "<em/>" )
@@ -77,22 +77,22 @@ Js.widget.notice = Js.widget.activity.extend({
 			that.closeNotice();
 		});
 		
-		if ( ret == false ) {
+		if ( r == false ) {
 			setTimeout( function() {
 				that.closeNotice();
 			}, (this.setting.seconds * 1000) );
 		}
 	},
-	success: function( note, callback ) {
-		this.callback = Jrun.pick( callback, null );
-		this._domAddNotice( note, 'success' );
+	success: function( tx, fn ) {
+		this.callback = Jrun.pick( fn, null );
+		this._domAddNotice( tx, 'success' );
 	},
-	note: function( note, callback ) {
-		this.callback = Jrun.pick( callback, null );
-		this._domAddNotice( note, 'note' );
+	note: function( tx, fn ) {
+		this.callback = Jrun.pick( fn, null );
+		this._domAddNotice( tx, 'note' );
 	},
-	error: function( note, callback ) {
-		this.callback = Jrun.pick( callback, null );
-		this._domAddNotice( note, 'error' );
+	error: function( tx, fn ) {
+		this.callback = Jrun.pick( fn, null );
+		this._domAddNotice( tx, 'error' );
 	}
 });

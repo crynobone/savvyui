@@ -4,14 +4,15 @@
 
 Js.util.smartInput = Js.create({
 	node: null,
+	element: null,
 	
-	initiate: function( node ) {
-		return ( Jrun.isset(node) ? this.init( node ) : this );
+	initiate: function( elem ) {
+		return ( Jrun.isset(elem) ? this.init( elem ) : this );
 	},
 	
-	init: function( node ) {
-		var node = Jrun.pick( node, this.node );
-		this.node = Js.use( node );
+	init: function( elem ) {
+		this.element = Jrun.pick( elem, this.elem );
+		this.node = Js.use( this.element );
 		
 		this.activate();
 		

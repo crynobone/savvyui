@@ -6,12 +6,12 @@ Js.util.ticker = Js.create({
 	element: null,
 	node: null,
 	
-	initiate: function( selector ) {
-		return ( Jrun.isset(selector) ? this.init( selector ) : this );
+	initiate: function( elem ) {
+		return ( Jrun.isset(elem) ? this.init( selector ) : this );
 	},
 	
-	init: function( selector ) {
-		this.element = Jrun.pick( selector, null );
+	init: function( elem ) {
+		this.element = Jrun.pick( elem, null );
 		
 		if ( Jrun.isset(this.element) ) 
 			this.node = Js.use( this.element );

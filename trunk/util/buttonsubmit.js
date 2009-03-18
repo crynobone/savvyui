@@ -11,21 +11,21 @@ Js.util.buttonSubmit = Js.create({
 	handler: "click",
 	formValidate: null,
 	
-	initiate: function( js ) {
-		this.id = Jrun.pick( js.id, null );
-		this.url = Jrun.pick( js.url, null );
-		this.button = Jrun.pick( js.button, null );
+	initiate: function( jo ) {
+		this.id = Jrun.pick( jo.id, null );
+		this.url = Jrun.pick( jo.url, null );
+		this.button = Jrun.pick( jo.button, null );
 		
 		// if id, url and button have been defined, straight away call this.init()
 		if ( !!this.id && !!this.url && this.button ) 
-			this.init( js.option );
+			this.init( jo.option );
 		
 		return this;
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting );
+	setup: function( opt ) {
+		var opt = Jrun.pickType( opt, {}, "object" );
+		this.setting = Js.append( opt, this.setting );
 		
 		return this;
 	},
@@ -36,10 +36,10 @@ Js.util.buttonSubmit = Js.create({
 		this.formValidate.onError = this.setting.formError;
 	},
 	
-	init: function( option ) {
+	init: function( opt ) {
 		var that = this;
 		
-		this.setup( option );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.util[this.appName] );
 		this._prepSetting();
 		
@@ -48,14 +48,14 @@ Js.util.buttonSubmit = Js.create({
 		// bind onClick event delegation to the button
 		Js.use( this.button ).bind( this.handler, function() {
 			// we need to validate the form
-			var form = new Js.ext.validate( that.id, that.formValidate );
-			var params = form.cacheResult;
+			var f = new Js.ext.validate( that.id, that.formValidate );
+			var dt = f.cacheResult;
 			
-			if( !!params ) {
+			if( !!dt ) {
 			   jQuery.ajax({
 					type: method,
 					url: that.url,
-					data: params,
+					data: dt,
 					beforeSend: function() {
 						if ( Jrun.isfunction(that.setting.beforeSend) ) 
 							that.setting.beforeSend.apply( that );

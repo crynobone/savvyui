@@ -13,12 +13,12 @@ Js.util.activeContent = Js.create({
 	fnBeforeStart: null,
 	fnSuccess: null,
 	
-	initiate: function( js ) {
+	initiate: function( jo ) {
 		var that = this;
-		var js = Jrun.pickType( js, {}, "object" );
-		this.element = Jrun.pick( js.element, null );
-		this.fnBeforeStart = Jrun.pick( js.beforeStart, this.fnBeforeStart );
-		this.fbSuccess = Jrun.pick( js.success, this.fnSuccess );
+		var jo = Jrun.pickType( jo, {}, "object" );
+		this.element = Jrun.pick( jo.element, null );
+		this.fnBeforeStart = Jrun.pick( jo.beforeStart, this.fnBeforeStart );
+		this.fbSuccess = Jrun.pick( jo.success, this.fnSuccess );
 		
 		if ( Jrun.isset(this.element) ) {
 			this._selector();
@@ -47,18 +47,18 @@ Js.util.activeContent = Js.create({
 		Js.use( this.element ).bind( "click", function() {
 			var href = Js.use( this ).attr( "href" );
 			var hash = ( Jrun.isset(href) ? href : this.href );
-			var ret;
+			var r;
 			
-			ret = ( hash.match(/^\#/) ? ["", hash.substr(1)] : hash.split(/\#/) ); 
+			r = ( hash.match(/^\#/) ? ["", hash.substr(1)] : hash.split(/\#/) ); 
 			
 			if ( Jrun.isfunction(that.fnBeforeStart) ) 
 				that.fnBeforeStart();
 			
-			if ( Jrun.isset(ret[1]) ) {
-				that.repeat = ( ret[1] === that.last );
+			if ( Jrun.isset(r[1]) ) {
+				that.repeat = ( r[1] === that.last );
 				
-				that.last = ret[1];
-				that.init( ret[1].split(/\//) );
+				that.last = r[1];
+				that.init( r[1].split(/\//) );
 				
 				if ( Jrun.isfunction(that.fnSuccess) ) 
 					that.fnSuccess();

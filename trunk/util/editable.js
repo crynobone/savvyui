@@ -14,25 +14,25 @@ Js.util.editable = Js.create({
 	cacheData: null,
 	lastSelected: null,
 	
-	initiate: function( element, option ) {
-		return ( !!Jrun.isset(element) ? this.init( element, option ) : this );
+	initiate: function( elem, opt ) {
+		return ( !!Jrun.isset(elem) ? this.init( elem, opt ) : this );
 	},
 	
-	setup: function( option ) {
-		var option = Jrun.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting, ["lang"], true );
+	setup: function( opt ) {
+		var opt = Jrun.pickType( opt, {}, "object" );
+		this.setting = Js.append( opt, this.setting, ["lang"], true );
 		
-		if ( Jrun.isset(option.lang) ) 
-			this.language = Js.append( option.lang, this.language );
+		if ( Jrun.isset(opt.lang) ) 
+			this.language = Js.append( opt.lang, this.language );
 		
 		return this;
 	},
 	
-	init: function( selector, option ) {
+	init: function( elem, opt ) {
 		var that = this;
 		
-		this.element = Jrun.pick( this.element, selector );
-		this.setup( option );
+		this.element = Jrun.pick( this.element, elem );
+		this.setup( opt );
 		this.setting = Js.append( this.setting, Js.config.util.editable );
 		this.language = Js.append( this.language, Js.language.util.editable );
 		this.node = Js.use( this.element );
@@ -103,7 +103,7 @@ Js.util.editable = Js.create({
 			language: {
 				closeText: "Cancel"
 			},
-			overlay: true
+			overlay: this.setting.overlay
 		});
 		
 		var div = Js.use( "<div/>" )

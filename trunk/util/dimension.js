@@ -7,39 +7,39 @@ Js.util.dimension = {
 	page: {
 		scrolls: {
 			x: function() {
-				var doc = document.body;
-				var ret = 0;
-				var offset = window.pageXOffset;
+				var d = document.body;
+				var r = 0;
+				var off = window.pageXOffset;
 				var el = document.documentElement;
 				
-				if ( typeof(offset) == "number" ) 
-					ret = offset;
+				if ( typeof(off) == "number" ) 
+					r = off;
 				
-				else if ( doc && doc.scrollLeft ) 
-					ret = doc.scrollLeft;
+				else if ( d && d.scrollLeft ) 
+					r = d.scrollLeft;
 				
 				else if ( el && el.scrollLeft ) 
-					ret = el.scrollLeft;
+					r = el.scrollLeft;
 				
-				return ret;
+				return r;
 			},
 			
 			y: function() {
-				var doc = document.body;
-				var ret = 0;
-				var offset = window.pageYOffset;
+				var d = document.body;
+				var r = 0;
+				var off = window.pageYOffset;
 				var el = document.documentElement;
 				
-				if ( typeof(offset) == "number" ) 
-					ret = offset;
+				if ( typeof(off) == "number" ) 
+					r = off;
 				
-				else if ( doc && doc.scrollTop ) 
-					ret = doc.scrollTop;
+				else if ( d && d.scrollTop ) 
+					r = d.scrollTop;
 				
 				else if ( el && el.scrollTop ) 
-					ret = el.scrollTop;
+					r = el.scrollTop;
 				
-				return ret;
+				return r;
 			},
 			
 			both: function() {
@@ -51,19 +51,19 @@ Js.util.dimension = {
 			}
 		},
 		
-		middle: function( width, height ) {
-			var doc = document.body;
-			var offset = [Js.use(window).width(), Js.use(window).height()];
-			var axis = Js.util.dimension.page.scrolls.both();
-			var ret = [];
+		middle: function( w, h ) {
+			var d = document.body;
+			var off = [Js.use(window).width(), Js.use(window).height()];
+			var a = Js.util.dimension.page.scrolls.both();
+			var r = [];
 					
-			ret[0] = Math.round( ((offset[0] - width) / 2) + axis[0] );
-			ret[1] = Math.round( ((offset[1] - height) / 2) + axis[1] ); 
+			r[0] = Math.round( ((off[0] - w) / 2) + a[0] );
+			r[1] = Math.round( ((off[1] - h) / 2) + a[1] ); 
 			
-			ret[0] = ( ret[0] < 0 ? 0 : ret[0] );
-			ret[1] = ( ret[1] < 0 ? 0 : ret[1] );
+			r[0] = ( r[0] < 0 ? 0 : r[0] );
+			r[1] = ( r[1] < 0 ? 0 : r[1] );
 				
-			return ret.reverse();
+			return r.reverse();
 		}
 	},
 	

@@ -68,7 +68,7 @@ Js.ext.validate = Js.create({
 		
 		if ( Jrun.isfunction(fnBeforeStart) ) {
 			// execute the function and free up the memory
-			contRun = fnBeforeStart.apply( this, [node] );
+			contRun = fnBeforeStart.apply( this );
 			fnBeforeStart = null;
 		}
 		

@@ -57,20 +57,20 @@ Js.util.buttonSubmit = Js.create({
 					url: that.url,
 					data: dt,
 					beforeSend: function() {
-						if ( Jrun.isfunction(that.setting.beforeSend) ) 
+						if ( Jrun.isfunction( that.setting.beforeSend ) ) 
 							that.setting.beforeSend.apply( that );
 					},
 					success: function( reply ) {
 						var runDefault = true;
 						
-						if ( Jrun.isfunction(that.setting.sendSuccess) ) 
+						if ( Jrun.isfunction( that.setting.sendSuccess ) ) 
 							runDefault = that.setting.sendSuccess.apply( that, [reply] );
 						
 						if ( runDefault !== false ) 
-							Js.parse.xhr.init(reply);
+							Js.parse.xhr.init( reply );
 					},
 					onError: function() {
-						if( Jrun.isfunction(that.setting.onSendError) ) 
+						if( Jrun.isfunction( that.setting.onSendError ) ) 
 							that.setting.onSendError.apply( that );
 					}
 				});

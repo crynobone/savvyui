@@ -11,7 +11,7 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
 			this.id = Jrun.pick( jo.id, null );
 			this.url = Jrun.pick( jo.url, null );	
 		} 
-		else if ( Jrun.parameter(arguments, 2, [true, "string"]) ) {
+		else if ( Jrun.parameter( arguments, 2, [true, "string"] ) ) {
 			this.id = Jrun.pick( arguments[0], null );
 			this.url = Jrun.pick( arguments[1], null );
 		}

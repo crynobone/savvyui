@@ -20,7 +20,7 @@ Js.util.activeContent = Js.create({
 		this.fnBeforeStart = Jrun.pick( jo.beforeStart, this.fnBeforeStart );
 		this.fbSuccess = Jrun.pick( jo.success, this.fnSuccess );
 		
-		if ( Jrun.isset(this.element) ) {
+		if ( Jrun.isset( this.element ) ) {
 			this._selector();
 			this._check();
 		} 
@@ -32,7 +32,7 @@ Js.util.activeContent = Js.create({
 	},
 	
 	destroy: function() {
-		if( Jrun.isset(this.interval) ) {
+		if( Jrun.isset( this.interval ) ) {
 			clearInterval( this.interval );
 			this.interval == null;
 		}
@@ -46,12 +46,12 @@ Js.util.activeContent = Js.create({
 		
 		Js.use( this.element ).bind( "click", function() {
 			var href = Js.use( this ).attr( "href" );
-			var hash = ( Jrun.isset(href) ? href : this.href );
+			var hash = ( Jrun.isset( href ) ? href : this.href );
 			var r;
 			
-			r = ( hash.match(/^\#/) ? ["", hash.substr(1)] : hash.split(/\#/) ); 
+			r = ( hash.match(/^\#/) ? ["", hash.substr( 1 )] : hash.split(/\#/) ); 
 			
-			if ( Jrun.isfunction(that.fnBeforeStart) ) 
+			if ( Jrun.isfunction( that.fnBeforeStart ) ) 
 				that.fnBeforeStart();
 			
 			if ( Jrun.isset(r[1]) ) {
@@ -60,7 +60,7 @@ Js.util.activeContent = Js.create({
 				that.last = r[1];
 				that.init( r[1].split(/\//) );
 				
-				if ( Jrun.isfunction(that.fnSuccess) ) 
+				if ( Jrun.isfunction( that.fnSuccess ) ) 
 					that.fnSuccess();
 			}
 		});
@@ -70,12 +70,12 @@ Js.util.activeContent = Js.create({
 		if ( location.hash != this.last && location.hash !== "#" ) {
 			this.last = location.hash;
 			
-			if ( Jrun.isfunction(this.fnBeforeStart) ) 
+			if ( Jrun.isfunction( this.fnBeforeStart ) ) 
 				this.fnBeforeStart();
 			
-			this.init( location.hash.substr(1).split(/\//) );
+			this.init( location.hash.substr( 1 ).split( /\// ) );
 			
-			if ( Jrun.isfunction(this.fnSuccess) ) 
+			if ( Jrun.isfunction( this.fnSuccess ) ) 
 				this.fnSuccess();
 		}
 	}

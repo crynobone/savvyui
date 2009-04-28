@@ -60,11 +60,11 @@
 			// Add event handler whenever someone submit #contact-me form
 			$("#contact-me").submit(function() {
 				// initiate the Form Validation for #contact-me form
-				var validation = new Js.ext.validate(this);
+				Js.data.validation = new Js.ext.validate(this);
 		 
-				if(!!validation.cacheResult) {
+				if(!!Js.data.validation.cacheResult) {
 					// if all input field validated
-					alert("Your done, querystring: " + validation.cacheResult);
+					alert("Your done, querystring: " + Js.data.validation.cacheResult);
 				}
 				else {
 					// if any of the field not validated

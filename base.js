@@ -238,7 +238,7 @@ var Jrun = {
 	
 	// Check whether the value is in an array
 	inArray: function( v, dt ) {
-		var i = dt.length;
+		var i = (dt.length - 1);
 		
 		for ( ; i > -1 && !!dt[i]; i-- ) {
 			if ( dt[i] === v ) {
@@ -252,7 +252,7 @@ var Jrun = {
 	
 	// Check whether the value is in an array, check validity based on Regular Expression
 	inArrayGrep: function( v, dt ) {
-		var i = dt.length;
+		var i = (dt.length - 1);
 		
 		for ( ; i > -1 && !!dt[i]; i-- ) {
 			if ( dt[i].match(v) ) {
@@ -266,14 +266,16 @@ var Jrun = {
 	
 	// Get the indexOf based on value in an array
 	'indexOf': function( v, dt ) {
-		var i = dt.length;
+		var i = (dt.length - 1);
+		
 		for ( ; i-- && dt[i] !== v; );
 		return i;
 	},
 	
 	// Get the indexOf based on value in an array
 	indexOfGrep: function( v, dt ) {
-		var i = dt.length;
+		var i = (dt.length - 1);
+		
 		for ( ; i-- && !dt[i].match(v); );
 		return i;
 	},
@@ -324,7 +326,7 @@ var Jrun = {
 		for ( ; i < l; i++ ) {
 			var r = dt[i];
             
-            if ( Jrun.isset(r) ) {
+            if ( Jrun.isset( r ) ) {
                 return r;
 				break;
             }
@@ -338,13 +340,13 @@ var Jrun = {
 		var dt = jQuery.makeArray( arguments ),
 			i = 0;
 		var l = dt.length;
-		var v = dt[(l - 1)];
+		var v = dt[( l - 1 )];
 		
-		for ( ; i < (l - 1); i++ ) {
+		for ( ; i < ( l - 1 ); i++ ) {
 			var r = dt[i];
             
-            if ( Jrun.isset(r) ) {
-                if ( this.typeOf(r, v) ) {
+            if ( Jrun.isset( r ) ) {
+                if ( this.typeOf( r, v ) ) {
                     return r;
 					break;
                 }
@@ -359,7 +361,7 @@ var Jrun = {
 		var dt = jQuery.makeArray( arguments ),
 			i = 0;
 		var l = dt.length;
-		var v = dt[(l - 1)];
+		var v = dt[ ( l - 1 ) ];
 		
 		if ( this.typeOf(v) == "string" ) 
 			v = new RegExp(v);
@@ -454,7 +456,7 @@ var Jrun = {
 		var r = [];
 		
 		// return empty array
-		if ( this.isset(dt) ) {
+		if ( this.isset( dt ) ) {
 			// ensure the offset
 			l.off = ( dt.length - off );
 			l.dt = dt.length;
@@ -515,6 +517,6 @@ var Jrun = {
 	},
 	
 	prep: function( dt ) {
-		return ( dt.match(/^(#|\.)?(.*)$/gi) ? RegExp.$2 : dt );
+		return ( dt.match( /^(#|\.)?(.*)$/gi ) ? RegExp.$2 : dt );
 	}
 };

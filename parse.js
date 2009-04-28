@@ -63,7 +63,7 @@ Js.parse = {
 				else if ( !!id ) 
 					Js.use("#" + id).html( args );
 			}
-			else if ( Jrun.isset(object) ) {
+			else if ( Jrun.isset( fn ) ) {
 				// eval the function without making a callback
 				var fn = eval( fn );
 					

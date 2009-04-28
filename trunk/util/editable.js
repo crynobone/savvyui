@@ -15,7 +15,7 @@ Js.util.editable = Js.create({
 	lastSelected: null,
 	
 	initiate: function( elem, opt ) {
-		return ( !!Jrun.isset(elem) ? this.init( elem, opt ) : this );
+		return ( !!Jrun.isset( elem ) ? this.init( elem, opt ) : this );
 	},
 	
 	setup: function( opt ) {
@@ -64,23 +64,23 @@ Js.util.editable = Js.create({
 		var val = this.input.val();
 		this.value = val;
 		
-		if ( Jrun.isfunction(this.setting.onBeforeUpdate) ) 
+		if ( Jrun.isfunction( this.setting.onBeforeUpdate ) ) 
 			runDefault = this.setting.onBeforeUpdate.apply( this, [field] );
 		
-		if ( runDefault !== false && (Jrun.isset(val) && Jrun.trim(val) != "" && !Jrun.inArray(val, ret)) ) {
+		if ( runDefault !== false && (Jrun.isset( val ) && Jrun.trim( val ) != "" && !Jrun.inArray( val, ret ) ) ) {
 			Js.use( '<option selected="selected" value="' + val + '">' + val + '</option>' ).appendTo( field );
 			updated = true;
 		} 
 		else 
 			field.options[0].selected = true;
 		
-		if ( Jrun.isfunction(this.setting.onUpdate) ) 
+		if ( Jrun.isfunction( this.setting.onUpdate ) ) 
 			this.setting.onUpdate.apply( this, [field, updated] );
 	},
 	getModalBox: function( field ) {
 		var that = this;
 		
-		if ( Jrun.isfunction(this.setting.beforeStart) ) 
+		if ( Jrun.isfunction( this.setting.beforeStart ) ) 
 			this.setting.beforeStart.apply( this );
 		
 		this.box = new Js.widget.dialog({
@@ -111,7 +111,7 @@ Js.util.editable = Js.create({
 		});
 		
 		var div = Js.use( "<div/>" )
-			.setClass( "data" )
+			.setClass( "panel" )
 			.appendTo( this.box.content[0] );
 		
 		var p = Js.use( "<label/>" )
@@ -122,7 +122,6 @@ Js.util.editable = Js.create({
 			.attr( "name", "util_editable_" + Jrun.prep( this.element ) )
 			.val( this.setting.prefix )
 			.appendTo( div[0] );
-		
 		
 		var box = this.box;
 		

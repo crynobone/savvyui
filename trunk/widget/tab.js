@@ -2,6 +2,7 @@
  * version: 0.9.4
  */
 
+
 Js.widget.tab = Js.create({
 	appName: "tab",
 	height: null,
@@ -24,7 +25,7 @@ Js.widget.tab = Js.create({
 			that.init( opt );	
 		};
 		
-		if ( !!Jrun.isset(elem) )
+		if ( !!Jrun.isset( elem ) )
 			prepare( elem, opt );
 		
 		return this;

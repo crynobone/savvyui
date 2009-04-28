@@ -13,7 +13,7 @@ Js.config = {
 			beforeStart: null,
 			success: null,
 			onError: null,
-			autoExecute: true
+			auto: true
 		}
 	},
 	

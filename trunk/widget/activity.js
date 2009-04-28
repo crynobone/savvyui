@@ -12,7 +12,7 @@ Js.widget.activity = Js.create({
 	count: 0,
 	
 	initiate: function( elem, opt ) {
-		return ( Jrun.isset(elem) ? this.init( elem, opt ) : this );
+		return ( Jrun.isset( elem ) ? this.init( elem, opt ) : this );
 	},
 	
 	setup: function( opt ) {
@@ -67,7 +67,7 @@ Js.widget.activity = Js.create({
 		}
 		
 		this.count++;
-		if ( Jrun.isfunction(fn) ) 
+		if ( Jrun.isfunction( fn ) ) 
 			fn();
 	},
 	
@@ -91,7 +91,7 @@ Js.widget.activity = Js.create({
 			this.node.fadeTo( "normal", 0, 
 				function() {
 					Js.use( this ).css(	"display", "none" );
-					if ( Jrun.isfunction(fn) ) 
+					if ( Jrun.isfunction( fn ) ) 
 						fn();
 				}
 			);

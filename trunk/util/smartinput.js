@@ -23,13 +23,13 @@ Js.util.smartInput = Js.create({
 		this.node.bind( "blur", function() {
 			var node = Js.use( this );
 			
-			if ( Jrun.trim(node.val()) === "" ) 
+			if ( Jrun.trim( node.val() ) === "" ) 
 				node.val( node.attr("title").toString() );
 			
 		}).bind( "focus", function() {
 			var node = Js.use(this);
 			
-			if ( node.attr("title") == node.val() )  
+			if ( node.attr( "title" ) == node.val() )  
 				node.val("");
 			
 		}).val( this.node.attr("title").toString() );
@@ -39,13 +39,13 @@ Js.util.smartInput = Js.create({
 		this.node.unbind( "blur", function() {
 			var node = Js.use( this );
 			
-			if ( Jrun.trim(node.val()) === "" ) 
+			if ( Jrun.trim( node.val() ) === "" ) 
 				node.val( node.attr("title").toString() );
 			
 		}).unbind( "focus", function() {
 			var node = Js.use( this );
 			
-			if ( node.attr("title") == node.val() ) 
+			if ( node.attr( "title" ) == node.val() ) 
 				node.val("");
 			
 		});

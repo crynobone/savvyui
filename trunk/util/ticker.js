@@ -6,37 +6,37 @@ Js.util.ticker = Js.create({
 	element: null,
 	node: null,
 	
-	initiate: function( elem ) {
-		return ( Jrun.isset( elem ) ? this.init( selector ) : this );
+	initiate: function( element ) {
+		return ( Js.helper.isset( element ) ? this.init( element ) : this );
 	},
 	
-	init: function( elem ) {
-		this.element = Jrun.pick( elem, null );
+	init: function( element ) {
+		this.element = Js.helper.pick( element, null );
 		
-		if ( Jrun.isset( this.element ) ) 
-			this.node = Js.use( this.element );
+		if ( Js.helper.isset( this.element ) ) 
+			this.node = Js.$( this.element );
 		
 		return this;
 	},
 	
 	tick: function() {
-		this.node.each( function( i, v ) {
-			// set checked to true
-			v.checked = true;
+		// set checked to true
+		this.node.each( function() {
+			this.checked = true;
 		} );
 	},
 	
 	untick: function() {
-		this.node.each( function( i, v ) { 
-			// set checked to false
-			v.checked = false;
+		// set checked to false
+		this.node.each( function() { 
+			this.checked = false;
 		} );
 	},
 	
 	invert: function() {
-		this.node.each( function( i, v ) {
-			// reverse checkbox selection
-			v.checked = !v.checked;
+		// reverse checkbox selection
+		this.node.each( function() {
+			this.checked = !this.checked;
 		} );
 	}
 });

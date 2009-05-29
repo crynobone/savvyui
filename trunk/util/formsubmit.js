@@ -8,12 +8,12 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
 	
 	initiate: function( obj ) {
 		if ( Js.on.parameter( arguments, 1, ['object'] ) ) {
-			this.id = Js.on.pick( obj.id, null );
-			this.url = Js.on.pick( obj.url, null );	
+			this.id = Js.helper.pick( obj.id, null );
+			this.url = Js.helper.pick( obj.url, null );	
 		} 
-		else if ( Js.on.parameter( arguments, 2, [true, "string"] ) ) {
-			this.id = Js.on.pick( arguments[0], null );
-			this.url = Js.on.pick( arguments[1], null );
+		else if ( Js.helper.parameter( arguments, 2, [true, "string"] ) ) {
+			this.id = Js.helper.pick( arguments[0], null );
+			this.url = Js.helper.pick( arguments[1], null );
 		}
 		
 		this.button = this.id;

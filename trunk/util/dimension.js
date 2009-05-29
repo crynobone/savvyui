@@ -10,7 +10,7 @@ Js.util.dimension = {
 				var doc = document.body;
 				var result = 0;
 				var offset = window.pageXOffset;
-				var elem = document.documentElement;
+				var element = document.documentElement;
 				
 				if ( typeof( offset ) == 'number' ) 
 					result = offset;
@@ -18,8 +18,8 @@ Js.util.dimension = {
 				else if ( doc && doc.scrollLeft ) 
 					result = doc.scrollLeft;
 				
-				else if ( elem && elem.scrollLeft ) 
-					result = elem.scrollLeft;
+				else if ( element && element.scrollLeft ) 
+					result = element.scrollLeft;
 				
 				return result;
 			},
@@ -28,7 +28,7 @@ Js.util.dimension = {
 				var doc = document.body;
 				var result = 0;
 				var offset = window.pageYOffset;
-				var elem = document.documentElement;
+				var element = document.documentElement;
 				
 				if ( typeof( offset ) == 'number' ) 
 					result = offset;
@@ -36,8 +36,8 @@ Js.util.dimension = {
 				else if ( doc && doc.scrollTop ) 
 					result = doc.scrollTop;
 				
-				else if ( elem && elem.scrollTop ) 
-					result = elem.scrollTop;
+				else if ( element && element.scrollTop ) 
+					result = element.scrollTop;
 				
 				return result;
 			},
@@ -90,10 +90,10 @@ Js.util.dimension = {
 				}
 				else {
 					if ( loop == false ) {
-						result[0] = Js.on.pick( node.scrollWidth, 0 );
-						result[1] = Js.on.pick( node.scrollHeight, 0 );
-						result[2] = Js.on.pick( node.offsetTop, 0 );
-						result[3] = Js.on.pick( node.offsetLeft, 0 );
+						result[0] = Js.helper.pick( node.scrollWidth, 0 );
+						result[1] = Js.helper.pick( node.scrollHeight, 0 );
+						result[2] = Js.helper.pick( node.offsetTop, 0 );
+						result[3] = Js.helper.pick( node.offsetLeft, 0 );
 					}
 				}
 				

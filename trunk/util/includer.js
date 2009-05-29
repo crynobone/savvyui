@@ -11,7 +11,7 @@ Js.util.includer = {
 	},
 	
 	style: function( uri, media ) {
-		var media = Js.on.pickGrep( media, "all", /^(all|print|screen|handheld)$/i );
+		var media = Js.helper.pickGrep( media, "all", /^(all|print|screen|handheld)$/i );
 		
 		return Js.$( "<link/>" ).attr({
 			'type': 'text/css',

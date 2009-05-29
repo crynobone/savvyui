@@ -3,7 +3,7 @@
  */
 
 Js.widget.activity = Js.create({
-	appName: "activity",
+	appName: 'activity',
 	node: null,
 	element: null,
 	box: null,
@@ -11,88 +11,100 @@ Js.widget.activity = Js.create({
 	language: null,
 	count: 0,
 	
-	initiate: function( elem, opt ) {
-		return ( Jrun.isset( elem ) ? this.init( elem, opt ) : this );
+	initiate: function( element, option ) {
+		return ( Js.helper.isset( element ) ? this.init( element, option ) : this );
 	},
 	
-	setup: function( opt ) {
-		if ( Jrun.typeOf(opt, "object") ) {
-			this.setting = Js.append(opt, this.setting, ["lang"], true);
+	setup: function( option ) {
+		if ( Js.helper.typeOf( option, 'object' ) ) {
+			this.setting = Js.append( option, this.setting, ['lang'], true);
 			
-			if ( Jrun.isset(opt.lang) ) 
-				this.language = Js.append(opt.lang, this.language);
+			if ( Js.helper.isset( option.lang ) ) 
+				this.language = Js.append( option.lang, this.language );
 		}
+		
 		return this;
 	},
 	
-	init: function( elem, opt ) {
-		this.setup( opt );
+	init: function( element, option ) {
+		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.config.widget[this.appName] );
 		
-		this.element = Jrun.pick( elem, this.element );
-		this.node = Js.use( this.element );
+		this.element = Js.helper.pick( element, this.element );
+		this.node = Js.$( this.element );
 		
 		if ( this.node.size() == 0 ) {
 			try {
-				this.node = Js.use("<div/>").attr("id", Jrun.prep(this.element)).appendTo("body");
+				this.node = Js.$('<div/>')
+					.attr( 'id', Js.helper.prep( this.element ) )
+					.appendTo('body');
 			}
 			catch(e) {
-				Js.debug.error("Js.widget.activity: fail to create elementById '" + this.element + "'");
+				Js.debug.error( 'Js.widget.activity: fail to create elementById ' + this.element );
 			}
 		}
 		
-		this.node.css({
+		var css = {
 			background: this.setting.background,
 			zIndex: this.setting.zIndex,
-			display: "none"
-		}).setClass( Jrun.prep(this.setting.identifier) ).css( "opacity", 0.01 );
+			display: 'none'
+		};
+		
+		this.node
+			.css( css )
+			.setClass( Js.helper.prep( this.setting.identifier)  )
+			.css( 'opacity', 0.01 );
 		
 		return this;
 	},
 	
-	activate: function( fn ) {
-		var opt = this.setting;
+	activate: function( callback ) {
+		var option = this.setting;
 		
 		if ( this.count == 0 ) {
-			this.node.css( "display", "block" ).fadeTo( "normal", opt.opacity );
-			var t = Js.util.dimension.page.middle( opt.boxWidth, opt.boxHeight );
+			this.node.css( 'display', 'block' ).fadeTo( 'normal', option.opacity );
 			
-			if ( Jrun.isset(this.box) ) {
+			var middle = Js.util.dimension.page.middle( option.boxWidth, option.boxHeight );
+			
+			if ( Js.helper.isset( this.box ) ) {
 				this.box.css({
-					top: t[0] + "px",
-					left: t[1] + "px"
+					top: middle[0] + 'px',
+					left: middle[1] + 'px'
 				});
 			}
 		}
 		
 		this.count++;
-		if ( Jrun.isfunction( fn ) ) 
-			fn();
+		
+		if ( Js.helper.isfunction( callback ) ) 
+			callback();
 	},
 	
 	loadImage: function() {
-		var opt = this.setting;
-		this.box = Js.use( "<img/>" )
-			.attr( "src", opt.imagePath )
-			.css({
-				position: "absolute",
-				width: opt.boxWidth + "px",
-				height: opt.boxHeight + "px",
-				zIndex: (opt.zIndex + 1)
-			})
+		var option = this.setting;
+		var css = {
+			position: 'absolute',
+			width: option.boxWidth + 'px',
+			height: option.boxHeight + 'px',
+			zIndex: (option.zIndex + 1)
+		};
+		
+		this.box = Js.$( '<img/>' )
+			.attr( 'src', option.imagePath )
+			.css( css )
 			.appendTo( this.node[0] );
 		
 		return this;
 	},
 	
-	deactivate: function( fn ) {
+	deactivate: function( callback ) {
 		if ( this.count > 0 ) {
-			this.node.fadeTo( "normal", 0, 
+			this.node.fadeTo( 'normal', 0, 
 				function() {
-					Js.use( this ).css(	"display", "none" );
-					if ( Jrun.isfunction( fn ) ) 
-						fn();
+					Js.$( this ).css(	'display', 'none' );
+					if ( Js.helper.isfunction( callback ) ) 
+						callback();
 				}
 			);
 		}

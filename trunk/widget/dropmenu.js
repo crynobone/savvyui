@@ -7,84 +7,84 @@ Js.widget.dropmenu = Js.create({
 	element: null,
 	setting: null,
 	
-	initiate: function( elem, opt ) {
-		var that = this;
-		var prepare = function( elem, opt ) {
-			that.element = elem;
-			that.init( opt );
-		};
+	initiate: function( element, option ) {
+		var that = this,
+			prepare = function( element, option ) {
+				that.element = element;
+				that.init( option );
+			};
 		
-		if ( Jrun.isset( elem ) ) 
-			prepare( elem, opt );
+		if ( Js.helper.isset( element ) ) 
+			prepare( element, option );
 			
 		return this;
 	},
 	
-	setup: function( opt ) {
-		if ( Jrun.typeOf( opt, "object" ) ) 
-			this.setting = Js.append( opt, this.setting );
+	setup: function( option ) {
+		if ( Js.helper.typeOf( option, 'object' ) ) 
+			this.setting = Js.append( option, this.setting );
 			
 		return this;
 	},
 	
-	init: function( elem, opt ) {
+	init: function( element, option ) {
 		var that = this;
 		
-		this.element = Jrun.pick( elem, this.element );
-		this.setup( opt );
+		this.element = Js.helper.pick( element, this.element );
+		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget.dropmenu );
-		this.node = Js.use( this.element );
+		this.node = Js.$( this.element );
 		
 		if ( this.node.size() > 0 ) {
 			
-			Js.use( "ul, li", this.node[0] ).hover( function() {
+			Js.$( 'ul, li', this.node[0] ).hover( function() {
 				that._show( this );
-			}, function(){
+			}, function() {
 				that._hide( this );
 			});
 			
-			Js.use( 'li', this.node[0] ).hover( function() { 
-				Js.use( this ).addClass( 'hover' ); 
-				Js.use( '> a', this ).addClass( 'hover' ); 
+			Js.$( 'li', this.node[0] ).hover( function() { 
+				Js.$( this ).addClass( 'hover' ); 
+				Js.$( '> a', this ).addClass( 'hover' ); 
 			}, function() { 
-				Js.use( this ).removeClass( 'hover' );
-				Js.use( '> a', this ).removeClass( 'hover' ); 
+				Js.$( this ).removeClass( 'hover' );
+				Js.$( '> a', this ).removeClass( 'hover' ); 
 			});
 		}
 		else 
-			Js.debug.error("Js.widget.dropdown: No elements found");
+			Js.debug.error( 'Js.widget.dropdown: No elements found' );
 		
-		return this;	
+		return this;
 	},
 	
-	_show: function( el ) {
-		var c = this._getChild( el );
+	_show: function( element ) {
+		var child = this._getChild( element ),
+			option = this.setting;
 		
-		if ( !c ) 
+		if ( !child ) 
 			return false;
 		
-		Js.use( c )
+		Js.$( child )
 			.data( 'cancelHide', true )
-			.css( "zIndex", this.setting.zIndex++ )
-			.fadeIn( this.setting.speed )
-			.slideDown( this.setting.speed );
+			.css( 'zIndex', option.zIndex++ )
+			.fadeIn( option.speed )
+			.slideDown( option.speed );
 		
-		if ( el.nodeName.toLowerCase() == "ul" ) {
-			var li = this._getPosition( el );
-			Js.use( li ).addClass( 'hover' );
-			Js.use( '> a', li ).addClass( 'hover' );
+		if ( element.nodeName.toLowerCase() == 'ul' ) {
+			var li = this._getPosition( element );
+			Js.$( li ).addClass( 'hover' );
+			Js.$( '> a', li ).addClass( 'hover' );
 		}
 	},
 	
-	_hide: function( el ) {
-		var that = this;
+	_hide: function( element ) {
+		var that = this,
+			child = this._getChild( element );
 		
-		var c = this._getChild( el );
-		
-		if ( !c )
+		if ( !child )
 			return false;
 			
-		var node = Js.use( c )
+		var node = Js.$( child )
 			.data( 'cancelHide', false );
 		
 		setTimeout( function() {
@@ -93,16 +93,16 @@ Js.widget.dropmenu = Js.create({
 		}, 200);
 	},
 	
-	_getChild: function( el ) {
-		if ( el.nodeName.toLowerCase() == "li" ) {
-			var c = Js.use( "> ul", el );
-			return c.size() > 0 ? c[0] : null ;
+	_getChild: function( element ) {
+		if ( element.nodeName.toLowerCase() == 'li' ) {
+			var child = Js.$( '> ul', element );
+			return child.size() > 0 ? child[0] : null ;
 		}
 		else 
-			return el;
+			return element;
 	},
 	
-	_getPosition: function( el ) {
-		return ( el.nodeName.toLowerCase() == 'ul' ? Js.use( el ).parents( 'li' )[0] : el );
+	_getPosition: function( element ) {
+		return ( element.nodeName.toLowerCase() == 'ul' ? Js.$( element ).parents( 'li' )[0] : element );
 	}
 });

@@ -5,70 +5,70 @@
 Js.widget.dialog = Js.widget.panel.extend({
 	overlay: null,
 	
-	_prepSetting: function() {
-		this.renderTo = Jrun.pick( this.setting.renderTo, "body:eq(0)" );
+	_prepare: function() {
+		this.renderTo = Js.helper.pick( this.setting.renderTo, 'body:eq(0)' );
 		this.element = this.setting.element;
 	},
 	
-	init: function( opt ) {
+	init: function( option ) {
 		var that = this;
 		
-		this.setup( opt );
+		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
-		this._prepSetting();
+		this._prepare();
 		
-		var opt = this.setting;
+		var option = this.setting;
 		
 		// set renderTo element
-		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) {
-			this.renderTo = Js.use(this.renderTo);
+		if ( typeof( this.renderTo ) === 'string' || this.renderTo.nodeType ) {
+			this.renderTo = Js.$( this.renderTo );
 		}
 		else if ( !this.renderTo || !this.renderTo.nodeType ) {
-			this.renderTo = Js.use("body").eq(0);
+			this.renderTo = Js.$('body').eq(0);
 		}
 		
-		if ( !!opt.overlay ) 
-			this.overlay = new Js.widget.activity("#overlay-panel");
+		if ( !!option.overlay ) 
+			this.overlay = new Js.widget.activity( '#overlay-panel' );
 		
 		
 		this._loadBorder();
 		this._loadContent();
 		
-		if ( Jrun.isset( opt.button ) ) {
-			for ( var i = 0; i < opt.button.length; i++ ) 
-				this.addButton( opt.button[i] );
+		if ( Js.helper.isset( option.button ) ) {
+			for ( var i = 0; i < option.button.length; i++ ) 
+				this.addButton( option.button[i] );
 		}
 	
 		
-		if ( !!opt.overlay ) 
+		if ( !!option.overlay ) 
 			this.overlay.activate();
 		
 		this.fixDimension();
 		
-		if ( !!opt.clickOver && !!opt.overlay ) {
-			this.overlay.node.one("click", function() {
-				that.closePanel( opt.onClickOver );
+		if ( !!option.clickOver && !!option.overlay ) {
+			this.overlay.node.one('click', function() {
+				that.closePanel( option.onClickOver );
 			});
 		}
 		
 		return this;
 	},
 	
-	closePanel: function( fn ) {
+	closePanel: function( callback ) {
 		var that = this,
-			opt = this.setting;
+			option = this.setting;
 		
-		if ( !!opt.overlay ) 
+		if ( !!option.overlay ) 
 			this.overlay.deactivate();
 			
-		if ( Jrun.isfunction( fn ) )
-			fn.apply( this );
+		if ( Js.helper.isfunction( callback ) )
+			callback.apply( this );
 		
 		// callback to close panel
-		this.node.fadeOut( "slow", function() {
-			if ( Jrun.isfunction(that.setting.onClose) ) 
-				that.setting.onClose.apply(that);
+		this.node.fadeOut( 'slow', function() {
+			if ( Js.helper.isfunction( that.setting.onClose ) ) 
+				that.setting.onClose.apply( that );
 			
 			that.node.remove();
 		});
@@ -77,7 +77,7 @@ Js.widget.dialog = Js.widget.panel.extend({
 	},
 	
 	fixDimension: function() {
-		var width = ( this.main.width() > Jrun.pickType(this.setting.width, 0, 'number') ? this.main.width() : this.setting.width );
+		var width = ( this.main.width() > Js.helper.pickType( this.setting.width, 0, 'number') ? this.main.width() : this.setting.width );
 		
 		var offset = [
 			width,
@@ -92,10 +92,10 @@ Js.widget.dialog = Js.widget.panel.extend({
 		top = (top < 0 ? 0 : top);
 		
 		this.node.css({
-			"position": "absolute", 
-			"top": top + "px", 
-			"left": left + "px",
-			"zIndex": 6000
+			'position': 'absolute', 
+			'top': top + 'px', 
+			'left': left + 'px',
+			'zIndex': 6000
 		});
 	}
 });

@@ -62,9 +62,9 @@
 				// initiate the Form Validation for #contact-me form
 				Js.data.validation = new Js.ext.validate(this);
 		 
-				if(!!Js.data.validation.cacheResult) {
+				if ( !!Js.data.validation.result ) {
 					// if all input field validated
-					alert("Your done, querystring: " + Js.data.validation.cacheResult);
+					alert("Your done, querystring: " + Js.data.validation.result);
 				}
 				else {
 					// if any of the field not validated

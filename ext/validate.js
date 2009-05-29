@@ -8,22 +8,22 @@ Js.ext.validate = Js.create({
 	first: null,
 	setting: null,
 	language: null,
-	data: "",
+	data: '',
 	test: {
 		match: [],
 		compareDate: []
 	},
-	cacheResult: null,
+	result: null,
 	
 	initiate: function( node, option ) {
-		return ( Js.on.isset( node ) ? this.init( node, option ) : this );
+		return ( Js.helper.isset( node ) ? this.init( node, option ) : this );
 	},
 	
 	setup: function( option ) {
-		var option = Js.on.pickType( option, {}, "object" );
-		this.setting = Js.append( option, this.setting, ["lang"], true );
+		var option = Js.helper.pickType( option, {}, 'object' );
+		this.setting = Js.append( option, this.setting, ['lang'], true );
 		
-		if( Js.on.isset( option.lang ) ) 
+		if( Js.helper.isset( option.lang ) ) 
 			this.language = Js.append( option.lang, this.setting );
 			
 		return this;
@@ -51,7 +51,7 @@ Js.ext.validate = Js.create({
 		
 		this._prepare();
 		
-		if ( Js.on.isset( this.setting.auto ) && this.setting.auto === true ) 
+		if ( Js.helper.isset( this.setting.auto ) && this.setting.auto === true ) 
 			this.run();
 		
 		return this;
@@ -60,104 +60,104 @@ Js.ext.validate = Js.create({
 	run: function() {
 		var that = this;
 		var setting = this.setting;
-		var fnBeforeStart = Js.on.pick( setting.beforeStart, null );
-		var fnSuccess = Js.on.pick( setting.success, null );
-		var fnOnError = Js.on.pick( setting.onError, null );
-		var contRun = true;
+		var fn_before_start = Js.helper.pick( setting.beforeStart, null );
+		var fn_success = Js.helper.pick( setting.success, null );
+		var fn_on_error = Js.helper.pick( setting.onError, null );
+		var continue_run = true;
 		
-		this.data = "";
-		// set this.first to NULL
+		// start over
+		this.data = '';
 		this.first = null;
 		
-		if ( Js.on.isfunction( fnBeforeStart ) ) {
+		if ( Js.helper.isfunction( fn_before_start ) ) {
 			// execute the function and free up the memory
-			contRun = fnBeforeStart.apply( this );
-			fnBeforeStart = null;
+			continue_run = fn_before_start.apply( this );
+			fn_before_start = null;
 		}
 		
-		if ( contRun === false ) 
+		if ( continue_run === false ) 
 			return false;
 		
 		if ( this.node.length >= 1 ) {
 			// based on the form, select on input type
-			Js.$( ":input", this.node ).each( function( i, v ) {
-				that._validate( v );
+			Js.$( ':input', this.node ).each( function( index, value ) {
+				that._validate( value );
 			} );
 		}
 		
-		if ( Js.on.isset( this.first ) ) {
+		if ( Js.helper.isset( this.first ) ) {
 			// there an error, set focus to first invalid field
 			try {
 				this.first.focus();
 			} 
 			catch (e) {
-				Js.debug.log( "Js.ext.form: Cannot trigger onFirstFormError " + e );
+				Js.debug.log( 'Js.ext.form: Cannot trigger onFirstFormError ' + e );
 			}
 			
-			if ( Js.on.isfunction( fnOnError ) ) 
-				fnOnError.apply( this );
+			if ( Js.helper.isfunction( fn_on_error ) ) 
+				fn_on_error.apply( this );
 			
 			// stop form processing
-			this.cacheResult = false;
+			this.result = false;
 			
 			return false;
 		}
 		else {
 			// return all field data in querystring format
-			if ( Js.on.isfunction( fnSuccess ) ) 
-				fnSuccess.apply( this );
+			if ( Js.helper.isfunction( fn_success ) ) 
+				fn_success.apply( this );
 			
-			this.cacheResult = this.data;
+			this.result = this.data;
 			return this.data;
 		}
 	},
 	
 	_error: function( node, text ) {		
 		var that = this;
-		this.first = ( Js.on.isnull( this.first ) ? node : this.first );
-		this._addErr( node, text );
+		this.first = ( Js.helper.isnull( this.first ) ? node : this.first );
+		this._addError( node, text );
 	},
 	
 	_data: function( node ) {
-		var data = "";
+		var data = '';
 		
 		// dump name and value to opt in querystring format ( &name=value )
 		if ( node.is(':checkbox, :radio') ) {
 			if ( node.is(':checked') ) 
-				data += "&" + node.attr( 'name' ) + "=" + Js.parse.html.to( node.val() );
+				data += '&' + node.attr( 'name' ) + '=' + Js.parse.html.to( node.val() );
 		} 
 		
 		else 
-			data += "&" + node.attr( 'name' ) + "=" + Js.parse.html.to( node.val() );
+			data += '&' + node.attr( 'name' ) + '=' + Js.parse.html.to( node.val() );
 		
 		return data;
 	},
 	
-	_removeErr: function( node ) {
-		var errSpan = this.setting.errorNode;
-		var errNode = node.siblings( errSpan );
+	_removeError: function( node ) {
+		var error_span = this.setting.errorNode;
+		var error_node = node.siblings( error_span );
 		
-		if ( errNode.length > 0 ) 
-			errNode.remove();
+		if ( error_node.length > 0 ) 
+			error_node.remove();
 	},
 	
-	_addErr: function( node, message ) {
+	_addError: function( node, message ) {
 		var that = this;
-		var errorNode = node.siblings( this.setting.errorNode ).eq(0);
+		var error_node = node.siblings( this.setting.errorNode ).eq(0);
 		
-		if ( errorNode.length < 1 ) 
-				Js.$( "<" + this.setting.error.node + "/>" )
+		if ( error_node.length < 1 ) 
+				Js.$( '<' + this.setting.error.node + '/>' )
 					.addClass( this.setting.error.cssMessage )
 					.text( message )
 					.insertAfter( node[0] );
 		
 		else 
-			errorNode.eq(0).append( '<br />' + message );
+			error_node.eq(0).append( '<br />' + message );
 		
-		node.bind( "change", function() {
-			var jnode = Js.$( this );
-			if ( jnode.val() !== "" ) {
-				that._removeErr( jnode );
+		node.bind( 'change', function() {
+			var obj = Js.$( this );
+			if ( obj.val() !== '' ) {
+				that._removeError( obj );
 				that.first = null;
 			}
 		});
@@ -168,39 +168,38 @@ Js.ext.validate = Js.create({
 		var lang = this.language;
 		var node = Js.$( field );
 		var value = node.val();
-		// Double confirm the element is either input, select or textarea
 		
-		if ( node.attr('name') != "" ) {
+		if ( node.attr('name') != '' ) {
 			// remove previously loaded error message
-			that._removeErr( node );
+			that._removeError( node );
 			
 			// turn the className into array so we can do some testing
-			var klasses = ( !!node.attr('class') ? node.attr('class') : "" );
+			var klasses = ( !!node.attr('class') ? node.attr('class') : '' );
 			var klass = klasses.split(/\s/);
-			var error = "";
+			var error = '';
 			
 			// if the element is required
-			if ( !!Js.on.inArray("required", klass) && Js.on.trim(value) == "" ) {
+			if ( !!Js.helper.inArray( 'required', klass ) && Js.helper.trim( value ) == '' ) {
 				error = lang.required;
 			}
 			
 			// this set of validate only triggered when this.value isn't empty
-			if ( Js.on.trim( value ) != "" ) {
+			if ( Js.helper.trim( value ) != '' ) {
 				
-				if ( !!Js.on.inArray( "string", klass ) && !Js.test.isString( value ) ) 
+				if ( !!Js.helper.inArray( 'string', klass ) && !Js.test.isString( value ) ) 
 					error = lang.string;
-				else if ( !!Js.on.inArrayGrep( /^(integer|number)$/, klass ) && !Js.test.isNumber( value ) ) 
+				else if ( !!Js.helper.inArrayGrep( /^(integer|number)$/, klass ) && !Js.test.isNumber( value ) ) 
 					error = lang.number;
-				else if ( !!Js.on.inArray( "email", klass ) && !Js.test.isEmail( value ) ) 
+				else if ( !!Js.helper.inArray( 'email', klass ) && !Js.test.isEmail( value ) ) 
 					error = lang.email;
 				
-				var indexLength = Js.on.indexOfGrep( /^(max|min|exact)\-(\d*)$/i, klass );
+				var indexof_length = Js.helper.indexOfGrep( /^(max|min|exact)\-(\d*)$/i, klass );
 					
-				if ( indexLength > -1 ) {
+				if ( indexof_length > -1 ) {
 					var types = RegExp.$1;
 					var values = RegExp.$2;
 					
-					if ( !Js.test.isLength( klass[indexLength], value.length ) ) {
+					if ( !Js.test.isLength( klass[indexof_length], value.length ) ) {
 						switch ( types ) {
 							case 'min' :
 								types = lang.min;
@@ -222,31 +221,31 @@ Js.ext.validate = Js.create({
 				}
 			}
 			
-			var testIndex = Js.on.indexOfGrep( /^(custom)\-(\w*)$/g, klass );
+			var indexof_custom = Js.helper.indexOfGrep( /^(custom)\-(\w*)$/g, klass );
 			
-			if ( testIndex > -1 ) {
-				var tester = Js.on.camelize( klass[testIndex] );
-				var validate = this.setting[tester];
+			if ( indexof_custom > -1 ) {
+				var custom_keyword = Js.helper.camelize( klass[indexof_custom] );
+				var validate = this.setting[custom_keyword];
 				
-				if ( Js.on.isset( validate ) ) {
-					var required = Js.on.pickType( validate.required, false, "boolean" );
+				if ( Js.helper.isset( validate ) ) {
+					var required = Js.helper.pickType( validate.required, false, 'boolean' );
 					
-					if ( required === true && Js.on.trim( value ) === "" ) 
-						error = Js.on.pickType( validate.error, error, "string" );
+					if ( required === true && Js.helper.trim( value ) === '' ) 
+						error = Js.helper.pickType( validate.error, error, 'string' );
 					
-					if ( Js.on.trim( value ) !== "" ) {
-						if ( Js.on.isfunction( validate.callback ) && !validate.callback( value ) ) 
-							error = Js.on.pickType( validate.error, error, "string" );
+					if ( Js.helper.trim( value ) !== '' ) {
+						if ( Js.helper.isfunction( validate.callback ) && !validate.callback( value ) ) 
+							error = Js.helper.pickType( validate.error, error, 'string' );
 						
 						else if ( validate.regex && !value.match( validate.regex ) ) 
-							error = Js.on.pickType( validate.error, error, "string" );
+							error = Js.helper.pickType( validate.error, error, 'string' );
 					}
 				}
 			}
 			
 			Js.debug.log( error );
 			
-			if ( error != "" ) 
+			if ( error != '' ) 
 				that._error( node, error );
 			
 			this.data += this._data( node );

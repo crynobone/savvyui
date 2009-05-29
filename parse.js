@@ -5,11 +5,11 @@
 Js.parse = {
 	html: {
 		to: function( text ) {
-			return encodeURIComponent( Js.on.htmlEncode( new String( text ) ) );
+			return encodeURIComponent( Js.helper.htmlEncode( new String( text ) ) );
 		},
 		
 		from: function( text ) {
-			return Js.on.htmlDecode( decodeURIComponent( new String( text ) ) );
+			return Js.helper.htmlDecode( decodeURIComponent( new String( text ) ) );
 		}
 	},
 	
@@ -20,7 +20,7 @@ Js.parse = {
 			
 			Js.debug.log( 'XHR: ' + json );
 			
-			if ( Js.on.typeOf( data ) == 'object' ) {
+			if ( Js.helper.typeOf( data ) == 'object' ) {
 				if ( !!data.SUIXHR ) {
 					that.notice( data );
 					that.href( data );
@@ -34,9 +34,9 @@ Js.parse = {
 		},
 		
 		notice: function( data ) {
-			var value = Js.on.pickType( data.notice, 'string' );
+			var value = Js.helper.pickType( data.notice, 'string' );
 			
-			if ( Js.on.isset(value) && value !== '' ) {
+			if ( Js.helper.isset(value) && value !== '' ) {
 				window.alert( value );
 				
 				try {
@@ -45,34 +45,34 @@ Js.parse = {
 			}
 		},
 		href: function( data ) {
-			var href = Js.on.pickGrep( data.href, /^https?:\/\//g );
-			var xhref = Js.on.pickGrep( data.xhref, /^https?:\/\//g );
+			var href = Js.helper.pickGrep( data.href, /^https?:\/\//g );
+			var xhref = Js.helper.pickGrep( data.xhref, /^https?:\/\//g );
 			
-			if ( Js.on.isset( xhref ) && xhref !== '' ) 
-				Js.on.href( xhref, '_blank' );
+			if ( Js.helper.isset( xhref ) && xhref !== '' ) 
+				Js.helper.href( xhref, '_blank' );
 			
-			else if ( Js.on.isset( href ) && href !== '' ) 
-				Js.on.href( href );
+			else if ( Js.helper.isset( href ) && href !== '' ) 
+				Js.helper.href( href );
 		},
 		
 		update: function( data ) {
-			var args = Js.on.pick( data.text );
-			var id = Js.on.pickType( data.id, 'string' );
-			var el = Js.on.pickType( data.selector, 'string' );
-			var fn = Js.on.pickType( data.callback, 'string' );
+			var args = Js.helper.pick( data.text );
+			var identity = Js.helper.pickType( data.id, 'string' );
+			var element = Js.helper.pickType( data.selector, 'string' );
+			var callback = Js.helper.pickType( data.callback, 'string' );
 			
-			if ( Js.on.typeOf( args ) == 'string' ) {
-				if ( !!el ) 
-					Js.$( el ).html( args );
-				else if ( !!id ) 
-					Js.$( '#' + id ).html( args );
+			if ( Js.helper.typeOf( args ) == 'string' ) {
+				if ( !!element ) 
+					Js.$( element ).html( args );
+				else if ( !!identity ) 
+					Js.$( '#' + identity ).html( args );
 			}
-			else if ( Js.on.isset( fn ) ) {
+			else if ( Js.helper.isset( callback ) ) {
 				// eval the function without making a callback
-				var fn = eval( fn );
+				var fn = eval( callback );
 				
 				// execute the function
-				if ( Js.on.isfunction( fn ) ) 
+				if ( Js.helper.isfunction( fn ) ) 
 					fn( args );
 			}
 		}

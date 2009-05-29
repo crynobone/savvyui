@@ -5,7 +5,7 @@
  */
 
 Js.create = function( obj ) {
-	var obj = Js.on.pickType( obj, {}, "object" );
+	var obj = Js.helper.pickType( obj, {}, "object" );
 	var base = function() {};
 	
 	base.prototype.destroy = function() {
@@ -32,30 +32,30 @@ Js.create = function( obj ) {
 	function Class() {
 		// initiate the __construct function if construct available
 		if ( !initd && !!this.initiate ) 
-			this.initiate.apply( this, Js.on.toArray( arguments ) );
+			this.initiate.apply( this, Js.helper.toArray( arguments ) );
 	};
 	
 	Class.prototype = proto;
-	Class.prototype.initiate = Js.on.pick( obj.initiate, obj.__construct, null );
+	Class.prototype.initiate = Js.helper.pick( obj.initiate, obj.__construct, null );
 	Class.constructor = Class;
 	
 	Class.prototype.$inject = function( fn ) {
-		if ( Js.on.isfunction( fn ) ) 
-			return fn.apply( this, Js.on.toArray( arguments, 1 ) );
+		if ( Js.helper.isfunction( fn ) ) 
+			return fn.apply( this, Js.helper.toArray( arguments, 1 ) );
 	};
 	
 	Class.prototype.$const = (function( object ) {
 		var $const = { };
 		
-		if ( Js.on.typeOf( object.Const ) == "object" ) {
+		if ( Js.helper.typeOf( object.Const ) == "object" ) {
 			var $const = Js.nue( object.Const );
 			delete object.Const;
 		}
 		
 		return (function( fn ) {
-			if ( Js.on.typeOf( fn ) == "string" ) {
-				if ( Js.on.isfunction( $const[fn] ) ) 
-					return $const[fn].apply( this, Js.on.toArray( arguments, 1 ) );
+			if ( Js.helper.typeOf( fn ) == "string" ) {
+				if ( Js.helper.isfunction( $const[fn] ) ) 
+					return $const[fn].apply( this, Js.helper.toArray( arguments, 1 ) );
 				else 
 					return $const[fn];
 			}
@@ -69,7 +69,7 @@ Js.create = function( obj ) {
 	};
 	
 	// if this function is being called from .extend, prepare parent method inheritant
-	var Extend = Js.on.pick( obj.Extend, null );
+	var Extend = Js.helper.pick( obj.Extend, null );
 	
 	// assign object with method provided in js
 	(function( proto ) {
@@ -78,26 +78,26 @@ Js.create = function( obj ) {
 		
 		// add method to this object
 		for ( var method in proto ) {
-			if ( proto.hasOwnProperty( method ) && (!Js.on.inArray( method, not ) && !this[method] ) ) 
+			if ( proto.hasOwnProperty( method ) && (!Js.helper.inArray( method, not ) && !this[method] ) ) 
 				this[method] = proto[method];
 		};
 		
 	}).call( proto, obj );
 	
 	// object called from .extend, inherit parent method if object does not have it's own method
-	if ( !!Js.on.isset( Extend ) ) {
+	if ( !!Js.helper.isset( Extend ) ) {
 		try {
 			(function( proto ) {
 				// restrict object from looping certain method
 				var not = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 				
 				for ( var method in proto.prototype ) {
-					if ( proto.prototype.hasOwnProperty( method ) && (!Js.on.inArray( method, not ) && !this[method] ) ) 
+					if ( proto.prototype.hasOwnProperty( method ) && (!Js.helper.inArray( method, not ) && !this[method] ) ) 
 						this[method] = proto.prototype[method];
 				}
 				
 				for ( var method in proto ) {
-					if ( proto.hasOwnProperty( method ) && !Js.on.inArray( method, not ) ) {
+					if ( proto.hasOwnProperty( method ) && !Js.helper.inArray( method, not ) ) {
 						if ( !this[method] )
 							this[method] = proto[method];	
 					}
@@ -114,7 +114,7 @@ Js.create = function( obj ) {
 		}
 		
 		Class.prototype.$parent = function( fn ) {
-			return this.$super[fn].apply( this, Js.on.toArray( arguments, 1 ) );
+			return this.$super[fn].apply( this, Js.helper.toArray( arguments, 1 ) );
 		};
 	}
 	

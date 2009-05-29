@@ -3,7 +3,7 @@ Js.setup = {
 		validate: function( data ) {
 			Js.config.ext.validate = Js.append( data, Js.config.ext.validate, ['lang'], true );
 			
-			if ( Js.on.isset( data.lang ) ) 
+			if ( Js.helper.isset( data.lang ) ) 
 				Js.language.ext.validate = Js.append( data.lang, Js.language.ext.validate );
 		}
 	},
@@ -23,7 +23,7 @@ Js.setup = {
 		editable: function( data ) {
 			Js.config.util.editable = Js.append( data, Js.config.util.editable, ['lang'], true );
 			
-			if ( Js.on.isset( data.lang ) ) 
+			if ( Js.helper.isset( data.lang ) ) 
 				Js.language.util.editable = Js.append( data.lang, Js.language.util.editable );
 		}
 	},
@@ -36,7 +36,7 @@ Js.setup = {
 		datePicker: function( data ) {
 			Js.config.widget.datePicker = Js.append( data, Js.config.widget.datePicker, ['lang'], true );
 			
-			if ( Js.on.isset( data.lang ) ) 
+			if ( Js.helper.isset( data.lang ) ) 
 				Js.language.widget.datePicker = Js.append( data.lang, Js.language.widget.datePicker );
 		},
 		
@@ -51,7 +51,7 @@ Js.setup = {
 		notice: function( data ) {
 			Js.config.widget.notice = Js.append( data, Js.config.widget.notice, ['lang'], true );
 			
-			if ( Js.on.isset( data.lang ) ) 
+			if ( Js.helper.isset( data.lang ) ) 
 				Js.language.widget.notice = Js.append( data.lang, Js.language.widget.notice );
 		},
 		

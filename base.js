@@ -20,10 +20,10 @@ Js.toString = function() {
 };
 
 Js.nue = function( data, num ) {
-	var num = Js.on.pickType( num, 1, 'number' );
-	var type_of = Js.on.typeOf( data, 'object' );
+	var num = Js.helper.pickType( num, 1, 'number' );
+	var type_of = Js.helper.typeOf( data, 'object' );
 	
-	if ( Js.on.inArray( type_of, ['object', 'array']) ) {
+	if ( Js.helper.inArray( type_of, ['object', 'array']) ) {
 		var result = ( type_of == 'object' ? {} : [] );
 		--num;
 		
@@ -40,12 +40,12 @@ Js.nue = function( data, num ) {
 
 Js.append = function( data, alt, define, invert ) {
 	// provide list of method (in array) to be append
-	var define = Js.on.pickType( define, null, 'array' );
+	var define = Js.helper.pickType( define, null, 'array' );
 	
 	// invert append option
-	var invert = Js.on.pickType( invert, false, 'boolean' );
+	var invert = Js.helper.pickType( invert, false, 'boolean' );
 	
-	if ( !Js.on.typeOf( data, 'object' ) )
+	if ( !Js.helper.typeOf( data, 'object' ) )
 		data = {};
 	
 	var result = data;
@@ -53,7 +53,7 @@ Js.append = function( data, alt, define, invert ) {
 	// loop value's method
 	for ( var method in alt ) {
 		// if data doesn't have the method add it
-		var add = Js.on.isnull( define ) || Js.on.inArray( method, define );
+		var add = Js.helper.isnull( define ) || Js.helper.inArray( method, define );
 		var both = !data.hasOwnProperty( method ) && alt.hasOwnProperty( method );
 		var add = ( !!invert ? !add : add );
 		 
@@ -86,7 +86,7 @@ Js.debug = {
 	
 	// Log a message/note
 	log: function( text, value ) {
-		var value = Js.on.pick( value, '' );
+		var value = Js.helper.pick( value, '' );
 		
 		// push log to stack
 		this.data.log.push( text );
@@ -107,7 +107,7 @@ Js.debug = {
 	
 	// Log an error
 	error: function( text, value ) {
-		var value = Js.on.pick( value, '' );
+		var value = Js.helper.pick( value, '' );
 		
 		// push log to stack
 		this.data.error.push( text );
@@ -128,9 +128,9 @@ Js.debug = {
 };
 
 /* Misc function for Savvy.UI
- * namespace: Js.on
+ * namespace: Js.helper
  */
-Js.on = {
+Js.helper = Js.fn = {
 	behaviour: function() {
 		// Return Object containing Boolean value of each browser object.
 		return function() {
@@ -202,7 +202,7 @@ Js.on = {
 				window.open( uri, target );
 		} 
 		else 
-			Js.debug.error( 'Js.on.href: failed to load page ' + uri );
+			Js.debug.error( 'Js.helper.href: failed to load page ' + uri );
 	},
 	
 	// Encode HTML entities from any given string
@@ -289,14 +289,14 @@ Js.on = {
 	
 	parameter: function( data, length, expect ) {
 		var data = jQuery.makeArray( data ),
-			expect = Js.on.pickType( expect, [], 'array' ),
+			expect = Js.helper.pickType( expect, [], 'array' ),
 			result = false;
 		
 		if ( data.length === length ) {
 			result = true;
 			
 			jQuery.each( data, function( index, val ) {
-				if ( expect[index] !== true && Js.on.typeOf( val ) !== expect[index] ) 
+				if ( expect[index] !== true && Js.helper.typeOf( val ) !== expect[index] ) 
 					result = false;
 			});
 		}
@@ -314,7 +314,7 @@ Js.on = {
 		for ( ; index < length; index++ ) {
 			result = data[index];
             
-            if ( Js.on.isset( result ) ) {
+            if ( Js.helper.isset( result ) ) {
                 return result;
 				break;
             }
@@ -334,7 +334,7 @@ Js.on = {
 		for ( ; index < ( length - 1 ); index++ ) {
 			var result = data[index];
             
-            if ( Js.on.isset( result ) ) {
+            if ( Js.helper.isset( result ) ) {
                 if ( this.typeOf( result, type ) ) {
                     return result;
 					break;
@@ -359,7 +359,7 @@ Js.on = {
 		for ( ; index < ( length - 1 ); index++ ) {
 			result = data[index];
             
-            if ( Js.on.isset( result ) ) {
+            if ( Js.helper.isset( result ) ) {
                 if ( !!result.match( regex ) ) {
                     return result;
 					break;
@@ -391,7 +391,7 @@ Js.on = {
 	
 	replace: function( search, replace, data ) {
 		var data = new String( data );
-		var replace = Js.on.pickType( replace, '', 'string' );
+		var replace = Js.helper.pickType( replace, '', 'string' );
 		
 		return data.split( search ).join( replace );
 	},
@@ -424,11 +424,11 @@ Js.on = {
 	toProperCase: function( data ) {
 		var value = data.split(/ /g), 
 			result = [],
-			that = function(o) {
-				var o = o.toString();
+			that = function( text ) {
+				var text = text.toString();
 				return [
-					o.substr( 0, 1 ).toUpperCase(),
-					o.substr( 1 )
+					text.substr( 0, 1 ).toUpperCase(),
+					text.substr( 1 )
 				].join('');
 			};
 		
@@ -442,7 +442,7 @@ Js.on = {
 	// Convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert
 	toArray: function( data, offset ) {
 		var offset = (function(o) {
-			var o = Js.on.pickType( o, 0, 'number' );
+			var o = Js.helper.pickType( o, 0, 'number' );
 			return o < 1 ? 0 : o;
 		})( offset );
 		
@@ -478,7 +478,7 @@ Js.on = {
 	// Return the typeof passed argument, extending JavaScript default typeof
 	typeOf: function( data, type ) {
 		var result = (function( data ) {
-			if ( Js.on.isnull( data ) ) 
+			if ( Js.helper.isnull( data ) ) 
 				return 'undefined';
 			else {
 				var value = Object.prototype.toString.call( data ).match(/(\w+)\]/)[1];
@@ -486,7 +486,7 @@ Js.on = {
 			}
 		})( data );
 		
-		return ( Js.on.isset( type ) ? (result === type.toLowerCase()) : result );
+		return ( Js.helper.isset( type ) ? (result === type.toLowerCase()) : result );
 	},
 	
 	// return only unique value of an array
@@ -499,11 +499,11 @@ Js.on = {
 		jQuery.each( data, function( index, value ) {
 			if ( !repeat ) {
 				// add only if unique
-				if ( !Js.on.inArray( value, result ) ) 
+				if ( !Js.helper.inArray( value, result ) ) 
 					result.push( value );
 			} 
 			else {
-				if ( index == 0 || value !== Js.on.trim( data[i - 1] ) ) 
+				if ( index == 0 || value !== Js.helper.trim( data[i - 1] ) ) 
 					result.push( value );
 			}
 		});
@@ -516,6 +516,7 @@ Js.on = {
 	}
 };
 
+Js.data = {};
 Js.ext = {};
 Js.util = {};
 Js.widget = {};

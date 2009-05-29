@@ -1685,77 +1685,77 @@ Js.util.editable = Js.create({
 	cacheData: null,
 	lastSelected: null,
 	
-	initiate: function( elem, opt ) {
-		return ( !!Jrun.isset( elem ) ? this.init( elem, opt ) : this );
+	initiate: function( element, option ) {
+		return ( !!Js.helper.isset( element ) ? this.init( element, option ) : this );
 	},
 	
-	setup: function( opt ) {
-		var opt = Jrun.pickType( opt, {}, 'object' );
-		this.setting = Js.append( opt, this.setting, ['lang'], true );
+	setup: function( option ) {
+		var option = Js.helper.pickType( option, {}, 'object' );
+		this.setting = Js.append( option, this.setting, ['lang'], true );
 		
-		if ( Jrun.isset(opt.lang) ) 
-			this.language = Js.append( opt.lang, this.language );
+		if ( Js.helper.isset( option.lang ) ) 
+			this.language = Js.append( option.lang, this.language );
 		
 		return this;
 	},
 	
-	init: function( elem, opt ) {
+	init: function( element, option ) {
 		var that = this;
 		
-		this.element = Jrun.pick( this.element, elem );
-		this.setup( opt );
+		this.element = Js.helper.pick( this.element, element );
+		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.util.editable );
 		this.language = Js.append( this.language, Js.language.util.editable );
-		this.node = Js.use( this.element );
+		this.node = Js.$( this.element );
 		
 		this.node.bind( 'change', function() {
-			var node = Js.use( this );
+			var node = Js.$( this );
 			
 			if ( node.val() == that.setting.identifier ) 
 				that.getModalBox( this );
 		});
 		
-		this.node.each(function() {
-			if ( Js.use(this).val() == that.setting.identifier ) 
+		this.node.each( function() {
+			if ( Js.$(this).val() == that.setting.identifier ) 
 				this.options[0].selected = true;
-		});
+		} );
 		
 		return this;
 	},
 	onModalBoxClose: function( field ) {
-		var ret = [];
+		var result = [];
 		
-		Js.use( field ).children( 'option' ).each(function( i, v) {
-			ret.push( Js.use( v ).val() );
+		Js.$( field ).children( 'option' ).each(function( index, value ) {
+			result.push( Js.$( value ).val() );
 		});
 		
-		this.cacheData = ret;
+		this.cacheData = result;
 		var updated = false;
-		var runDefault = true;
+		var run_default = true;
 		var val = this.input.val();
 		this.value = val;
 		
-		if ( Jrun.isfunction( this.setting.onBeforeUpdate ) ) 
-			runDefault = this.setting.onBeforeUpdate.apply( this, [field] );
+		if ( Js.helper.isfunction( this.setting.onBeforeUpdate ) ) 
+			run_default = this.setting.onBeforeUpdate.apply( this, [field] );
 		
-		if ( runDefault !== false && (Jrun.isset( val ) && Jrun.trim( val ) != '' && !Jrun.inArray( val, ret ) ) ) {
-			Js.use( '<option selected="selected" value="' + val + '">' + val + '</option>' ).appendTo( field );
+		if ( run_default !== false && ( Js.helper.isset( val ) && Js.helper.trim( val ) != '' && !Js.helper.inArray( val, result ) ) ) {
+			Js.$( '<option selected="selected" value="' + val + '">' + val + '</option>' ).appendTo( field );
 			updated = true;
 		} 
 		else 
 			field.options[0].selected = true;
 		
-		if ( Jrun.isfunction( this.setting.onUpdate ) ) 
+		if ( Js.helper.isfunction( this.setting.onUpdate ) ) 
 			this.setting.onUpdate.apply( this, [field, updated] );
 	},
 	getModalBox: function( field ) {
 		var that = this;
 		
-		if ( Jrun.isfunction( this.setting.beforeStart ) ) 
+		if ( Js.helper.isfunction( this.setting.beforeStart ) ) 
 			this.setting.beforeStart.apply( this );
 		
 		this.box = new Js.widget.dialog({
-			element: 'editable_edit_box_' + Jrun.prep( this.element ),
+			element: 'editable_edit_box_' + Js.helper.prep( this.element ),
 			title: this.language.title,
 			width: 300,
 			height: 100,
@@ -1781,16 +1781,16 @@ Js.util.editable = Js.create({
 			}
 		});
 		
-		var div = Js.use( '<div/>' )
+		var div = Js.$( '<div/>' )
 			.setClass( 'panel' )
 			.appendTo( this.box.content[0] );
 		
-		var p = Js.use( '<label/>' )
+		var p = Js.$( '<label/>' )
 			.htmlText( '' + this.language.message )
 			.appendTo( div[0] );
 			
-		this.input = Js.use( '<input type="text"/>')
-			.attr( 'name', 'util_editable_' + Jrun.prep( this.element ) )
+		this.input = Js.$( '<input type="text"/>')
+			.attr( 'name', 'util_editable_' + Js.helper.prep( this.element ) )
 			.val( this.setting.prefix )
 			.appendTo( div[0] );
 		
@@ -1802,6 +1802,7 @@ Js.util.editable = Js.create({
 		})
 	}
 });
+
 /* Includer for Savvy.UI
  * version: 0.0.5
  */

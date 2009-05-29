@@ -32,8 +32,8 @@ Js.widget.dialog = Js.widget.panel.extend({
 			this.overlay = new Js.widget.activity( '#overlay-panel' );
 		
 		
-		this._loadBorder();
-		this._loadContent();
+		this._addBorder();
+		this._addContent();
 		
 		if ( Js.helper.isset( option.button ) ) {
 			for ( var i = 0; i < option.button.length; i++ ) 

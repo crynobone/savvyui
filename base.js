@@ -147,7 +147,7 @@ Js.helper = Js.fn = {
 				opera: false
 			};
 			// detect IE
-			browse.ie = browse[ win.XMLHttpRequest ? "ie7" : "ie6" ] = !!win.ActiveXObject;
+			browse.ie = browse[ win.XMLHttpRequest ? 'ie7' : 'ie6' ] = !!win.ActiveXObject;
 			// detect KHTML
 			browse.khtml = ( doc.childNodes && !doc.all && !navigator.taintEnabled );
 			// detect Gecko
@@ -208,19 +208,19 @@ Js.helper = Js.fn = {
 	// Encode HTML entities from any given string
 	htmlEncode: function( text ) {
 		return new String( text )
-			.replace(/&/g, "&amp;")
-			.replace(/</g, "&lt;")
-			.replace(/>/g, "&gt;")
-			.replace(/\+/g, "&#43;");
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/\+/g, '&#43;');
 	},
 	
 	// Decode HTML entities from any given string
 	htmlDecode: function( text ) {
 		return new String( text )
-			.replace(/&amp;/g, "&")
-			.replace(/&lt;/g, "<")
-			.replace(/&gt;/g, ">")
-			.replace(/&#43;/g, "+");
+			.replace(/&amp;/g, '&')
+			.replace(/&lt;/g, '<')
+			.replace(/&gt;/g, '>')
+			.replace(/&#43;/g, '+');
 	},
 	
 	// Check whether the value is in an array
@@ -353,7 +353,7 @@ Js.helper = Js.fn = {
 		var length = data.length;
 		var regex = data[ ( length - 1 ) ];
 		
-		if ( this.typeOf( regex ) == "string" ) 
+		if ( this.typeOf( regex ) == 'string' ) 
 			regex = new RegExp( regex );
 		
 		for ( ; index < ( length - 1 ); index++ ) {

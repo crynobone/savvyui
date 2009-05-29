@@ -3,7 +3,7 @@
  */
 
 Js.widget.panel = Js.create({
-	appName: "panel",
+	appName: 'panel',
 	node: null,
 	main: null,
 	mainTitle: null,
@@ -18,178 +18,178 @@ Js.widget.panel = Js.create({
 	minimizeButton: null,
 	content: null,
 	footer: null,
-	status: "normal",
+	status: 'normal',
 	
-	initiate: function( opt ) {
-		return ( Jrun.isset( opt ) ? this.init( opt ) : this );
+	initiate: function( option ) {
+		return ( Js.helper.isset( option ) ? this.init( option ) : this );
 	},
 	
-	setup: function( opt ) {
-		if ( Jrun.typeOf( opt, "object" ) ) {
-			this.setting = Js.append( opt, this.setting, ["lang"], true );
+	setup: function( option ) {
+		if ( Js.helper.typeOf( option, 'object' ) ) {
+			this.setting = Js.append( option, this.setting, ['lang'], true );
 			
-			if ( Jrun.isset(opt.lang) ) 
-				this.language = Js.append(opt.lang, this.language);
+			if ( Js.helper.isset( option.lang ) ) 
+				this.language = Js.append( option.lang, this.language );
 		}
 		
 		return this;
 	},
 	
-	_prepSetting: function() {
-		this.renderTo = Jrun.pick( this.setting.renderTo, "body:eq(0)" );
+	_prepare: function() {
+		this.renderTo = Js.helper.pick( this.setting.renderTo, 'body:eq(0)' );
 		this.element = this.setting.element;
 	},
 	
-	init: function( opt ) {
+	init: function( option ) {
 		var that = this;
-		
-		this.setup( opt );
+
+		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
-		this._prepSetting();
+		this._prepare();
 		
 		// set renderTo element
-		if ( typeof(this.renderTo) === "string" || this.renderTo.nodeType ) {
-			this.renderTo = Js.use(this.renderTo);
+		if ( typeof( this.renderTo ) === 'string' || this.renderTo.nodeType ) {
+			this.renderTo = Js.$( this.renderTo );
 		}
 		else if ( !this.renderTo || !this.renderTo.nodeType ) {
-			this.renderTo = Js.use("body:eq(0)");
+			this.renderTo = Js.$( 'body:eq(0)' );
 		}
 			
-		this._loadBorder();
-		this._loadContent();
+		this._addBorder();
+		this._addContent();
 		
-		if ( Jrun.isset(this.setting.button) ) {
-			var l = this.setting.button.length;
+		if ( Js.helper.isset( this.setting.button ) ) {
+			var button_length = this.setting.button.length;
 			
-			for ( var i = 0; i < l; i++ ) 
+			for ( var i = 0; i < button_length; i++ ) 
 				this.addButton( this.setting.button[i] );
 		}
 		
 		return this;
 	},
 	
-	_loadBorder: function() {
+	_addBorder: function() {
 		var that = this;
 		
-		var table = Js.use( "<table/>" )
-			.attr( "id", this.element + "_panel" )
-			.setClass( "widget-panel" )
+		var table = Js.$( '<table/>' )
+			.attr( 'id', this.element + '_panel' )
+			.setClass( 'widget-panel' )
 			.appendTo( this.renderTo[0] );
 		
 		var tr = [];
-		tr[0] = Js.use( "<tr/>" ).appendTo( table[0] );
-		tr[1] = Js.use( "<tr/>" ).appendTo( table[0] );
-		tr[2] = Js.use( "<tr/>" ).appendTo( table[0] );
+		tr[0] = Js.$( '<tr/>' ).appendTo( table[0] );
+		tr[1] = Js.$( '<tr/>' ).appendTo( table[0] );
+		tr[2] = Js.$( '<tr/>' ).appendTo( table[0] );
 		
 		var dh = [];
 		var dc = [];
 		var df = [];
 		
-		dh[0] = Js.use( "<td/>" ).setClass( "tl" ).appendTo( tr[0][0] ).css( "opacity", 0.7 );
-		dh[1] = Js.use( "<td/>" ).setClass( "b" ).appendTo( tr[0][0] ).css( "opacity", 0.7 );
-		dh[2] = Js.use( "<td/>" ).setClass( "tr" ).appendTo( tr[0][0] ).css( "opacity", 0.7 );
+		dh[0] = Js.$( '<td/>' ).setClass( 'tl' ).appendTo( tr[0][0] ).css( 'opacity', 0.7 );
+		dh[1] = Js.$( '<td/>' ).setClass( 'b' ).appendTo( tr[0][0] ).css( 'opacity', 0.7 );
+		dh[2] = Js.$( '<td/>' ).setClass( 'tr' ).appendTo( tr[0][0] ).css( 'opacity', 0.7 );
 		
-		dc[0] = Js.use( "<td/>" ).setClass( "b" ).appendTo( tr[1][0] ).css( "opacity", 0.7 );
-		dc[1] = Js.use( "<td/>" ).setClass( "c" ).appendTo( tr[1][0] );
-		dc[2] = Js.use( "<td/>" ).setClass( "b" ).appendTo( tr[1][0] ).css( "opacity", 0.7 );
+		dc[0] = Js.$( '<td/>' ).setClass( 'b' ).appendTo( tr[1][0] ).css( 'opacity', 0.7 );
+		dc[1] = Js.$( '<td/>' ).setClass( 'c' ).appendTo( tr[1][0] );
+		dc[2] = Js.$( '<td/>' ).setClass( 'b' ).appendTo( tr[1][0] ).css( 'opacity', 0.7 );
 		
-		df[0] = Js.use( "<td/>" ).setClass( "bl" ).appendTo( tr[2][0] ).css( "opacity", 0.7 );
-		df[1] = Js.use( "<td/>" ).setClass( "b" ).appendTo( tr[2][0] ).css( "opacity", 0.7 );
-		df[2] = Js.use( "<td/>" ).setClass( "br" ).appendTo( tr[2][0] ).css( "opacity", 0.7 );
+		df[0] = Js.$( '<td/>' ).setClass( 'bl' ).appendTo( tr[2][0] ).css( 'opacity', 0.7 );
+		df[1] = Js.$( '<td/>' ).setClass( 'b' ).appendTo( tr[2][0] ).css( 'opacity', 0.7 );
+		df[2] = Js.$( '<td/>' ).setClass( 'br' ).appendTo( tr[2][0] ).css( 'opacity', 0.7 );
 		
 		
 		this.node = table;
 		this.main = dc[1];
 	},
-	_loadContent: function() {
+	_addContent: function() {
 		var that = this,
-			opt = this.setting;
+			option = this.setting;
 		
 		// set panel width
-		if ( Jrun.isset(opt.width) ) 
-			this.main.css( "width", opt.width + "px" );
+		if ( Js.helper.isset( option.width ) ) 
+			this.main.css( 'width', option.width + 'px' );
 		
 		// render header
-		this.header = Js.use( "<h2/>" )
-			.addClass( "header" )
+		this.header = Js.$( '<h2/>' )
+			.addClass( 'header' )
 			.appendTo( this.main[0] );
 		
-		if ( !opt.header ) 
+		if ( !option.header ) 
 			this.header.hide();
 		
 		// render content
-		this.container = Js.use( "<div/>" )
-			.addClass( "content-container" )
+		this.container = Js.$( '<div/>' )
+			.addClass( 'content-container' )
 			.appendTo( this.main[0] );
 		
 		// render footer
-		this.footer = Js.use( "<div/>" )
-			.addClass( "footer" )
+		this.footer = Js.$( '<div/>' )
+			.addClass( 'footer' )
 			.appendTo( this.main[0] );
 		
 		
 		// set panel height
-		if ( Jrun.isset( opt.height ) ) 
-			this.container.css( "height", opt.height + "px" );
+		if ( Js.helper.isset( option.height ) ) 
+			this.container.css( 'height', option.height + 'px' );
 		
 		// render header title
-		this.mainTitle = Js.use( "<span/>" )
-			.addClass( "title" )
-			.text( opt.title )
+		this.mainTitle = Js.$( '<span/>' )
+			.addClass( 'title' )
+			.text( option.title )
 			.appendTo( this.header[0] );
 		
-		this.buttons = Js.use( "<span/>" )
-			.addClass( "button" )
+		this.buttons = Js.$( '<span/>' )
+			.addClass( 'button' )
 			.appendTo( this.footer[0] );
 		
 		// render Close-Button 
-		this.closeButton = Js.use( "<a/>" )
-			.attr( "href", "#" )
+		this.closeButton = Js.$( '<a/>' )
+			.attr( 'href', '#' )
 			.text( this.language.closeText )
-			.setClass( "buttons" )
+			.setClass( 'buttons' )
 			.appendTo( this.footer[0] );
 		
 		// Enable Close-Button option
-		if ( !!opt.closable ) 
-			this.closeButton.addClass( "close" ).click( function() { that.closePanel(); return false; });
+		if ( !!option.closable ) 
+			this.closeButton.addClass( 'close' ).click( function() { that.closePanel(); return false; });
 		else 
-			this.closeButton.addClass( "button-disabled" );
+			this.closeButton.addClass( 'button-disabled' );
 		
 		// THIS IS WHERE YOUR CONTENT SHOULD GO
-		this.content = Js.use( "<div/>" )
-			.attr( "id", this.element )
-			.setClass( "content" )
+		this.content = Js.$( '<div/>' )
+			.attr( 'id', this.element )
+			.setClass( 'content' )
 			.appendTo( this.container[0] );
 		
 		try {
-			this.content.html( opt.content );
-		} catch(e) {
-			this.content.htmlText( opt.content );
+			this.content.html( option.content );
+		} catch ( e ) {
+			this.content.htmlText( option.content );
 		}
 		
 		// set height and scrolling option for content CONTAINER
-		if ( Jrun.isset( opt.height ) && !!opt.scroll ) {
+		if ( Js.helper.isset( option.height ) && !!option.scroll ) {
 			this.content.css({
-				"height": opt.height + "px",
-				"overflow": "auto"
+				'height': option.height + 'px',
+				'overflow': 'auto'
 			});
 		}
 		
 		// make the panel visible
-		this.node.show( "slow" );
+		this.node.show( 'slow' );
 		
 		return this;
 	},
 	
 	closePanel: function() {
 		var that = this,
-			opt = this.setting;
+			option = this.setting;
 		
 		// callback to close panel
-		this.node.fadeOut( "slow", function() {
-			if ( Jrun.isfunction( opt.onClose ) ) 
-				opt.onClose.apply( that );
+		this.node.fadeOut( 'slow', function() {
+			if ( Js.helper.isfunction( option.onClose ) ) 
+				option.onClose.apply( that );
 			
 			that.node.remove();
 		});
@@ -197,42 +197,43 @@ Js.widget.panel = Js.create({
 		return this;
 	},
 	
-	title: function( tx ) {
-		this.mainTitle.html("").text( tx );
+	title: function( text ) {
+		this.mainTitle.html('').text( text );
 		return this;
 	},
 	
-	addButton: function( jo ) {
-		var that = this;
-		var fn = Jrun.pickType( jo.callback, "function" );
-		var tx = Jrun.pickType( jo.text, this.language.defaultButton, "string" );
-		var t = Jrun.pickGrep( jo.type, "normal", /^(normal|submit|cancel)$/i );
+	addButton: function( obj ) {
+		var that = this,
+			callback = Js.helper.pickType( obj.callback, 'function' ),
+			text = Js.helper.pickType( obj.text, this.language.defaultButton, 'string' ),
+			type = Js.helper.pickGrep( obj.type, 'normal', /^(normal|submit|cancel)$/i );
 		
-		Js.use( "<a/>" )
-			.attr( "href", "#" )
+		Js.$( '<a/>' )
+			.attr( 'href', '#' )
 			.click( function() {
-				var runDefault = false;
-				if ( Jrun.isfunction(fn) ) 
-					runDefault = fn();
+				var run_default = false;
 				
-				if ( runDefault === true ) 
+				if ( Js.helper.isfunction( callback ) ) 
+					run_default = callback();
+				
+				if ( run_default === true ) 
 					that.closePanel();
 				
 				return false;
 			})
-			.addClass( "buttons" )
-			.addClass( t )
-			.text( tx )
+			.addClass( 'buttons' )
+			.addClass( type )
+			.text( text )
 			.appendTo( this.buttons[0] );
 	},
 	
 	_fixResize: function() {
-		var opt = this.setting;
+		var option = this.setting;
 		
-		if ( Jrun.isset(opt.height) && !!opt.scroll ) {
+		if ( Js.helper.isset( option.height) && !!option.scroll ) {
 			this.content.css({
-				"height": opt.height + "px", 
-				"overflow": "auto"
+				'height': option.height + 'px', 
+				'overflow': 'auto'
 			});
 		}
 	}

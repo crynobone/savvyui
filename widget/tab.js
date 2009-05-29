@@ -235,7 +235,7 @@ Js.widget.tab = Js.create({
 		var anchors = Js.$( 'li > a', this.header[0] );
 		
 		if ( anchors.size() > 0 ) 
-			this.activateTab( anchors.eq( 0 ).attr('href') );
+			this.activateTab( anchors.attr('href') );
 	},
 	
 	showTab: function() {

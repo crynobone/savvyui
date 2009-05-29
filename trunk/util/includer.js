@@ -3,19 +3,20 @@
  */
 
 Js.util.includer = { 
-	script: function( s ) {
-		return Js.use( "<script/>" ).attr({
-			"type": "text/javascript",
-			"src": s
-		}).appendTo( "head" );
+	script: function( uri ) {
+		return Js.$( '<script/>' ).attr({
+			'type': 'text/javascript',
+			'src': uri
+		}).appendTo( 'head' );
 	},
 	
-	style: function( s, m ) {
-		var m = Js.pickGrep( m, "all", /^(all|print|screen|handheld)$/i );
-		return Js.use( "<link/>" ).attr({
-			"type": "text/css",
-			"href": s,
-			"media": m
-		}).appendTo( "head" );
+	style: function( uri, media ) {
+		var media = Js.on.pickGrep( media, "all", /^(all|print|screen|handheld)$/i );
+		
+		return Js.$( "<link/>" ).attr({
+			'type': 'text/css',
+			'href': uri,
+			'media': media
+		}).appendTo( 'head' );
 	}
 };

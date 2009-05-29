@@ -4,17 +4,17 @@
  * version: 0.4.1 
  */
 
-Js.create = function( jo ) {
-	var jo = Jrun.pickType( jo, {}, "object" );
+Js.create = function( obj ) {
+	var obj = Js.on.pickType( obj, {}, "object" );
 	var base = function() {};
 	
 	base.prototype.destroy = function() {
 		// remove all properties and method for this object
-		for ( var m in this ) 
-			this[m] = null;
+		for ( var method in this ) 
+			this[method] = null;
 				
-		for ( var m in this.prototype ) 
-			this.prototype[m] = null;
+		for ( var method in this.prototype ) 
+			this.prototype[method] = null;
 			
 		// delete this (which doesn't actually totally delete it
 		delete this;
@@ -32,44 +32,44 @@ Js.create = function( jo ) {
 	function Class() {
 		// initiate the __construct function if construct available
 		if ( !initd && !!this.initiate ) 
-			this.initiate.apply( this, Jrun.toArray(arguments) );
+			this.initiate.apply( this, Js.on.toArray( arguments ) );
 	};
 	
 	Class.prototype = proto;
-	Class.prototype.initiate = Jrun.pick( jo.initiate, jo.__construct, null );
+	Class.prototype.initiate = Js.on.pick( obj.initiate, obj.__construct, null );
 	Class.constructor = Class;
 	
 	Class.prototype.$inject = function( fn ) {
-		if ( Jrun.isfunction(fn) ) 
-			return fn.apply( this, Jrun.toArray(arguments, 1) );
+		if ( Js.on.isfunction( fn ) ) 
+			return fn.apply( this, Js.on.toArray( arguments, 1 ) );
 	};
 	
-	Class.prototype.$const = (function( jo ) {
+	Class.prototype.$const = (function( object ) {
 		var $const = { };
 		
-		if ( Jrun.typeOf(jo.Const) == "object" ) {
-			var $const = Js.nue( jo.Const );
-			delete jo.Const;
+		if ( Js.on.typeOf( object.Const ) == "object" ) {
+			var $const = Js.nue( object.Const );
+			delete object.Const;
 		}
 		
 		return (function( fn ) {
-			if ( Jrun.typeOf(fn) == "string" ) {
-				if ( Jrun.isfunction($const[fn]) ) 
-					return $const[fn].apply( this, Jrun.toArray(arguments, 1) );
+			if ( Js.on.typeOf( fn ) == "string" ) {
+				if ( Js.on.isfunction( $const[fn] ) ) 
+					return $const[fn].apply( this, Js.on.toArray( arguments, 1 ) );
 				else 
 					return $const[fn];
 			}
 		});
-	})( jo );
+	})( obj );
 	
 	// create inheritance capability using .extend
-	Class.extend = function( jo ) {
-		jo.Extend = this;	
-		return Js.create( jo );
+	Class.extend = function( obj ) {
+		obj.Extend = this;	
+		return Js.create( obj );
 	};
 	
 	// if this function is being called from .extend, prepare parent method inheritant
-	var Extend = Jrun.pick( jo.Extend, null );
+	var Extend = Js.on.pick( obj.Extend, null );
 	
 	// assign object with method provided in js
 	(function( proto ) {
@@ -77,34 +77,31 @@ Js.create = function( jo ) {
 		var not = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 		
 		// add method to this object
-		for ( var m in proto ) {
-			if ( proto.hasOwnProperty(m) && (!Jrun.inArray(m, not) && !this[m]) ) 
-				this[m] = proto[m];
+		for ( var method in proto ) {
+			if ( proto.hasOwnProperty( method ) && (!Js.on.inArray( method, not ) && !this[method] ) ) 
+				this[method] = proto[method];
 		};
 		
-	}).call( proto, jo );
+	}).call( proto, obj );
 	
 	// object called from .extend, inherit parent method if object does not have it's own method
-	if( !!Jrun.isset(Extend) ) {
+	if ( !!Js.on.isset( Extend ) ) {
 		try {
 			(function( proto ) {
 				// restrict object from looping certain method
 				var not = ["Extend", "__construct", "__destruct", "$super", "prototype"];
 				
-				for ( var m in proto.prototype ) {
-					if ( proto.prototype.hasOwnProperty(m) && (!Jrun.inArray(m, not) && !this[m]) ) 
-						this[m] = proto.prototype[m];
+				for ( var method in proto.prototype ) {
+					if ( proto.prototype.hasOwnProperty( method ) && (!Js.on.inArray( method, not ) && !this[method] ) ) 
+						this[method] = proto.prototype[method];
 				}
 				
-				for ( var m in proto ) {
-					if ( proto.hasOwnProperty(m) && !Jrun.inArray(m, not) ) {
-						if ( !this[m] )
-							this[m] = proto[m];
-						
+				for ( var method in proto ) {
+					if ( proto.hasOwnProperty( method ) && !Js.on.inArray( method, not ) ) {
+						if ( !this[method] )
+							this[method] = proto[method];	
 					}
 				}
-				
-				
 				
 				// create a linkage to the parent object
 				this.$super = proto.prototype;
@@ -113,17 +110,17 @@ Js.create = function( jo ) {
 		
 		} catch(e) {
 			// incase something goes wrong
-			Js.debug.error( "Js.create: failed " + e );
+			Js.debug.error( 'Js.create: failed ' + e );
 		}
 		
 		Class.prototype.$parent = function( fn ) {
-			return this.$super[fn].apply( this, Jrun.toArray(arguments, 1) );
+			return this.$super[fn].apply( this, Js.on.toArray( arguments, 1 ) );
 		};
 	}
 	
 	// avoid Extend to be duplicated in this.prototype 
 	delete Extend;
-	delete jo;
+	delete obj;
 	
 	return Class;
 };

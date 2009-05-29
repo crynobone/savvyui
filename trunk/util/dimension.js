@@ -7,39 +7,39 @@ Js.util.dimension = {
 	page: {
 		scrolls: {
 			x: function() {
-				var d = document.body;
-				var r = 0;
-				var off = window.pageXOffset;
-				var el = document.documentElement;
+				var doc = document.body;
+				var result = 0;
+				var offset = window.pageXOffset;
+				var elem = document.documentElement;
 				
-				if ( typeof(off) == "number" ) 
-					r = off;
+				if ( typeof( offset ) == 'number' ) 
+					result = offset;
 				
-				else if ( d && d.scrollLeft ) 
-					r = d.scrollLeft;
+				else if ( doc && doc.scrollLeft ) 
+					result = doc.scrollLeft;
 				
-				else if ( el && el.scrollLeft ) 
-					r = el.scrollLeft;
+				else if ( elem && elem.scrollLeft ) 
+					result = elem.scrollLeft;
 				
-				return r;
+				return result;
 			},
 			
 			y: function() {
-				var d = document.body;
-				var r = 0;
-				var off = window.pageYOffset;
-				var el = document.documentElement;
+				var doc = document.body;
+				var result = 0;
+				var offset = window.pageYOffset;
+				var elem = document.documentElement;
 				
-				if ( typeof(off) == "number" ) 
-					r = off;
+				if ( typeof( offset ) == 'number' ) 
+					result = offset;
 				
-				else if ( d && d.scrollTop ) 
-					r = d.scrollTop;
+				else if ( doc && doc.scrollTop ) 
+					result = doc.scrollTop;
 				
-				else if ( el && el.scrollTop ) 
-					r = el.scrollTop;
+				else if ( elem && elem.scrollTop ) 
+					result = elem.scrollTop;
 				
-				return r;
+				return result;
 			},
 			
 			both: function() {
@@ -51,19 +51,20 @@ Js.util.dimension = {
 			}
 		},
 		
-		middle: function( w, h ) {
-			var d = document.body;
-			var off = [Js.use(window).width(), Js.use(window).height()];
-			var a = Js.util.dimension.page.scrolls.both();
-			var r = [];
-					
-			r[0] = Math.round( ((off[0] - w) / 2) + a[0] );
-			r[1] = Math.round( ((off[1] - h) / 2) + a[1] ); 
+		middle: function( weight, height ) {
+			var doc = document.body,
+				offset = [ Js.$( window ).width(), Js.$( window ).height() ],
+				locate = Js.util.dimension.page.scrolls.both();
 			
-			r[0] = ( r[0] < 0 ? 0 : r[0] );
-			r[1] = ( r[1] < 0 ? 0 : r[1] );
+			var result = [
+				Math.round( ( ( offset[0] - weight ) / 2 ) + locate[0] ),
+				Math.round( ( ( offset[1] - height ) / 2 ) + locate[1] )
+			];
+			
+			result[0] = ( result[0] < 0 ? 0 : result[0] );
+			result[1] = ( result[1] < 0 ? 0 : result[1] );
 				
-			return r.reverse();
+			return result.reverse();
 		}
 	},
 	
@@ -71,35 +72,35 @@ Js.util.dimension = {
 		scrolls: {},
 		size: {},
 		
-		offset: function( node ){
-			var ret = [0, 0, 0, 0];
+		offset: function( node ) {
+			var result = [0, 0, 0, 0];
 			var loop = false;
 			
-			if ( Jrun.isset(node) ) {
+			if ( Jrun.isset( node ) ) {
 				if ( node.offsetParent ) {
 					loop = true;
-					ret[0] = node.offsetWidth;
-					ret[1] = node.offsetHeight;
+					result[0] = node.offsetWidth;
+					result[1] = node.offsetHeight;
 					
 					while ( node.offsetParent ) {
-						ret[2] += node.offsetTop;
-						ret[3] += node.offsetLeft;
+						result[2] += node.offsetTop;
+						result[3] += node.offsetLeft;
 						node = node.offsetParent;
 					}
 				}
 				else {
 					if ( loop == false ) {
-						ret[0] = Jrun.pick( node.scrollWidth, 0 );
-						ret[1] = Jrun.pick( node.scrollHeight, 0 );
-						ret[2] = Jrun.pick( node.offsetTop, 0 );
-						ret[3] = Jrun.pick( node.offsetLeft, 0 );
+						result[0] = Js.on.pick( node.scrollWidth, 0 );
+						result[1] = Js.on.pick( node.scrollHeight, 0 );
+						result[2] = Js.on.pick( node.offsetTop, 0 );
+						result[3] = Js.on.pick( node.offsetLeft, 0 );
 					}
 				}
 				
-				return ret;
+				return result;
 			}
 			else 
-				Js.debug.log("Js.util.dimension.node.offset: failed because node does not exist");
+				Js.debug.log('Js.util.dimension.node.offset: failed because node does not exist');
 		}
 	}
 };

@@ -1,74 +1,66 @@
-/**
- * @projectDescription Global Configurator Function for Savvy.UI
- * @memberOf Js
- * @version 0.0.1
- * @author Mior Muhammad Zaki crynobone@gmail.com
- * @license MIT
- */
-
 Js.setup = {
 	ext: {
-		validate: function( dt ) {
-			Js.config.ext.validate = Js.append( dt, Js.config.ext.validate, ["lang"], true );
+		validate: function( data ) {
+			Js.config.ext.validate = Js.append( data, Js.config.ext.validate, ['lang'], true );
 			
-			if ( Jrun.isset(dt.lang) ) 
-				Js.language.ext.validate = Js.append( dt.lang, Js.language.ext.validate );
+			if ( Js.on.isset( data.lang ) ) 
+				Js.language.ext.validate = Js.append( data.lang, Js.language.ext.validate );
 		}
 	},
 	
-	test: function( dt ) {
-		Js.config.test = Js.append( dt, Js.config.test );
+	test: function( data ) {
+		Js.config.test = Js.append( data, Js.config.test );
 	},
 	
 	util: {
-		buttonSubmit: function( dt ) {
-			Js.config.util.buttonSubmit = Js.append( dt, Js.config.util.buttonSubmit );
+		buttonSubmit: function( data ) {
+			Js.config.util.buttonSubmit = Js.append( data, Js.config.util.buttonSubmit );
 		},
 		
-		formSubmit: function( dt ) {
-			Js.config.util.formSubmit = Js.append( dt, Js.config.util.formSubmit );
+		formSubmit: function( data ) {
+			Js.config.util.formSubmit = Js.append( data, Js.config.util.formSubmit );
 		},
-		editable: function( dt ) {
-			Js.config.util.editable = Js.append( dt, Js.config.util.editable, ["lang"], true );
+		editable: function( data ) {
+			Js.config.util.editable = Js.append( data, Js.config.util.editable, ['lang'], true );
 			
-			if ( Jrun.isset(dt.lang) ) 
-				Js.language.util.editable = Js.append( dt.lang, Js.language.util.editable );
+			if ( Js.on.isset( data.lang ) ) 
+				Js.language.util.editable = Js.append( data.lang, Js.language.util.editable );
 		}
 	},
 	
 	widget: {
-		activity: function( dt ) {
-			Js.config.widget.activity = Js.append( dt, Js.config.widget.activity );
+		activity: function( data ) {
+			Js.config.widget.activity = Js.append( data, Js.config.widget.activity );
 		},
 		
-		datePicker: function( dt ) {
-			Js.config.widget.datePicker = Js.append( dt, Js.config.widget.datePicker, ["lang"], true );
+		datePicker: function( data ) {
+			Js.config.widget.datePicker = Js.append( data, Js.config.widget.datePicker, ['lang'], true );
 			
-			if ( Jrun.isset(dt.lang) ) 
-				Js.language.widget.datePicker = Js.append( dt.lang, Js.language.widget.datePicker );
+			if ( Js.on.isset( data.lang ) ) 
+				Js.language.widget.datePicker = Js.append( data.lang, Js.language.widget.datePicker );
 		},
 		
-		dropmenu: function( dt ) {
-			Js.config.widget.dropmenu = Js.append( dt, Js.config.widget.dropmenu );
+		dropmenu: function( data ) {
+			Js.config.widget.dropmenu = Js.append( data, Js.config.widget.dropmenu );
 		},
 		
-		iconizer: function( dt ) {
-			Js.config.widget.iconizer = Js.append( dt, Js.config.widget.iconizer );
+		iconizer: function( data ) {
+			Js.config.widget.iconizer = Js.append( data, Js.config.widget.iconizer );
 		},
 		
-		notice: function( dt ) {
-			Js.config.widget.notice = Js.append( dt, Js.config.widget.notice, ["lang"], true );
+		notice: function( data ) {
+			Js.config.widget.notice = Js.append( data, Js.config.widget.notice, ['lang'], true );
 			
-			if ( Jrun.isset(dt.lang) ) 
-				Js.language.widget.notice = Js.append( dt.lang, Js.language.widget.notice );
+			if ( Js.on.isset( data.lang ) ) 
+				Js.language.widget.notice = Js.append( data.lang, Js.language.widget.notice );
 		},
 		
-		panel: function( dt ) {
-			Js.config.widget.panel = Js.append( dt, Js.config.widget.panel );
+		panel: function( data ) {
+			Js.config.widget.panel = Js.append( data, Js.config.widget.panel );
 		},
 		
-		tab: function( dt ) {
-			Js.config.widget.tab = Js.append( dt, Js.config.widget.tab );
+		tab: function( data ) {
+			Js.config.widget.tab = Js.append( data, Js.config.widget.tab );
 		}
 	}
 };

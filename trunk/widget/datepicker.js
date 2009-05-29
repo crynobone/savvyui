@@ -82,8 +82,6 @@ Js.widget.datePicker = Js.create({
 			this.value = [js.year, js.month, js.day].join("-");
 		}
 		
-		
-		
 		this.month = ( (!js.month || isNaN(js.month) || js.month > 12 || js.month < 0) ? this.dateObject.getMonth() : Math.abs(js.month - 1) );
 		this.year = ( (!js.year || isNaN(js.year) || js.year < 1000) ? this.dateObject.getFullYear() : js.year );
 		this.day = Jrun.pick( js.day, this.day );
@@ -145,8 +143,8 @@ Js.widget.datePicker = Js.create({
 		
 		var content = Js.use("<div/>").appendTo(this.box.content[0]);
 		
+		this.option = Js.use( "<div/>" ).addClass( "calendar-option" ).appendTo( content[0] );
 		this.content = Js.use( "<div/>" ).addClass( "calendar-content" ).appendTo( content[0] );
-		this.option = Js.use( "<div/>" ).addClass( "calendar-option" ).hide().appendTo( content[0] );
 		
 		this.callback();
 		
@@ -494,7 +492,7 @@ Js.widget.datePicker = Js.create({
 				})
 				.appendTo( this.content[0] );
 			
-			Js.use( "<p/>" ).text( this.language.selectMonthYear ).appendTo( this.option[0] );
+			//Js.use( "<p/>" ).text( this.language.selectMonthYear ).appendTo( this.option[0] );
 			
 			var selmonth = Js.use( "<select name='month'></select>" ).bind( "change", function() {
 				that.customMonth( this.value );
@@ -525,20 +523,6 @@ Js.widget.datePicker = Js.create({
 					.appendTo( selyear[0] );
 			}
 			
-			var _toggleContent = function() {
-				var i = that.box.node.data("toggle");
-				
-				if ( i === 1 ) {
-					that.content.hide( "normal" );
-					that.option.show( "normal" );
-					that.box.node.data( "toggle", 0 );
-				}
-				else if ( i === 0 ) {
-					that.option.hide( "normal" );
-					that.content.show( "normal" );
-					that.box.node.data( "toggle", 1 );
-				}
-			};
 			
 			if ( this.status == "initiated" ) 
 				this.box.buttons.html("");
@@ -550,15 +534,6 @@ Js.widget.datePicker = Js.create({
 					that.today();
 				}
 			});
-			this.box.addButton({
-				type: "submit",
-				text: "Option",
-				callback: function() {
-					_toggleContent();
-				}
-			});
-			this.box.node.data( "toggle", 0 );
-			_toggleContent();
 		}
 		
 		this.box.fixDimension();

@@ -3,51 +3,52 @@
  */
 
 Js.test = {
-	isString: function( v ) {
-		return ( typeof(v) == "string" && isNaN(v) );
+	isString: function( value ) {
+		return ( typeof( value ) == 'string' && isNaN( value ) );
 	},
 	
-	isNumber: function( v ) {
-		return !isNaN( v );
+	isNumber: function( value ) {
+		return !isNaN( value );
 	},
 	
-	isLength: function( dt, v ) {
-		var r = false;
+	isLength: function( data, value ) {
+		var result = false;
 		
-		if ( dt.match(/^(exact|min|max)\-(\d*)$/i) ) {
-			var l = Jrun.toNumber(RegExp.$2);
+		if ( data.match(/^(max|min|exact)\-(\d*)$/i) ) {
+			var type = RegExp.$1;
+			var length = Js.on.toNumber( RegExp.$2 );
 			
-			switch ( RegExp.$1 ) {
+			switch ( type ) {
 				case 'max':
-					r = v <= l;
+					result = value <= length;
 					break;
 				case 'min':
-					r = v >= l;
+					result = value >= length;
 					break;
 				case 'exact':
-					r = v == l;
+					result = value == length;
 					break;
 				default:
-					r = false;
+					result = false;
 			}
 		}
 		
-		return r;
+		return result;
 	},
 	
-	isEmail: function( v ) {
-		return ( v.match(Js.config.test.email) );
+	isEmail: function( value ) {
+		return ( value.match( Js.config.test.email ) );
 	},
 	
-	isURL: function( v ) {
-		return ( v.match(Js.config.test.url) );
+	isURL: function( value ) {
+		return ( value.match( Js.config.test.url ) );
 	},
 	
-	isIpAddress: function( v ) {
-		return ( v.match(Js.config.test.ip) );
+	isIpAddress: function( value ) {
+		return ( value.match( Js.config.test.ip ) );
 	},
 	
-	isPostcode: function( v ) {
-		return ( v.match(Js.config.test.postcode) );
+	isPostcode: function( value ) {
+		return ( value.match( Js.config.test.postcode ) );
 	}
 };

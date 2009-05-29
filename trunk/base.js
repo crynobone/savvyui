@@ -436,7 +436,7 @@ Js.helper = Js.fn = {
 			result.push( that( val ) );
 		});
 		
-		return r.join(' ');
+		return result.join(' ');
 	},
 	
 	// Convert a object (mainly use for arguments) to array & require on .length to check the length to object to convert

@@ -3,94 +3,94 @@
  */
 
 Js.widget.message = Js.create({
-	appName: "message",
+	appName: 'message',
 	node: null,
 	setting: null,
 	
-	initiate: function( opt ) {
-		this.setup( opt );
+	initiate: function( option ) {
+		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		
-		if ( Jrun.isnull(this.node) ) 
+		if ( Js.helper.isnull( this.node ) ) 
 			this.init();
 		
 		return this;
 	},
 	
-	setup: function( opt ) {
-		var opt = Jrun.pickType( opt, {}, "object" );
-		this.setting = Js.append( opt, this.setting );
+	setup: function( option ) {
+		var option = Js.helper.pickType( option, {}, 'object' );
+		this.setting = Js.append( option, this.setting );
 		
 		return this;
 	},
 	
-	add: function( jo ) {
-		var that = this;
+	add: function( obj ) {
+		var that = this,
+			text = Js.helper.pick( obj.text, '' ),
+			type = Js.helper.pickGrep( obj.type, 'note', /^(note|error|success)$/ ),
+			closable = Js.helper.pickType( obj.closable, true, 'boolean' );
 		
-		if ( Jrun.isnull(this.node) ) 
+		if ( Js.helper.isnull( this.node ) ) 
 			this.init();
-		
-		var tx = Jrun.pick( js.text, "" );
-		var type = Jrun.pickGrep( js.type, "note", /^(note|error|success)$/ );
-		var c = Jrun.pickType( js.closable, true, "boolean" );
 		
 		(function() {
-			var div = Js.use( "<div/>" )
+			var div = Js.$( '<div/>' )
 				.attr({
-					className: "widgetmessage-box"
+					className: 'widgetmessage-box'
 				})
-				.css( "margin", "2px 0px" )
-				.appendTo(that.node[0]).hide();
+				.css( 'margin', '2px 0px' )
+				.appendTo( that.node[0] )
+				.hide();
 			
-			if ( !!c ) {
-				var span = Js.use( "<span/>" )
+			if ( !!closable ) {
+				var span = Js.$( '<span/>' )
 					.attr({
-						className: "widgetmessage-close"
+						className: 'widgetmessage-close'
 					})
-					.text("x")
+					.text('x')
 					.appendTo( div[0] );
 			}
 			
-			var p = Js.use( "<p/>" ).htmlText( tx ).appendTo( div[0] );
+			var p = Js.$( '<p/>' ).htmlText( text ).appendTo( div[0] );
 			
-			var t = setTimeout(function() {
-				div.hide( "normal", function() {
+			var timeout_id = setTimeout(function() {
+				div.hide( 'normal', function() {
 					span.remove();
 					p.remove();
 				});
-			}, (this.setting.seconds * 1000) );
+			}, ( this.setting.seconds * 1000 ) );
 			
-			if ( !!c ) {
-				span.bind( "click", function(){
-					clearTimeout(t);
-					t = null;
+			if ( !!closable ) {
+				span.bind( 'click', function(){
+					clearTimeout( timeout_id );
+					timeout_id = null;
 					
-					div.hide( "normal", function(){
+					div.hide( 'normal', function(){
 						span.remove();
 						p.remove();
 					});
 				});
 			}
 			
-			div.setClass( type ).show( "slow" );
+			div.setClass( type ).show( 'slow' );
 		})();
 	},
 	init: function() {
 		var that = this;
 		
-		this.node = Js.use( "#" + this.setting.identifier );
+		this.node = Js.$( '#' + this.setting.identifier );
 		
 		if ( this.node.length < 1 ) {
-			this.node = Js.use( "<div/>" )
-				.attr( "id", this.setting.identifier )
-				.appendTo( "body" );
+			this.node = Js.$( '<div/>' )
+				.attr( 'id', this.setting.identifier )
+				.appendTo( 'body' );
 		}
 		
-		var fn = function() {
-			that.node.css("top", Js.util.dimension.page.scrolls.y() + "px");
+		var callback = function() {
+			that.node.css( 'top', Js.util.dimension.page.scrolls.y() + 'px' );
 		};
 		
-		jQuery(window).bind( "scroll", fn );
-		fn();
+		Js.$( window ).bind( 'scroll', callback );
+		callback();
 	}
 });

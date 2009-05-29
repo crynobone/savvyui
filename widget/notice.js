@@ -3,96 +3,97 @@
  */
 
 Js.widget.notice = Js.widget.activity.extend({
-	appName: "notice",
+	appName: 'notice',
 	callback: null,
 	node: null,
 	setting: null,
 	language: null,
 	
-	initiate: function( elem, opt ) {
-		this.setup( opt );
+	initiate: function( element, option ) {
+		this.setup( option );
 		this.setting = Js.append( this.setting, Js.config.widget[this.appName] );
 		this.language = Js.append( this.language, Js.language.widget[this.appName] );
 		
-		this.node = this.$super.initiate( elem, {
+		this.node = this.$super.initiate( element, {
 			boxWidth: 550,
 			boxHeight: 0,
 			opacity: 0.9
 		});
 		
 		this.node.init();
-		this.node.box = Js.use( "<div/>" )
+		this.node.box = Js.$( '<div/>' )
 			.css({
-				"position": "absolute",
-				"width": "550px"
+				'position': 'absolute',
+				'width': '550px'
 			})
 			.appendTo( this.$super.node[0] );
 	},
 	closeNotice: function() {
 		var that = this;
 		
-		if ( Jrun.isfunction(this.callback) ) {
-			this.callback.apply(this);
+		if ( Js.helper.isfunction( this.callback ) ) {
+			this.callback.apply( this );
 			this.callback = null;
 		}
 		
 		this.node.deactivate( function() {
-			that.node.box.text("");
+			that.node.box.text('');
 		});
 	},
-	_domAddNotice: function( v, s ) {
-		var s = Jrun.pickGrep( s, "note", /^(note|success|error)$/i );
-		var that = this;
+	show: function( obj, status ) {
+		var status = Js.helper.pickGrep( status, 'note', /^(note|success|error)$/i ),
+			that = this;
 		
-		this.node.box.text("");
+		var title = this.language[ Js.helper.camelize('title-' + status) ],
+			text = '',
+			sticky = false;
+		
+		this.node.box.text('');
 		this.node.activate();
 		
-		var title = this.language[Jrun.camelize("title-" + status)];
-		var tx = "";
-		var r = false;
-		
-		if ( Jrun.typeOf(v) != "object" ) 
-			title = v;
+		if ( !Js.helper.typeOf( obj, 'object' ) ) 
+			title = obj;
 		else {
-			title = Jrun.pick( note.title, "" );
-			tx = Jrun.pick( note.message, "" );
-			r = Jrun.pick( note.sticky, false );
+			title = Js.helper.pick( note.title, '' );
+			text = Js.helper.pick( note.message, '' );
+			sticky = Js.helper.pick( note.sticky, false );
 		}
 		
-		this.node.box.setClass( this.setting['css' + Jrun.toProperCase(s)] );
+		this.node.box.setClass( this.setting['css' + Js.helper.toProperCase( status )] );
 		
-		Js.use( "<h3/>" )
+		Js.$( '<h3/>' )
 			.text( title )
 			.appendTo( this.node.box[0] );
 		
-		if ( tx != "" ) 
-			var p = Js.use( "<p/>" ).htmlText( "" + tx ).appendTo( this.node.box[0] );
+		if ( text != '' ) 
+			var p = Js.$( '<p/>' )
+				.htmlText( text.toString() )
+				.appendTo( this.node.box[0] );
 		
-		
-		var span = Js.use( "<em/>" )
+		var span = Js.$( '<em/>' )
 			.text( Js.language.widget.notice.timer )
 			.appendTo( this.node.box[0] );
 		
-		this.node.node.one( "click", function() {
+		this.node.node.one( 'click', function() {
 			that.closeNotice();
-		});
+		} );
 		
-		if ( r == false ) {
+		if ( sticky == false ) {
 			setTimeout( function() {
 				that.closeNotice();
-			}, (this.setting.seconds * 1000) );
+			}, ( this.setting.seconds * 1000 ) );
 		}
 	},
-	success: function( tx, fn ) {
-		this.callback = Jrun.pick( fn, null );
-		this._domAddNotice( tx, 'success' );
+	success: function( text, callback ) {
+		this.callback = Js.helper.pick( callback, null );
+		this.show( text, 'success' );
 	},
-	note: function( tx, fn ) {
-		this.callback = Jrun.pick( fn, null );
-		this._domAddNotice( tx, 'note' );
+	note: function( text, callback ) {
+		this.callback = Js.helper.pick( callback, null );
+		this.show( text, 'note' );
 	},
-	error: function( tx, fn ) {
-		this.callback = Jrun.pick( fn, null );
-		this._domAddNotice( tx, 'error' );
+	error: function( text, callback ) {
+		this.callback = Js.helper.pick( text, null );
+		this.show( text, 'error' );
 	}
 });

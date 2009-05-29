@@ -3,24 +3,25 @@
  */
 
 Js.util.activeContent = Js.create({
-	appName: "activeContent",
+	appName: 'activeContent',
 	last: null,
 	interval: null,
 	repeat: false,
 	init: null,
 	element: null,
 	option: null,
-	fnBeforeStart: null,
-	fnSuccess: null,
+	beforeStart: null,
+	success: null,
 	
-	initiate: function( jo ) {
-		var that = this;
-		var jo = Jrun.pickType( jo, {}, "object" );
-		this.element = Jrun.pick( jo.element, null );
-		this.fnBeforeStart = Jrun.pick( jo.beforeStart, this.fnBeforeStart );
-		this.fbSuccess = Jrun.pick( jo.success, this.fnSuccess );
+	initiate: function( obj ) {
+		var that = this,
+			obj = Js.helper.pickType( obj, {}, 'object' );
 		
-		if ( Jrun.isset( this.element ) ) {
+		this.element = Js.helper.pick( obj.element, null );
+		this.beforeStart = Js.helper.pick( obj.beforeStart, this.beforeStart );
+		this.success = Js.helper.pick( obj.success, this.success );
+		
+		if ( Js.helper.isset( this.element ) ) {
 			this._selector();
 			this._check();
 		} 
@@ -32,7 +33,7 @@ Js.util.activeContent = Js.create({
 	},
 	
 	destroy: function() {
-		if( Jrun.isset( this.interval ) ) {
+		if( Js.helper.isset( this.interval ) ) {
 			clearInterval( this.interval );
 			this.interval == null;
 		}
@@ -44,39 +45,39 @@ Js.util.activeContent = Js.create({
 	_selector: function() {
 		var that = this;
 		
-		Js.use( this.element ).bind( "click", function() {
-			var href = Js.use( this ).attr( "href" );
-			var hash = ( Jrun.isset( href ) ? href : this.href );
-			var r;
+		Js.$( this.element ).bind( 'click', function() {
+			var href = Js.use( this ).attr( 'href' );
+			var hash = ( Js.helper.isset( href ) ? href : this.href );
+			var result;
 			
-			r = ( hash.match(/^\#/) ? ["", hash.substr( 1 )] : hash.split(/\#/) ); 
+			result = ( hash.match(/^\#/) ? ['', hash.substr( 1 )] : hash.split(/\#/) ); 
 			
-			if ( Jrun.isfunction( that.fnBeforeStart ) ) 
-				that.fnBeforeStart();
+			if ( Js.helper.isfunction( that.beforeStart ) ) 
+				that.beforeStart();
 			
-			if ( Jrun.isset(r[1]) ) {
-				that.repeat = ( r[1] === that.last );
+			if ( Js.helper.isset(result[1]) ) {
+				that.repeat = ( result[1] === that.last );
 				
-				that.last = r[1];
-				that.init( r[1].split(/\//) );
+				that.last = result[1];
+				that.init( result[1].split(/\//) );
 				
-				if ( Jrun.isfunction( that.fnSuccess ) ) 
-					that.fnSuccess();
+				if ( Js.helper.isfunction( that.success ) ) 
+					that.success();
 			}
 		});
 	},
 	
 	_check: function() {
-		if ( location.hash != this.last && location.hash !== "#" ) {
+		if ( location.hash != this.last && location.hash !== '#' ) {
 			this.last = location.hash;
 			
-			if ( Jrun.isfunction( this.fnBeforeStart ) ) 
-				this.fnBeforeStart();
+			if ( Js.helper.isfunction( this.beforeStart ) ) 
+				this.beforeStart();
 			
 			this.init( location.hash.substr( 1 ).split( /\// ) );
 			
-			if ( Jrun.isfunction( this.fnSuccess ) ) 
-				this.fnSuccess();
+			if ( Js.helper.isfunction( this.success ) ) 
+				this.success();
 		}
 	}
 });

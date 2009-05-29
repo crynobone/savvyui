@@ -3,7 +3,7 @@
  */
 
 Js.util.editable = Js.create({
-	appName: "editable",
+	appName: 'editable',
 	node: null,
 	element: null,
 	box: null,
@@ -19,8 +19,8 @@ Js.util.editable = Js.create({
 	},
 	
 	setup: function( opt ) {
-		var opt = Jrun.pickType( opt, {}, "object" );
-		this.setting = Js.append( opt, this.setting, ["lang"], true );
+		var opt = Jrun.pickType( opt, {}, 'object' );
+		this.setting = Js.append( opt, this.setting, ['lang'], true );
 		
 		if ( Jrun.isset(opt.lang) ) 
 			this.language = Js.append( opt.lang, this.language );
@@ -37,7 +37,7 @@ Js.util.editable = Js.create({
 		this.language = Js.append( this.language, Js.language.util.editable );
 		this.node = Js.use( this.element );
 		
-		this.node.bind( "change", function() {
+		this.node.bind( 'change', function() {
 			var node = Js.use( this );
 			
 			if ( node.val() == that.setting.identifier ) 
@@ -54,7 +54,7 @@ Js.util.editable = Js.create({
 	onModalBoxClose: function( field ) {
 		var ret = [];
 		
-		Js.use( field ).children( "option" ).each(function( i, v) {
+		Js.use( field ).children( 'option' ).each(function( i, v) {
 			ret.push( Js.use( v ).val() );
 		});
 		
@@ -67,7 +67,7 @@ Js.util.editable = Js.create({
 		if ( Jrun.isfunction( this.setting.onBeforeUpdate ) ) 
 			runDefault = this.setting.onBeforeUpdate.apply( this, [field] );
 		
-		if ( runDefault !== false && (Jrun.isset( val ) && Jrun.trim( val ) != "" && !Jrun.inArray( val, ret ) ) ) {
+		if ( runDefault !== false && (Jrun.isset( val ) && Jrun.trim( val ) != '' && !Jrun.inArray( val, ret ) ) ) {
 			Js.use( '<option selected="selected" value="' + val + '">' + val + '</option>' ).appendTo( field );
 			updated = true;
 		} 
@@ -84,7 +84,7 @@ Js.util.editable = Js.create({
 			this.setting.beforeStart.apply( this );
 		
 		this.box = new Js.widget.dialog({
-			element: "editable_edit_box_" + Jrun.prep( this.element ),
+			element: 'editable_edit_box_' + Jrun.prep( this.element ),
 			title: this.language.title,
 			width: 300,
 			height: 100,
@@ -97,36 +97,36 @@ Js.util.editable = Js.create({
 					callback: function() {
 						return true;
 					},
-					type: "submit"
+					type: 'submit'
 				}
 			],
 			language: {
-				closeText: "Cancel"
+				closeText: 'Cancel'
 			},
 			overlay: this.setting.overlay,
 			clickOver: true,
 			onClickOver: function() {
-				that.input.val("");
+				that.input.val('');
 			}
 		});
 		
-		var div = Js.use( "<div/>" )
-			.setClass( "panel" )
+		var div = Js.use( '<div/>' )
+			.setClass( 'panel' )
 			.appendTo( this.box.content[0] );
 		
-		var p = Js.use( "<label/>" )
-			.htmlText( "" + this.language.message )
+		var p = Js.use( '<label/>' )
+			.htmlText( '' + this.language.message )
 			.appendTo( div[0] );
 			
 		this.input = Js.use( '<input type="text"/>')
-			.attr( "name", "util_editable_" + Jrun.prep( this.element ) )
+			.attr( 'name', 'util_editable_' + Jrun.prep( this.element ) )
 			.val( this.setting.prefix )
 			.appendTo( div[0] );
 		
 		var box = this.box;
 		
-		box.closeButton.htmlText("Cancel").bind( "click", function() {
-			that.input.val("");
+		box.closeButton.htmlText('Cancel').bind( 'click', function() {
+			that.input.val('');
 			box.closePanel();
 		})
 	}

@@ -12,9 +12,9 @@ Js.util.buttonSubmit = Js.create({
 	formValidate: null,
 	
 	initiate: function( obj ) {
-		this.id = Js.on.pick( obj.id, null );
-		this.url = Js.on.pick( obj.url, null );
-		this.button = Js.on.pick( obj.button, null );
+		this.id = Js.helper.pick( obj.id, null );
+		this.url = Js.helper.pick( obj.url, null );
+		this.button = Js.helper.pick( obj.button, null );
 		
 		// if id, url and button have been defined, straight away call this.init()
 		if ( !!this.id && !!this.url && this.button ) 
@@ -24,7 +24,7 @@ Js.util.buttonSubmit = Js.create({
 	},
 	
 	setup: function( option ) {
-		var option = Js.on.pickType( option, {}, 'object' );
+		var option = Js.helper.pickType( option, {}, 'object' );
 		this.setting = Js.append( option, this.setting );
 		
 		return this;
@@ -43,13 +43,13 @@ Js.util.buttonSubmit = Js.create({
 		this.setting = Js.append( this.setting, Js.config.util[this.appName] );
 		this._prepare();
 		
-		var method = Js.on.pickGrep( this.setting.method, /^(get|post)$/i );
+		var method = Js.helper.pickGrep( this.setting.method, /^(get|post)$/i );
 		
 		// bind onClick event delegation to the button
 		Js.use( this.button ).bind( this.handler, function() {
 			// we need to validate the form
 			var form = new Js.ext.validate( that.id, that.formValidate );
-			var result = form.cacheResult;
+			var result = form.result;
 			
 			if ( !!result ) {
 			   Js.$.ajax({
@@ -57,20 +57,20 @@ Js.util.buttonSubmit = Js.create({
 					url: that.url,
 					data: result,
 					beforeSend: function() {
-						if ( Js.on.isfunction( that.setting.beforeSend ) ) 
+						if ( Js.helper.isfunction( that.setting.beforeSend ) ) 
 							that.setting.beforeSend.apply( that );
 					},
 					success: function( reply ) {
-						var runDefault = true;
+						var run_default = true;
 						
-						if ( Js.on.isfunction( that.setting.sendSuccess ) ) 
-							runDefault = that.setting.sendSuccess.apply( that, [reply] );
+						if ( Js.helper.isfunction( that.setting.sendSuccess ) ) 
+							run_default = that.setting.sendSuccess.apply( that, [reply] );
 						
-						if ( runDefault !== false ) 
+						if ( run_default !== false ) 
 							Js.parse.xhr.init( reply );
 					},
 					onError: function() {
-						if( Js.on.isfunction( that.setting.onSendError ) ) 
+						if( Js.helper.isfunction( that.setting.onSendError ) ) 
 							that.setting.onSendError.apply( that );
 					}
 				});

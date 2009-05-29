@@ -4,71 +4,75 @@
 
 Js.parse = {
 	html: {
-		to: function( r ) {
-			return encodeURIComponent( Jrun.htmlEncode( new String(r) ) );
+		to: function( text ) {
+			return encodeURIComponent( Js.on.htmlEncode( new String( text ) ) );
 		},
 		
-		from: function( r ) {
-			return Jrun.htmlDecode( decodeURIComponent( new String(r) ) );
+		from: function( text ) {
+			return Js.on.htmlDecode( decodeURIComponent( new String( text ) ) );
 		}
 	},
 	
 	xhr: {
-		init: function( v ) {
+		init: function( json ) {
 			var that = Js.parse.xhr;
-			var dt = eval( "(" + v + ")" );
+			var data = eval( '(' + json + ')' );
 			
-			Js.debug.log( "XHR: " + v );
+			Js.debug.log( 'XHR: ' + json );
 			
-			if ( Jrun.typeOf(dt) == "object" ) {
-				if ( !!dt.SUIXHR ) {
-					that.notice( dt );
-					that.href( dt );
-					that.update( dt );
+			if ( Js.on.typeOf( data ) == 'object' ) {
+				if ( !!data.SUIXHR ) {
+					that.notice( data );
+					that.href( data );
+					that.update( data );
+					
+					return true;
 				}
+				else 
+					return false;
 			}
 		},
 		
-		notice: function( dt ) {
-			var v = Jrun.pickType( dt.notice, "string" );
+		notice: function( data ) {
+			var value = Js.on.pickType( data.notice, 'string' );
 			
-			if ( Jrun.isset(v) && v !== "" ) {
-				window.alert( v );
+			if ( Js.on.isset(value) && value !== '' ) {
+				window.alert( value );
 				
 				try {
-					console.log( v );
+					console.log( value );
 				} catch(e) { }
 			}
 		},
-		href: function( dt ) {
-			var h = Jrun.pickGrep( dt.href, /^https?:\/\//g );
-			var x = Jrun.pickGrep( dt.xhref, /^https?:\/\//g );
+		href: function( data ) {
+			var href = Js.on.pickGrep( data.href, /^https?:\/\//g );
+			var xhref = Js.on.pickGrep( data.xhref, /^https?:\/\//g );
 			
-			if ( Jrun.isset(x) && x !== "" ) 
-				Jrun.href( x, "_blank" );
+			if ( Js.on.isset( xhref ) && xhref !== '' ) 
+				Js.on.href( xhref, '_blank' );
 			
-			else if ( Jrun.isset(h) && h !== "" ) 
-				Jrun.href( h );
+			else if ( Js.on.isset( href ) && href !== '' ) 
+				Js.on.href( href );
 		},
 		
-		update: function( dt ) {
-			var args = Jrun.pick( dt.text );
-			var id = Jrun.pickType( dt.id, "string" );
-			var el = Jrun.pickType( dt.selector, "string" );
-			var fn = Jrun.pickType( dt.callback, "string" );
+		update: function( data ) {
+			var args = Js.on.pick( data.text );
+			var id = Js.on.pickType( data.id, 'string' );
+			var el = Js.on.pickType( data.selector, 'string' );
+			var fn = Js.on.pickType( data.callback, 'string' );
 			
-			if ( Jrun.typeOf( args ) == "string" ) {
+			if ( Js.on.typeOf( args ) == 'string' ) {
 				if ( !!el ) 
-					Js.use( el ).html( args );
+					Js.$( el ).html( args );
 				else if ( !!id ) 
-					Js.use("#" + id).html( args );
+					Js.$( '#' + id ).html( args );
 			}
-			else if ( Jrun.isset( fn ) ) {
+			else if ( Js.on.isset( fn ) ) {
 				// eval the function without making a callback
 				var fn = eval( fn );
-					
+				
 				// execute the function
-				if ( Jrun.isfunction(fn) ) 
+				if ( Js.on.isfunction( fn ) ) 
 					fn( args );
 			}
 		}

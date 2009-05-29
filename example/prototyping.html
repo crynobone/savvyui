@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Prototyping</title>
+		<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+		<script type="text/javascript" src="../lib/savvyui.js"></script>
+		<script type="text/javascript" src="unit-testing.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+		<!--
+		Js.debug.enable = true;
+		Js.proto = function() {
+			String.prototype.trim = function() {
+				return Js.on.trim(this.toString());
+			};
+		};
+		
+		jQuery(function($) {
+			var s = " Hello world               ";
+			alert('"' + s.trim() + '"');
+		});
+		jQuery(function($) {
+			var s = " Hello world               ";
+			Js.proto();
+			alert('"' + s.trim() + '"');
+		});
+		-->
+		</script>
+		
+	</body>
+</html>

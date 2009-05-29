@@ -6,23 +6,24 @@
  */
 
 jQuery.fn.extend({
-	setClass: function( v ) {
+	setClass: function( value ) {
 		return this.each( function() {
-			this.className = v;
-		});
+			this.className = value;
+		} );
 	},
-	htmlText: function( tx ) {
-		if ( tx == undefined ) 
+	
+	htmlText: function( text ) {
+		if ( text == undefined ) 
 			return ( this[0] ? this[0].innerHTML : null );
-		
 		else {
-			this.each(function() {
-				this.innerHTML = tx;
-			});
+			this.each( function() {
+				this.innerHTML = text;
+			} );
+			
 			return this;
 		}
 	}
 });
 
 // Bind Js.use with jQuery Object
-Js.use = window.jQuery;
+Js.$ = window.jQuery;

@@ -163,21 +163,21 @@ Js.helper = Js.fn = {
 	// Camelize string input
 	camelize: function( data ) {
 		var value = data.split( /\-/ );
+		var length = value.length;
 		
 		// if array only have one value
-		if ( value.length === 1 )
+		if ( length === 1 )
 			return value[0];
 		
 		var result = ( data.indexOf('-') == 0 ? value[0].charAt(0).toUpperCase() + value[0].substr(1) : value[0] );
 		
-		jQuery.each( value, function( index, val ) {
-			if ( index > 0 )
-				result = [
-					result, 
-					val.charAt(0).toUpperCase(), 
-					val.substr(1)
-				].join('');
-		} );
+		for ( var index = 1; index < length; i++ ) {
+			result = [
+				result, 
+				val.charAt(0).toUpperCase(), 
+				val.substr(1)
+			].join('');
+		}
 		
 		return result;
 	},

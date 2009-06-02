@@ -7,7 +7,7 @@ Js.util.formSubmit = Js.util.buttonSubmit.extend({
 	handler: 'submit',
 	
 	initiate: function( obj ) {
-		if ( Js.on.parameter( arguments, 1, ['object'] ) ) {
+		if ( Js.helper.parameter( arguments, 1, ['object'] ) ) {
 			this.id = Js.helper.pick( obj.id, null );
 			this.url = Js.helper.pick( obj.url, null );	
 		} 

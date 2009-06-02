@@ -46,7 +46,7 @@ Js.util.buttonSubmit = Js.create({
 		var method = Js.helper.pickGrep( this.setting.method, /^(get|post)$/i );
 		
 		// bind onClick event delegation to the button
-		Js.use( this.button ).bind( this.handler, function() {
+		Js.$( this.button ).bind( this.handler, function() {
 			// we need to validate the form
 			var form = new Js.ext.validate( that.id, that.formValidate );
 			var result = form.result;

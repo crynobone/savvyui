@@ -20,7 +20,7 @@ Js.util.smartInput = Js.create({
 	
 	init: function( element ) {
 		var that = this;
-		this.element = Js.on.pick( element, this.element );
+		this.element = Js.helper.pick( element, this.element );
 		this.node = Js.$( this.element );
 		
 		this.activate();
@@ -33,7 +33,7 @@ Js.util.smartInput = Js.create({
 			.bind( 'blur', function() {
 				var node = Js.$( this );
 				
-				if ( Js.on.trim( node.val() ) === '' ) 
+				if ( Js.helper.trim( node.val() ) === '' ) 
 					node.val( node.attr( 'title' ).toString() );
 				
 			})
@@ -51,7 +51,7 @@ Js.util.smartInput = Js.create({
 			.unbind( 'blur', function() {
 				var node = Js.$( this );
 				
-				if ( Js.on.trim( node.val() ) === '' ) 
+				if ( Js.helper.trim( node.val() ) === '' ) 
 					node.val( node.attr( 'title' ).toString() );
 				
 			}).unbind( 'focus', function() {

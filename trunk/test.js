@@ -16,7 +16,7 @@ Js.test = {
 		
 		if ( data.match(/^(max|min|exact)\-(\d*)$/i) ) {
 			var type = RegExp.$1;
-			var length = Js.helper..toNumber( RegExp.$2 );
+			var length = Js.helper.toNumber( RegExp.$2 );
 			
 			switch ( type ) {
 				case 'max':

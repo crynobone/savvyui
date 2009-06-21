@@ -46,7 +46,7 @@ Js.util.activeContent = Js.create({
 		var that = this;
 		
 		Js.$( this.element ).bind( 'click', function() {
-			var href = Js.use( this ).attr( 'href' );
+			var href = Js.$( this ).attr( 'href' );
 			var hash = ( Js.helper.isset( href ) ? href : this.href );
 			var result;
 			
@@ -64,6 +64,8 @@ Js.util.activeContent = Js.create({
 				if ( Js.helper.isfunction( that.success ) ) 
 					that.success();
 			}
+			
+			return false;
 		});
 	},
 	

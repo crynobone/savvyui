@@ -49,6 +49,7 @@ table.widget-panel .tl, table.widget-panel .tr, table.widget-panel .bl, table.wi
 	color: white;
 	font-size: 14px;
 	font-weight: bold;
+	padding: 0;
 }
 .widget-panel .footer .button {}
 .widget-panel .footer .buttons {
@@ -76,12 +77,14 @@ table.widget-panel .tl, table.widget-panel .tr, table.widget-panel .bl, table.wi
 .widget-panel .header .title {
 	display: block;
 	padding: 4px 10px 5px;
+	line-height: 20px;
 }
 .widget-panel .content-container {
 	border-color: #555555;
 	border-style: solid;
 	border-width: 0 1px;
 	padding: 10px;
+	line-height: 20px;
 }
 .widget-panel .footer {
 	border-color: #555555;

@@ -171,11 +171,11 @@ Js.helper = Js.fn = {
 		
 		var result = ( data.indexOf('-') == 0 ? value[0].charAt(0).toUpperCase() + value[0].substr(1) : value[0] );
 		
-		for ( var index = 1; index < length; i++ ) {
+		for ( var index = 1; index < length; index++ ) {
 			result = [
 				result, 
-				val.charAt(0).toUpperCase(), 
-				val.substr(1)
+				value[index].charAt(0).toUpperCase(), 
+				value[index].substr(1)
 			].join('');
 		}
 		

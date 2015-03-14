@@ -1,0 +1,60 @@
+
+# Introduction #
+`Js.widget.tab` allow you to dynamically create tab interface using Savvy.UI, below is a sample of code to initiate a tab.
+
+## HTML ##
+You need to code your HTML as shown below. First of all `Js.widget.tab` require you to group the tab inside a container.
+```
+<div id="content-tab">
+	<div id="tab-1" title="Title for Tab 1" class="simpletab">
+		Some content of this tab
+	</div>
+	<div id="tab-2" title="Title for Tab 2" class="simpletab">
+		Some other content of this tab
+	</div>
+	<div>What ever, this wouldn't be included in the tab.</div>
+</div>
+```
+## Initiate Js.widget.tab ##
+```
+var tab1 = new Js.widget.tab("#content-tab", {
+	handler:"mouseover",
+	identifier:".simpletab"
+});
+```
+`tab1` have become our [Object Reference](ObjectReference.md) to `Js.widget.tab`, allow us to further manipulate that particular tab in the future (See below for more information).
+
+# Configuration #
+| Name | Description | Default Value | Value Type |
+|:-----|:------------|:--------------|:-----------|
+| handler | Determine event handler for tab to be activated | click | String |
+| identifier | Allow the code to detect whether this container should be included in the tab, preferable type is based on className | .tab | String |
+
+# Customization to the Tab #
+## Adding New Tab ##
+Adding new tab to a tab interface is as easy as initiating it, assume we still using `tab1`
+```
+tab1.addTab({
+	id: "hello-world",
+	title: "Hello world",
+	closable: true,
+	content: "<p>Hello world</p>"
+});
+```
+
+## Toggle Tab Interface Display ##
+Toggle tab interface using one simple callback
+```
+tab1.toggle();
+```
+## Enabling/Disabling a Tab ##
+Savvy.UI provide `.enableTab()` and `.disableTab()` for this purpose.
+```
+// Disable #tab-2
+tab1.disableTab("#tab-2");
+
+// Re-enable #tab-2
+tab1.enableTab("#tab-2");
+```
+# Example #
+http://crynobone.com/script/example/widget/tab.html

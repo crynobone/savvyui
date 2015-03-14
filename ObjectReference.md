@@ -1,0 +1,22 @@
+# What an Object Reference? #
+When we initiate any of the module in Savvy.UI, we can opt to whether assign an Object Reference to the module that we just initiated. The only true benefit of doing so is to allow us to further manipulate the object at any point of time as long as the Object Reference has not been alter.
+
+```
+/* Let start with a new tab interface, here I'm initiating it 
+ * without adding any Object Reference
+ */
+new Js.widget.tab("#some-container");
+
+/* What if I found out I need to deactivate one of the tab */
+```
+
+To solve the scenario brought up above, here what we can actually do.
+```
+var tab = new Js.widget.tab("#some-container");
+tab.disableTab("#tab-2");
+
+// do some other programming...
+
+/* What if I need to reactivate #tab-2? */
+tab.enableTab("#tab-2");
+```

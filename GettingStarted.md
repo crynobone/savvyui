@@ -1,0 +1,17 @@
+# The Basic #
+First and foremost, you need to include jQuery and Savvy.UI JavaScript Library, e.g:
+```
+<script src="/path/to/jquery.js" type="text/javascript"></script>
+<script src="/path/to/savvyui.js" type="text/javascript"></script>
+```
+Always remember to include jQuery before including Savvy.UI. If you wish to get more detail on using jQuery, please visit [jQuery Documentation Wiki](http://docs.jquery.com/). Another thing, even though Savvy.UI come with three [Compression Format](CompressionFormat.md), you just need to include one of it in a page, depending which suit your usage.
+
+## Adding Savvy.UI CSS ##
+It much easier to include `/css/all.css` rather than including individual Cascading StyleSheet (CSS) file, e.g:
+```
+<link type="text/css" rel="stylesheet" media="all" href="/path/to/css/all.css" />
+```
+Alternatively, you can just include what you need using this following code:
+```
+<link type="text/css" rel="stylesheet" media="all" href="/path/to/css/widget-tab.css" />
+```
